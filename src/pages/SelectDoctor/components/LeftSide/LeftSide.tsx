@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from 'react-i18next';
-import { LeftLayout, Stepper } from '../../common';
+import { LeftLayout, Stepper } from 'pages/common';
 
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
@@ -27,7 +27,6 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			fontSize: '15px',
 			lineHeight: '15px',
 			letterSpacing: '5px',
-			paddingBottom: '17px',
 		},
 		titleContainer: {
 			display: 'none',
@@ -37,11 +36,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			},
 		},
 		title: {
-			fontSize: '30px',
 			fontWeight: 'bold',
-			lineHeight: '40px',
-			letterSpacing: '0.2px',
-			fontFamily: 'Playfair Display',
 		},
 	}),
 );
@@ -65,10 +60,10 @@ const LeftSide = () => {
 				</Typography>
 			</div>
 			<div className={classes.titleContainer}>
-				<Typography component="div" className={classes.title}>
+				<Typography variant="h1" className={classes.title}>
 					{t('left.title.firstLine')}
 				</Typography>
-				<Typography component="div" className={classes.title}>
+				<Typography variant="h1" className={classes.title}>
 					{t('left.title.secondLine')}
 				</Typography>
 			</div>

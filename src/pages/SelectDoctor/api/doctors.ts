@@ -1,25 +1,29 @@
 // import axios from 'axios';
+import isToday from 'date-fns/isToday';
 
-interface DoctorAvailability {
+export interface DoctorAvailability {
 	id: number;
 	name: string;
 	cmp: string;
+	profilePicture: string;
+	comment?: string;
 	availableDates: string[];
 }
 
-interface MedicalSpeciality {
+export interface MedicalSpeciality {
 	id: number;
 	name: string;
 	doctors: DoctorAvailability[];
 }
 
 interface RequestProps {
-	currentDate: string;
+	date: Date;
+	useCase: string;
 }
 
-export const getMedicalSpecialities = async ({ currentDate }: RequestProps): Promise<MedicalSpeciality[]> => {
-	// const response = axios<MedicalSpeciality[]>.get('/specialities', { data: { currentDate } });
-	console.log(currentDate);
+export const getMedicalSpecialities = async (data: RequestProps): Promise<MedicalSpeciality[]> => {
+	// const response = axios<MedicalSpeciality[]>.get('/specialities', { data });
+
 	const specialities = [
 		{
 			id: 1,
@@ -29,6 +33,8 @@ export const getMedicalSpecialities = async ({ currentDate }: RequestProps): Pro
 					id: 1,
 					name: 'Jose Luis Perez Cuellar',
 					cmp: '938943',
+					profilePicture: 'https://picsum.photos/200/184',
+					comment: 'El doctor se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
 					availableDates: [
 						'2020-05-20T09:00',
 						'2020-05-20T09:30',
@@ -44,9 +50,25 @@ export const getMedicalSpecialities = async ({ currentDate }: RequestProps): Pro
 						'2020-05-20T17:00',
 					],
 				},
+				{
+					id: 2,
+					name: 'Sandra Ramirez',
+					cmp: '938943',
+					profilePicture: 'https://picsum.photos/200/184',
+					comment:
+						'Cuando conversé con la doctora Riveros, parecía que me conocía desde antes. Entendió mi preocupación',
+					availableDates: [
+						'2020-05-20T09:00',
+						'2020-05-20T09:30',
+						'2020-05-20T10:00',
+						'2020-05-20T11:00',
+						'2020-05-20T11:30',
+						'2020-05-20T12:00',
+					],
+				},
 			],
 		},
 	] as MedicalSpeciality[];
 
-	return specialities;
+	return isToday(data.date) ? specialities : [];
 };
