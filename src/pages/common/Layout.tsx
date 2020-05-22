@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
 			backgroundColor: BACKGROUND_DEFAULT,
 			flex: '1 1 auto',
 			minHeight: 'calc(100vh - 80px)',
-			paddingLeft: 26,
 			[theme.breakpoints.up('md')]: {
 				paddingLeft: 109,
 			},
