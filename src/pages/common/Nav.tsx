@@ -5,6 +5,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Button from '@material-ui/core/Button';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -12,11 +13,11 @@ const useStyles = makeStyles((theme: Theme) =>
 			alignItems: 'center',
 			borderBottom: '1px solid #6FCF97',
 			display: 'flex',
-			justifyContent: 'center',
-			padding: '12px 0',
+			padding: '12px 0 12px 52px',
 			position: 'relative',
 			[theme.breakpoints.up('md')]: {
 				padding: '27px 0',
+				justifyContent: 'center',
 			},
 		},
 		brandLogo: {
@@ -27,7 +28,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			},
 		},
 		arrowIcon: {
-			left: 14,
+			padding: '10px',
+			left: 4,
 			position: 'absolute',
 			cursor: 'pointer',
 		},
@@ -37,6 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			position: 'absolute',
 			right: '26px',
 			textTransform: 'none',
+			textDecoration: 'none',
+			'&:hover': {
+				textDecoration: 'none',
+			},
 			[theme.breakpoints.up('md')]: {
 				padding: '10px 20px',
 				right: '72px',
@@ -49,17 +55,25 @@ const useStyles = makeStyles((theme: Theme) =>
 const Nav: FC = () => {
 	const classes = useStyles();
 	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
+	const history = useHistory();
 	const { t } = useTranslation('nav');
+	const onClick = () => {
+		history.push('/iniciar_sesion');
+	};
+	const onGoBack = () => {
+		history.goBack();
+	};
 
 	return (
 		<nav className={classes.container}>
-			<LeftIcon className={classes.arrowIcon} />
+			<LeftIcon className={classes.arrowIcon} onClick={onGoBack} />
 			<BrandLogo className={classes.brandLogo} />
 			<Button
 				className={classes.loginButton}
 				variant={matches ? 'outlined' : 'text'}
 				color="primary"
 				disableRipple={!matches}
+				onClick={onClick}
 			>
 				{t('login')}
 			</Button>

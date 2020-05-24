@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+
 import { DoctorAvailability } from '../../api';
 import AvailableTimes from '../AvailableTimes';
 import useStyles from './styles';
@@ -18,9 +20,13 @@ export interface ActiveDoctorTime {
 const DoctorList = ({ doctors }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
+	const history = useHistory();
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorID: -1, time: '' });
 	const selectDoctor = (doctorID: number) => (selectedTime: string) => {
 		setActiveDoctorTime({ doctorID: selectedTime === '' ? -1 : doctorID, time: selectedTime });
+	};
+	const continueToPreRegister = () => {
+		history.push('/pre_registro');
 	};
 
 	return (
@@ -73,7 +79,12 @@ const DoctorList = ({ doctors }: DoctorListProps) => {
 								activeDoctorTime={activeDoctorTime}
 							/>
 							{activeDoctorTime.doctorID === id ? (
-								<Button fullWidth className={classes.continueButton} variant="contained">
+								<Button
+									fullWidth
+									className={classes.continueButton}
+									variant="contained"
+									onClick={continueToPreRegister}
+								>
 									{t('left.button.continue')}
 								</Button>
 							) : null}
