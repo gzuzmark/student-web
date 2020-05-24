@@ -33,6 +33,7 @@ const typography = {
 	fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 	fontWeightRegular: 500,
 	h1: {
+		// titles left side
 		fontFamily: ['Playfair Display', '-apple-system', 'sans-serif'].join(','),
 		fontSize: '22px',
 		lineHeight: '28px',
@@ -43,6 +44,7 @@ const typography = {
 		},
 	},
 	h2: {
+		// some titles
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontSize: '20px',
 		lineHeight: '25px',
@@ -53,6 +55,7 @@ const typography = {
 		},
 	},
 	h3: {
+		// subtitle
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontSize: '10px',
 		lineHeight: '15px',
@@ -62,6 +65,7 @@ const typography = {
 		},
 	},
 	button: {
+		// normal buttons
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontSize: '15px',
 		lineHeight: '18px',
@@ -71,16 +75,18 @@ const typography = {
 		},
 	},
 	body1: {
+		// input boxes
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
-		fontSize: '15px',
-		lineHeight: '20px',
+		fontSize: '12px',
+		lineHeight: '18px',
 		letterSpacing: '0.2px',
 		[defaultTheme.breakpoints.up('md')]: {
-			fontSize: '12px',
-			lineHeight: '15px',
+			fontSize: '15px',
+			lineHeight: '20px',
 		},
 	},
 	body2: {
+		// quotes
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontStyle: 'italic',
 		[defaultTheme.breakpoints.up('md')]: {
@@ -89,12 +95,10 @@ const typography = {
 		},
 	},
 	h4: {
-		// TODO
+		// Small buttons
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
-		[defaultTheme.breakpoints.up('md')]: {
-			fontSize: '13px',
-			lineHeight: '18px',
-		},
+		fontSize: '13px',
+		lineHeight: '18px',
 	},
 };
 
@@ -173,6 +177,8 @@ const overrides = {
 			},
 		},
 		textPrimary: {
+			color: MAIN_GREEN,
+			textDecoration: 'underline',
 			'&:hover': {
 				backgroundColor: 'transparent',
 				textDecoration: 'underline',

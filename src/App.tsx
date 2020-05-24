@@ -9,7 +9,7 @@ import { AppProvider } from './AppContext';
 
 import pageTheme from './theme';
 import { Nav } from 'pages/common';
-import { SelectDoctor } from 'pages';
+import routes from './routes';
 
 const theme = createMuiTheme({
 	...pageTheme,
@@ -19,7 +19,6 @@ const formats = {
 	normalDate: 'dd/MM/yyyy',
 	keyboardDate: 'dd/MM/yyyy',
 };
-const routes = [{ id: 'SelectDoctor', route: '/seleccionar_doctor', component: SelectDoctor }];
 
 function App() {
 	return (
