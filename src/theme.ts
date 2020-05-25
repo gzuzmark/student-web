@@ -1,5 +1,6 @@
 import { ElementType } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
+import { Overrides } from '@material-ui/core/styles/overrides';
 
 const defaultTheme = createMuiTheme();
 
@@ -49,9 +50,11 @@ const typography = {
 		fontSize: '20px',
 		lineHeight: '25px',
 		letterSpacing: '0.2px',
+		fontWeight: 400,
 		[defaultTheme.breakpoints.up('md')]: {
 			fontSize: '25px',
 			lineHeight: '30px',
+			fontWeight: 500,
 		},
 	},
 	h3: {
@@ -69,6 +72,7 @@ const typography = {
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontSize: '15px',
 		lineHeight: '18px',
+		fontWeight: 400,
 		[defaultTheme.breakpoints.up('md')]: {
 			fontSize: '20px',
 			lineHeight: '25px',
@@ -127,7 +131,7 @@ const props: PropsTypes = {
 	},
 };
 
-const overrides = {
+const overrides: Overrides = {
 	MuiPickersDay: {
 		day: {
 			color: palette.text.primary,
@@ -154,12 +158,17 @@ const overrides = {
 	MuiButton: {
 		contained: {
 			boxShadow: 'none',
+			textTransform: 'unset',
+			padding: '16px 0',
 			'&:hover': {
 				boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
 			},
 			'&$disabled': {
 				color: 'white',
 				backgroundColor: DISABLED,
+			},
+			[defaultTheme.breakpoints.up('md')]: {
+				padding: '21px 0',
 			},
 		},
 		containedPrimary: {
@@ -185,10 +194,31 @@ const overrides = {
 			},
 		},
 	},
+	MuiInputLabel: {
+		root: {
+			color: PRIMARY_BLACK,
+			'&$focused': {
+				color: PRIMARY_BLACK,
+			},
+		},
+		outlined: {
+			// TODO check if this will be used
+			transform: 'translate(21px, 16px) scale(1)',
+			'&$shrink': {
+				transform: 'translate(0, -22px) scale(1)',
+			},
+			[defaultTheme.breakpoints.up('md')]: {
+				transform: 'translate(21px, 14px) scale(1)',
+				'&$shrink': {
+					transform: 'translate(0, -28px) scale(1)',
+				},
+			},
+		},
+	},
 	MuiOutlinedInput: {
 		root: {
 			backgroundColor: 'white',
-			'&:hover $notchedOutline': {
+			'&&:hover $notchedOutline': {
 				borderColor: BLUE_STEEL,
 			},
 			'&$focused $notchedOutline': {
@@ -198,10 +228,15 @@ const overrides = {
 		},
 		notchedOutline: {
 			borderColor: BLUE_STEEL,
+			'& > legend': {
+				// TODO check if this will be used
+				maxWidth: '0.01px',
+			},
 		},
 		input: {
 			fontSize: '13px',
 			lineHeight: '18px',
+			padding: '14px 18.5px 14px 21px',
 			[defaultTheme.breakpoints.up('md')]: {
 				fontSize: '15px',
 				lineHeight: '20px',

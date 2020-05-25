@@ -45,10 +45,10 @@ const useStyles = makeStyles((theme: Theme) =>
 	}),
 );
 
-export const Container = ({ children }: LayoutProps) => {
+export const Container = ({ children, className }: LayoutProps) => {
 	const classes = useStyles();
 
-	return <section className={classes.container}>{children}</section>;
+	return <section className={clsx(classes.container, className)}>{children}</section>;
 };
 
 export const LeftLayout = ({ children, className }: LayoutProps) => {

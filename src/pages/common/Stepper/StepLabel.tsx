@@ -19,6 +19,7 @@ const useStyles = makeStyles(({ breakpoints, palette }: Theme) =>
 			fontSize: '12px',
 			lineHeight: '15px',
 			letterSpacing: '0.2px',
+			fontStyle: 'normal',
 			[breakpoints.up('md')]: {
 				fontSize: '15px',
 				lineHeight: '20px',

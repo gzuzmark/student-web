@@ -9,7 +9,7 @@ import { AppProvider } from './AppContext';
 
 import pageTheme from './theme';
 import { Nav } from 'pages/common';
-import routes from './routes';
+import { routes, routeWithoutNav } from './routes';
 
 const theme = createMuiTheme({
 	...pageTheme,
@@ -26,13 +26,20 @@ function App() {
 			<ThemeProvider theme={theme}>
 				<AppProvider>
 					<Router>
-						<Nav />
 						<Switch>
-							{routes.map(({ id, route, component: Component }) => (
-								<Route key={id} path={route}>
-									<Component />
-								</Route>
-							))}
+							<Route exact path={routes.map(({ path }) => path)}>
+								<>
+									<Nav />
+									{routes.map(({ id, ...rest }) => (
+										<Route key={id} {...rest} />
+									))}
+								</>
+							</Route>
+							<Route exact path={routeWithoutNav.map(({ path }) => path)}>
+								{routeWithoutNav.map(({ id, ...rest }) => (
+									<Route key={id} {...rest} />
+								))}
+							</Route>
 						</Switch>
 					</Router>
 				</AppProvider>
