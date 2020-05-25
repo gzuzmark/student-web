@@ -1,17 +1,17 @@
 import { ReactElement } from 'react';
-import { SelectDoctor, PreSignUp } from 'pages';
+import { SelectDoctor, PreSignUp, Login } from 'pages';
 
 interface Route {
 	id: string;
-	route: string;
+	path: string;
 	component: () => ReactElement;
 }
 
-type routesType = Route[];
+type RoutesType = Route[];
 
-const routes: routesType = [
-	{ id: 'SelectDoctor', route: '/seleccionar_doctor', component: SelectDoctor },
-	{ id: 'PreSignUp', route: '/pre_registro', component: PreSignUp },
+export const routes: RoutesType = [
+	{ id: 'SelectDoctor', path: '/seleccionar_doctor', component: SelectDoctor },
+	{ id: 'PreSignUp', path: '/pre_registro', component: PreSignUp },
 ];
 
-export default routes;
+export const routeWithoutNav: RoutesType = [{ id: 'Login', path: '/iniciar_sesion', component: Login }];
