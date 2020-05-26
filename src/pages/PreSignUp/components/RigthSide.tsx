@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { Theme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Link, useHistory } from 'react-router-dom';
 
 import { RightLayout } from 'pages/common';
@@ -30,9 +31,6 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	titleWrapper: {
 		paddingBottom: '15px',
-		'& > span': {
-			fontSize: '15px',
-		},
 	},
 	mobileSubTitle: {
 		fontSize: '15px',
@@ -60,10 +58,16 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		},
 		[breakpoints.up('md')]: {
 			padding: '27px 109px 25px 30px',
+			boxShadow: 'none',
+			cursor: 'pointer',
+			'&:hover': {
+				boxShadow: '0px 4px 10px rgba(83, 91, 108, 0.12)',
+			},
 		},
 	},
 	cardHeader: {
 		paddingBottom: '8px',
+		fontSize: '10px',
 	},
 	iconButton: {
 		position: 'absolute',
@@ -101,6 +105,7 @@ const RightSide = () => {
 	const { t } = useTranslation('preSignUp');
 	const history = useHistory();
 	const { appointmentOwner, updateState } = useContext(AppContext);
+	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('md'));
 	const isForMyself = appointmentOwner === MYSELF;
 	const l18nSelector = isForMyself ? 'toYou' : 'toSomeoneElse';
 	const classes = useStyles({ isForMyself });
@@ -129,42 +134,39 @@ const RightSide = () => {
 							{t('right.subTitle.toYou')}
 						</Typography>
 					) : (
-						<>
-							<Typography component="span">{t('right.subTitle.base.to')} </Typography>
-							<Typography className={classes.boldTitle} component="span">
-								{t('right.subTitle.toSmeoneElse')}
-							</Typography>
-						</>
+						<Typography className={classes.boldTitle} component="span">
+							{t('right.subTitle.toSmeoneElse')}
+						</Typography>
 					)}
 					<Typography className={classes.mobileSubTitle}>{t('right.subTitle.continueQuestion.mobile')}</Typography>
 				</div>
 				<div className={classes.cards}>
 					{isForMyself ? (
-						<Card className={classes.card}>
+						<Card className={classes.card} onClick={goToLogin}>
 							<Typography className={classes.cardHeader} variant="h3">
 								{t('right.signIn.label.toYou')}
 							</Typography>
 							<Typography>{t('right.signIn.body.toYou')}</Typography>
-							<IconButton className={classes.iconButton} color="primary" onClick={goToLogin}>
+							<IconButton className={classes.iconButton} color="primary">
 								<RightIcon />
 							</IconButton>
 						</Card>
 					) : null}
-					<Card className={classes.card}>
+					<Card className={classes.card} onClick={goToSignUp()}>
 						<Typography className={classes.cardHeader} variant="h3">
 							{t(`right.signUp.label.${l18nSelector}`)}
 						</Typography>
 						<Typography>{t(`right.signUp.body.${l18nSelector}`)} </Typography>
-						<IconButton className={classes.iconButton} color="primary" onClick={goToSignUp()}>
+						<IconButton className={classes.iconButton} color="primary">
 							<RightIcon />
 						</IconButton>
 					</Card>
-					<Card className={classes.card}>
+					<Card className={classes.card} onClick={goToSignUp(GUEST)}>
 						<Typography className={classes.cardHeader} variant="h3">
-							{t('right.signUp.label.guest')}
+							{matches ? t('right.signUp.label.guest') : t('right.signUp.label.guest.mobile')}
 						</Typography>
-						<Typography>{t('right.signUp.body.guest')}</Typography>
-						<IconButton className={classes.iconButton} color="primary" onClick={goToSignUp(GUEST)}>
+						<Typography>{t(`right.signUp.body.guest.${l18nSelector}`)}</Typography>
+						<IconButton className={classes.iconButton} color="primary">
 							<RightIcon />
 						</IconButton>
 					</Card>

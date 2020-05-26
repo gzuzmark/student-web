@@ -1,9 +1,9 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { formatApiDate, stylesWithTheme } from 'utils';
+import { stylesWithTheme } from 'utils';
 import { ActiveDoctorTime } from './DoctorList/DoctorList';
+import TimeOption from './TimeOption';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -42,11 +42,13 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		textTransform: 'lowercase',
 		fontSize: '14px',
 		lineHeight: '15px',
+		padding: '7.5px 0',
 		[breakpoints.up('md')]: {
 			marginRight: '7px',
 			minWidth: 'auto',
 			fontSize: '13px',
 			lineHeight: '18px',
+			padding: '11.5px 8px',
 		},
 	},
 	timesOverlay: {
@@ -79,25 +81,23 @@ const AvailableTimes = ({ availableDates, name, doctorID, selectTime, activeDoct
 	const format = matches ? 'k:mm' : undefined;
 	const isSelectedDoctor = activeDoctorTime.doctorID === doctorID;
 	const isEmptyTime = activeDoctorTime.time === '';
-	const isButtonDisabled = (time: string) =>
-		isEmptyTime ? false : activeDoctorTime.time !== time || !isSelectedDoctor;
+	const isButtonDisabled = (date: string) =>
+		isEmptyTime ? false : activeDoctorTime.time !== date || !isSelectedDoctor;
+	const isButtonActive = (date: string) => (isEmptyTime ? false : activeDoctorTime.time === date && isSelectedDoctor);
 
 	return (
 		<div className={classes.container}>
 			{!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null}
 			<div className={classes.times}>
 				{availableDates.map((date: string) => (
-					<div className={classes.dateButtonWrapper} key={`${name}-${date}`}>
-						<Button
-							classes={{ root: classes.dateButton }}
-							variant="contained"
-							onClick={onClick(date)}
-							disabled={isButtonDisabled(date)}
-							fullWidth
-						>
-							{formatApiDate(date, format)}
-						</Button>
-					</div>
+					<TimeOption
+						date={date}
+						onClick={onClick(date)}
+						disabled={isButtonDisabled(date)}
+						active={isButtonActive(date)}
+						format={format}
+						key={`${name}-${date}`}
+					/>
 				))}
 			</div>
 		</div>
