@@ -125,6 +125,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			width: '171px',
 			fontSize: '13px',
 			lineHeight: '18px',
+			padding: '11.5px 0',
 		},
 	},
 	availableTitleWrapper: {
