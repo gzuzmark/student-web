@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent } from 'react';
+import React, { useState, useCallback, MouseEvent } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
@@ -7,10 +7,12 @@ import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-
 import { stylesWithTheme } from 'utils/createStyles';
 import { ReactComponent as Visibility } from 'icons/eye_on.svg';
 import { ReactComponent as VisibilityOff } from 'icons/eye_off.svg';
+import { sendLogin } from 'pages/api';
+
+import validationSchema from '../validationSchema';
 
 const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	inputWrapper: {
@@ -57,6 +59,11 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	},
 }));
 
+interface FormValues {
+	phoneNumber: string;
+	password: string;
+}
+
 const LoginForm = () => {
 	const { t } = useTranslation('login');
 	const classes = useStyles();
@@ -67,15 +74,16 @@ const LoginForm = () => {
 	const handleOnMouseDown = (e: MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 	};
-	const onSubmit = (values: Record<string, any>, { setSubmitting }: { setSubmitting: Function }) => {
-		console.log(values);
-		setTimeout(() => {
+	const onSubmit = useCallback(
+		async ({ phoneNumber, password }: FormValues, { setSubmitting }: { setSubmitting: Function }) => {
+			await sendLogin({ username: phoneNumber, password });
 			setSubmitting(false);
-		}, 1000);
-	};
+		},
+		[],
+	);
 
 	return (
-		<Formik initialValues={{ phoneNumber: '', password: '' }} onSubmit={onSubmit}>
+		<Formik initialValues={{ phoneNumber: '', password: '' }} onSubmit={onSubmit} validationSchema={validationSchema}>
 			{({ submitForm, isSubmitting }) => (
 				<Form>
 					<div>

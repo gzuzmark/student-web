@@ -8,6 +8,9 @@ const login = {
 	'login.submit.text': 'Ingresar a mi cuenta',
 	'login.signUp.text': '¿No tienes una cuenta?',
 	'login.signUp.link': '¡Create una!',
+	'login.phoneNumber.required': 'Ingrese un número de celular',
+	'login.phoneNumber.digits': 'Ingrese solo números',
+	'login.password.required': 'Ingrese un contraseña',
 };
 
 export default login;
