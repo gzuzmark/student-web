@@ -5,11 +5,11 @@ import { ThemeProvider } from '@material-ui/styles';
 import { LocalizationProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import esLocal from 'date-fns/locale/es';
-import { AppProvider } from './AppContext';
-
-import pageTheme from './theme';
 import { Nav } from 'pages/common';
+
 import { routes, routeWithoutNav } from './routes';
+import { AppProvider } from './AppContext';
+import pageTheme from './theme';
 
 const theme = createMuiTheme({
 	...pageTheme,
