@@ -15,12 +15,12 @@ const useStyles = makeStyles((theme: Theme) =>
 		container: {
 			display: 'flex',
 			flexDirection: 'column',
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				flexDirection: 'row',
 			},
 		},
 		leftLayout: {
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				width: 411,
 				paddingLeft: 104,
 			},
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			backgroundColor: BACKGROUND_DEFAULT,
 			flex: '1 1 auto',
 			minHeight: 'calc(100vh - 80px)',
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				paddingLeft: 109,
 			},
 		},
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			position: 'absolute',
 			top: '528px',
 			left: '0',
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				display: 'block',
 			},
 		},

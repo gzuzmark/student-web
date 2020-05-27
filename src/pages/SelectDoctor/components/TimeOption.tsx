@@ -14,11 +14,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		marginBottom: '11px',
 		'&:nth-child(3n)': {
 			marginRight: '0',
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				marginRight: '7px',
 			},
 		},
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			width: '46px',
 			'&:nth-last-child(-n + 6)': {
 				marginBottom: '0',
@@ -31,7 +31,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		lineHeight: '15px',
 		padding: '7.5px 0',
 		boxShadow: (props: StylesProps) => (props.active ? '0px 4px 4px rgba(83, 91, 108, 0.28)' : 'none'),
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			marginRight: '7px',
 			minWidth: 'auto',
 			fontSize: '13px',

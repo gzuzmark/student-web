@@ -3,13 +3,13 @@ import { stylesWithTheme } from 'utils';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	doctorList: {
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			maxWidth: '606px',
 		},
 	},
 	counter: {
 		display: 'none',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'block',
 			padding: '22px 0 38px 0',
 		},
@@ -29,7 +29,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		backgroundColor: 'white',
 		padding: '21px 26px 61px 26px',
 		marginBottom: '15px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			borderRadius: '10px',
 			padding: '34px 0 23px 36px',
 			marginBottom: '25px',
@@ -42,7 +42,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	photoWrapper: {
 		paddingRight: '20px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			paddingRight: '58px',
 		},
 	},
@@ -58,14 +58,14 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	name: {
 		fontSize: '15px',
 		lineHeight: '18px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			fontSize: '20px',
 			lineHeight: '25px',
 		},
 	},
 	specialityWrapper: {
 		paddingBottom: '5px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			paddingRight: '27px',
 			paddingBottom: '11px',
 		},
@@ -80,20 +80,20 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	commentWrapper: {
 		display: 'none',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'block',
 			maxWidth: '356px',
 		},
 	},
 	comment: {
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			fontSize: '13px',
 			lineHeight: '15px',
 			fontStyle: 'italic',
 		},
 	},
 	flexWrapper: {
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'flex',
 		},
 	},
@@ -103,7 +103,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		marginBottom: '11px',
 		'&:nth-child(3n)': {
 			marginRight: '0',
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				marginRight: '7px',
 			},
 		},
@@ -113,7 +113,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		textTransform: 'lowercase',
 	},
 	timesWrapper: {
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'flex',
 			alignItems: 'center',
 		},
@@ -121,7 +121,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	continueButton: {
 		fontSize: '15px',
 		textTransform: 'unset',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			width: '171px',
 			fontSize: '13px',
 			lineHeight: '18px',
@@ -134,7 +134,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	availableTitle: {
 		fontSize: '14px',
 		color: palette.info.main,
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			fontSize: '12px',
 			lineHeight: '17px',
 		},

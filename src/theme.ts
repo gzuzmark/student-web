@@ -39,7 +39,7 @@ const typography = {
 		fontSize: '22px',
 		lineHeight: '28px',
 		letterSpacing: '0.2px',
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '30px',
 			lineHeight: '40px',
 		},
@@ -51,7 +51,7 @@ const typography = {
 		lineHeight: '25px',
 		letterSpacing: '0.2px',
 		fontWeight: 400,
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '25px',
 			lineHeight: '30px',
 			fontWeight: 500,
@@ -63,7 +63,7 @@ const typography = {
 		fontSize: '10px',
 		lineHeight: '15px',
 		letterSpacing: '5px',
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '15px',
 		},
 	},
@@ -73,7 +73,7 @@ const typography = {
 		fontSize: '15px',
 		lineHeight: '18px',
 		fontWeight: 400,
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '20px',
 			lineHeight: '25px',
 		},
@@ -84,7 +84,7 @@ const typography = {
 		fontSize: '12px',
 		lineHeight: '18px',
 		letterSpacing: '0.2px',
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '15px',
 			lineHeight: '20px',
 		},
@@ -93,7 +93,7 @@ const typography = {
 		// quotes
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontStyle: 'italic',
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '13px',
 			lineHeight: '15px',
 		},
@@ -167,7 +167,7 @@ const overrides: Overrides = {
 				color: 'white',
 				backgroundColor: DISABLED,
 			},
-			[defaultTheme.breakpoints.up('md')]: {
+			[defaultTheme.breakpoints.up('lg')]: {
 				padding: '21px 0',
 			},
 		},
@@ -207,7 +207,7 @@ const overrides: Overrides = {
 			'&$shrink': {
 				transform: 'translate(0, -22px) scale(1)',
 			},
-			[defaultTheme.breakpoints.up('md')]: {
+			[defaultTheme.breakpoints.up('lg')]: {
 				transform: 'translate(21px, 14px) scale(1)',
 				'&$shrink': {
 					transform: 'translate(0, -28px) scale(1)',
@@ -237,7 +237,7 @@ const overrides: Overrides = {
 			fontSize: '13px',
 			lineHeight: '18px',
 			padding: '14px 18.5px 14px 21px',
-			[defaultTheme.breakpoints.up('md')]: {
+			[defaultTheme.breakpoints.up('lg')]: {
 				fontSize: '15px',
 				lineHeight: '20px',
 			},
@@ -249,7 +249,7 @@ export const leftPrefixTitleFontsStyles = {
 	fontSize: '10px',
 	lineHeight: '15px',
 	letterSpacing: '5px',
-	[defaultTheme.breakpoints.up('md')]: {
+	[defaultTheme.breakpoints.up('lg')]: {
 		fontSize: '15px',
 	},
 };
@@ -258,7 +258,7 @@ export const leftTitleFontsStyles = {
 	fontSize: '22px',
 	lineHeight: '28px',
 	letterSpacing: '0.2px',
-	[defaultTheme.breakpoints.up('md')]: {
+	[defaultTheme.breakpoints.up('lg')]: {
 		fontSize: '30px',
 		lineHeight: '40px',
 	},
@@ -268,7 +268,7 @@ export const leftStepsLabels = {
 	fontSize: '12px',
 	lineHeight: '15px',
 	letterSpacing: '0.2px',
-	[defaultTheme.breakpoints.up('md')]: {
+	[defaultTheme.breakpoints.up('lg')]: {
 		fontSize: '15px',
 		lineHeight: '28px',
 	},

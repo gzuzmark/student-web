@@ -5,7 +5,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	container: {
 		paddingTop: '26px',
 		minHeight: 'calc(100vh - 220px)',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			paddingTop: '65px',
 			paddingRight: '104px',
 			minHeight: 'calc(100vh - 145px)',
@@ -14,7 +14,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	titleContainer: {
 		paddingBottom: '24px',
 		paddingLeft: '26px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			paddingBottom: '33px',
 			paddingLeft: '0',
 		},
@@ -22,7 +22,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	title: {
 		fontSize: '20px',
 		lineHeight: '25px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			fontSize: '25px',
 			lineHeight: '30px',
 			letterSpacing: '0.2px',
@@ -30,12 +30,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	divider: {
 		display: 'none',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'block',
 		},
 	},
 	emptyMessageWrapper: {
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			textAlign: 'center',
 			maxWidth: '510px',
 			margin: '0 auto',
@@ -47,7 +47,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		lineHeight: '25px',
 		color: palette.info.main,
 		padding: '0 30px 20px 26px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			fontSize: '20px',
 			padding: '0',
 		},

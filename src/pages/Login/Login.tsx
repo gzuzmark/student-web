@@ -17,7 +17,7 @@ const Login = () => {
 
 	return (
 		<Container className={classes.container}>
-			<div>
+			<div className={classes.imgWrapper}>
 				<img className={classes.mobileImg} src={mobileLogin} alt="mobile background" />
 				<img className={classes.desktopImg} src={desktopImage} alt="desktop background" />
 			</div>

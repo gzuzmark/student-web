@@ -28,7 +28,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 		},
 		isNotFirstChild: {
 			'&& $icon': {
-				[breakpoints.up('md')]: {
+				[breakpoints.up('lg')]: {
 					top: '11px',
 					left: '18px',
 				},
@@ -38,12 +38,12 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			borderColor: palette.primary.main,
 			color: palette.primary.main,
 			'& $icon': {
-				[breakpoints.up('md')]: {
+				[breakpoints.up('lg')]: {
 					top: '11px',
 					left: '20px',
 				},
 			},
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				height: '49px',
 				width: '49px',
 			},

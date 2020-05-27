@@ -15,14 +15,14 @@ const useStyles = makeStyles((theme: Theme) =>
 			display: 'flex',
 			padding: '12px 0 12px 52px',
 			position: 'relative',
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				padding: '27px 0',
 				justifyContent: 'center',
 			},
 		},
 		brandLogo: {
 			width: 58,
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				width: 97,
 				height: 25,
 			},
@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme: Theme) =>
 			left: 4,
 			position: 'absolute',
 			cursor: 'pointer',
+			[theme.breakpoints.up('lg')]: {
+				display: 'none',
+			},
 		},
 		loginButton: {
 			fontSize: '12px',
@@ -43,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			'&:hover': {
 				textDecoration: 'none',
 			},
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				padding: '10px 20px',
 				right: '72px',
 				fontSize: '15px',
@@ -54,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Nav: FC = () => {
 	const classes = useStyles();
-	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
+	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 	const history = useHistory();
 	const { t } = useTranslation('nav');
 	const onClick = () => {

@@ -14,7 +14,7 @@ interface StylesProps {
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		padding: '23px 0 23px 26px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			paddingTop: (props: StylesProps) => (props.isForMyself ? '188px' : '112px'),
 			paddingLeft: 0,
 		},

@@ -15,11 +15,14 @@ import { ReactComponent as VisibilityOff } from 'icons/eye_off.svg';
 const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	inputWrapper: {
 		paddingBottom: '36px',
-		[breakpoints.up('md')]: {
-			paddingBottom: '36px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '46px',
 		},
 		'&:last-child': {
 			paddingBottom: '6px',
+			[breakpoints.up('lg')]: {
+				paddingBottom: '16px',
+			},
 		},
 	},
 	icon: {
@@ -30,6 +33,9 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	linkWrapper: {
 		textAlign: 'right',
 		paddingBottom: '27px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '19px',
+		},
 	},
 	link: {
 		color: palette.info.main,
@@ -39,6 +45,9 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	},
 	buttonWrapper: {
 		paddingBottom: '17px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '26px',
+		},
 	},
 	signUpWrapper: {
 		textAlign: 'center',

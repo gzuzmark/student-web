@@ -5,12 +5,12 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles(({ breakpoints, palette }: Theme) =>
 	createStyles({
 		root: {
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				flexDirection: 'row-reverse',
 			},
 		},
 		iconContainer: {
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				padding: 0,
 			},
 		},
@@ -20,13 +20,13 @@ const useStyles = makeStyles(({ breakpoints, palette }: Theme) =>
 			lineHeight: '15px',
 			letterSpacing: '0.2px',
 			fontStyle: 'normal',
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				fontSize: '15px',
 				lineHeight: '20px',
 			},
 		},
 		vertical: {
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				marginRight: (props: { active: boolean }) => (props.active ? 0 : '7.5px'),
 			},
 		},

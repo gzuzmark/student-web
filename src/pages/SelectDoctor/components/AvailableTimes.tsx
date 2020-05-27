@@ -8,7 +8,7 @@ import TimeOption from './TimeOption';
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
 		position: 'relative',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			width: '330px',
 			marginRight: '10px', // 7px of margin right from buttons + 12px from container width space + 10px to all sum up 29px
 		},
@@ -17,7 +17,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		display: 'flex',
 		flexWrap: 'wrap',
 		marginBottom: '18px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			marginBottom: '0',
 		},
 	},
@@ -27,11 +27,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		marginBottom: '11px',
 		'&:nth-child(3n)': {
 			marginRight: '0',
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				marginRight: '7px',
 			},
 		},
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			width: '46px',
 			'&:nth-last-child(-n + 6)': {
 				marginBottom: '0',
@@ -43,7 +43,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		fontSize: '14px',
 		lineHeight: '15px',
 		padding: '7.5px 0',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			marginRight: '7px',
 			minWidth: 'auto',
 			fontSize: '13px',
@@ -71,7 +71,7 @@ interface AvailableTimesProps {
 
 const AvailableTimes = ({ availableDates, name, doctorID, selectTime, activeDoctorTime }: AvailableTimesProps) => {
 	const classes = useStyles();
-	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
+	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 	const activateAll = () => {
 		selectTime('');
 	};
