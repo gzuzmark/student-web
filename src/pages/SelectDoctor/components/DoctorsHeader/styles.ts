@@ -5,7 +5,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	form: {
 		paddingBottom: '20px',
 		paddingLeft: '26px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'flex',
 			paddingBottom: '9px',
 			paddingLeft: '0',
@@ -19,13 +19,13 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	datePickerField: {
 		paddingBottom: '14px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			paddingBottom: 0,
 		},
 	},
 	datePickerContainer: {
 		maxWidth: '227px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			minWidth: '260px',
 			paddingRight: '50px',
 		},
@@ -34,7 +34,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	useCaseInput: {
 		fontSize: '13px',
 		lineHeight: '18px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			fontSize: '15px',
 			paddingTop: '14px',
 		},

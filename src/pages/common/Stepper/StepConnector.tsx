@@ -19,7 +19,7 @@ const StepConnector = withStyles(({ palette, breakpoints }: Theme) =>
 		},
 		line: {
 			borderColor: palette.action.disabled,
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				padding: '0 46px 0 0',
 				borderTopWidth: 2,
 				borderRightWidth: 2,

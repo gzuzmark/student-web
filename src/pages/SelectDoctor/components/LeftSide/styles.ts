@@ -6,7 +6,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		display: 'flex',
 		justifyContent: 'center',
 		padding: '30px 0',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'block',
 			padding: '89px 0 0 104px',
 		},
@@ -14,7 +14,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	prefixTitleContainer: {
 		display: 'none',
 		paddingBottom: '17px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'block',
 		},
 	},
@@ -27,7 +27,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	titleContainer: {
 		display: 'none',
 		paddingBottom: '57px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'block',
 		},
 	},

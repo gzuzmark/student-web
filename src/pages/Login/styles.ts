@@ -7,38 +7,49 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		position: 'relative',
 		overflow: 'hidden',
 	},
+	imgWrapper: {
+		[breakpoints.up('lg')]: {
+			position: 'relative',
+			width: '83.1vh',
+		},
+	},
 	mobileImg: {
 		position: 'fixed',
 		top: '24px',
-		left: '178px',
-		[breakpoints.up('md')]: {
+		right: '-127px',
+		[breakpoints.up('lg')]: {
 			display: 'none',
 		},
 	},
 	desktopImg: {
 		display: 'none',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'block',
+			objectFit: 'cover',
+			width: '100%',
 		},
 	},
 	loginFormContainer: {
 		paddingTop: '151px',
 		paddingLeft: '25px',
 		paddingRight: '25px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			background: 'white',
 			borderTopLeftRadius: '25px',
 			borderBottomLeftRadius: '25px',
-			marginLeft: '-195px',
-			paddingRight: 0,
-			paddingTop: '117px',
-			paddingLeft: '98px',
-			width: '100%',
+			flex: '1 1 auto',
+			height: '100vh',
+			marginLeft: '-25px',
+			zIndex: 2,
+			padding: 0,
 		},
 	},
 	contentWrapper: {
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			maxWidth: '401px',
+			paddingRight: 0,
+			paddingTop: '117px',
+			paddingLeft: '98px',
 		},
 	},
 	brandImg: {
@@ -48,15 +59,15 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	title: {
 		paddingRight: '150px',
-		paddingBottom: '33px', // 15px
-		[breakpoints.up('md')]: {
+		paddingBottom: '43px',
+		[breakpoints.up('lg')]: {
 			paddingRight: 0,
-			paddingBottom: '65px', // 47px
+			paddingBottom: '73px',
 		},
 	},
 	desktopCircle: {
 		display: 'none',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'block',
 		},
 	},

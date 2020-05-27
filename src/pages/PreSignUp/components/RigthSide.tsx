@@ -19,13 +19,14 @@ interface StylesProps {
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	rightContainer: {
-		[breakpoints.down('md')]: {
-			minHeight: 'calc(100vh - 167px)',
+		minHeight: 'calc(100vh - 167px)',
+		[breakpoints.up('lg')]: {
+			minHeight: 'calc(100vh - 80px)',
 		},
 	},
 	wrapper: {
 		padding: '21px 26px 0',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			paddingTop: (props: StylesProps) => (props.isForMyself ? '86px' : '106px'),
 		},
 	},
@@ -35,7 +36,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	mobileSubTitle: {
 		fontSize: '15px',
 		padding: (props: StylesProps) => (props.isForMyself ? '0 0 5px 0' : '30px 0 15px 0'),
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			display: 'none',
 		},
 	},
@@ -56,7 +57,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		'&:last-child': {
 			marginBottom: 0,
 		},
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			padding: '27px 109px 25px 30px',
 			boxShadow: 'none',
 			cursor: 'pointer',
@@ -78,7 +79,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			width: '24px',
 			height: '24px',
 		},
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			top: '32px',
 			right: '29px',
 			'& > span > svg': {
@@ -90,7 +91,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	linkWrapper: {
 		textAlign: 'center',
 		paddingBottom: '9px',
-		[breakpoints.up('md')]: {
+		[breakpoints.up('lg')]: {
 			textAlign: 'left',
 		},
 	},
@@ -105,7 +106,7 @@ const RightSide = () => {
 	const { t } = useTranslation('preSignUp');
 	const history = useHistory();
 	const { appointmentOwner, updateState } = useContext(AppContext);
-	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('md'));
+	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const isForMyself = appointmentOwner === MYSELF;
 	const l18nSelector = isForMyself ? 'toYou' : 'toSomeoneElse';
 	const classes = useStyles({ isForMyself });

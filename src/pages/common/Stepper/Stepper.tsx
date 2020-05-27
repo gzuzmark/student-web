@@ -10,7 +10,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		root: {
 			padding: 0,
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				padding: '0 46px 0 0',
 			},
 		},
