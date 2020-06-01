@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -9,18 +9,19 @@ import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { PasswordField } from 'pages/common';
+import AppContext, { GUEST, AppointmentOwner } from 'AppContext';
 
-import validationSchema from './validationSchema';
+import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
 
 export interface ContactValues {
 	phoneNumber: string;
-	email: string;
-	password: string;
-	repeatPassword: string;
+	email?: string;
+	password?: string;
+	repeatPassword?: string;
 }
 
 interface ContactFormProps {
-	submitSignUp: (value: ContactValues) => void;
+	submitSignUp: (value: ContactValues, appointmentOwner: AppointmentOwner) => void;
 	openPrivacyPolicy: () => void;
 }
 
@@ -79,16 +80,22 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy }: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	const { appointmentOwner } = useContext(AppContext);
 	const onSubmit = useCallback(
 		async (values: ContactValues, { setSubmitting }: { setSubmitting: Function }) => {
-			submitSignUp(values);
+			submitSignUp(values, appointmentOwner as AppointmentOwner);
 			setSubmitting(false);
 		},
-		[submitSignUp],
+		[appointmentOwner, submitSignUp],
 	);
+	const isGuest = appointmentOwner === GUEST;
 
 	return (
-		<Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+		<Formik
+			initialValues={initialValues}
+			onSubmit={onSubmit}
+			validationSchema={isGuest ? guestValidationSchema : newUservalidationSchema}
+		>
 			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
 					<div>
@@ -116,24 +123,28 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy }: ContactFormProps) => {
 								fullWidth
 							/>
 						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={PasswordField}
-								name="password"
-								label={t('contact.fields.password.label')}
-								variant="outlined"
-								fullWidth
-							/>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={PasswordField}
-								name="repeatPassword"
-								label={t('contact.fields.repeatPassword.label')}
-								variant="outlined"
-								fullWidth
-							/>
-						</div>
+						{!isGuest ? (
+							<>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={PasswordField}
+										name="password"
+										label={t('contact.fields.password.label')}
+										variant="outlined"
+										fullWidth
+									/>
+								</div>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={PasswordField}
+										name="repeatPassword"
+										label={t('contact.fields.repeatPassword.label')}
+										variant="outlined"
+										fullWidth
+									/>
+								</div>
+							</>
+						) : null}
 					</div>
 					<div className={classes.privacyPolicyWrapper}>
 						<Typography className={classes.legalInformation} component="span">

@@ -4,6 +4,8 @@ export const MYSELF = 'myself';
 export const RELATIVE = 'relative';
 export const GUEST = 'guest';
 
+export type AppointmentOwner = 'myself' | 'relative' | 'guest' | '';
+
 interface AppProviderProps {
 	children: ReactElement;
 }
@@ -12,14 +14,14 @@ interface ContextProps {
 	user: Record<string, any> | null;
 	useCase: string;
 	updateState: Function;
-	appointmentOwner: 'myself' | 'relative' | 'guest' | '';
+	appointmentOwner: AppointmentOwner;
 }
 
 const defaultState: ContextProps = {
 	user: null,
 	useCase: 'Problemas de Piel',
 	updateState: Function.prototype,
-	appointmentOwner: 'myself',
+	appointmentOwner: 'guest',
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

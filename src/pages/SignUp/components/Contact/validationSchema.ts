@@ -23,8 +23,9 @@ const messages = {
 	},
 };
 
-const validationSchema = object().shape({
+export const newUservalidationSchema = object().shape({
 	phoneNumber: string()
+		.min(9, messages.phoneNumber.required)
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
 		// @ts-ignore
@@ -41,4 +42,15 @@ const validationSchema = object().shape({
 		.toEqual('password', messages.repeatPassword.notEqual),
 });
 
-export default validationSchema;
+export const guestValidationSchema = object().shape({
+	phoneNumber: string()
+		.min(9, messages.phoneNumber.required)
+		.max(9, messages.phoneNumber.required)
+		// eslint-disable-next-line
+		// @ts-ignore
+		.digits(messages.phoneNumber.required)
+		.required(messages.phoneNumber.required),
+	// eslint-disable-next-line
+	// @ts-ignore
+	email: string().validEmail(messages.email.validEmail),
+});
