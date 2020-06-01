@@ -1,0 +1,4 @@
+export { default as LeftSide } from './LeftSide';
+export * from './AboutMe';
+export * from './MedicalData';
+export * from './Contact';

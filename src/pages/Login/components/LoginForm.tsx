@@ -1,16 +1,16 @@
-import React, { useState, useCallback, MouseEvent } from 'react';
+import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
-import { InputAdornment, IconButton } from '@material-ui/core';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import clsx from 'clsx';
+
 import { stylesWithTheme } from 'utils/createStyles';
-import { ReactComponent as Visibility } from 'icons/eye_on.svg';
-import { ReactComponent as VisibilityOff } from 'icons/eye_off.svg';
 import { sendLogin } from 'pages/api';
+import { PasswordField } from 'pages/common';
 
 import validationSchema from '../validationSchema';
 
@@ -25,6 +25,15 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 			[breakpoints.up('lg')]: {
 				paddingBottom: '16px',
 			},
+		},
+	},
+	inputError: {
+		paddingBottom: '36px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '25px',
+		},
+		'&:last-child': {
+			paddingBottom: '6px',
 		},
 	},
 	icon: {
@@ -67,13 +76,6 @@ interface FormValues {
 const LoginForm = () => {
 	const { t } = useTranslation('login');
 	const classes = useStyles();
-	const [showPassword, setShowPassword] = useState(false);
-	const toggleShowPassword = () => {
-		setShowPassword(!showPassword);
-	};
-	const handleOnMouseDown = (e: MouseEvent<HTMLButtonElement>) => {
-		e.preventDefault();
-	};
 	const onSubmit = useCallback(
 		async ({ phoneNumber, password }: FormValues, { setSubmitting }: { setSubmitting: Function }) => {
 			await sendLogin({ username: phoneNumber, password });
@@ -84,10 +86,15 @@ const LoginForm = () => {
 
 	return (
 		<Formik initialValues={{ phoneNumber: '', password: '' }} onSubmit={onSubmit} validationSchema={validationSchema}>
-			{({ submitForm, isSubmitting }) => (
+			{({ submitForm, isSubmitting, errors, touched }) => (
 				<Form>
 					<div>
-						<div className={classes.inputWrapper}>
+						<div
+							className={clsx(
+								classes.inputWrapper,
+								errors.phoneNumber && touched.phoneNumber ? classes.inputError : '',
+							)}
+						>
 							<Field
 								component={TextField}
 								name="phoneNumber"
@@ -98,26 +105,12 @@ const LoginForm = () => {
 								fullWidth
 							/>
 						</div>
-						<div className={classes.inputWrapper}>
+						<div className={clsx(classes.inputWrapper, errors.password && touched.password ? classes.inputError : '')}>
 							<Field
-								component={TextField}
+								component={PasswordField}
 								name="password"
 								label={t('login.password.label')}
 								variant="outlined"
-								type={showPassword ? 'text' : 'password'}
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											<IconButton onClick={toggleShowPassword} onMouseDown={handleOnMouseDown}>
-												{showPassword ? (
-													<Visibility className={classes.icon} />
-												) : (
-													<VisibilityOff className={classes.icon} />
-												)}
-											</IconButton>
-										</InputAdornment>
-									),
-								}}
 								fullWidth
 							/>
 						</div>
