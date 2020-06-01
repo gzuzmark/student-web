@@ -2,6 +2,8 @@ import { ElementType } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { Overrides } from '@material-ui/core/styles/overrides';
 
+import { ReactComponent as DownArrow } from 'icons/down-arrow.svg';
+
 const defaultTheme = createMuiTheme();
 
 const MAIN_GREEN = '#1ECD96';
@@ -10,12 +12,16 @@ const DISABLED = '#D9D9DC';
 const BLUE_STEEL = '#9EADCC';
 const PRIMARY_BLACK = '#535B6C';
 const SECONDARY_BLACK = '#353535';
+const RED_MAIN = '#FE6B6F';
 
 const palette = {
 	primary: {
 		main: MAIN_GREEN,
 		light: LIGHT_GREEN,
 		contrastText: 'white',
+	},
+	error: {
+		main: RED_MAIN,
 	},
 	divider: DISABLED,
 	info: {
@@ -36,6 +42,7 @@ const typography = {
 	h1: {
 		// titles left side
 		fontFamily: ['Playfair Display', '-apple-system', 'sans-serif'].join(','),
+		fontWeight: 400,
 		fontSize: '22px',
 		lineHeight: '28px',
 		letterSpacing: '0.2px',
@@ -81,7 +88,7 @@ const typography = {
 	body1: {
 		// input boxes
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
-		fontSize: '12px',
+		fontSize: '13px',
 		lineHeight: '18px',
 		letterSpacing: '0.2px',
 		[defaultTheme.breakpoints.up('lg')]: {
@@ -119,6 +126,7 @@ type ButtonColor = 'inherit' | 'primary' | 'secondary' | 'default' | undefined;
 interface PropsTypes {
 	MuiTypography: { color: TypographyColor; component: ElementType };
 	MuiButton: { color: ButtonColor };
+	MuiSelect: { IconComponent: ElementType };
 }
 
 const props: PropsTypes = {
@@ -128,6 +136,9 @@ const props: PropsTypes = {
 	},
 	MuiButton: {
 		color: 'primary',
+	},
+	MuiSelect: {
+		IconComponent: DownArrow,
 	},
 };
 
@@ -153,6 +164,21 @@ const overrides: Overrides = {
 		},
 		current: {
 			backgroundColor: palette.primary.main,
+		},
+	},
+	MuiSelect: {
+		select: {
+			'&:focus': {
+				backgroundColor: 'white',
+			},
+		},
+		iconOutlined: {
+			top: 'calc(50% - 4px)',
+			right: '13px',
+			[defaultTheme.breakpoints.up('lg')]: {
+				right: '23px',
+				top: 'calc(50% - 3px)',
+			},
 		},
 	},
 	MuiButton: {
@@ -194,15 +220,32 @@ const overrides: Overrides = {
 			},
 		},
 	},
+	MuiFormLabel: {
+		root: {
+			color: PRIMARY_BLACK,
+		},
+	},
 	MuiInputLabel: {
 		root: {
 			color: PRIMARY_BLACK,
+			zIndex: 2,
 			'&$focused': {
 				color: PRIMARY_BLACK,
 			},
 		},
+		formControl: {
+			transform: 'translate(21px, 16px) scale(1)',
+			'&$shrink': {
+				transform: 'translate(0, -22px) scale(1)',
+			},
+			[defaultTheme.breakpoints.up('lg')]: {
+				transform: 'translate(21px, 14px) scale(1)',
+				'&$shrink': {
+					transform: 'translate(0, -28px) scale(1)',
+				},
+			},
+		},
 		outlined: {
-			// TODO check if this will be used
 			transform: 'translate(21px, 16px) scale(1)',
 			'&$shrink': {
 				transform: 'translate(0, -22px) scale(1)',
@@ -241,6 +284,19 @@ const overrides: Overrides = {
 				fontSize: '15px',
 				lineHeight: '20px',
 			},
+		},
+	},
+	MuiFormHelperText: {
+		root: {
+			'&$error': {
+				fontSize: '13px',
+				lineHeight: '18px',
+			},
+		},
+		contained: {
+			marginLeft: 0,
+			marginRight: 0,
+			textAlign: 'right',
 		},
 	},
 };
