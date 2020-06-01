@@ -7,16 +7,17 @@ import { stylesWithTheme } from 'utils/createStyles';
 import { PrivacyPolicyDialog } from 'pages/common';
 
 import ContactForm, { ContactValues } from './ContactForm';
+import { AppointmentOwner } from 'AppContext';
 
 interface ContactProps {
-	submitSignUp: (value: ContactValues) => void;
+	submitSignUp: (value: ContactValues, appointmentOwner: AppointmentOwner) => void;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		padding: '21px 26px 0',
 		[breakpoints.up('lg')]: {
-			padding: '81px 0px 0px 108px',
+			padding: '81px 0px 0px 0px',
 		},
 	},
 	mobileSubtitle: {

@@ -6,6 +6,7 @@ import { Container, RightLayout } from 'pages/common';
 
 import { LeftSide, AboutMe, AboutMeValues, MedicalData, MedicalDataValues, Contact, ContactValues } from './components';
 import { sendSignUp } from 'pages/api';
+import { AppointmentOwner } from 'AppContext';
 
 const subRoutes = ['sobre_ti', 'datos_medicos', 'contacto'];
 const findStep = (location: Location) =>
@@ -38,14 +39,14 @@ const SignUp = () => {
 
 		push(`/registro/${subRoutes[step + 1]}`);
 	};
-	const submitSignUp = async (contactInfo: ContactValues) => {
+	const submitSignUp = async (contactInfo: ContactValues, appointmentOwner: AppointmentOwner) => {
 		const user = {
 			...(aboutUser as AboutMeValues),
 			...(medicalData as MedicalDataValues),
 			...contactInfo,
 		};
 
-		await sendSignUp(user);
+		await sendSignUp(user, appointmentOwner);
 	};
 
 	checkStep(location, aboutUser, push, medicalData);

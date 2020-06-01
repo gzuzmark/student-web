@@ -3,9 +3,11 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import FormLabel from '@material-ui/core/FormLabel';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { OptionsGroup, Option } from 'pages/common';
@@ -60,6 +62,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	fieldLabelWrapper: {
 		paddingBottom: '8px',
 	},
+	optionalField: {
+		[breakpoints.up('lg')]: {
+			marginRight: '-2px',
+		},
+	},
 	privacyPolicyWrapper: {
 		display: 'none',
 		[breakpoints.up('lg')]: {
@@ -71,11 +78,15 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		cursor: 'pointer',
 		textDecoration: 'underline',
 	},
+	italicLabel: {
+		fontStyle: 'italic',
+	},
 }));
 
 const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy }: MedicalDataFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
+	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const onSubmit = useCallback(
 		(values: MedicalDataValues, { setSubmitting }: { setSubmitting: Function }) => {
 			onChangeStep(values);
@@ -128,8 +139,15 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy }: MedicalDataFormPro
 							/>
 						</div>
 						<div className={classes.fieldWrapper}>
-							<div className={classes.fieldLabelWrapper}>
-								<FormLabel>{t('medicalData.fields.moreInfo.label')}</FormLabel>
+							<div className={clsx(classes.fieldLabelWrapper, classes.optionalField)}>
+								<FormLabel>
+									{t('medicalData.fields.moreInfo.label')}{' '}
+									{matches ? (
+										<Typography component="span" className={classes.italicLabel}>
+											{t('medicalData.fields.optional.label')}
+										</Typography>
+									) : null}
+								</FormLabel>
 							</div>
 							<Field component={TextField} name="moreInfo" variant="outlined" fullWidth />
 						</div>

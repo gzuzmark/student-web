@@ -13,7 +13,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		padding: '21px 26px 0',
 		[breakpoints.up('lg')]: {
-			padding: '72px 0px 0px 81px',
+			padding: '72px 0px 0px 0px',
 		},
 	},
 	mobileSubtitle: {

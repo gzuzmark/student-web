@@ -1,5 +1,6 @@
 import aliviaAxios from 'utils/customAxios';
 import format from 'date-fns/format';
+import { AppointmentOwner } from 'AppContext';
 
 export interface User {
 	name: string;
@@ -18,7 +19,7 @@ export interface User {
 	password?: string;
 }
 
-export const sendSignUp = async (user: User): Promise<void> => {
+export const sendSignUp = async (user: User, appointmentOwner: AppointmentOwner): Promise<void> => {
 	try {
 		await aliviaAxios.post('/signup', {
 			data: { ...user, birthDate: user.birthDate && format(new Date(user.birthDate), 'dd/MM/yyyy') },
