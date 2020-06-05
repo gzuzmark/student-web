@@ -20,6 +20,8 @@ const useStyles = makeStyles((theme: Theme) =>
 			},
 		},
 		leftLayout: {
+			position: 'relative',
+			overflow: 'hidden',
 			[theme.breakpoints.up('lg')]: {
 				width: 411,
 				paddingLeft: 104,
@@ -36,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 		circle: {
 			display: 'none',
 			position: 'absolute',
-			top: '528px',
+			top: '448px',
 			left: '0',
 			[theme.breakpoints.up('lg')]: {
 				display: 'block',

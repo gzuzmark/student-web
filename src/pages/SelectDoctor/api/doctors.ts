@@ -1,11 +1,14 @@
 // import axios from 'axios';
 import isToday from 'date-fns/isToday';
 
-export interface DoctorAvailability {
+export interface Doctor {
 	id: number;
 	name: string;
 	cmp: string;
 	profilePicture: string;
+}
+
+export interface DoctorAvailability extends Doctor {
 	comment?: string;
 	availableDates: string[];
 }

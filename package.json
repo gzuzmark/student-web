@@ -17,6 +17,7 @@
 		"@types/yup": "^0.29.0",
 		"axios": "^0.19.2",
 		"date-fns": "^2.13.0",
+		"date-fns-tz": "^1.0.10",
 		"formik": "^2.1.4",
 		"formik-material-ui": "^2.0.0-beta.1",
 		"formik-material-ui-pickers": "^0.0.8",

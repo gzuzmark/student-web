@@ -1,4 +1,5 @@
 import React, { ReactElement, useState, useCallback } from 'react';
+import { mockUser } from 'pages/api/login';
 
 export const MYSELF = 'myself';
 export const RELATIVE = 'relative';
@@ -10,18 +11,34 @@ interface AppProviderProps {
 	children: ReactElement;
 }
 
+export interface User {
+	name: string;
+	lastName: string;
+	secondSurname: string;
+	identification: string;
+	birthDate: string;
+	gender: string;
+	takeMedicines: boolean;
+	medicines?: string;
+	haveAllergies: boolean;
+	allergies?: string;
+	moreMedicalInformation?: string;
+	phoneNumber: string;
+	email?: string;
+}
+
 interface ContextProps {
-	user: Record<string, any> | null;
+	user: User | null;
 	useCase: string;
 	updateState: Function;
 	appointmentOwner: AppointmentOwner;
 }
 
 const defaultState: ContextProps = {
-	user: null,
+	user: mockUser,
 	useCase: 'Problemas de Piel',
 	updateState: Function.prototype,
-	appointmentOwner: 'guest',
+	appointmentOwner: MYSELF,
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 
