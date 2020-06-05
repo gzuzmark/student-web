@@ -10,6 +10,7 @@ import { Nav } from 'pages/common';
 import { routes, routeWithoutNav } from './routes';
 import { AppProvider } from './AppContext';
 import pageTheme from './theme';
+import PrivateRoute from 'pages/common/PrivateRoute';
 
 const theme = createMuiTheme({
 	...pageTheme,
@@ -30,9 +31,17 @@ function App() {
 							<Route exact path={routes.map(({ path }) => path)}>
 								<>
 									<Nav />
-									{routes.map(({ id, ...rest }) => (
-										<Route key={id} {...rest} />
-									))}
+									{routes.map(({ id, guard, component: Component, ...rest }) =>
+										!!guard ? (
+											<Route key={id} {...rest}>
+												<PrivateRoute>
+													<Component />
+												</PrivateRoute>
+											</Route>
+										) : (
+											<Route key={id} component={Component} {...rest} />
+										),
+									)}
 								</>
 							</Route>
 							<Route exact path={routeWithoutNav.map(({ path }) => path)}>

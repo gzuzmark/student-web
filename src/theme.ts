@@ -299,6 +299,14 @@ const overrides: Overrides = {
 			textAlign: 'right',
 		},
 	},
+	MuiCard: {
+		root: {
+			boxShadow: 'none',
+			'&:hover': {
+				boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
+			},
+		},
+	},
 };
 
 export const leftPrefixTitleFontsStyles = {
