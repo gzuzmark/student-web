@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { SelectDoctor, PreSignUp, Login, SignUp, AppointmentList, Appointment } from 'pages';
+import { SelectDoctor, PreSignUp, Login, SignUp, AppointmentList, Appointment, Triage } from 'pages';
 
 interface Route {
 	id: string;
@@ -12,6 +12,7 @@ interface Route {
 type RoutesType = Route[];
 
 export const routes: RoutesType = [
+	{ id: 'Triage', path: '/triaje', component: Triage },
 	{ id: 'SelectDoctor', path: '/seleccionar_doctor', component: SelectDoctor },
 	{ id: 'PreSignUp', path: '/pre_registro', component: PreSignUp },
 	{ id: 'SignUp', path: '/registro/*', component: SignUp },

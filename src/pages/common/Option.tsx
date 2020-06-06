@@ -1,4 +1,4 @@
-import React, { useContext, useRef, ChangeEvent, useCallback, useMemo } from 'react';
+import React, { useContext, useRef, useCallback, useMemo } from 'react';
 import Button, { ButtonProps } from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -19,19 +19,8 @@ const useOptionStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			// maxWidth: '169px',
 		},
 	},
-	optionButton: {
-		textTransform: 'none',
-		padding: '12.5px',
-		'&.MuiButton-contained': {
-			padding: '13.5px',
-			[breakpoints.up('lg')]: {
-				padding: '17.5px',
-			},
-		},
-		[breakpoints.up('lg')]: {
-			padding: '16.5px',
-		},
-	},
+	active: {},
+	optionButton: {},
 	optionInput: {
 		display: 'none',
 	},
@@ -39,11 +28,24 @@ const useOptionStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface OptionProps extends Omit<ButtonProps, 'value'> {
 	value: string | boolean | number;
+	wrapperClassName?: string;
+	classes?: Record<string, any>;
 }
 
-const Option = ({ children, value, ...props }: OptionProps) => {
+const mergeClasses = (optionClasses: Record<string, any>, customClasses: Record<string, any>) => {
+	const copyOptionClasses = { ...optionClasses };
+
+	Object.keys(customClasses).forEach((key: string) => {
+		copyOptionClasses[key] = customClasses[key];
+	});
+
+	return copyOptionClasses;
+};
+
+const Option = ({ children, value, classes, wrapperClassName, ...props }: OptionProps) => {
 	const { name, onChange, onBlur, formValue, ...buttonProps } = useContext(OptionsContext);
-	const classes = useOptionStyles();
+	const defaultClasses = useOptionStyles();
+	const optionClasses = classes ? mergeClasses(defaultClasses, classes) : defaultClasses;
 	const inputRef = useRef(null);
 	const onClick = useCallback(() => {
 		// eslint-disable-next-line
@@ -51,24 +53,21 @@ const Option = ({ children, value, ...props }: OptionProps) => {
 		inputRef.current.click();
 	}, []);
 	const checked = formValue === value;
-	const inputOnChange = useCallback(
-		(e: ChangeEvent<HTMLInputElement>) => {
-			const value = e.target.value;
-
-			onChange(value === 'true');
-		},
-		[onChange],
-	);
+	const inputOnChange = useCallback(() => {
+		onChange(value);
+	}, [onChange, value]);
 	const blurCallback = useMemo(() => onBlur, [onBlur]);
+	const variant = props.variant || (checked ? 'contained' : 'outlined');
 
 	return (
-		<div className={classes.optionWrapper}>
+		<div className={clsx(optionClasses.optionWrapper, wrapperClassName)}>
 			<Button
-				className={clsx(classes.optionButton, props.className)}
+				{...props}
+				className={clsx(optionClasses.optionButton, { [optionClasses.active]: checked }, props.className)}
 				onClick={onClick}
 				onBlur={blurCallback}
 				name={name}
-				variant={checked ? 'contained' : 'outlined'}
+				variant={variant}
 				{...buttonProps}
 			>
 				{children}
@@ -78,7 +77,7 @@ const Option = ({ children, value, ...props }: OptionProps) => {
 				ref={inputRef}
 				name={name}
 				value={String(value)}
-				className={classes.optionInput}
+				className={optionClasses.optionInput}
 				onChange={inputOnChange}
 				type="radio"
 			/>
