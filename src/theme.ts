@@ -291,6 +291,7 @@ const overrides: Overrides = {
 			'&$error': {
 				fontSize: '13px',
 				lineHeight: '18px',
+				textAlign: 'right',
 			},
 		},
 		contained: {

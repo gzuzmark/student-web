@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,8 @@ import mobileLogin from 'icons/mobile_login.png';
 import desktopImage from 'icons/login_image.png';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import Circle from 'pages/common/Circle';
+import AppContext from 'AppContext';
+import { usePageTitle, useCurrentUserRediction } from 'utils';
 
 import { LoginForm } from './components';
 import useStyles from './styles';
@@ -14,6 +16,10 @@ import useStyles from './styles';
 const Login = () => {
 	const classes = useStyles();
 	const { t } = useTranslation('login');
+	const { user: currentUser } = useContext(AppContext);
+
+	usePageTitle('Registro');
+	useCurrentUserRediction(currentUser, '/citas');
 
 	return (
 		<Container className={classes.container}>

@@ -59,6 +59,19 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			},
 		},
 	},
+	optionButton: {
+		textTransform: 'none',
+		padding: '12.5px',
+		'&.MuiButton-contained': {
+			padding: '13.5px',
+			[breakpoints.up('lg')]: {
+				padding: '17.5px',
+			},
+		},
+		[breakpoints.up('lg')]: {
+			padding: '16.5px',
+		},
+	},
 	fieldLabelWrapper: {
 		paddingBottom: '8px',
 	},
@@ -105,8 +118,12 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy }: MedicalDataFormPro
 								<FormLabel>{t('medicalData.fields.moreInfo.label')}</FormLabel>
 							</div>
 							<Field component={OptionsGroup} name="takeMedicines" fullWidth>
-								<Option value={true}>{t('medicalData.fields.yesOption')}</Option>
-								<Option value={false}>{t('medicalData.fields.noOption')}</Option>
+								<Option className={classes.optionButton} value={true}>
+									{t('medicalData.fields.yesOption')}
+								</Option>
+								<Option className={classes.optionButton} value={false}>
+									{t('medicalData.fields.noOption')}
+								</Option>
 							</Field>
 						</div>
 						<div className={classes.fieldWrapper}>
@@ -124,8 +141,12 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy }: MedicalDataFormPro
 								<FormLabel>{t('medicalData.fields.haveAllergies.label')}</FormLabel>
 							</div>
 							<Field component={OptionsGroup} name="haveAllergies" fullWidth>
-								<Option value={true}>{t('medicalData.fields.yesOption')}</Option>
-								<Option value={false}>{t('medicalData.fields.noOption')}</Option>
+								<Option className={classes.optionButton} value={true}>
+									{t('medicalData.fields.yesOption')}
+								</Option>
+								<Option className={classes.optionButton} value={false}>
+									{t('medicalData.fields.noOption')}
+								</Option>
 							</Field>
 						</div>
 						<div className={classes.fieldWrapper}>

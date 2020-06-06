@@ -27,29 +27,35 @@ export interface User {
 	email?: string;
 }
 
+export interface TriagePair {
+	question: string;
+	answer: string;
+}
+
 interface ContextProps {
 	user: User | null;
+	channel: string;
 	useCase: string;
-	updateState: Function;
 	appointmentOwner: AppointmentOwner;
+	updateState: Function;
+	triage: TriagePair[];
 }
 
 const defaultState: ContextProps = {
-	user: mockUser,
-	useCase: 'Problemas de Piel',
+	user: null,
+	channel: 'videocall',
+	useCase: '',
 	updateState: Function.prototype,
 	appointmentOwner: MYSELF,
+	triage: [],
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 
 const AppProvider = ({ children }: AppProviderProps) => {
 	const [state, setState] = useState<Partial<ContextProps>>(defaultState);
-	const updateState = useCallback(
-		(newState: Partial<ContextProps>) => {
-			setState({ ...state, ...newState });
-		},
-		[state],
-	);
+	const updateState = useCallback((newState: Partial<ContextProps>) => {
+		setState((state) => ({ ...state, ...newState }));
+	}, []);
 
 	return <AppContext.Provider value={{ ...state, updateState }}>{children}</AppContext.Provider>;
 };

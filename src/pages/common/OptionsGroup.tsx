@@ -2,6 +2,7 @@ import React, { ElementType } from 'react';
 import { ButtonProps } from '@material-ui/core/Button';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { FieldProps, getIn } from 'formik';
+import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils';
 
@@ -17,6 +18,8 @@ type FieldPropsForContext = Pick<FieldProps['field'], 'name' | 'onBlur'>;
 
 interface OptionsGroupProps extends ButtonsForComponent, FieldProps {
 	children: ElementType;
+	className: string;
+	fieldClassName: string;
 }
 
 interface OptionsContextProps extends Partial<ButtonPropsForContext>, FieldPropsForContext {
@@ -32,12 +35,14 @@ export const OptionsGroup = ({
 	form: { errors, touched, setFieldValue },
 	field: { name, onBlur, value },
 	children,
+	className,
+	fieldClassName,
 	...props
 }: OptionsGroupProps) => {
 	const classes = useGroupStyles();
 	const fieldError = getIn(errors, name);
 	const showError = getIn(touched, name) && !!fieldError;
-	const onChange = (value: boolean) => {
+	const onChange = (value: string | number | boolean) => {
 		setFieldValue(name, value, true);
 	};
 	const contextValue = {
@@ -50,8 +55,8 @@ export const OptionsGroup = ({
 
 	return (
 		<OptionsContext.Provider value={contextValue}>
-			<div>
-				<div className={classes.group}>{children}</div>
+			<div className={fieldClassName}>
+				<div className={clsx(classes.group, className)}>{children}</div>
 				{showError ? (
 					<FormHelperText error={showError} variant="outlined">
 						{fieldError}

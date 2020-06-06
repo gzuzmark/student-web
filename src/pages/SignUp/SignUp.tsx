@@ -3,10 +3,11 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
+import { sendSignUp } from 'pages/api';
+import { usePageTitle, useCurrentUserRediction } from 'utils';
+import AppContext, { AppointmentOwner } from 'AppContext';
 
 import { LeftSide, AboutMe, AboutMeValues, MedicalData, MedicalDataValues, Contact, ContactValues } from './components';
-import { sendSignUp } from 'pages/api';
-import AppContext, { AppointmentOwner } from 'AppContext';
 
 const subRoutes = ['sobre_ti', 'datos_medicos', 'contacto'];
 const findStep = (location: Location) =>
@@ -30,7 +31,7 @@ const SignUp = () => {
 	const [step, setStep] = useState<number>(0);
 	const [aboutUser, setAboutUser] = useState<AboutMeValues>();
 	const [medicalData, setMedicalData] = useState<MedicalDataValues>();
-	const { updateState } = useContext(AppContext);
+	const { user: currentUser, updateState } = useContext(AppContext);
 	const onChangeStep = (values: AboutMeValues | MedicalDataValues) => {
 		if (step === 0) {
 			setAboutUser(values as AboutMeValues);
@@ -53,6 +54,8 @@ const SignUp = () => {
 		}
 	};
 
+	usePageTitle('Registro');
+	useCurrentUserRediction(currentUser, '/citas');
 	checkStep(location, aboutUser, push, medicalData);
 
 	useEffect(() => {

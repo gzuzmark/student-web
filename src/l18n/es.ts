@@ -6,6 +6,7 @@ import loginL18n from 'pages/Login/l18n';
 import signUpL18n from 'pages/SignUp/l18n';
 import appointmentListL18n from 'pages/AppointmentList/l18n';
 import appointmentDetailL18n from 'pages/Appointment/l18n';
+import triageL18n from 'pages/Triage/l18n';
 
 export default {
 	nav: {
@@ -26,4 +27,5 @@ export default {
 	signUp: { ...signUpL18n },
 	appointmentList: { ...appointmentListL18n },
 	appointmentDetail: { ...appointmentDetailL18n },
+	triage: { ...triageL18n },
 };

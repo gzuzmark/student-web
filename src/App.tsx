@@ -52,6 +52,9 @@ function App() {
 							<Route exact path="/registro">
 								<Redirect to="/registro/sobre_ti" />
 							</Route>
+							<Route path="/*">
+								<Redirect to="/triaje" />
+							</Route>
 						</Switch>
 					</Router>
 				</AppProvider>

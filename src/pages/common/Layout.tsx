@@ -30,9 +30,10 @@ const useStyles = makeStyles((theme: Theme) =>
 		rightLayout: {
 			backgroundColor: BACKGROUND_DEFAULT,
 			flex: '1 1 auto',
-			minHeight: 'calc(100vh - 80px)',
+			minHeight: 'calc(100vh - 50px)',
 			[theme.breakpoints.up('lg')]: {
 				paddingLeft: 109,
+				minHeight: 'calc(100vh - 80px)',
 			},
 		},
 		circle: {

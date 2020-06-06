@@ -5,3 +5,4 @@ export * from './Login';
 export * from './SignUp';
 export * from './AppointmentList';
 export * from './Appointment';
+export * from './Triage';
