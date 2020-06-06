@@ -1,5 +1,5 @@
 import React, { ReactElement, useState, useCallback } from 'react';
-import { mockUser } from 'pages/api/login';
+// import { mockUser } from 'pages/api/login';
 
 export const MYSELF = 'myself';
 export const RELATIVE = 'relative';
