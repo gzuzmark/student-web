@@ -53,7 +53,7 @@ module.exports = {
 			},
 			{
 				'selector': 'parameter',
-				'format': ['camelCase', 'snake_case'],
+				'format': ['camelCase', 'snake_case', 'PascalCase'],
 				'leadingUnderscore': 'allow'
 			},
 			{

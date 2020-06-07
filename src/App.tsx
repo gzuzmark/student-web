@@ -21,7 +21,7 @@ const formats = {
 	keyboardDate: 'dd/MM/yyyy',
 };
 
-function App() {
+const App = () => {
 	return (
 		<LocalizationProvider dateAdapter={DateFnsUtils} locale={esLocal} dateFormats={formats}>
 			<ThemeProvider theme={theme}>
@@ -50,7 +50,7 @@ function App() {
 								))}
 							</Route>
 							<Route exact path="/registro">
-								<Redirect to="/registro/sobre_ti" />
+								<Redirect to="/registro/contacto" />
 							</Route>
 							<Route path="/*">
 								<Redirect to="/triaje" />
@@ -61,6 +61,6 @@ function App() {
 			</ThemeProvider>
 		</LocalizationProvider>
 	);
-}
+};
 
 export default App;
