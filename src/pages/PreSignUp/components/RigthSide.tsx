@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
@@ -9,7 +9,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Link, useHistory } from 'react-router-dom';
 
 import { RightLayout } from 'pages/common';
-import AppContext, { MYSELF, RELATIVE, GUEST } from 'AppContext';
+import { MYSELF, RELATIVE, GUEST } from 'AppContext';
 import { ReactComponent as RightIcon } from 'icons/right.svg';
 import { stylesWithTheme } from 'utils/createStyles';
 
@@ -102,10 +102,14 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const RightSide = () => {
+interface RightSideProps {
+	appointmentOwner?: string;
+	updateState?: Function;
+}
+
+const RightSide = ({ appointmentOwner, updateState }: RightSideProps) => {
 	const { t } = useTranslation('preSignUp');
 	const history = useHistory();
-	const { appointmentOwner, updateState } = useContext(AppContext);
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const isForMyself = appointmentOwner === MYSELF;
 	const l18nSelector = isForMyself ? 'toYou' : 'toSomeoneElse';

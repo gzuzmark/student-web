@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react';
+import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { PasswordField } from 'pages/common';
-import AppContext, { GUEST, AppointmentOwner } from 'AppContext';
+import { GUEST, AppointmentOwner } from 'AppContext';
 
 import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
 
@@ -21,8 +21,10 @@ export interface ContactValues {
 }
 
 interface ContactFormProps {
-	submitSignUp: (value: ContactValues, appointmentOwner: AppointmentOwner) => void;
+	onChangeStep: (values: ContactValues) => void;
 	openPrivacyPolicy: () => void;
+	appointmentOwner: AppointmentOwner | undefined;
+	contactInfo: ContactValues | undefined;
 }
 
 const initialValues = {
@@ -76,23 +78,22 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const ContactForm = ({ submitSignUp, openPrivacyPolicy }: ContactFormProps) => {
+const ContactForm = ({ onChangeStep, openPrivacyPolicy, appointmentOwner, contactInfo }: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
-	const { appointmentOwner } = useContext(AppContext);
 	const onSubmit = useCallback(
 		async (values: ContactValues, { setSubmitting }: { setSubmitting: Function }) => {
-			submitSignUp(values, appointmentOwner as AppointmentOwner);
+			onChangeStep(values);
 			setSubmitting(false);
 		},
-		[appointmentOwner, submitSignUp],
+		[onChangeStep],
 	);
 	const isGuest = appointmentOwner === GUEST;
 
 	return (
 		<Formik
-			initialValues={initialValues}
+			initialValues={contactInfo || initialValues}
 			onSubmit={onSubmit}
 			validationSchema={isGuest ? guestValidationSchema : newUservalidationSchema}
 		>

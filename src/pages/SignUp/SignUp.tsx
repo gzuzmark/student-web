@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
 import { sendSignUp } from 'pages/api';
 import { usePageTitle, useCurrentUserRediction } from 'utils';
-import AppContext, { AppointmentOwner } from 'AppContext';
+import AppContext from 'AppContext';
 
 import { LeftSide, AboutMe, AboutMeValues, MedicalData, MedicalDataValues, Contact, ContactValues } from './components';
 
-const subRoutes = ['sobre_ti', 'datos_medicos', 'contacto'];
+const subRoutes = ['contacto', 'datos_medicos', 'sobre_ti'];
 const findStep = (location: Location) =>
 	subRoutes.findIndex((route: string) => location && location.pathname === `/registro/${route}`);
 const checkStep = (
 	location: Location,
-	aboutUser: AboutMeValues | undefined,
+	contactInfo: ContactValues | undefined,
 	push: Function,
 	medicalData: MedicalDataValues | undefined,
 ) => {
 	const index = findStep(location);
-	if (index === 1 && !aboutUser) {
+	if (index === 1 && !contactInfo) {
 		push('registro/sobre_ti');
 	} else if (index === 2 && !medicalData) {
 		push('registro/datos_medicos');
@@ -29,34 +29,36 @@ const checkStep = (
 const SignUp = () => {
 	const { push, listen, location } = useHistory();
 	const [step, setStep] = useState<number>(0);
-	const [aboutUser, setAboutUser] = useState<AboutMeValues>();
+	const [contactInfo, setContactInfo] = useState<ContactValues>();
 	const [medicalData, setMedicalData] = useState<MedicalDataValues>();
-	const { user: currentUser, updateState } = useContext(AppContext);
-	const onChangeStep = (values: AboutMeValues | MedicalDataValues) => {
+	const { user: currentUser, updateState, appointmentOwner } = useContext(AppContext);
+	const onChangeStep = (values: ContactValues | MedicalDataValues) => {
 		if (step === 0) {
-			setAboutUser(values as AboutMeValues);
+			setContactInfo(values as ContactValues);
 		} else if (step === 1) {
 			setMedicalData(values as MedicalDataValues);
 		}
 
 		push(`/registro/${subRoutes[step + 1]}`);
 	};
-	const submitSignUp = async (contactInfo: ContactValues, appointmentOwner: AppointmentOwner) => {
-		const user = {
-			...(aboutUser as AboutMeValues),
-			...(medicalData as MedicalDataValues),
-			...contactInfo,
-		};
+	const submitSignUp = async (aboutUser: AboutMeValues) => {
+		if (appointmentOwner && updateState) {
+			const user = {
+				...(medicalData as MedicalDataValues),
+				...(contactInfo as ContactValues),
+				...aboutUser,
+			};
 
-		await sendSignUp(user, appointmentOwner);
-		if (updateState) {
+			await sendSignUp(user, appointmentOwner);
 			updateState({ user });
 		}
 	};
 
 	usePageTitle('Registro');
 	useCurrentUserRediction(currentUser, '/citas');
-	checkStep(location, aboutUser, push, medicalData);
+	useLayoutEffect(() => {
+		checkStep(location, contactInfo, push, medicalData);
+	}, [contactInfo, location, medicalData, push]);
 
 	useEffect(() => {
 		const removeListener = listen((location: Location) => {
@@ -77,17 +79,17 @@ const SignUp = () => {
 			<LeftSide step={step} />
 			<RightLayout>
 				<Switch>
-					<Route path="/registro/sobre_ti">
-						<AboutMe onChangeStep={onChangeStep} />
+					<Route exact path="/registro/contacto">
+						<Contact contactInfo={contactInfo} onChangeStep={onChangeStep} appointmentOwner={appointmentOwner} />
 					</Route>
 					<Route exact path="/registro/datos_medicos">
-						<MedicalData onChangeStep={onChangeStep} />
+						<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
 					</Route>
-					<Route exact path="/registro/contacto">
-						<Contact submitSignUp={submitSignUp} />
+					<Route path="/registro/sobre_ti">
+						<AboutMe submitSignUp={submitSignUp} />
 					</Route>
 					<Route exact path="/registro/*">
-						<Redirect to="/registro/sobre_ti" />
+						<Redirect to="/registro/contacto" />
 					</Route>
 				</Switch>
 			</RightLayout>

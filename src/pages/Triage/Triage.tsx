@@ -23,7 +23,7 @@ const Triage = () => {
 	return (
 		<Container>
 			<LeftSide />
-			<RightSide />
+			<RightSide updateContextState={updateState} />
 		</Container>
 	);
 };

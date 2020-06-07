@@ -9,7 +9,7 @@ import { PrivacyPolicyDialog } from 'pages/common';
 import AboutMeForm, { AboutMeValues } from './AboutMeForm';
 
 interface AboutMeProps {
-	onChangeStep: (values: AboutMeValues) => void;
+	submitSignUp: (value: AboutMeValues) => void;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -43,7 +43,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMe = ({ onChangeStep }: AboutMeProps) => {
+const AboutMe = ({ submitSignUp }: AboutMeProps) => {
 	const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
@@ -73,7 +73,7 @@ const AboutMe = ({ onChangeStep }: AboutMeProps) => {
 			<Typography className={classes.subTitle} color="primary">
 				{t('aboutme.subTitle')}
 			</Typography>
-			<AboutMeForm onChangeStep={onChangeStep} openPrivacyPolicy={openDialog} />
+			<AboutMeForm submitSignUp={submitSignUp} openPrivacyPolicy={openDialog} />
 			<PrivacyPolicyDialog isOpen={isDialogOpen} closeDialog={closeDialog} />
 		</div>
 	);

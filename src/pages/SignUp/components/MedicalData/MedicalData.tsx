@@ -42,9 +42,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface MedicalDataProps {
 	onChangeStep: (values: MedicalDataValues) => void;
+	medicalData: MedicalDataValues | undefined;
 }
 
-const MedicalData = ({ onChangeStep }: MedicalDataProps) => {
+const MedicalData = ({ onChangeStep, medicalData }: MedicalDataProps) => {
 	const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 	const { t } = useTranslation('signUp');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
@@ -83,7 +84,7 @@ const MedicalData = ({ onChangeStep }: MedicalDataProps) => {
 			<Typography className={classes.subTitle} color="primary">
 				{t('medicalData.subTitle')}
 			</Typography>
-			<MedicalDataForm onChangeStep={onChangeStep} openPrivacyPolicy={openDialog} />
+			<MedicalDataForm medicalData={medicalData} onChangeStep={onChangeStep} openPrivacyPolicy={openDialog} />
 			<PrivacyPolicyDialog isOpen={isDialogOpen} closeDialog={closeDialog} />
 		</div>
 	);

@@ -42,7 +42,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 interface TimeOptionProps {
-	date: string;
+	date: Date;
 	onClick: () => void;
 	disabled: boolean;
 	active?: boolean;

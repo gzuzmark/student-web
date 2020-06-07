@@ -4,6 +4,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { stylesWithTheme } from 'utils';
 import { ActiveDoctorTime } from './DoctorList/DoctorList';
 import TimeOption from './TimeOption';
+import { Schedule } from '../api';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -62,10 +63,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 interface AvailableTimesProps {
-	availableDates: string[];
+	availableDates: Schedule[];
 	name: string;
 	doctorID: number;
-	selectTime: (time: string) => void;
+	selectTime: (scheduleId: string) => void;
 	activeDoctorTime: ActiveDoctorTime;
 }
 
@@ -75,28 +76,29 @@ const AvailableTimes = ({ availableDates, name, doctorID, selectTime, activeDoct
 	const activateAll = () => {
 		selectTime('');
 	};
-	const onClick = (date: string) => () => {
-		selectTime(date);
+	const onClick = (scheduleId: string) => () => {
+		selectTime(scheduleId);
 	};
 	const format = matches ? 'k:mm' : undefined;
 	const isSelectedDoctor = activeDoctorTime.doctorID === doctorID;
-	const isEmptyTime = activeDoctorTime.time === '';
-	const isButtonDisabled = (date: string) =>
-		isEmptyTime ? false : activeDoctorTime.time !== date || !isSelectedDoctor;
-	const isButtonActive = (date: string) => (isEmptyTime ? false : activeDoctorTime.time === date && isSelectedDoctor);
+	const isEmptyTime = activeDoctorTime.scheduleID === '';
+	const isButtonDisabled = (scheduleID: string) =>
+		isEmptyTime ? false : activeDoctorTime.scheduleID !== scheduleID || !isSelectedDoctor;
+	const isButtonActive = (scheduleID: string) =>
+		isEmptyTime ? false : activeDoctorTime.scheduleID === scheduleID && isSelectedDoctor;
 
 	return (
 		<div className={classes.container}>
 			{!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null}
 			<div className={classes.times}>
-				{availableDates.map((date: string) => (
+				{availableDates.map(({ id, startTime }: Schedule) => (
 					<TimeOption
-						date={date}
-						onClick={onClick(date)}
-						disabled={isButtonDisabled(date)}
-						active={isButtonActive(date)}
+						date={startTime}
+						onClick={onClick(id)}
+						disabled={isButtonDisabled(id)}
+						active={isButtonActive(id)}
 						format={format}
-						key={`${name}-${date}`}
+						key={`${name}-${doctorID}-${id}`}
 					/>
 				))}
 			</div>
