@@ -23,7 +23,7 @@ export interface AboutMeValues {
 }
 
 interface AboutMeFormProps {
-	onChangeStep: (values: AboutMeValues) => void;
+	submitSignUp: (value: AboutMeValues) => void;
 	openPrivacyPolicy: () => void;
 }
 
@@ -67,15 +67,15 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMeForm = ({ onChangeStep, openPrivacyPolicy }: AboutMeFormProps) => {
+const AboutMeForm = ({ submitSignUp, openPrivacyPolicy }: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const onSubmit = useCallback(
 		async (values: AboutMeValues, { setSubmitting }: { setSubmitting: Function }) => {
-			onChangeStep(values);
+			submitSignUp(values);
 			setSubmitting(false);
 		},
-		[onChangeStep],
+		[submitSignUp],
 	);
 
 	return (

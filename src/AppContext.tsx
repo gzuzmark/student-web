@@ -1,11 +1,25 @@
 import React, { ReactElement, useState, useCallback } from 'react';
 // import { mockUser } from 'pages/api/login';
 
+// Appointment Owner
 export const MYSELF = 'myself';
 export const RELATIVE = 'relative';
 export const GUEST = 'guest';
 
 export type AppointmentOwner = 'myself' | 'relative' | 'guest' | '';
+
+// Steps
+export const TRIAGE_STEP = 'triage';
+export const ATTENTION_METHOD = 'attention-method';
+export const SELECT_DOCTOR = 'select-doctor';
+export const PRE_SIGNUP = 'pre-signup';
+export const routeMapping = {
+	[TRIAGE_STEP]: '/triaje',
+	[ATTENTION_METHOD]: 'metodo_atencion',
+	[SELECT_DOCTOR]: '/seleccionar_doctor',
+};
+
+export type AppointmentCreationStep = 'triage' | 'attention-method' | 'select-doctor' | 'pre-signup';
 
 interface AppProviderProps {
 	children: ReactElement;
@@ -39,15 +53,17 @@ interface ContextProps {
 	appointmentOwner: AppointmentOwner;
 	updateState: Function;
 	triage: TriagePair[];
+	appointmentCreationStep: AppointmentCreationStep;
 }
 
 const defaultState: ContextProps = {
 	user: null,
 	channel: 'videocall',
-	useCase: '',
+	useCase: 'Fiebre',
 	updateState: Function.prototype,
 	appointmentOwner: MYSELF,
 	triage: [],
+	appointmentCreationStep: 'triage',
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

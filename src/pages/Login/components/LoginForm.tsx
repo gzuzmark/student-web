@@ -5,12 +5,13 @@ import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { sendLogin } from 'pages/api';
 import { PasswordField } from 'pages/common';
+import { AppointmentCreationStep, PRE_SIGNUP, SELECT_DOCTOR, routeMapping } from 'AppContext';
 
 import validationSchema from '../validationSchema';
 
@@ -73,15 +74,31 @@ interface FormValues {
 	password: string;
 }
 
-const LoginForm = () => {
+interface LoginFormProps {
+	appointmentCreationStep: AppointmentCreationStep | undefined;
+}
+
+const LoginForm = ({ appointmentCreationStep }: LoginFormProps) => {
 	const { t } = useTranslation('login');
 	const classes = useStyles();
+	const history = useHistory();
 	const onSubmit = useCallback(
 		async ({ phoneNumber, password }: FormValues, { setSubmitting }: { setSubmitting: Function }) => {
 			await sendLogin({ username: phoneNumber, password });
 			setSubmitting(false);
+			switch (appointmentCreationStep) {
+				case PRE_SIGNUP:
+					history.push('/pago');
+					break;
+				case SELECT_DOCTOR:
+					history.push(routeMapping[SELECT_DOCTOR]);
+					break;
+				default:
+					history.push('/citas');
+					break;
+			}
 		},
-		[],
+		[appointmentCreationStep, history],
 	);
 
 	return (

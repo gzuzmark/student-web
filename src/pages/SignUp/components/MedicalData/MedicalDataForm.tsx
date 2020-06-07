@@ -25,6 +25,7 @@ export interface MedicalDataValues {
 interface MedicalDataFormProps {
 	onChangeStep: (values: MedicalDataValues) => void;
 	openPrivacyPolicy: () => void;
+	medicalData: MedicalDataValues | undefined;
 }
 
 const initialValues = {
@@ -96,7 +97,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy }: MedicalDataFormProps) => {
+const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: MedicalDataFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
@@ -109,7 +110,7 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy }: MedicalDataFormPro
 	);
 
 	return (
-		<Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+		<Formik initialValues={medicalData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
 			{({ submitForm, isSubmitting, values }) => (
 				<Form className={classes.form}>
 					<div>

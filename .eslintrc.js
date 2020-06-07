@@ -25,5 +25,48 @@ module.exports = {
 		'@typescript-eslint/no-use-before-define': 'off',
 		'react-hooks/rules-of-hooks': 'error',
 		'react-hooks/exhaustive-deps': 'warn',
+		'@typescript-eslint/camelcase': 'off',
+		'@typescript-eslint/naming-convention': [
+			'error',
+			{
+				'selector': 'default',
+				'format': ['camelCase'],
+				'filter': {
+					// you can expand this regex to add more allowed names
+					'regex': '[- ]',
+					'match': false
+				}
+			},
+
+			{
+				'selector': 'variable',
+				'format': ['camelCase', 'PascalCase', 'UPPER_CASE']
+			},
+			{
+				'selector': 'property',
+				'format': ['camelCase', 'snake_case'],
+				'filter': {
+					// you can expand this regex to add more allowed names
+					'regex': '[- ]',
+					'match': false
+				}
+			},
+			{
+				'selector': 'parameter',
+				'format': ['camelCase', 'snake_case'],
+				'leadingUnderscore': 'allow'
+			},
+			{
+				'selector': 'memberLike',
+				'modifiers': ['private'],
+				'format': ['camelCase'],
+				'leadingUnderscore': 'require'
+			},
+
+			{
+				'selector': 'typeLike',
+				'format': ['PascalCase']
+			}
+		]
 	},
 };

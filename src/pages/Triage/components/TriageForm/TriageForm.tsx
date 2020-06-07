@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -13,7 +13,8 @@ import { ReactComponent as UserIcon } from 'icons/user.svg';
 import { ReactComponent as CompanionIcon } from 'icons/companion.svg';
 import { ReactComponent as MehIcon } from 'icons/meh.svg';
 import { ReactComponent as SadIcon } from 'icons/sad.svg';
-import AppContext, { TriagePair, MYSELF, RELATIVE } from 'AppContext';
+import { TriagePair, MYSELF, RELATIVE, SELECT_DOCTOR } from 'AppContext';
+import { getKeyValue } from 'utils';
 
 import validationSchema from './validationSchema';
 import useStyles from './styles';
@@ -23,6 +24,10 @@ interface TriageFromValues {
 	discomfortLvl: string;
 	discomfortDescription: string;
 	discomfortDuration: string;
+}
+
+interface TriageFormProps {
+	updateContextState: Function | undefined;
 }
 
 const STRONG = 'strong';
@@ -43,8 +48,6 @@ const createQuestionsMap = (t: Function): Record<string, string> => ({
 	discomfortDuration: t('triage.fields.discomfortDuration.label'),
 });
 
-const getKeyValue = <U extends keyof T, T extends object>(key: U) => (obj: T) => obj[key];
-
 const createTriageArr = (values: TriageFromValues, t: Function): TriagePair[] => {
 	const questions = createQuestionsMap(t);
 
@@ -54,19 +57,19 @@ const createTriageArr = (values: TriageFromValues, t: Function): TriagePair[] =>
 		answer: getKeyValue<keyof TriageFromValues, TriageFromValues>(key as keyof TriageFromValues)(values),
 	}));
 };
-const TriageForm = () => {
+
+const TriageForm = ({ updateContextState }: TriageFormProps) => {
 	const classes = useStyles();
 	const history = useHistory();
-	const { updateState } = useContext(AppContext);
 	const { t } = useTranslation('triage');
 	const onSubmit = (
 		{ appointmentOwner, ...others }: TriageFromValues,
 		{ setSubmitting }: { setSubmitting: Function },
 	) => {
-		if (updateState) {
+		if (updateContextState) {
 			const triageArr = createTriageArr({ appointmentOwner, ...others }, t);
 
-			updateState({ appointmentOwner, triage: triageArr });
+			updateContextState({ appointmentOwner, triage: triageArr, appointmentCreationStep: SELECT_DOCTOR });
 			history.push('/seleccionar_doctor');
 			setSubmitting(false);
 		}

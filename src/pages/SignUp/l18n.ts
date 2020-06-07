@@ -2,14 +2,14 @@ const signUp = {
 	'left.titlePrefix': 'AHORA,',
 	'left.title.toYouOrSomeoneElse': 'Creación de cuenta',
 	'left.title.guest': 'Continuar como invitado',
-	'left.step.first.label': 'SOBRE TI',
+	'left.step.first.label': 'CONTACTO',
 	'left.step.second.label': 'DATOS MÉDICOS',
-	'left.step.third.label': 'CONTACTO',
+	'left.step.third.label': 'SOBRE TI',
 	// About Me
 	'aboutme.title.firstSection': 'Llena los',
 	'aboutme.title.secondSection': 'datos del paciente',
 	'aboutme.title.thirdSection': 'para continuar',
-	'aboutme.subTitle': '1. INFORMACIÓN SOBRE TI',
+	'aboutme.subTitle': '3. INFORMACIÓN SOBRE TI',
 	'aboutme.fields.name.label': 'Nombre',
 	'aboutme.fields.lastName.label': 'Apellido Paterno',
 	'aboutme.fields.secondSurname.label': 'Apellido Materno',
@@ -27,7 +27,7 @@ const signUp = {
 	'aboutme.validation.gender.required': 'Selecciona un género para continuar',
 	'aboutme.privacyPolicy.firstSection': 'Estoy de acuerdo con la',
 	'aboutme.privacyPolicy.secondSection': 'política de privacidad',
-	'aboutme.submit.text': 'Continuar',
+	'aboutme.submit.text': 'De acuerdo, crear mi cuenta',
 	// Medical data
 	'medicalData.mobile.title.firstSection': 'Completa esta información médica',
 	'medicalData.title.firstSection': 'Completa esta',
@@ -52,7 +52,7 @@ const signUp = {
 	// Contact
 	'contact.mobile.title': 'Usaremos tus datos de contacto para enviarte la información de tu cita',
 	'contact.title': 'Usaremos los datos de contacto para enviar la información de cita',
-	'contact.subTitle': '3. DATOS DE CONTACTO',
+	'contact.subTitle': '1. DATOS DE CONTACTO',
 	'contact.fields.phoneNumber.label': 'Celular',
 	'contact.fields.phoneNumber.helperText': 'Con este número iniciarás sesión en el futuro',
 	'contact.fields.email.label': 'Correo electrónico',
@@ -69,8 +69,8 @@ const signUp = {
 	'contact.legalInformation.privacyPolicyLink': 'política de privacidad',
 	'contact.legalInformation.secondSection': 'y nuestros',
 	'contact.legalInformation.termsAndConditionsLink': 'términos y condiciones.',
-	'contact.submit.text.mobile': 'De acuerdo, crear mi cuenta',
-	'contact.submit.text': 'De acuerdo, deseo crear una cuenta',
+	'contact.submit.text.mobile': 'Continuar',
+	'contact.submit.text': 'Continuar',
 };
 
 export default signUp;

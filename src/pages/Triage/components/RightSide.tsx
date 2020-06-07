@@ -27,14 +27,18 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const RightSide = () => {
+interface RightSideProp {
+	updateContextState: Function | undefined;
+}
+
+const RightSide = ({ updateContextState }: RightSideProp) => {
 	const classes = useStyles();
 	const { t } = useTranslation('triage');
 
 	return (
 		<RightLayout>
 			<div className={classes.wrapper}>
-				<TriageForm />
+				<TriageForm updateContextState={updateContextState} />
 			</div>
 			<div className={classes.disclosureWrapper}>
 				<Typography>{t('triage.disclosure.firstLine')}</Typography>

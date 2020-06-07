@@ -4,29 +4,35 @@ import Button from '@material-ui/core/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
+import { PRE_SIGNUP } from 'AppContext';
+
 import { DoctorAvailability } from '../../api';
 import AvailableTimes from '../AvailableTimes';
 import useStyles from './styles';
 
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
+	updateContextState: Function | undefined;
 }
 
 export interface ActiveDoctorTime {
 	doctorID: number;
-	time: string;
+	scheduleID: string;
 }
 
-const DoctorList = ({ doctors }: DoctorListProps) => {
+const DoctorList = ({ doctors, updateContextState }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const history = useHistory();
-	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorID: -1, time: '' });
-	const selectDoctor = (doctorID: number) => (selectedTime: string) => {
-		setActiveDoctorTime({ doctorID: selectedTime === '' ? -1 : doctorID, time: selectedTime });
+	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorID: -1, scheduleID: '' });
+	const selectDoctor = (doctorID: number) => (scheduleID: string) => {
+		setActiveDoctorTime({ doctorID: scheduleID === '' ? -1 : doctorID, scheduleID });
 	};
 	const continueToPreRegister = () => {
-		history.push('/pre_registro');
+		if (updateContextState) {
+			updateContextState({ appointmentCreationStep: PRE_SIGNUP });
+			history.push('/pre_registro');
+		}
 	};
 
 	return (
@@ -40,7 +46,7 @@ const DoctorList = ({ doctors }: DoctorListProps) => {
 				</Typography>
 			</div>
 			<div className={classes.doctorList}>
-				{doctors.map(({ id, name, cmp, comment, profilePicture, availableDates }: DoctorAvailability) => (
+				{doctors.map(({ id, name, cmp, comment, profilePicture, schedules }: DoctorAvailability) => (
 					<div className={classes.doctorWrapper} key={id}>
 						<div className={classes.doctor}>
 							<div className={classes.photoWrapper}>
@@ -72,7 +78,7 @@ const DoctorList = ({ doctors }: DoctorListProps) => {
 						</div>
 						<div className={classes.timesWrapper}>
 							<AvailableTimes
-								availableDates={availableDates}
+								availableDates={schedules}
 								name={name}
 								doctorID={id}
 								selectTime={selectDoctor(id)}

@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 
 import { LeftLayout } from 'pages/common';
-import AppContext, { MYSELF } from 'AppContext';
+import { MYSELF } from 'AppContext';
 import { stylesWithTheme } from 'utils/createStyles';
 
 interface StylesProps {
@@ -24,9 +24,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const LeftSide = () => {
+interface LeftSideProps {
+	appointmentOwner?: string;
+}
+
+const LeftSide = ({ appointmentOwner }: LeftSideProps) => {
 	const { t } = useTranslation('preSignUp');
-	const { appointmentOwner } = useContext(AppContext);
 	const isForMyself = appointmentOwner === MYSELF;
 	const classes = useStyles({ isForMyself });
 
