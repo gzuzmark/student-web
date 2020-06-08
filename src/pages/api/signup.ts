@@ -55,7 +55,6 @@ export const createPatient = async (user: NewUser, localUserToken: string): Prom
 			},
 		);
 		const data = resp.data.data;
-		console.log(data);
 
 		return data.id;
 	} catch (e) {

@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
-import { PRE_SIGNUP_STEP } from 'AppContext';
+import { PRE_SIGNUP_STEP, PAYMENT_STEP } from 'AppContext';
 
 import { DoctorAvailability } from '../../api';
 import AvailableTimes from '../AvailableTimes';
@@ -31,7 +31,10 @@ const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListP
 	};
 	const continueToPreRegister = () => {
 		if (updateContextState) {
-			updateContextState({ appointmentCreationStep: PRE_SIGNUP_STEP, scheduleID: activeDoctorTime.scheduleID });
+			updateContextState({
+				appointmentCreationStep: isUserLoggedIn ? PAYMENT_STEP : PRE_SIGNUP_STEP,
+				scheduleID: activeDoctorTime.scheduleID,
+			});
 			if (isUserLoggedIn) {
 				history.push('/pago');
 			} else {

@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import { stylesWithTheme } from 'utils/createStyles';
 import { sendLogin, getCurrentUser } from 'pages/api';
 import { PasswordField } from 'pages/common';
-import { AppointmentCreationStep, PRE_SIGNUP_STEP, SELECT_DOCTOR_STEP, TRIAGE_STEP } from 'AppContext';
+import { AppointmentCreationStep, PRE_SIGNUP_STEP, SELECT_DOCTOR_STEP, TRIAGE_STEP, PAYMENT_STEP } from 'AppContext';
 
 import validationSchema from '../validationSchema';
 
@@ -105,7 +105,11 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 			const token = await sendLogin({ username: phoneNumber, password }, setFieldError);
 			if (token && updateContextState) {
 				const [reservationToken, currentUser] = await getCurrentUser(token);
-				updateContextState({ reservationAccountID: reservationToken, user: currentUser });
+				updateContextState({
+					reservationAccountID: reservationToken,
+					user: currentUser,
+					appointmentCreationStep: appointmentCreationStep === PRE_SIGNUP_STEP ? PAYMENT_STEP : appointmentCreationStep,
+				});
 				redirectAfterLogin(appointmentCreationStep, history);
 			}
 

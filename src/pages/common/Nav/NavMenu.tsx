@@ -31,7 +31,7 @@ const NavMenu = ({ anchorEl, isMenuOpen, handleMenuClose }: NavMenuProps) => {
 	const { t } = useTranslation('nav');
 	const classes = useMenuStyles();
 	const { push } = useHistory();
-	const { updateState, useCase } = useContext(AppContext);
+	const { updateState } = useContext(AppContext);
 	const goToAppointments = () => {
 		handleMenuClose();
 		push('/citas');
@@ -58,13 +58,14 @@ const NavMenu = ({ anchorEl, isMenuOpen, handleMenuClose }: NavMenuProps) => {
 			});
 			purgerLocalStorage();
 
-			if (useCase) {
-				push(`/triaje?malestar=${useCase.id}`);
-			} else {
-				push('/iniciar_sesion');
-			}
+			push('/iniciar_sesion');
+			// if (useCase) {
+			// 	push(`/triaje?malestar=${useCase.name}`);
+			// } else {
+			// 	push('/iniciar_sesion');
+			// }
 		}
-	}, [handleMenuClose, push, updateState, useCase]);
+	}, [handleMenuClose, push, updateState]);
 
 	return (
 		<Menu

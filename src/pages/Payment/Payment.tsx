@@ -9,23 +9,27 @@ import { PAYMENT_ROUTE } from 'routes';
 
 const Payment = () => {
 	const history = useHistory();
-	const { triage, reservationAccountID, scheduleID, useCase } = useAppointmentStepValidation(PAYMENT_ROUTE);
+	const { userToken, triage, reservationAccountID, scheduleID, useCase } = useAppointmentStepValidation(PAYMENT_ROUTE);
 
 	usePageTitle('Pago');
 	const onClick = useCallback(async () => {
 		if (useCase) {
-			await aliviaAxios.post('/appointments', {
-				data: {
-					reservation_account_id: reservationAccountID,
-					use_case_id: useCase.id,
-					schedule_id: scheduleID,
-					appointment_type_id: 'asdf',
-					questions: triage,
+			await aliviaAxios.post(
+				'/appointments',
+				{
+					data: {
+						reservation_account_id: reservationAccountID,
+						use_case_id: useCase.id,
+						schedule_id: scheduleID,
+						appointment_type_id: 'asdf',
+						questions: triage,
+					},
 				},
-			});
+				{ headers: { Authentication: `Bearer ${userToken}` } },
+			);
 			history.push('/citas');
 		}
-	}, [history, reservationAccountID, scheduleID, triage, useCase]);
+	}, [history, reservationAccountID, scheduleID, triage, useCase, userToken]);
 
 	return (
 		<Container>
