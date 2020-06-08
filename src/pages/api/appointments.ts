@@ -153,7 +153,7 @@ export const getAppointmentList = async (
 		const resp = await aliviaAxios.get<AppointmentListResponse>('/appointments', {
 			params,
 			headers: {
-				Authentication: `Bearer ${token}`,
+				Authorization: `Bearer ${token}`,
 			},
 		});
 		const list = resp.data.data;

@@ -49,7 +49,7 @@ export const createPatient = async (user: NewUser, localUserToken: string): Prom
 			},
 			{
 				headers: {
-					Authentication: `Bearer ${localUserToken}`,
+					Authorization: `Bearer ${localUserToken}`,
 				},
 			},
 		);

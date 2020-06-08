@@ -71,7 +71,7 @@ const signUp = {
 	'contact.legalInformation.termsAndConditionsLink': 'términos y condiciones.',
 	'contact.submit.text.mobile': 'Continuar',
 	'contact.submit.text': 'Continuar',
-	'contact.phoneNumber.error': 'El número que ingresaste es inváverdlido',
+	'contact.phoneNumber.error': 'El número que ingresaste es inválido',
 	'contact.password.error': 'El email que ingresaste es inválido',
 };
 

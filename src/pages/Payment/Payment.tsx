@@ -18,7 +18,7 @@ const createAppointment = async (useCase, reservationAccountID, scheduleID, tria
 				appointment_type_id: 'asdf',
 				questions: triage,
 			},
-			{ headers: { Authentication: `Bearer ${userToken}` } },
+			{ headers: { Authorization: `Bearer ${userToken}` } },
 		);
 		history.push('/citas');
 	}

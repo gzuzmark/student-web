@@ -21,7 +21,7 @@ export const getCurrentUser = async (userToken: string): Promise<[string, Simple
 	try {
 		const resp = await aliviaAxios.get<CurrentUserResponse>('/users/me', {
 			headers: {
-				Authentication: `Bearer ${userToken}`,
+				Authorization: `Bearer ${userToken}`,
 			},
 		});
 		const data = resp.data.data.user;
