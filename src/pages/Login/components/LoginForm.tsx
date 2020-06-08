@@ -106,6 +106,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 			if (token && updateContextState) {
 				const [reservationToken, currentUser] = await getCurrentUser(token);
 				updateContextState({
+					userToken: token,
 					reservationAccountID: reservationToken,
 					user: currentUser,
 					appointmentCreationStep: appointmentCreationStep === PRE_SIGNUP_STEP ? PAYMENT_STEP : appointmentCreationStep,

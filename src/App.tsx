@@ -6,10 +6,13 @@ import { LocalizationProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import esLocal from 'date-fns/locale/es';
 import { Nav } from 'pages/common';
+import { parse } from 'query-string';
 
 import { routes, routeWithoutNav } from './routes';
 import { AppProvider } from './AppContext';
 import pageTheme from './theme';
+import { redirectToBaseAlivia } from './utils';
+
 import Validator from 'pages/common/Validator';
 
 const theme = createMuiTheme({
@@ -19,6 +22,18 @@ const theme = createMuiTheme({
 const formats = {
 	normalDate: 'dd/MM/yyyy',
 	keyboardDate: 'dd/MM/yyyy',
+};
+
+const RedirectWrapper = ({ location }: { location: Location }) => {
+	const params = parse(location.search);
+
+	if (!params.malestar) {
+		redirectToBaseAlivia();
+
+		return null;
+	}
+
+	return <Redirect to={{ pathname: '/triaje', search: `?malestar=${params.malestar}` }} />;
 };
 
 const App = () => {
@@ -50,9 +65,7 @@ const App = () => {
 							<Route exact path="/registro">
 								<Redirect to="/registro/contacto" />
 							</Route>
-							<Route path="/*">
-								<Redirect to="/triaje" />
-							</Route>
+							<Route path="/*" component={RedirectWrapper} />
 						</Switch>
 					</Router>
 				</AppProvider>
