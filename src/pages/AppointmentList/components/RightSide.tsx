@@ -81,7 +81,7 @@ const requestSmallAppointments = async (
 	userToken: string | null | undefined,
 ) => {
 	if (userToken) {
-		const appointments = await getAppointmentList({ user_id: userID, closed }, userToken);
+		const appointments = await getAppointmentList({ user_id: userID, closed });
 
 		if (appointments) {
 			setAppointments(appointments);

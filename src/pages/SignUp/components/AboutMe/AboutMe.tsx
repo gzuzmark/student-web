@@ -9,7 +9,7 @@ import { PrivacyPolicyDialog } from 'pages/common';
 import AboutMeForm, { AboutMeValues } from './AboutMeForm';
 
 interface AboutMeProps {
-	submitSignUp: (value: AboutMeValues) => void;
+	submitSignUp: (value: AboutMeValues, setSubmitting: Function, setFieldError: Function) => void;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({

@@ -6,7 +6,7 @@ import getUnixTime from 'date-fns/getUnixTime';
 import snakeCase from 'lodash/snakeCase';
 import camelCase from 'lodash/camelCase';
 
-export const CURRENT_TIME_ZONE = '-5';
+export const CURRENT_TIME_ZONE = Intl.DateTimeFormat().resolvedOptions().timeZone || '-5';
 
 export const formatApiDate = (date: Date | string, strFormat = 'h:mmaa') => {
 	const dateObj = date instanceof Date ? date : new Date(date);

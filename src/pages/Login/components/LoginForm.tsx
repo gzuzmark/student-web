@@ -104,7 +104,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 		async ({ phoneNumber, password }: FormValues, { setSubmitting, setFieldError }: FormikHelpers<FormValues>) => {
 			const token = await sendLogin({ username: phoneNumber, password }, setFieldError);
 			if (token && updateContextState) {
-				const [reservationToken, currentUser] = await getCurrentUser(token);
+				const [reservationToken, currentUser] = await getCurrentUser();
 				updateContextState({
 					userToken: token,
 					reservationAccountID: reservationToken,

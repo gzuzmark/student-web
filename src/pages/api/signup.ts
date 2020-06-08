@@ -11,6 +11,10 @@ const errorMessages = {
 	contactEmail: i18next.t('signUp:contact.email.error'),
 };
 
+const patientErrorMessages = {
+	identification: i18next.t('signUp:aboutMe.fields.identification.error'),
+};
+
 interface NewUser {
 	name: string;
 	lastName: string; // last_name
@@ -33,31 +37,24 @@ interface CreatePatientResponse {
 
 type ContactValuesRequest = Omit<ContactValues, 'repeatPassword'>;
 
-export const createPatient = async (user: NewUser, localUserToken: string): Promise<string | undefined> => {
+export const createPatient = async (user: NewUser, setFieldError: Function): Promise<string | undefined> => {
 	try {
-		const resp = await aliviaAxios.post<CreatePatientResponse>(
-			'/patients',
-			{
-				name: user.name,
-				last_name: user.lastName,
-				second_last_name: user.secondSurname,
-				document_number: user.identification,
-				birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
-				allergies: user.allergies,
-				meds: user.medicines,
-				extra_info: user.moreMedicalInformation,
-			},
-			{
-				headers: {
-					Authorization: `Bearer ${localUserToken}`,
-				},
-			},
-		);
+		const resp = await aliviaAxios.post<CreatePatientResponse>('/patients', {
+			name: user.name,
+			last_name: user.lastName,
+			second_last_name: user.secondSurname,
+			document_number: user.identification,
+			birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
+			allergies: user.allergies,
+			meds: user.medicines,
+			extra_info: user.moreMedicalInformation,
+		});
 		const data = resp.data.data;
 
 		return data.id;
 	} catch (e) {
 		console.log(e);
+		setFieldError('identification', patientErrorMessages.identification);
 	}
 };
 
