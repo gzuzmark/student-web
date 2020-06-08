@@ -37,7 +37,7 @@ export const mockUser = {
 
 export const sendLogin = async (fields: LoginFields, setFieldErrors: Function): Promise<string | void> => {
 	try {
-		const resp = await aliviaAxios.post<TokenResponse>('/auth', { data: fields });
+		const resp = await aliviaAxios.post<TokenResponse>('/auth', fields);
 		const data = resp.data;
 
 		setLocalValue('userToken', data.token);
@@ -61,7 +61,7 @@ export const logout = async (): Promise<void> => {
 
 export const forgotPassword = async (fields: ForgotPasswordField): Promise<void> => {
 	try {
-		await aliviaAxios.post('/auth/recover-password', { data: fields });
+		await aliviaAxios.post('/auth/recover-password', fields);
 		// sendSuccessMessage
 	} catch (e) {
 		console.log(e);

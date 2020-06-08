@@ -12,13 +12,11 @@ const createAppointment = async (useCase, reservationAccountID, scheduleID, tria
 		await aliviaAxios.post(
 			'/appointments',
 			{
-				data: {
-					reservation_account_id: reservationAccountID,
-					use_case_id: useCase.id,
-					schedule_id: scheduleID,
-					appointment_type_id: 'asdf',
-					questions: triage,
-				},
+				reservation_account_id: reservationAccountID,
+				use_case_id: useCase.id,
+				schedule_id: scheduleID,
+				appointment_type_id: 'asdf',
+				questions: triage,
 			},
 			{ headers: { Authentication: `Bearer ${userToken}` } },
 		);

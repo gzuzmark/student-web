@@ -38,15 +38,14 @@ export const createPatient = async (user: NewUser, localUserToken: string): Prom
 		const resp = await aliviaAxios.post<CreatePatientResponse>(
 			'/patients',
 			{
-				data: {
-					...user,
-					last_name: user.lastName,
-					second_last_name: user.secondSurname,
-					document_number: user.identification,
-					birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
-					meds: user.medicines,
-					extra_info: user.moreMedicalInformation,
-				},
+				name: user.name,
+				last_name: user.lastName,
+				second_last_name: user.secondSurname,
+				document_number: user.identification,
+				birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
+				allergies: user.allergies,
+				meds: user.medicines,
+				extra_info: user.moreMedicalInformation,
 			},
 			{
 				headers: {
@@ -68,7 +67,9 @@ export const createAccount = async (
 ): Promise<string | void> => {
 	try {
 		const resp = await aliviaAxios.post<TokenResponse>('/users', {
-			data: { username: email, phone: phoneNumber, password },
+			username: email,
+			phone: phoneNumber,
+			password,
 		});
 		const data = resp.data;
 
