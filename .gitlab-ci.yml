@@ -22,6 +22,8 @@ install_stage:
 
 build_stage_dev:
   stage: build
+  variables:
+    REACT_APP_BASE_URL: "$API_BASE_URL_DEV"
   script:
     - yarn build
   dependencies:
