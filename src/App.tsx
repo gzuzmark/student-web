@@ -10,7 +10,7 @@ import { Nav } from 'pages/common';
 import { routes, routeWithoutNav } from './routes';
 import { AppProvider } from './AppContext';
 import pageTheme from './theme';
-import PrivateRoute from 'pages/common/PrivateRoute';
+import Validator from 'pages/common/Validator';
 
 const theme = createMuiTheme({
 	...pageTheme,
@@ -30,18 +30,16 @@ const App = () => {
 						<Switch>
 							<Route exact path={routes.map(({ path }) => path)}>
 								<>
-									<Nav />
-									{routes.map(({ id, guard, component: Component, ...rest }) =>
-										!!guard ? (
-											<Route key={id} {...rest}>
-												<PrivateRoute>
+									{routes.map(({ id, guard, component: Component, ...rest }) => (
+										<Route key={id} {...rest}>
+											<Validator isPrivate={!!guard}>
+												<>
+													<Nav />
 													<Component />
-												</PrivateRoute>
-											</Route>
-										) : (
-											<Route key={id} component={Component} {...rest} />
-										),
-									)}
+												</>
+											</Validator>
+										</Route>
+									))}
 								</>
 							</Route>
 							<Route exact path={routeWithoutNav.map(({ path }) => path)}>

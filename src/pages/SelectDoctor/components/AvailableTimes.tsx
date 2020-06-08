@@ -65,12 +65,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 interface AvailableTimesProps {
 	availableDates: Schedule[];
 	name: string;
-	doctorID: number;
+	doctorCmp: string;
 	selectTime: (scheduleId: string) => void;
 	activeDoctorTime: ActiveDoctorTime;
 }
 
-const AvailableTimes = ({ availableDates, name, doctorID, selectTime, activeDoctorTime }: AvailableTimesProps) => {
+const AvailableTimes = ({ availableDates, name, doctorCmp, selectTime, activeDoctorTime }: AvailableTimesProps) => {
 	const classes = useStyles();
 	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 	const activateAll = () => {
@@ -80,7 +80,7 @@ const AvailableTimes = ({ availableDates, name, doctorID, selectTime, activeDoct
 		selectTime(scheduleId);
 	};
 	const format = matches ? 'k:mm' : undefined;
-	const isSelectedDoctor = activeDoctorTime.doctorID === doctorID;
+	const isSelectedDoctor = activeDoctorTime.doctorCmp === doctorCmp;
 	const isEmptyTime = activeDoctorTime.scheduleID === '';
 	const isButtonDisabled = (scheduleID: string) =>
 		isEmptyTime ? false : activeDoctorTime.scheduleID !== scheduleID || !isSelectedDoctor;
@@ -98,7 +98,7 @@ const AvailableTimes = ({ availableDates, name, doctorID, selectTime, activeDoct
 						disabled={isButtonDisabled(id)}
 						active={isButtonActive(id)}
 						format={format}
-						key={`${name}-${doctorID}-${id}`}
+						key={`${name}-${doctorCmp}-${id}`}
 					/>
 				))}
 			</div>

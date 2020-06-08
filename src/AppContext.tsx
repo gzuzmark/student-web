@@ -1,5 +1,6 @@
 import React, { ReactElement, useState, useCallback } from 'react';
-// import { mockUser } from 'pages/api/login';
+import { getLocalValue } from 'utils';
+import { UseCase } from 'pages/api/useCase';
 
 // Appointment Owner
 export const MYSELF = 'myself';
@@ -10,19 +11,27 @@ export type AppointmentOwner = 'myself' | 'relative' | 'guest' | '';
 
 // Steps
 export const TRIAGE_STEP = 'triage';
-export const ATTENTION_METHOD = 'attention-method';
-export const SELECT_DOCTOR = 'select-doctor';
-export const PRE_SIGNUP = 'pre-signup';
+export const ATTENTION_METHOD_STEP = 'attention-method';
+export const SELECT_DOCTOR_STEP = 'select-doctor';
+export const PRE_SIGNUP_STEP = 'pre-signup';
+export const PAYMENT_STEP = 'payment';
 export const routeMapping = {
 	[TRIAGE_STEP]: '/triaje',
-	[ATTENTION_METHOD]: 'metodo_atencion',
-	[SELECT_DOCTOR]: '/seleccionar_doctor',
+	[ATTENTION_METHOD_STEP]: 'metodo_atencion',
+	[SELECT_DOCTOR_STEP]: '/seleccionar_doctor',
 };
 
-export type AppointmentCreationStep = 'triage' | 'attention-method' | 'select-doctor' | 'pre-signup';
+export type AppointmentCreationStep = '' | 'triage' | 'attention-method' | 'select-doctor' | 'pre-signup' | 'payment';
 
 interface AppProviderProps {
 	children: ReactElement;
+}
+
+export interface SimpleUser {
+	id: string;
+	name: string;
+	lastName: string;
+	secondSurname: string;
 }
 
 export interface User {
@@ -47,23 +56,29 @@ export interface TriagePair {
 }
 
 interface ContextProps {
-	user: User | null;
+	user: SimpleUser | null;
+	userToken: string | null;
+	reservationAccountID: string;
 	channel: string;
-	useCase: string;
+	useCase: UseCase | null;
 	appointmentOwner: AppointmentOwner;
-	updateState: Function;
 	triage: TriagePair[];
+	scheduleID: string;
+	updateState: Function;
 	appointmentCreationStep: AppointmentCreationStep;
 }
 
 const defaultState: ContextProps = {
 	user: null,
+	userToken: getLocalValue('userToken'),
+	reservationAccountID: '',
 	channel: 'videocall',
-	useCase: 'Fiebre',
-	updateState: Function.prototype,
-	appointmentOwner: MYSELF,
+	useCase: null,
+	scheduleID: '',
 	triage: [],
-	appointmentCreationStep: 'triage',
+	appointmentOwner: MYSELF,
+	updateState: Function.prototype,
+	appointmentCreationStep: '',
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

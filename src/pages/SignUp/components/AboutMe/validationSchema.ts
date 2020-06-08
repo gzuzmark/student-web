@@ -5,7 +5,7 @@ import { registerCustomValidators } from 'utils/addCustomValidations';
 
 registerCustomValidators(Yup);
 
-const { string, object, date } = Yup;
+const { string, object, date, number } = Yup;
 
 const messages = {
 	name: {
@@ -37,6 +37,8 @@ const validationSchema = object().shape({
 		// eslint-disable-next-line
 		// @ts-ignore
 		.digits(messages.identification.digits)
+		.min(7, messages.identification.digits)
+		.max(11, messages.identification.digits)
 		.required(messages.identification.required),
 	birthDate: date()
 		.required(messages.birthDate.required)
@@ -44,7 +46,7 @@ const validationSchema = object().shape({
 		.max(new Date('2100-01-01'), messages.birthDate.required)
 		.typeError(messages.birthDate.required)
 		.nullable(),
-	gender: string().required(messages.gender.required),
+	gender: number().required(messages.gender.required),
 });
 
 export default validationSchema;

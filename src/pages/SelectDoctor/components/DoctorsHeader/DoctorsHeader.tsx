@@ -1,20 +1,22 @@
-import React, { useState, useContext, Dispatch, SetStateAction } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
+
 import { DatePickerInput } from 'pages/common';
+import { UseCase } from 'pages/api/useCase';
+
 import useStyles from './styles';
-import AppContext from 'AppContext';
 
 interface DoctorsHeaderProps {
 	date: Date | null;
 	updateDate: Dispatch<SetStateAction<Date | null>>;
+	useCase: UseCase | null | undefined;
 }
 
-const DoctorsHeader = ({ date, updateDate }: DoctorsHeaderProps) => {
+const DoctorsHeader = ({ date, updateDate, useCase }: DoctorsHeaderProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [openDatePicker, setOpenDatePicker] = useState<boolean>(false);
-	const { useCase } = useContext(AppContext);
 
 	return (
 		<div className={classes.form}>
@@ -47,7 +49,7 @@ const DoctorsHeader = ({ date, updateDate }: DoctorsHeaderProps) => {
 					{t('right.useCaseLabel')}
 				</Typography>
 				<Typography component="div" className={classes.useCaseInput}>
-					{useCase}
+					{useCase ? useCase.name : ''}
 				</Typography>
 			</div>
 		</div>

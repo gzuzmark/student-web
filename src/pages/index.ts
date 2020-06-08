@@ -6,3 +6,4 @@ export * from './SignUp';
 export * from './AppointmentList';
 export * from './Appointment';
 export * from './Triage';
+export * from './Payment';

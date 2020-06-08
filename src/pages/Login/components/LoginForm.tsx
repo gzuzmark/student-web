@@ -3,15 +3,15 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { sendLogin } from 'pages/api';
+import { sendLogin, getCurrentUser } from 'pages/api';
 import { PasswordField } from 'pages/common';
-import { AppointmentCreationStep, PRE_SIGNUP, SELECT_DOCTOR, routeMapping } from 'AppContext';
+import { AppointmentCreationStep, PRE_SIGNUP_STEP, SELECT_DOCTOR_STEP, TRIAGE_STEP } from 'AppContext';
 
 import validationSchema from '../validationSchema';
 
@@ -76,29 +76,42 @@ interface FormValues {
 
 interface LoginFormProps {
 	appointmentCreationStep: AppointmentCreationStep | undefined;
+	updateContextState: Function | undefined;
 }
+const redirectAfterLogin = (
+	appointmentCreationStep: AppointmentCreationStep | undefined,
+	history: Record<string, any>,
+): void => {
+	switch (appointmentCreationStep) {
+		case TRIAGE_STEP:
+		case SELECT_DOCTOR_STEP:
+			history.goBack();
+			break;
+		case PRE_SIGNUP_STEP:
+			history.push('/pago');
+			break;
+		default:
+			history.push('/citas');
+			break;
+	}
+};
 
-const LoginForm = ({ appointmentCreationStep }: LoginFormProps) => {
+const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormProps) => {
 	const { t } = useTranslation('login');
 	const classes = useStyles();
 	const history = useHistory();
 	const onSubmit = useCallback(
-		async ({ phoneNumber, password }: FormValues, { setSubmitting }: { setSubmitting: Function }) => {
-			await sendLogin({ username: phoneNumber, password });
-			setSubmitting(false);
-			switch (appointmentCreationStep) {
-				case PRE_SIGNUP:
-					history.push('/pago');
-					break;
-				case SELECT_DOCTOR:
-					history.push(routeMapping[SELECT_DOCTOR]);
-					break;
-				default:
-					history.push('/citas');
-					break;
+		async ({ phoneNumber, password }: FormValues, { setSubmitting, setFieldError }: FormikHelpers<FormValues>) => {
+			const token = await sendLogin({ username: phoneNumber, password }, setFieldError);
+			if (token && updateContextState) {
+				const [reservationToken, currentUser] = await getCurrentUser(token);
+				updateContextState({ reservationAccountID: reservationToken, user: currentUser });
+				redirectAfterLogin(appointmentCreationStep, history);
 			}
+
+			setSubmitting(false);
 		},
-		[appointmentCreationStep, history],
+		[appointmentCreationStep, history, updateContextState],
 	);
 
 	return (

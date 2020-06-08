@@ -1,6 +1,10 @@
 import { useLayoutEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import AppContext, { User, SELECT_DOCTOR, PRE_SIGNUP } from 'AppContext';
+import AppContext, { SELECT_DOCTOR_STEP, PRE_SIGNUP_STEP, PAYMENT_STEP } from 'AppContext';
+import { UseCase } from 'pages/api';
+import { SELECT_DOCTOR_ROUTE, PRE_SIGN_UP_ROUTE, PAYMENT_ROUTE } from 'routes';
+
+import { redirectToBaseAlivia } from './redirects';
 
 export const usePageTitle = (title: string) => {
 	useLayoutEffect(() => {
@@ -8,7 +12,7 @@ export const usePageTitle = (title: string) => {
 	}, [title]);
 };
 
-export const useCurrentUserRediction = (currentUser: User | null | undefined, redictedPath: string) => {
+export const useCurrentUserRediction = (currentUser: string | null | undefined, redictedPath: string) => {
 	const history = useHistory();
 
 	useLayoutEffect(() => {
@@ -18,31 +22,45 @@ export const useCurrentUserRediction = (currentUser: User | null | undefined, re
 	}, [currentUser, history, redictedPath]);
 };
 
+const redirectIfUseCaseIsEmpty = (useCase: UseCase | null | undefined) => {
+	if (!useCase) {
+		redirectToBaseAlivia();
+	}
+};
+
 // Only use this hook once at the top of the component for data validation
 // if you use it more than once then it will likely cause unexpected
 // re-renders
-export const useAppointmentStepValidation = (step: string) => {
-	const { appointmentCreationStep, ...rest } = useContext(AppContext);
+export const useAppointmentStepValidation = (route: string) => {
+	const { appointmentCreationStep, useCase, ...rest } = useContext(AppContext);
 	const history = useHistory();
 
 	useLayoutEffect(() => {
-		switch (step) {
-			case 'seleccionar-doctor':
-				if (appointmentCreationStep !== SELECT_DOCTOR) {
+		switch (route) {
+			case SELECT_DOCTOR_ROUTE:
+				redirectIfUseCaseIsEmpty(useCase);
+				if (appointmentCreationStep !== SELECT_DOCTOR_STEP) {
 					history.push('/triaje');
 				}
 
 				break;
-			case 'pre-registro':
-				if (appointmentCreationStep !== PRE_SIGNUP) {
+			case PRE_SIGN_UP_ROUTE:
+				redirectIfUseCaseIsEmpty(useCase);
+				if (appointmentCreationStep !== PRE_SIGNUP_STEP) {
 					history.push('/triaje');
 				}
 
+				break;
+			case PAYMENT_ROUTE:
+				redirectIfUseCaseIsEmpty(useCase);
+				if (appointmentCreationStep !== PAYMENT_STEP) {
+					history.push('/triaje');
+				}
 				break;
 			default:
 				break;
 		}
-	}, [appointmentCreationStep, history, step]);
+	}, [appointmentCreationStep, history, route, useCase]);
 
-	return { appointmentCreationStep, ...rest };
+	return { appointmentCreationStep, useCase, ...rest };
 };

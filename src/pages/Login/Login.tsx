@@ -16,10 +16,10 @@ import useStyles from './styles';
 const Login = () => {
 	const classes = useStyles();
 	const { t } = useTranslation('login');
-	const { user: currentUser, appointmentCreationStep } = useContext(AppContext);
+	const { userToken, appointmentCreationStep, updateState } = useContext(AppContext);
 
-	usePageTitle('Registro');
-	useCurrentUserRediction(currentUser, '/citas');
+	usePageTitle('Iniciar sesion');
+	useCurrentUserRediction(userToken, '/citas');
 
 	return (
 		<Container className={classes.container}>
@@ -33,7 +33,7 @@ const Login = () => {
 					<Typography className={classes.title} variant="h2">
 						{t('login.title')}
 					</Typography>
-					<LoginForm appointmentCreationStep={appointmentCreationStep} />
+					<LoginForm updateContextState={updateState} appointmentCreationStep={appointmentCreationStep} />
 					<Circle className={classes.desktopCircle} radius="80" right="-80" bottom="-94" />
 				</div>
 			</div>

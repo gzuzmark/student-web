@@ -44,7 +44,7 @@ module.exports = {
 			},
 			{
 				'selector': 'property',
-				'format': ['camelCase', 'snake_case'],
+				'format': ['camelCase', 'snake_case', 'PascalCase'],
 				'filter': {
 					// you can expand this regex to add more allowed names
 					'regex': '[- ]',

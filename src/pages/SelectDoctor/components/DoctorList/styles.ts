@@ -58,6 +58,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	name: {
 		fontSize: '15px',
 		lineHeight: '18px',
+		textTransform: 'capitalize',
 		[breakpoints.up('lg')]: {
 			fontSize: '20px',
 			lineHeight: '25px',
@@ -73,6 +74,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	speciality: {
 		fontSize: '12px',
 		lineHeight: '17px',
+		textTransform: 'uppercase',
 	},
 	cmp: {
 		fontSize: '12px',

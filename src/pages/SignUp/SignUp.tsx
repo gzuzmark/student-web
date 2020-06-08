@@ -3,9 +3,9 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
-import { sendSignUp } from 'pages/api';
-import { usePageTitle, useCurrentUserRediction } from 'utils';
-import AppContext from 'AppContext';
+import { createPatient, getCurrentUser } from 'pages/api';
+import { usePageTitle, useCurrentUserRediction, setLocalValue } from 'utils';
+import AppContext, { PAYMENT_STEP } from 'AppContext';
 
 import { LeftSide, AboutMe, AboutMeValues, MedicalData, MedicalDataValues, Contact, ContactValues } from './components';
 
@@ -29,9 +29,13 @@ const checkStep = (
 const SignUp = () => {
 	const { push, listen, location } = useHistory();
 	const [step, setStep] = useState<number>(0);
+	const [localUserToken, setLocalUserToken] = useState<string>();
 	const [contactInfo, setContactInfo] = useState<ContactValues>();
 	const [medicalData, setMedicalData] = useState<MedicalDataValues>();
-	const { user: currentUser, updateState, appointmentOwner } = useContext(AppContext);
+	const { userToken, updateState, appointmentOwner } = useContext(AppContext);
+	const changeLocalUserToken = (token: string) => {
+		setLocalUserToken(token);
+	};
 	const onChangeStep = (values: ContactValues | MedicalDataValues) => {
 		if (step === 0) {
 			setContactInfo(values as ContactValues);
@@ -43,19 +47,27 @@ const SignUp = () => {
 	};
 	const submitSignUp = async (aboutUser: AboutMeValues) => {
 		if (appointmentOwner && updateState) {
-			const user = {
+			const newUser = {
 				...(medicalData as MedicalDataValues),
-				...(contactInfo as ContactValues),
 				...aboutUser,
 			};
 
-			await sendSignUp(user, appointmentOwner);
-			updateState({ user });
+			if (localUserToken) {
+				const reservationAccountID = await createPatient(newUser, localUserToken);
+
+				if (reservationAccountID) {
+					// eslint-disable-next-line
+					const [_, user] = await getCurrentUser(localUserToken);
+					setLocalValue('userToken', localUserToken);
+					updateState({ reservationAccountID, userToken: localUserToken, user, appointmentCreationStep: PAYMENT_STEP });
+					push('/pago');
+				}
+			}
 		}
 	};
 
 	usePageTitle('Registro');
-	useCurrentUserRediction(currentUser, '/citas');
+	useCurrentUserRediction(userToken, '/citas');
 	useLayoutEffect(() => {
 		checkStep(location, contactInfo, push, medicalData);
 	}, [contactInfo, location, medicalData, push]);
@@ -80,7 +92,12 @@ const SignUp = () => {
 			<RightLayout>
 				<Switch>
 					<Route exact path="/registro/contacto">
-						<Contact contactInfo={contactInfo} onChangeStep={onChangeStep} appointmentOwner={appointmentOwner} />
+						<Contact
+							contactInfo={contactInfo}
+							onChangeStep={onChangeStep}
+							appointmentOwner={appointmentOwner}
+							changeLocalUserToken={changeLocalUserToken}
+						/>
 					</Route>
 					<Route exact path="/registro/datos_medicos">
 						<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
