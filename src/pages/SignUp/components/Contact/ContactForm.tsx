@@ -4,11 +4,12 @@ import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { PasswordField } from 'pages/common';
+import { createAccount } from 'pages/api';
 import { GUEST, AppointmentOwner } from 'AppContext';
 
 import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
@@ -25,6 +26,7 @@ interface ContactFormProps {
 	openPrivacyPolicy: () => void;
 	appointmentOwner: AppointmentOwner | undefined;
 	contactInfo: ContactValues | undefined;
+	changeLocalUserToken: (token: string) => void;
 }
 
 const initialValues = {
@@ -78,16 +80,28 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const ContactForm = ({ onChangeStep, openPrivacyPolicy, appointmentOwner, contactInfo }: ContactFormProps) => {
+const ContactForm = ({
+	onChangeStep,
+	openPrivacyPolicy,
+	appointmentOwner,
+	contactInfo,
+	changeLocalUserToken,
+}: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const onSubmit = useCallback(
-		async (values: ContactValues, { setSubmitting }: { setSubmitting: Function }) => {
-			onChangeStep(values);
+		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<ContactValues>) => {
+			const userToken = await createAccount(values, setFieldError);
+
+			if (userToken) {
+				changeLocalUserToken(userToken);
+				onChangeStep(values);
+			}
+
 			setSubmitting(false);
 		},
-		[onChangeStep],
+		[onChangeStep, changeLocalUserToken],
 	);
 	const isGuest = appointmentOwner === GUEST;
 

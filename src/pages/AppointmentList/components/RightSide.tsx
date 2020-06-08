@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import AppContext from 'AppContext';
 import { stylesWithTheme } from 'utils';
-import { getAppointmentList, AppointmentList } from 'pages/api/appointments';
+import { getAppointmentList, AppointDetail } from 'pages/api/appointments';
 
 import AppointmentsTab from './AppointmentsTab';
 
@@ -74,27 +74,38 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const requestSmallAppointments = async (setAppointments: Function) => {
-	const appointments = await getAppointmentList();
+const requestSmallAppointments = async (
+	setAppointments: Function,
+	closed: number,
+	userID: string,
+	userToken: string | null | undefined,
+) => {
+	if (userToken) {
+		const appointments = await getAppointmentList({ user_id: userID, closed }, userToken);
 
-	if (appointments) {
-		setAppointments(appointments);
+		if (appointments) {
+			setAppointments(appointments);
+		}
 	}
 };
 
 const RightSide = () => {
 	const { t } = useTranslation('appointmentList');
-	const { user: currentUser } = useContext(AppContext);
+	const { user: currentUser, userToken } = useContext(AppContext);
 	const [selectedTab, setSelectedTab] = useState<number>(0);
-	const [appointments, setAppointments] = useState<AppointmentList>();
+	const [oldAppointments, setOldAppointments] = useState<AppointDetail[]>([]);
+	const [appointments, setAppointments] = useState<AppointDetail[]>([]);
 	const classes = useStyles();
 	const handleChange = (_: ChangeEvent<{}>, newValue: number) => {
 		setSelectedTab(newValue);
 	};
 
 	useEffect(() => {
-		requestSmallAppointments(setAppointments);
-	}, []);
+		if (currentUser) {
+			requestSmallAppointments(setAppointments, 0, currentUser.id, userToken);
+			requestSmallAppointments(setOldAppointments, 1, currentUser.id, userToken);
+		}
+	}, [currentUser, userToken]);
 
 	return (
 		<RightLayout>
@@ -124,8 +135,8 @@ const RightSide = () => {
 				</Tabs>
 				{appointments ? (
 					<>
-						<AppointmentsTab appointments={appointments.current} isActive={selectedTab === 0} />
-						<AppointmentsTab appointments={appointments.old} isActive={selectedTab === 1} />
+						<AppointmentsTab appointments={appointments} isActive={selectedTab === 0} />
+						<AppointmentsTab appointments={oldAppointments} isActive={selectedTab === 1} />
 					</>
 				) : null}
 			</div>

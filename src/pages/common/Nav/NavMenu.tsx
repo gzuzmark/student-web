@@ -5,9 +5,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
-import { stylesWithTheme } from 'utils';
-import AppContext from 'AppContext';
-import { logout } from 'pages/api/login';
+import { stylesWithTheme, purgerLocalStorage } from 'utils';
+import AppContext, { TRIAGE_STEP } from 'AppContext';
+// import { logout } from 'pages/api/login';
 
 const useMenuStyles = stylesWithTheme(({ palette }: Theme) => ({
 	userItem: {
@@ -31,24 +31,40 @@ const NavMenu = ({ anchorEl, isMenuOpen, handleMenuClose }: NavMenuProps) => {
 	const { t } = useTranslation('nav');
 	const classes = useMenuStyles();
 	const { push } = useHistory();
-	const { updateState } = useContext(AppContext);
+	const { updateState, useCase } = useContext(AppContext);
 	const goToAppointments = () => {
 		handleMenuClose();
 		push('/citas');
 	};
-	const goToMyAccount = () => {
-		handleMenuClose();
-		push('/mi-cuenta');
-	};
+	// const goToMyAccount = () => {
+	// 	handleMenuClose();
+	// 	push('/mi-cuenta');
+	// };
 	const handleLogout = useCallback(async () => {
 		handleMenuClose();
 
-		await logout();
+		// await logout();
 
 		if (updateState) {
-			updateState({ user: null });
+			updateState({
+				user: null,
+				userToken: null,
+				useCase: null,
+				reservationAccountID: '',
+				channel: '',
+				triage: [],
+				scheduleID: '',
+				appointmentCreationStep: TRIAGE_STEP,
+			});
+			purgerLocalStorage();
+
+			if (useCase) {
+				push(`/triaje?malestar=${useCase.id}`);
+			} else {
+				push('/iniciar_sesion');
+			}
 		}
-	}, [handleMenuClose, updateState]);
+	}, [handleMenuClose, push, updateState, useCase]);
 
 	return (
 		<Menu
@@ -69,9 +85,9 @@ const NavMenu = ({ anchorEl, isMenuOpen, handleMenuClose }: NavMenuProps) => {
 			<MenuItem className={classes.userItem} onClick={goToAppointments} divider>
 				{t('userMenu.appointments')}
 			</MenuItem>
-			<MenuItem className={classes.userItem} onClick={goToMyAccount}>
+			{/* <MenuItem className={classes.userItem} onClick={goToMyAccount}>
 				{t('userMenu.myAccount')}
-			</MenuItem>
+			</MenuItem> */}
 			<MenuItem className={classes.userItem} onClick={handleLogout}>
 				{t('userMenu.logout')}
 			</MenuItem>

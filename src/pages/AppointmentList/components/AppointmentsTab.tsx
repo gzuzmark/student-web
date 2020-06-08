@@ -2,7 +2,7 @@ import React from 'react';
 import { Theme } from '@material-ui/core/styles';
 
 import { stylesWithTheme } from 'utils';
-import { SmallAppointment } from 'pages/api/appointments';
+import { AppointDetail } from 'pages/api/appointments';
 
 import AppointmentCard from './AppointmentCard';
 
@@ -16,7 +16,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 interface AppointmentsTabProps {
-	appointments: SmallAppointment[];
+	appointments: AppointDetail[];
 	isActive: boolean;
 }
 
@@ -25,7 +25,7 @@ const AppointmentsTab = ({ appointments, isActive }: AppointmentsTabProps) => {
 
 	return isActive ? (
 		<div className={classes.tabWrapper}>
-			{appointments.map((appointment: SmallAppointment) => (
+			{appointments.map((appointment: AppointDetail) => (
 				<AppointmentCard key={appointment.id} appointment={appointment} />
 			))}
 		</div>

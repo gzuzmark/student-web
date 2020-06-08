@@ -19,7 +19,7 @@ export interface AboutMeValues {
 	secondSurname: string;
 	identification: string;
 	birthDate: Date | null;
-	gender: string;
+	gender: number | undefined;
 }
 
 interface AboutMeFormProps {
@@ -33,7 +33,7 @@ const initialValues = {
 	secondSurname: '',
 	identification: '',
 	birthDate: null,
-	gender: '',
+	gender: undefined,
 };
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -117,6 +117,7 @@ const AboutMeForm = ({ submitSignUp, openPrivacyPolicy }: AboutMeFormProps) => {
 								type="tel"
 								label={t('aboutme.fields.id.label')}
 								variant="outlined"
+								inputProps={{ maxLength: 11 }}
 								fullWidth
 							/>
 						</div>
@@ -141,8 +142,8 @@ const AboutMeForm = ({ submitSignUp, openPrivacyPolicy }: AboutMeFormProps) => {
 								variant="outlined"
 								select
 							>
-								<MenuItem value="M">Masculino</MenuItem>
-								<MenuItem value="F">Femenino</MenuItem>
+								<MenuItem value={1}>Masculino</MenuItem>
+								<MenuItem value={2}>Femenino</MenuItem>
 							</Field>
 						</FormControl>
 					</div>

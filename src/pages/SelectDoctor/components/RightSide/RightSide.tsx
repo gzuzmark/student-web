@@ -10,21 +10,23 @@ import { getMedicalSpecialities, DoctorAvailability } from '../../api';
 import { DoctorList } from '../DoctorList';
 import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
+import { UseCase } from 'pages/api';
 
-const getDoctors = async (selectedDate: Date | null, useCase: string | undefined, setDoctors: Function) => {
+const getDoctors = async (selectedDate: Date | null, useCase: UseCase | null | undefined, setDoctors: Function) => {
 	if (!!selectedDate && !!useCase) {
-		const response = await getMedicalSpecialities({ date: dateToUTCUnixTimestamp(selectedDate), useCase });
+		const doctors = await getMedicalSpecialities({ day: dateToUTCUnixTimestamp(selectedDate), useCase: useCase.id });
 
-		setDoctors(response);
+		setDoctors(doctors);
 	}
 };
 
 interface RightSideProps {
-	useCase: string | undefined;
+	useCase: UseCase | null | undefined;
 	updateContextState: Function | undefined;
+	isUserLoggedIn: boolean;
 }
 
-const RightSide = ({ useCase, updateContextState }: RightSideProps) => {
+const RightSide = ({ useCase, updateContextState, isUserLoggedIn }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -40,10 +42,10 @@ const RightSide = ({ useCase, updateContextState }: RightSideProps) => {
 					{t('right.title')}
 				</Typography>
 			</div>
-			<DoctorsHeader date={selectedDate} updateDate={setSelectedDate} />
+			<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={setSelectedDate} />
 			<Divider className={classes.divider} />
 			{doctors.length > 0 ? (
-				<DoctorList updateContextState={updateContextState} doctors={doctors} />
+				<DoctorList isUserLoggedIn={isUserLoggedIn} updateContextState={updateContextState} doctors={doctors} />
 			) : (
 				<div className={classes.emptyMessageWrapper}>
 					<Typography component="div" className={classes.emptyMessage}>

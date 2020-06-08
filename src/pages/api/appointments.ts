@@ -1,8 +1,9 @@
-// import aliviaAxios from 'utils/customAxios';
-import isAfter from 'date-fns/isAfter';
-import isEqual from 'date-fns/isEqual';
+import aliviaAxios from 'utils/customAxios';
+// import isAfter from 'date-fns/isAfter';
+// import isEqual from 'date-fns/isEqual';
 
-import { formatUTCDate, parseUTCDate } from 'utils';
+// import { formatUTCDate, parseUTCDate } from 'utils';
+import { formatUTCDate } from 'utils';
 import { Doctor } from './selectDoctor';
 
 export const INCOMING = 'incoming';
@@ -37,95 +38,128 @@ export interface AppointmentList {
 
 interface ApiAppointmentDetail {
 	id: string;
-	channel: string;
-	disease: string;
+	doctor: {
+		id: string;
+		name: string;
+		title: string;
+		cmp: string;
+		photo: string;
+	};
 	date: number;
-	paidAmount: string;
-	patient: string;
-	speciality: string;
-	doctor: Doctor;
-	treatment: Record<string, any>;
-	recomendations: Record<string, any>;
+	appointment_type: {
+		id: string;
+		name: string;
+		cost: string;
+	};
+	patient: {
+		id: string;
+		name: string;
+		last_name: string;
+		second_last_name: string;
+	};
+	use_case: {
+		id: string;
+		name: string;
+	};
 }
 
 export interface AppointDetail {
 	id: string;
+	doctor: Doctor;
+	date: string;
+	time: string;
 	channel: string;
 	disease: string;
 	appointmentType: AppointmentType;
-	date: string;
-	time: string;
 	paidAmount: string;
 	patient: string;
-	speciality: string;
-	doctor: Doctor;
-	treatment: Record<string, any>;
-	recomendations: Record<string, any>;
+	// treatment: Record<string, any>;
+	// recomendations: Record<string, any>;
 }
 
-const mockSmallAppointmentList: ApiAppointmentList = {
-	current: [
-		{ id: '123', channel: 'videollamada', disease: 'gripe', date: 1592238600 },
-		{ id: '124', channel: 'chat', disease: 'covid', date: 1592683200 },
-		{ id: '125', channel: 'videollamada', disease: 'pulmonia', date: 1592683200 },
-		{ id: '126', channel: 'chat', disease: 'dolor muscular', date: 1593507600 },
-	],
-	old: [
-		{ id: '110', channel: 'videollamada', disease: 'gripe', date: 1592238600 },
-		{ id: '111', channel: 'chat', disease: 'covid', date: 1592683200 },
-		{ id: '112', channel: 'videollamada', disease: 'pulmonia', date: 1592683200 },
-	],
-};
+interface AppointmentListResponse {
+	data: ApiAppointmentDetail[];
+}
 
-const mockAppointmentDetail: ApiAppointmentDetail = {
-	id: '123',
-	channel: 'videollamada',
-	disease: 'resfrio',
-	patient: 'Joaquín Salinas',
-	speciality: 'MEDICINA GENERAL',
-	doctor: {
-		id: 333,
-		name: 'Jose Luis Perez Cuellar',
-		cmp: '948252',
-		profilePicture: 'https://picsum.photos/200/184',
-	},
-	// date: 1592238600, // June 15th - incoming date
-	date: 1590836400, // May 30th - previous date
-	paidAmount: '20',
-	treatment: { test: 'string' },
-	recomendations: { str: 'test' },
-};
+interface AppointmentListParams {
+	user_id: string;
+	closed: number;
+}
 
-const formatAppointmentList = (rawList: ApiSmallAppointment[]): SmallAppointment[] =>
-	rawList.map(({ date, ...rest }: ApiSmallAppointment) => ({
-		...rest,
+// const mockSmallAppointmentList: ApiAppointmentList = {
+// 	current: [
+// 		{ id: '123', channel: 'videollamada', disease: 'gripe', date: 1592238600 },
+// 		{ id: '124', channel: 'chat', disease: 'covid', date: 1592683200 },
+// 		{ id: '125', channel: 'videollamada', disease: 'pulmonia', date: 1592683200 },
+// 		{ id: '126', channel: 'chat', disease: 'dolor muscular', date: 1593507600 },
+// 	],
+// 	old: [
+// 		{ id: '110', channel: 'videollamada', disease: 'gripe', date: 1592238600 },
+// 		{ id: '111', channel: 'chat', disease: 'covid', date: 1592683200 },
+// 		{ id: '112', channel: 'videollamada', disease: 'pulmonia', date: 1592683200 },
+// 	],
+// };
+
+// const mockAppointmentDetail: ApiAppointmentDetail = {
+// 	id: '123',
+// 	channel: 'videollamada',
+// 	disease: 'resfrio',
+// 	patient: 'Joaquín Salinas',
+// 	speciality: 'MEDICINA GENERAL',
+// 	doctor: {
+// 		id: 333,
+// 		name: 'Jose Luis Perez Cuellar',
+// 		cmp: '948252',
+// 		profilePicture: 'https://picsum.photos/200/184',
+// 	},
+// 	// date: 1592238600, // June 15th - incoming date
+// 	date: 1590836400, // May 30th - previous date
+// 	paidAmount: '20',
+// 	treatment: { test: 'string' },
+// 	recomendations: { str: 'test' },
+// };
+
+const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType: AppointmentType): AppointDetail[] =>
+	rawList.map(({ id, doctor, date, appointment_type, patient, use_case }: ApiAppointmentDetail) => ({
+		id: id || 'asdasd-erugitoer-asddff',
+		doctor: {
+			name: doctor.name || 'Kris',
+			cmp: doctor.cmp,
+			profilePicture: doctor.photo,
+			speciality: doctor.title,
+		},
+		appointmentType,
 		date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
 		time: formatUTCDate(date, 'hh:mm aaa'),
+		disease: use_case.name,
+		channel: appointment_type.name,
+		paidAmount: appointment_type.cost,
+		patient: `${patient.name} ${patient.last_name}`,
 	}));
 
-const getAppointmentType = (date: number): AppointmentType => {
-	const parsedDate = parseUTCDate(date);
-	const currentDate = new Date();
-	const appointmentType =
-		isEqual(parsedDate, currentDate) || isAfter(parsedDate, currentDate) ? 'incoming' : 'previous';
+// const formatAppointmentDetail = ({ date, ...rest }: ApiAppointmentDetail): AppointDetail => ({
+// 	...rest,
+// 	appointmentType: getAppointmentType(date),
+// 	date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
+// 	time: formatUTCDate(date, 'h:mm aaa'),
+// });
 
-	return appointmentType;
-};
-
-const formatAppointmentDetail = ({ date, ...rest }: ApiAppointmentDetail): AppointDetail => ({
-	...rest,
-	appointmentType: getAppointmentType(date),
-	date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
-	time: formatUTCDate(date, 'h:mm aaa'),
-});
-
-export const getAppointmentList = async (): Promise<AppointmentList | undefined> => {
+// TODO Update how we get the appointments
+export const getAppointmentList = async (
+	params: AppointmentListParams,
+	token: string,
+): Promise<AppointDetail[] | undefined> => {
 	try {
-		// const resp = await aliviaAxios.get<ApiAppointmentList>('/citas');
-		// const list = resp.data;
-		const { current, old } = mockSmallAppointmentList;
+		const resp = await aliviaAxios.get<AppointmentListResponse>('/appointments', {
+			params,
+			headers: {
+				Authentication: `Bearer ${token}`,
+			},
+		});
+		const list = resp.data.data;
+		// const { current, old } = mockSmallAppointmentList;
 
-		return { current: formatAppointmentList(current), old: formatAppointmentList(old) };
+		return formatAppointmentList(list, params.closed === 1 ? PREVIOUS : INCOMING);
 	} catch (e) {
 		console.log(e);
 	}
@@ -135,9 +169,9 @@ export const getAppoinmentDetails = async ({ id }: { id: string }): Promise<Appo
 	try {
 		// const resp = await aliviaAxios.get<ApiAppointmentDetail>(`/citas/${id}`);
 		// const data = resp.data;
-		const data = mockAppointmentDetail;
-
-		return formatAppointmentDetail(data);
+		// const data = mockAppointmentDetail;
+		// return formatAppointmentDetail(data);
+		return undefined;
 	} catch (e) {
 		console.log(e);
 	}

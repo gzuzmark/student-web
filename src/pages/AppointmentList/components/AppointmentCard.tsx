@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme, capitalizeDate } from 'utils';
-import { SmallAppointment } from 'pages/api/appointments';
+import { AppointDetail } from 'pages/api/appointments';
 import { ReactComponent as CalendarIcon } from 'icons/calendar.svg';
 import { ReactComponent as ClockIcon } from 'icons/clock.svg';
 
@@ -106,14 +106,18 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 }));
 
 interface AppointmentCardProps {
-	appointment: SmallAppointment;
+	appointment: AppointDetail;
 }
 
-const AppointmentCard = ({ appointment: { id, channel, disease, date, time } }: AppointmentCardProps) => {
+const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
+	const { id, channel, disease, date, time } = appointment;
 	const classes = useStyles();
 	const history = useHistory();
 	const { t } = useTranslation('appointmentList');
 	const onClick = () => {
+		// eslint-disable-next-line
+		// @ts-ignore
+		window.appointment = appointment;
 		history.push(`/citas/${id}`);
 	};
 

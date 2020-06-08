@@ -13,7 +13,7 @@ import { ReactComponent as UserIcon } from 'icons/user.svg';
 import { ReactComponent as CompanionIcon } from 'icons/companion.svg';
 import { ReactComponent as MehIcon } from 'icons/meh.svg';
 import { ReactComponent as SadIcon } from 'icons/sad.svg';
-import { TriagePair, MYSELF, RELATIVE, SELECT_DOCTOR } from 'AppContext';
+import { TriagePair, MYSELF, RELATIVE, SELECT_DOCTOR_STEP } from 'AppContext';
 import { getKeyValue } from 'utils';
 
 import validationSchema from './validationSchema';
@@ -48,7 +48,7 @@ const createQuestionsMap = (t: Function): Record<string, string> => ({
 	discomfortDuration: t('triage.fields.discomfortDuration.label'),
 });
 
-const createTriageArr = (values: TriageFromValues, t: Function): TriagePair[] => {
+const createQuestionsAndAnswersArr = (values: TriageFromValues, t: Function): TriagePair[] => {
 	const questions = createQuestionsMap(t);
 
 	// TODO: if the form value ever changes, a validation of the key type would beneeded
@@ -67,9 +67,9 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 		{ setSubmitting }: { setSubmitting: Function },
 	) => {
 		if (updateContextState) {
-			const triageArr = createTriageArr({ appointmentOwner, ...others }, t);
+			const triageArr = createQuestionsAndAnswersArr({ appointmentOwner, ...others }, t);
 
-			updateContextState({ appointmentOwner, triage: triageArr, appointmentCreationStep: SELECT_DOCTOR });
+			updateContextState({ appointmentOwner, triage: triageArr, appointmentCreationStep: SELECT_DOCTOR_STEP });
 			history.push('/seleccionar_doctor');
 			setSubmitting(false);
 		}

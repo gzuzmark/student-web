@@ -64,6 +64,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	finishedLabel: {
 		backgroundColor: palette.primary.light,
 		padding: '5px',
+		[breakpoints.up('lg')]: {
+			marginRight: '50px',
+		},
 	},
 	desktopCardTitle: {
 		display: 'none',
@@ -219,7 +222,7 @@ interface RightSideProps {
 }
 
 const RightSide = ({
-	appointment: { appointmentType, date, time, channel, disease, speciality, doctor, paidAmount, patient },
+	appointment: { appointmentType, date, time, channel, disease, doctor, paidAmount, patient },
 }: RightSideProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('appointmentDetail');
@@ -258,7 +261,7 @@ const RightSide = ({
 						</div>
 						<div className={classes.doctorInfoWrapper}>
 							<Typography className={classes.doctorName}>{doctor.name}</Typography>
-							<Typography>{speciality}</Typography>
+							<Typography>{doctor.speciality}</Typography>
 							<Typography>
 								{t('appointmentDetail.doctor.cmp')} {doctor.cmp}
 							</Typography>

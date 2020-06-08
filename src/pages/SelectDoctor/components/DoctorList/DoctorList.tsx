@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
-import { PRE_SIGNUP } from 'AppContext';
+import { PRE_SIGNUP_STEP } from 'AppContext';
 
 import { DoctorAvailability } from '../../api';
 import AvailableTimes from '../AvailableTimes';
@@ -13,25 +13,30 @@ import useStyles from './styles';
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
 	updateContextState: Function | undefined;
+	isUserLoggedIn: boolean;
 }
 
 export interface ActiveDoctorTime {
-	doctorID: number;
+	doctorCmp: string;
 	scheduleID: string;
 }
 
-const DoctorList = ({ doctors, updateContextState }: DoctorListProps) => {
+const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const history = useHistory();
-	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorID: -1, scheduleID: '' });
-	const selectDoctor = (doctorID: number) => (scheduleID: string) => {
-		setActiveDoctorTime({ doctorID: scheduleID === '' ? -1 : doctorID, scheduleID });
+	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorCmp: '', scheduleID: '' });
+	const selectDoctor = (doctorCmp: string) => (scheduleID: string) => {
+		setActiveDoctorTime({ doctorCmp, scheduleID });
 	};
 	const continueToPreRegister = () => {
 		if (updateContextState) {
-			updateContextState({ appointmentCreationStep: PRE_SIGNUP });
-			history.push('/pre_registro');
+			updateContextState({ appointmentCreationStep: PRE_SIGNUP_STEP, scheduleID: activeDoctorTime.scheduleID });
+			if (isUserLoggedIn) {
+				history.push('/pago');
+			} else {
+				history.push('/pre_registro');
+			}
 		}
 	};
 
@@ -46,8 +51,8 @@ const DoctorList = ({ doctors, updateContextState }: DoctorListProps) => {
 				</Typography>
 			</div>
 			<div className={classes.doctorList}>
-				{doctors.map(({ id, name, cmp, comment, profilePicture, schedules }: DoctorAvailability) => (
-					<div className={classes.doctorWrapper} key={id}>
+				{doctors.map(({ name, cmp, comment, profilePicture, speciality, schedules }: DoctorAvailability) => (
+					<div className={classes.doctorWrapper} key={cmp}>
 						<div className={classes.doctor}>
 							<div className={classes.photoWrapper}>
 								<img className={classes.photo} src={profilePicture} alt="doctor" />
@@ -58,7 +63,7 @@ const DoctorList = ({ doctors, updateContextState }: DoctorListProps) => {
 								</div>
 								<div className={classes.flexWrapper}>
 									<div className={classes.specialityWrapper}>
-										<Typography className={classes.speciality}>Especialidad</Typography>
+										<Typography className={classes.speciality}>{speciality}</Typography>
 									</div>
 									<div>
 										<Typography className={classes.cmp}>CMP: {cmp}</Typography>
@@ -78,13 +83,13 @@ const DoctorList = ({ doctors, updateContextState }: DoctorListProps) => {
 						</div>
 						<div className={classes.timesWrapper}>
 							<AvailableTimes
+								doctorCmp={cmp}
 								availableDates={schedules}
 								name={name}
-								doctorID={id}
-								selectTime={selectDoctor(id)}
+								selectTime={selectDoctor(cmp)}
 								activeDoctorTime={activeDoctorTime}
 							/>
-							{activeDoctorTime.doctorID === id ? (
+							{activeDoctorTime.doctorCmp === cmp ? (
 								<Button
 									fullWidth
 									className={classes.continueButton}

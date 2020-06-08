@@ -13,6 +13,7 @@ interface ContactProps {
 	onChangeStep: (values: ContactValues) => void;
 	appointmentOwner: AppointmentOwner | undefined;
 	contactInfo: ContactValues | undefined;
+	changeLocalUserToken: (token: string) => void;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -47,7 +48,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const Contact = ({ onChangeStep, appointmentOwner, contactInfo }: ContactProps) => {
+const Contact = ({ onChangeStep, appointmentOwner, contactInfo, changeLocalUserToken }: ContactProps) => {
 	const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
@@ -76,6 +77,7 @@ const Contact = ({ onChangeStep, appointmentOwner, contactInfo }: ContactProps) 
 				onChangeStep={onChangeStep}
 				openPrivacyPolicy={openDialog}
 				appointmentOwner={appointmentOwner}
+				changeLocalUserToken={changeLocalUserToken}
 			/>
 			<PrivacyPolicyDialog isOpen={isDialogOpen} closeDialog={closeDialog} />
 		</div>
