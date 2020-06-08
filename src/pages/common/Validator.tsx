@@ -15,7 +15,7 @@ const requestCurrentUser = async (
 	setLoading: Function,
 ) => {
 	if (userToken && updateContextState) {
-		const [reservationAccountID, user] = await getCurrentUser(userToken);
+		const [reservationAccountID, user] = await getCurrentUser();
 		updateContextState({ user, reservationAccountID });
 	}
 	setLoading(false);

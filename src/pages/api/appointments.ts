@@ -59,7 +59,7 @@ interface ApiAppointmentDetail {
 	};
 	use_case: {
 		id: string;
-		name: string;
+		title: string;
 	};
 }
 
@@ -131,7 +131,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 		appointmentType,
 		date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
 		time: formatUTCDate(date, 'hh:mm aaa'),
-		disease: use_case.name,
+		disease: use_case.title,
 		channel: appointment_type.name,
 		paidAmount: appointment_type.cost,
 		patient: `${patient.name} ${patient.last_name}`,
@@ -145,16 +145,10 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 // });
 
 // TODO Update how we get the appointments
-export const getAppointmentList = async (
-	params: AppointmentListParams,
-	token: string,
-): Promise<AppointDetail[] | undefined> => {
+export const getAppointmentList = async (params: AppointmentListParams): Promise<AppointDetail[] | undefined> => {
 	try {
 		const resp = await aliviaAxios.get<AppointmentListResponse>('/appointments', {
 			params,
-			headers: {
-				Authorization: `Bearer ${token}`,
-			},
 		});
 		const list = resp.data.data;
 		// const { current, old } = mockSmallAppointmentList;

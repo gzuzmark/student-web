@@ -50,8 +50,9 @@ export interface DoctorAvailability extends Doctor {
 }
 
 interface RequestProps {
-	day: number;
 	useCase: string;
+	from: number;
+	to: number;
 }
 
 // const mockResponse: DoctorAvailabilityAPI[] = [

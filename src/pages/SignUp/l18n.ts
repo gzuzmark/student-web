@@ -28,6 +28,7 @@ const signUp = {
 	'aboutme.privacyPolicy.firstSection': 'Estoy de acuerdo con la',
 	'aboutme.privacyPolicy.secondSection': 'política de privacidad',
 	'aboutme.submit.text': 'De acuerdo, crear mi cuenta',
+	'aboutMe.fields.identification.error': 'Ya existe una cuenta asociada a este DNI',
 	// Medical data
 	'medicalData.mobile.title.firstSection': 'Completa esta información médica',
 	'medicalData.title.firstSection': 'Completa esta',
@@ -72,7 +73,7 @@ const signUp = {
 	'contact.submit.text.mobile': 'Continuar',
 	'contact.submit.text': 'Continuar',
 	'contact.phoneNumber.error': 'El número que ingresaste es inválido',
-	'contact.password.error': 'El email que ingresaste es inválido',
+	'contact.email.error': 'El email que ingresaste es inválido',
 };
 
 export default signUp;

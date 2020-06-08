@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback, useLayoutEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { Location } from 'history';
+import { useTranslation } from 'react-i18next';
 
 import { Container, RightLayout } from 'pages/common';
 import { createPatient, getCurrentUser } from 'pages/api';
@@ -28,6 +29,7 @@ const checkStep = (
 
 const SignUp = () => {
 	const { push, listen, location } = useHistory();
+	const { t } = useTranslation('signUp');
 	const [step, setStep] = useState<number>(0);
 	const [localUserToken, setLocalUserToken] = useState<string>();
 	const [contactInfo, setContactInfo] = useState<ContactValues>();
@@ -45,26 +47,37 @@ const SignUp = () => {
 
 		push(`/registro/${subRoutes[step + 1]}`);
 	};
-	const submitSignUp = async (aboutUser: AboutMeValues) => {
-		if (appointmentOwner && updateState) {
-			const newUser = {
-				...(medicalData as MedicalDataValues),
-				...aboutUser,
-			};
+	const submitSignUp = useCallback(
+		async (aboutUser: AboutMeValues, setSubmitting: Function, setFieldError: Function) => {
+			if (updateState) {
+				const newUser = {
+					...(medicalData as MedicalDataValues),
+					...aboutUser,
+				};
 
-			if (localUserToken) {
-				const reservationAccountID = await createPatient(newUser, localUserToken);
+				if (localUserToken) {
+					const reservationAccountID = await createPatient(newUser, setFieldError);
 
-				if (reservationAccountID) {
-					// eslint-disable-next-line
-					const [_, user] = await getCurrentUser(localUserToken);
-					setLocalValue('userToken', localUserToken);
-					updateState({ reservationAccountID, userToken: localUserToken, user, appointmentCreationStep: PAYMENT_STEP });
-					push('/pago');
+					if (reservationAccountID) {
+						// eslint-disable-next-line
+						const [_, user] = await getCurrentUser();
+						setLocalValue('userToken', localUserToken);
+						updateState({
+							reservationAccountID,
+							userToken: localUserToken,
+							user,
+							appointmentCreationStep: PAYMENT_STEP,
+						});
+						push('/pago');
+					} else {
+						setFieldError('identification', t('aboutMe.fields.identification.error'));
+					}
 				}
 			}
-		}
-	};
+			setSubmitting(false);
+		},
+		[localUserToken, medicalData, push, t, updateState],
+	);
 
 	usePageTitle('Registro');
 	useCurrentUserRediction(userToken, '/citas');

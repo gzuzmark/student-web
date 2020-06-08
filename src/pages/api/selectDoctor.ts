@@ -109,12 +109,16 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 const createMedicalSpecialityQuery = (data: RequestProps): SnakeRequestProps =>
 	transformToSnakeCase<RequestProps, SnakeRequestProps>(data);
 
-export const getMedicalSpecialities = async (data: RequestProps): Promise<DoctorAvailability[]> => {
-	const requestParams = createMedicalSpecialityQuery(data);
-	const response = await aliviaAxios.get<DoctorResponseAPI>('/doctors/schedules', {
-		params: { ...requestParams },
-	});
-	const parsedData = parseResponseData(response.data.data);
+export const getMedicalSpecialities = async (data: RequestProps): Promise<DoctorAvailability[] | undefined> => {
+	try {
+		const requestParams = createMedicalSpecialityQuery(data);
+		const response = await aliviaAxios.get<DoctorResponseAPI>('/doctors/schedules', {
+			params: { ...requestParams },
+		});
+		const parsedData = parseResponseData(response.data.data);
 
-	return parsedData;
+		return parsedData;
+	} catch (e) {
+		console.log(e);
+	}
 };

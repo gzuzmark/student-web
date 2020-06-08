@@ -4,3 +4,4 @@ export * from './addCustomValidations';
 export * from './hooks';
 export * from './localStorage';
 export * from './redirects';
+export * from './date';

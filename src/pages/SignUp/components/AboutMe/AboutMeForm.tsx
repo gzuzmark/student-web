@@ -23,7 +23,7 @@ export interface AboutMeValues {
 }
 
 interface AboutMeFormProps {
-	submitSignUp: (value: AboutMeValues) => void;
+	submitSignUp: (value: AboutMeValues, setSubmitting: Function, setFieldError: Function) => void;
 	openPrivacyPolicy: () => void;
 }
 
@@ -71,9 +71,11 @@ const AboutMeForm = ({ submitSignUp, openPrivacyPolicy }: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const onSubmit = useCallback(
-		async (values: AboutMeValues, { setSubmitting }: { setSubmitting: Function }) => {
-			submitSignUp(values);
-			setSubmitting(false);
+		async (
+			values: AboutMeValues,
+			{ setSubmitting, setFieldError }: { setSubmitting: Function; setFieldError: Function },
+		) => {
+			submitSignUp(values, setSubmitting, setFieldError);
 		},
 		[submitSignUp],
 	);

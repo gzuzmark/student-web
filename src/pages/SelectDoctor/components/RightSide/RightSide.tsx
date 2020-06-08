@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
-import { dateToUTCUnixTimestamp } from 'utils';
+import { dateToUTCUnixTimestamp, getEndOfDay } from 'utils';
 
 import { getMedicalSpecialities, DoctorAvailability } from '../../api';
 import { DoctorList } from '../DoctorList';
@@ -14,7 +14,12 @@ import { UseCase } from 'pages/api';
 
 const getDoctors = async (selectedDate: Date | null, useCase: UseCase | null | undefined, setDoctors: Function) => {
 	if (!!selectedDate && !!useCase) {
-		const doctors = await getMedicalSpecialities({ day: dateToUTCUnixTimestamp(selectedDate), useCase: useCase.id });
+		console.log(selectedDate);
+		const doctors = await getMedicalSpecialities({
+			useCase: useCase.id,
+			from: dateToUTCUnixTimestamp(selectedDate),
+			to: dateToUTCUnixTimestamp(getEndOfDay()),
+		});
 
 		setDoctors(doctors);
 	}
