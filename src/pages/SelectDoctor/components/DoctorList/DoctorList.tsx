@@ -72,7 +72,7 @@ const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListP
 										<Typography className={classes.cmp}>CMP: {cmp}</Typography>
 									</div>
 								</div>
-								{comment ? (
+								{null ? (
 									<div className={classes.commentWrapper}>
 										<Typography className={classes.comment}>&ldquo;{comment}&rdquo;</Typography>
 									</div>
