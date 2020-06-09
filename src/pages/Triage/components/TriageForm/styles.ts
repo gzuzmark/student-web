@@ -39,9 +39,11 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		},
 	},
 	optionField: {
-		display: 'block',
-		[breakpoints.up('lg')]: {
-			display: 'flex',
+		'&&': {
+			display: 'block',
+			[breakpoints.up('lg')]: {
+				display: 'flex',
+			},
 		},
 	},
 	smallerOptionField: {
