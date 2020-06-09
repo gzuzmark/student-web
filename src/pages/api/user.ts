@@ -17,9 +17,10 @@ interface CurrentUserResponse {
 }
 
 // TODO: This will most likely change to support multiple profiles, update it when needed
-export const getCurrentUser = async (): Promise<[string, SimpleUser]> => {
+export const getCurrentUser = async (token?: string): Promise<[string, SimpleUser]> => {
 	try {
-		const resp = await aliviaAxios.get<CurrentUserResponse>('/users/me');
+		const headers = token ? { Authorization: `Bearer ${token}` } : {};
+		const resp = await aliviaAxios.get<CurrentUserResponse>('/users/me', { headers });
 		const data = resp.data.data.user;
 
 		return [data.id, { id: data.id, name: data.name, lastName: data.last_name, secondSurname: data.second_last_name }];

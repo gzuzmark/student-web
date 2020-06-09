@@ -60,7 +60,7 @@ const SignUp = () => {
 
 					if (reservationAccountID) {
 						// eslint-disable-next-line
-						const [_, user] = await getCurrentUser();
+						const [_, user] = await getCurrentUser(localUserToken);
 						setLocalValue('userToken', localUserToken);
 						updateState({
 							reservationAccountID,
