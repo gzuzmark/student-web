@@ -145,10 +145,16 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 // });
 
 // TODO Update how we get the appointments
-export const getAppointmentList = async (params: AppointmentListParams): Promise<AppointDetail[] | undefined> => {
+export const getAppointmentList = async (
+	params: AppointmentListParams,
+	userToken: string,
+): Promise<AppointDetail[] | undefined> => {
 	try {
 		const resp = await aliviaAxios.get<AppointmentListResponse>('/appointments', {
 			params,
+			headers: {
+				Authorization: `Bearer ${userToken}`,
+			},
 		});
 		const list = resp.data.data;
 		// const { current, old } = mockSmallAppointmentList;
