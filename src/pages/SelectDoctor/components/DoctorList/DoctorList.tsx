@@ -27,7 +27,7 @@ const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListP
 	const history = useHistory();
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorCmp: '', scheduleID: '' });
 	const selectDoctor = (doctorCmp: string) => (scheduleID: string) => {
-		setActiveDoctorTime({ doctorCmp, scheduleID });
+		setActiveDoctorTime({ doctorCmp: scheduleID === '' ? '' : doctorCmp, scheduleID });
 	};
 	const continueToPreRegister = () => {
 		if (updateContextState) {

@@ -105,13 +105,13 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 			const token = await sendLogin({ username: phoneNumber, password }, setFieldError);
 			if (token && updateContextState) {
 				const [reservationToken, currentUser] = await getCurrentUser();
+				redirectAfterLogin(appointmentCreationStep, history);
 				updateContextState({
 					userToken: token,
 					reservationAccountID: reservationToken,
 					user: currentUser,
 					appointmentCreationStep: appointmentCreationStep === PRE_SIGNUP_STEP ? PAYMENT_STEP : appointmentCreationStep,
 				});
-				redirectAfterLogin(appointmentCreationStep, history);
 			}
 
 			setSubmitting(false);

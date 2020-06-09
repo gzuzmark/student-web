@@ -34,11 +34,8 @@ const validationSchema = object().shape({
 	lastName: string().required(messages.lastName.required),
 	secondSurname: string().required(messages.secondSurname.required),
 	identification: string()
-		// eslint-disable-next-line
-		// @ts-ignore
-		.digits(messages.identification.digits)
-		.min(7, messages.identification.digits)
-		.max(11, messages.identification.digits)
+		.min(8, messages.identification.digits)
+		.max(12, messages.identification.digits)
 		.required(messages.identification.required),
 	birthDate: date()
 		.required(messages.birthDate.required)

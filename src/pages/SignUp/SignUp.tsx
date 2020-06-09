@@ -56,7 +56,7 @@ const SignUp = () => {
 				};
 
 				if (localUserToken) {
-					const reservationAccountID = await createPatient(newUser, setFieldError);
+					const reservationAccountID = await createPatient(newUser, setFieldError, localUserToken);
 
 					if (reservationAccountID) {
 						// eslint-disable-next-line

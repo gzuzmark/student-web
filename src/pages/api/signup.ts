@@ -37,18 +37,30 @@ interface CreatePatientResponse {
 
 type ContactValuesRequest = Omit<ContactValues, 'repeatPassword'>;
 
-export const createPatient = async (user: NewUser, setFieldError: Function): Promise<string | undefined> => {
+export const createPatient = async (
+	user: NewUser,
+	setFieldError: Function,
+	authToken: string,
+): Promise<string | undefined> => {
 	try {
-		const resp = await aliviaAxios.post<CreatePatientResponse>('/patients', {
-			name: user.name,
-			last_name: user.lastName,
-			second_last_name: user.secondSurname,
-			document_number: user.identification,
-			birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
-			allergies: user.allergies,
-			meds: user.medicines,
-			extra_info: user.moreMedicalInformation,
-		});
+		const resp = await aliviaAxios.post<CreatePatientResponse>(
+			'/patients',
+			{
+				name: user.name,
+				last_name: user.lastName,
+				second_last_name: user.secondSurname,
+				document_number: user.identification,
+				birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
+				allergies: user.allergies,
+				meds: user.medicines,
+				extra_info: user.moreMedicalInformation,
+			},
+			{
+				headers: {
+					Authorization: `Bearer ${authToken}`,
+				},
+			},
+		);
 		const data = resp.data.data;
 
 		return data.id;

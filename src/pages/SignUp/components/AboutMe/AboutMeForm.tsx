@@ -116,7 +116,6 @@ const AboutMeForm = ({ submitSignUp, openPrivacyPolicy }: AboutMeFormProps) => {
 							<Field
 								component={TextField}
 								name="identification"
-								type="tel"
 								label={t('aboutme.fields.id.label')}
 								variant="outlined"
 								inputProps={{ maxLength: 11 }}
