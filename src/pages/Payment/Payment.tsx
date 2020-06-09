@@ -7,15 +7,23 @@ import { PAYMENT_ROUTE } from 'routes';
 
 // eslint-disable-next-line
 // @ts-ignore
-const createAppointment = async (useCase, reservationAccountID, scheduleID, triage, history) => {
+const createAppointment = async (useCase, reservationAccountID, scheduleID, triage, history, userToken) => {
 	if (useCase) {
-		await aliviaAxios.post('/appointments', {
-			reservation_account_id: reservationAccountID,
-			use_case_id: useCase.id,
-			schedule_id: scheduleID,
-			appointment_type_id: 'asdf',
-			questions: triage,
-		});
+		await aliviaAxios.post(
+			'/appointments',
+			{
+				reservation_account_id: reservationAccountID,
+				use_case_id: useCase.id,
+				schedule_id: scheduleID,
+				appointment_type_id: 'asdf',
+				questions: triage,
+			},
+			{
+				headers: {
+					Authorization: `Bearer ${userToken}`,
+				},
+			},
+		);
 
 		history.push('/citas');
 	}
@@ -27,7 +35,7 @@ const Payment = () => {
 
 	usePageTitle('Pago');
 	useLayoutEffect(() => {
-		createAppointment(useCase, reservationAccountID, scheduleID, triage, history);
+		createAppointment(useCase, reservationAccountID, scheduleID, triage, history, userToken);
 	}, [history, reservationAccountID, scheduleID, triage, useCase, userToken]);
 
 	return <div />;
