@@ -116,7 +116,7 @@ const SignUp = () => {
 						<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
 					</Route>
 					<Route path="/registro/sobre_ti">
-						<AboutMe submitSignUp={submitSignUp} />
+						<AboutMe submitSignUp={submitSignUp} appointmentOwner={appointmentOwner} />
 					</Route>
 					<Route exact path="/registro/*">
 						<Redirect to="/registro/contacto" />

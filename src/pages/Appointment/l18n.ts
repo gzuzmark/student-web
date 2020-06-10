@@ -8,7 +8,7 @@ const appointmentDetailL18n = {
 	'appointmentDetail.mobile.title.previous.firstLine': 'Detalle',
 	'appointmentDetail.mobile.title.previous.secondLine': 'de tu cita',
 	'appointmentDetail.detail.cancelAppointment':
-		'¿Deseas cancelar una cita? Escríbenos a alivia@lavictoria.pe con por lo menos 24 horas de anticipación',
+		'¿Deseas cancelar una cita? Contáctanos a nuestro whatsapp: 947 907 184 con, por lo menos, 24 horas de anticipación',
 	'appointmentDetail.detail.treatmentMessage':
 		'Aquí podrás ver tu tratamiento y recomendaciones una vez terminada la consulta.',
 	'appointmentDetail.for': 'por',
