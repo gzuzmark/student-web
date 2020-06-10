@@ -36,7 +36,7 @@ const initialValues = {
 	moreInfo: '',
 };
 
-const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
 			maxWidth: '403px',
@@ -76,9 +76,14 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	fieldLabelWrapper: {
 		paddingBottom: '8px',
 	},
-	optionalField: {
+	optionalFieldLabel: {
 		[breakpoints.up('lg')]: {
 			marginRight: '-2px',
+		},
+	},
+	moreInformationLabel: {
+		'& .MuiFormHelperText-root': {
+			color: palette.info.main,
 		},
 	},
 	privacyPolicyWrapper: {
@@ -116,7 +121,7 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 					<div>
 						<div className={classes.fieldWrapper}>
 							<div className={classes.fieldLabelWrapper}>
-								<FormLabel>{t('medicalData.fields.moreInfo.label')}</FormLabel>
+								<FormLabel>{t('medicalData.fields.takeMedicines.label')}</FormLabel>
 							</div>
 							<Field component={OptionsGroup} name="takeMedicines" fullWidth>
 								<Option className={classes.optionButton} value={true}>
@@ -161,7 +166,7 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 							/>
 						</div>
 						<div className={classes.fieldWrapper}>
-							<div className={clsx(classes.fieldLabelWrapper, classes.optionalField)}>
+							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
 								<FormLabel>
 									{t('medicalData.fields.moreInfo.label')}{' '}
 									{matches ? (
@@ -171,7 +176,14 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 									) : null}
 								</FormLabel>
 							</div>
-							<Field component={TextField} name="moreInfo" variant="outlined" fullWidth />
+							<Field
+								component={TextField}
+								className={classes.moreInformationLabel}
+								name="moreInfo"
+								variant="outlined"
+								helperText={t('medicalData.fields.moreInfo.helperText')}
+								fullWidth
+							/>
 						</div>
 					</div>
 					<div className={classes.privacyPolicyWrapper}>

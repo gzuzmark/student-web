@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { PrivacyPolicyDialog } from 'pages/common';
+import { MYSELF, AppointmentOwner } from 'AppContext';
 
 import AboutMeForm, { AboutMeValues } from './AboutMeForm';
 
 interface AboutMeProps {
 	submitSignUp: (value: AboutMeValues, setSubmitting: Function, setFieldError: Function) => void;
+	appointmentOwner?: AppointmentOwner;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -43,10 +45,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMe = ({ submitSignUp }: AboutMeProps) => {
+const AboutMe = ({ submitSignUp, appointmentOwner }: AboutMeProps) => {
 	const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
+	const userLabel = appointmentOwner === MYSELF ? 'forMe' : 'forSomeoneElse';
 	const openDialog = () => {
 		setIsDialogOpen(true);
 	};
@@ -71,7 +74,7 @@ const AboutMe = ({ submitSignUp }: AboutMeProps) => {
 				</Typography>
 			</div>
 			<Typography className={classes.subTitle} color="primary">
-				{t('aboutme.subTitle')}
+				{t(`aboutme.subTitle.${userLabel}`)}
 			</Typography>
 			<AboutMeForm submitSignUp={submitSignUp} openPrivacyPolicy={openDialog} />
 			<PrivacyPolicyDialog isOpen={isDialogOpen} closeDialog={closeDialog} />
