@@ -24,6 +24,7 @@ export interface ContactValues {
 interface ContactFormProps {
 	onChangeStep: (values: ContactValues) => void;
 	openPrivacyPolicy: () => void;
+	openTermsAndConditions: () => void;
 	appointmentOwner: AppointmentOwner | undefined;
 	contactInfo: ContactValues | undefined;
 	changeLocalUserToken: (token: string) => void;
@@ -83,6 +84,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 const ContactForm = ({
 	onChangeStep,
 	openPrivacyPolicy,
+	openTermsAndConditions,
 	appointmentOwner,
 	contactInfo,
 	changeLocalUserToken,
@@ -180,7 +182,7 @@ const ContactForm = ({
 							className={classes.privacyPolicyLink}
 							component="span"
 							color="primary"
-							onClick={openPrivacyPolicy}
+							onClick={openTermsAndConditions}
 						>
 							{t('contact.legalInformation.termsAndConditionsLink')}
 						</Typography>

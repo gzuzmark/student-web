@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
-import { stylesWithTheme } from 'utils';
-import { PrivacyPolicyDialog } from 'pages/common';
+import { stylesWithTheme, redirectToURL } from 'utils';
 
 import MedicalDataForm, { MedicalDataValues } from './MedicalDataForm';
 
@@ -46,15 +45,11 @@ interface MedicalDataProps {
 }
 
 const MedicalData = ({ onChangeStep, medicalData }: MedicalDataProps) => {
-	const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 	const { t } = useTranslation('signUp');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
 	const openDialog = () => {
-		setIsDialogOpen(true);
-	};
-	const closeDialog = () => {
-		setIsDialogOpen(false);
+		redirectToURL('https://drive.google.com/open?id=1RjgoOp4wR2zCUtktj0d_PqhT9FC7TGyR', true);
 	};
 
 	return (
@@ -85,7 +80,6 @@ const MedicalData = ({ onChangeStep, medicalData }: MedicalDataProps) => {
 				{t('medicalData.subTitle')}
 			</Typography>
 			<MedicalDataForm medicalData={medicalData} onChangeStep={onChangeStep} openPrivacyPolicy={openDialog} />
-			<PrivacyPolicyDialog isOpen={isDialogOpen} closeDialog={closeDialog} />
 		</div>
 	);
 };

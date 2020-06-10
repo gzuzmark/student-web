@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { PrivacyPolicyDialog } from 'pages/common';
 import { MYSELF, AppointmentOwner } from 'AppContext';
+import { redirectToURL } from 'utils';
 
 import AboutMeForm, { AboutMeValues } from './AboutMeForm';
 
@@ -46,15 +46,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 const AboutMe = ({ submitSignUp, appointmentOwner }: AboutMeProps) => {
-	const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const userLabel = appointmentOwner === MYSELF ? 'forMe' : 'forSomeoneElse';
 	const openDialog = () => {
-		setIsDialogOpen(true);
-	};
-	const closeDialog = () => {
-		setIsDialogOpen(false);
+		redirectToURL('https://drive.google.com/open?id=12DfeCL1FGluiEmYcH_fo4uZBUu1k-LtV', true);
 	};
 
 	return (
@@ -77,7 +73,6 @@ const AboutMe = ({ submitSignUp, appointmentOwner }: AboutMeProps) => {
 				{t(`aboutme.subTitle.${userLabel}`)}
 			</Typography>
 			<AboutMeForm submitSignUp={submitSignUp} openPrivacyPolicy={openDialog} />
-			<PrivacyPolicyDialog isOpen={isDialogOpen} closeDialog={closeDialog} />
 		</div>
 	);
 };

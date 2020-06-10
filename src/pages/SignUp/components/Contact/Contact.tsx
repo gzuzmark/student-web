@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
+import { redirectToURL } from 'utils';
 import { stylesWithTheme } from 'utils/createStyles';
-import { PrivacyPolicyDialog } from 'pages/common';
 
 import ContactForm, { ContactValues } from './ContactForm';
 import { AppointmentOwner } from 'AppContext';
@@ -49,14 +49,13 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 const Contact = ({ onChangeStep, appointmentOwner, contactInfo, changeLocalUserToken }: ContactProps) => {
-	const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
-	const openDialog = () => {
-		setIsDialogOpen(true);
+	const gotToPolicy = () => {
+		redirectToURL('https://drive.google.com/open?id=12DfeCL1FGluiEmYcH_fo4uZBUu1k-LtV', true);
 	};
-	const closeDialog = () => {
-		setIsDialogOpen(false);
+	const gotToTermsAndConditions = () => {
+		redirectToURL('https://drive.google.com/open?id=12DfeCL1FGluiEmYcH_fo4uZBUu1k-LtV', true);
 	};
 
 	return (
@@ -75,11 +74,11 @@ const Contact = ({ onChangeStep, appointmentOwner, contactInfo, changeLocalUserT
 			<ContactForm
 				contactInfo={contactInfo}
 				onChangeStep={onChangeStep}
-				openPrivacyPolicy={openDialog}
+				openPrivacyPolicy={gotToPolicy}
+				openTermsAndConditions={gotToTermsAndConditions}
 				appointmentOwner={appointmentOwner}
 				changeLocalUserToken={changeLocalUserToken}
 			/>
-			<PrivacyPolicyDialog isOpen={isDialogOpen} closeDialog={closeDialog} />
 		</div>
 	);
 };
