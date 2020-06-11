@@ -39,7 +39,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			borderBottomLeftRadius: '25px',
 			flex: '1 1 auto',
 			height: '100vh',
-			marginLeft: '-25px',
 			zIndex: 2,
 			padding: 0,
 		},

@@ -63,7 +63,7 @@ const App = () => {
 								))}
 							</Route>
 							<Route exact path="/registro">
-								<Redirect to="/registro/contacto" />
+								<Redirect to="/registro/sobre_ti" />
 							</Route>
 							<Route path="/*" component={RedirectWrapper} />
 						</Switch>

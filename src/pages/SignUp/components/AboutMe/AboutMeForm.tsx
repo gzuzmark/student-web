@@ -23,7 +23,7 @@ export interface AboutMeValues {
 }
 
 interface AboutMeFormProps {
-	submitSignUp: (value: AboutMeValues, setSubmitting: Function, setFieldError: Function) => void;
+	onChangeStep: (values: AboutMeValues) => void;
 	openPrivacyPolicy: () => void;
 }
 
@@ -67,17 +67,15 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMeForm = ({ submitSignUp, openPrivacyPolicy }: AboutMeFormProps) => {
+const AboutMeForm = ({ onChangeStep, openPrivacyPolicy }: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const onSubmit = useCallback(
-		async (
-			values: AboutMeValues,
-			{ setSubmitting, setFieldError }: { setSubmitting: Function; setFieldError: Function },
-		) => {
-			submitSignUp(values, setSubmitting, setFieldError);
+		(values: AboutMeValues, { setSubmitting }: { setSubmitting: Function; setFieldError: Function }) => {
+			onChangeStep(values);
+			setSubmitting(false);
 		},
-		[submitSignUp],
+		[onChangeStep],
 	);
 
 	return (
@@ -109,16 +107,6 @@ const AboutMeForm = ({ submitSignUp, openPrivacyPolicy }: AboutMeFormProps) => {
 								name="secondSurname"
 								label={t('aboutme.fields.secondSurname.label')}
 								variant="outlined"
-								fullWidth
-							/>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={TextField}
-								name="identification"
-								label={t('aboutme.fields.id.label')}
-								variant="outlined"
-								inputProps={{ maxLength: 11 }}
 								fullWidth
 							/>
 						</div>

@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
@@ -9,28 +8,34 @@ import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { PasswordField } from 'pages/common';
-import { createAccount } from 'pages/api';
-import { GUEST, AppointmentOwner } from 'AppContext';
 
 import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
 
 export interface ContactValues {
+	identification: string;
 	phoneNumber: string;
 	email?: string;
 	password?: string;
 	repeatPassword?: string;
 }
 
+interface FormikContactValues {
+	identification: string;
+	phoneNumber: string;
+	email: string;
+	password: string;
+	repeatPassword: string;
+}
+
 interface ContactFormProps {
-	onChangeStep: (values: ContactValues) => void;
+	submitSignUp: (values: ContactValues) => Promise<void>;
 	openPrivacyPolicy: () => void;
 	openTermsAndConditions: () => void;
-	appointmentOwner: AppointmentOwner | undefined;
-	contactInfo: ContactValues | undefined;
-	changeLocalUserToken: (token: string) => void;
+	isGuest: boolean;
 }
 
 const initialValues = {
+	identification: '',
 	phoneNumber: '',
 	email: '',
 	password: '',
@@ -81,41 +86,46 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const ContactForm = ({
-	onChangeStep,
-	openPrivacyPolicy,
-	openTermsAndConditions,
-	appointmentOwner,
-	contactInfo,
-	changeLocalUserToken,
-}: ContactFormProps) => {
+const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, isGuest }: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
-	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const onSubmit = useCallback(
-		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<ContactValues>) => {
-			const userToken = await createAccount(values, setFieldError);
+		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
+			try {
+				await submitSignUp(values);
 
-			if (userToken) {
-				changeLocalUserToken(userToken);
-				onChangeStep(values);
+				setSubmitting(false);
+			} catch (e) {
+				setFieldError('identification', t('contact.fields.identification.error'));
+				setFieldError('phoneNumber', t('contact.phoneNumber.error'));
+
+				if (values.email) {
+					setFieldError('email', t('contact.email.error'));
+				}
 			}
-
-			setSubmitting(false);
 		},
-		[onChangeStep, changeLocalUserToken],
+		[submitSignUp, t],
 	);
-	const isGuest = appointmentOwner === GUEST;
 
 	return (
 		<Formik
-			initialValues={contactInfo || initialValues}
+			initialValues={initialValues}
 			onSubmit={onSubmit}
 			validationSchema={isGuest ? guestValidationSchema : newUservalidationSchema}
 		>
 			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
 					<div>
+						<div className={classes.fieldWrapper}>
+							<Field
+								component={TextField}
+								name="identification"
+								label={t('contact.fields.id.label')}
+								variant="outlined"
+								inputProps={{ maxLength: 11 }}
+								fullWidth
+							/>
+						</div>
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={TextField}
@@ -189,7 +199,7 @@ const ContactForm = ({
 					</div>
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
-							{matches ? t('contact.submit.text') : t('contact.submit.text.mobile')}
+							{t('contact.submit.text')}
 						</Button>
 					</div>
 				</Form>

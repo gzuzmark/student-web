@@ -8,6 +8,10 @@ registerCustomValidators(Yup);
 const { string, object } = Yup;
 
 const messages = {
+	identification: {
+		required: i18next.t('signUp:contact.validation.id.required'),
+		digits: i18next.t('signUp:contact.validation.id.digits'),
+	},
 	phoneNumber: {
 		required: i18next.t('signUp:contact.validation.phoneNumber.required'),
 	},
@@ -16,6 +20,7 @@ const messages = {
 	},
 	password: {
 		required: i18next.t('signUp:contact.validation.password.required'),
+		minLength: i18next.t('signUp:contact.validation.password.incorrectFormat'),
 	},
 	repeatPassword: {
 		required: i18next.t('signUp:contact.validation.repeatPassword.required'),
@@ -24,6 +29,10 @@ const messages = {
 };
 
 export const newUservalidationSchema = object().shape({
+	identification: string()
+		.min(8, messages.identification.digits)
+		.max(12, messages.identification.digits)
+		.required(messages.identification.required),
 	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
 		.max(9, messages.phoneNumber.required)
@@ -34,7 +43,7 @@ export const newUservalidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().validEmail(messages.email.validEmail),
-	password: string().required(messages.password.required),
+	password: string().required(messages.password.required).min(6, messages.password.minLength),
 	repeatPassword: string()
 		.required(messages.repeatPassword.required)
 		// eslint-disable-next-line
@@ -43,6 +52,10 @@ export const newUservalidationSchema = object().shape({
 });
 
 export const guestValidationSchema = object().shape({
+	identification: string()
+		.min(8, messages.identification.digits)
+		.max(12, messages.identification.digits)
+		.required(messages.identification.required),
 	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
 		.max(9, messages.phoneNumber.required)

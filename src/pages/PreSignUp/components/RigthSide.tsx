@@ -157,15 +157,17 @@ const RightSide = ({ appointmentOwner, updateState }: RightSideProps) => {
 							</IconButton>
 						</Card>
 					) : null}
-					<Card className={classes.card} onClick={goToSignUp()}>
-						<Typography className={classes.cardHeader} variant="h3">
-							{t(`right.signUp.label.${l18nSelector}`)}
-						</Typography>
-						<Typography>{t(`right.signUp.body.${l18nSelector}`)} </Typography>
-						<IconButton className={classes.iconButton} color="primary">
-							<RightIcon />
-						</IconButton>
-					</Card>
+					{isForMyself ? (
+						<Card className={classes.card} onClick={goToSignUp()}>
+							<Typography className={classes.cardHeader} variant="h3">
+								{t(`right.signUp.label.${l18nSelector}`)}
+							</Typography>
+							<Typography>{t(`right.signUp.body.${l18nSelector}`)} </Typography>
+							<IconButton className={classes.iconButton} color="primary">
+								<RightIcon />
+							</IconButton>
+						</Card>
+					) : null}
 					<Card className={classes.card} onClick={goToSignUp(GUEST)}>
 						<Typography className={classes.cardHeader} variant="h3">
 							{matches ? t('right.signUp.label.guest') : t('right.signUp.label.guest.mobile')}

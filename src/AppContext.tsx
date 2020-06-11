@@ -58,6 +58,7 @@ export interface TriagePair {
 interface ContextProps {
 	user: SimpleUser | null;
 	userToken: string | null;
+	guestToken: string | null;
 	reservationAccountID: string;
 	channel: string;
 	useCase: UseCase | null;
@@ -71,6 +72,7 @@ interface ContextProps {
 const defaultState: ContextProps = {
 	user: null,
 	userToken: getLocalValue('userToken'),
+	guestToken: null,
 	reservationAccountID: '',
 	channel: 'videocall',
 	useCase: null,
@@ -87,6 +89,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
 	const updateState = useCallback((newState: Partial<ContextProps>) => {
 		setState((state) => ({ ...state, ...newState }));
 	}, []);
+	console.log(state);
 
 	return <AppContext.Provider value={{ ...state, updateState }}>{children}</AppContext.Provider>;
 };
