@@ -89,6 +89,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, isGuest }: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
+	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
 	const onSubmit = useCallback(
 		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
 			try {
@@ -120,7 +121,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 							<Field
 								component={TextField}
 								name="identification"
-								label={t('contact.fields.id.label')}
+								label={t(`contact.fields.id.label.${contactKey}`)}
 								variant="outlined"
 								inputProps={{ maxLength: 11 }}
 								fullWidth
@@ -132,7 +133,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 								className={classes.fieldWithHelperText}
 								name="phoneNumber"
 								type="tel"
-								label={t('contact.fields.phoneNumber.label')}
+								label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
 								variant="outlined"
 								helperText={t('contact.fields.phoneNumber.helperText')}
 								inputProps={{ maxLength: 9 }}
@@ -144,7 +145,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 								component={TextField}
 								className={classes.fieldWithHelperText}
 								name="email"
-								label={t('contact.fields.email.label')}
+								label={t(`contact.fields.email.label.${contactKey}`)}
 								variant="outlined"
 								helperText={t('contact.fields.email.helperText')}
 								fullWidth

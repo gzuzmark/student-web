@@ -86,10 +86,13 @@ const AppContext = React.createContext<Partial<ContextProps>>({});
 
 const AppProvider = ({ children }: AppProviderProps) => {
 	const [state, setState] = useState<Partial<ContextProps>>(defaultState);
-	const updateState = useCallback((newState: Partial<ContextProps>) => {
+	const updateState = useCallback((newState: Partial<ContextProps>, callback: Function | undefined = undefined) => {
 		setState((state) => ({ ...state, ...newState }));
+
+		if (callback && typeof callback === 'function') {
+			callback();
+		}
 	}, []);
-	console.log(state);
 
 	return <AppContext.Provider value={{ ...state, updateState }}>{children}</AppContext.Provider>;
 };

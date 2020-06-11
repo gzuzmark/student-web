@@ -19,7 +19,8 @@ export const useCurrentUserRediction = (currentUser: string | null | undefined, 
 		if (currentUser) {
 			history.push(redictedPath);
 		}
-	}, [currentUser, history, redictedPath]);
+		// eslint-disable-next-line
+	}, []);
 };
 
 const redirectIfUseCaseIsEmpty = (useCase: UseCase | null | undefined) => {

@@ -78,21 +78,15 @@ interface LoginFormProps {
 	appointmentCreationStep: AppointmentCreationStep | undefined;
 	updateContextState: Function | undefined;
 }
-const redirectAfterLogin = (
-	appointmentCreationStep: AppointmentCreationStep | undefined,
-	history: Record<string, any>,
-): void => {
+const getRedirectPath = (appointmentCreationStep: AppointmentCreationStep | undefined): string => {
 	switch (appointmentCreationStep) {
 		case TRIAGE_STEP:
 		case SELECT_DOCTOR_STEP:
-			history.goBack();
-			break;
+			return 'back';
 		case PRE_SIGNUP_STEP:
-			history.push('/pago');
-			break;
+			return '/pago';
 		default:
-			history.push('/citas');
-			break;
+			return '/citas';
 	}
 };
 
@@ -102,21 +96,36 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 	const history = useHistory();
 	const onSubmit = useCallback(
 		async ({ phoneNumber, password }: FormValues, { setSubmitting, setFieldError }: FormikHelpers<FormValues>) => {
-			const token = await sendLogin({ username: phoneNumber, password }, setFieldError);
-			if (token && updateContextState) {
-				const [reservationToken, currentUser] = await getCurrentUser(token);
-				updateContextState({
-					userToken: token,
-					reservationAccountID: reservationToken,
-					user: currentUser,
-					appointmentCreationStep: appointmentCreationStep === PRE_SIGNUP_STEP ? PAYMENT_STEP : appointmentCreationStep,
-				});
-				redirectAfterLogin(appointmentCreationStep, history);
-			}
+			try {
+				const token = await sendLogin({ username: phoneNumber, password });
+				if (token && updateContextState) {
+					const [reservationToken, currentUser] = await getCurrentUser(token);
+					const redirectPath = getRedirectPath(appointmentCreationStep);
 
-			setSubmitting(false);
+					updateContextState({
+						userToken: token,
+						reservationAccountID: reservationToken,
+						user: currentUser,
+						appointmentCreationStep:
+							appointmentCreationStep === PRE_SIGNUP_STEP ? PAYMENT_STEP : appointmentCreationStep,
+					});
+
+					if (redirectPath === 'back') {
+						console.log('going back');
+						history.goBack();
+					} else {
+						console.log('to the redirection we go !');
+						history.push(redirectPath);
+					}
+				}
+				setSubmitting(false);
+			} catch (e) {
+				setFieldError('phoneNumber', t('login.phoneNumber.error'));
+				setFieldError('password', t('login.password.error'));
+				setSubmitting(false);
+			}
 		},
-		[appointmentCreationStep, history, updateContextState],
+		[appointmentCreationStep, history, t, updateContextState],
 	);
 
 	return (

@@ -1,14 +1,8 @@
 import aliviaAxios from 'utils/customAxios';
-import i18next from 'l18n/index';
 
 import { setLocalValue } from 'utils';
 
 import { TokenResponse } from './types';
-
-const errorMessages = {
-	phoneNumber: i18next.t('login:login.phoneNumber.error'),
-	password: i18next.t('login:login.password.error'),
-};
 
 interface LoginFields {
 	username: string;
@@ -35,7 +29,7 @@ export const mockUser = {
 	email: 'jhon.doe@test.com',
 };
 
-export const sendLogin = async (fields: LoginFields, setFieldErrors: Function): Promise<string | void> => {
+export const sendLogin = async (fields: LoginFields): Promise<string | void> => {
 	try {
 		const resp = await aliviaAxios.post<TokenResponse>('/auth', fields);
 		const data = resp.data;
@@ -45,9 +39,7 @@ export const sendLogin = async (fields: LoginFields, setFieldErrors: Function): 
 		return data.token;
 	} catch (e) {
 		console.log(e);
-		// sendFailsMessage
-		setFieldErrors('phoneNumber', errorMessages.phoneNumber);
-		setFieldErrors('password', errorMessages.password);
+		throw Error(e);
 	}
 };
 
