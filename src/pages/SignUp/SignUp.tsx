@@ -49,13 +49,13 @@ const SignUp = () => {
 				} else if (!isGuest && useCase) {
 					localUserToken = await createAccount(contactInfo);
 					reservationAccountID = await createPatient(newUser, localUserToken);
-					user = formatNewUser(newUser);
+					user = { id: reservationAccountID, ...formatNewUser(newUser) };
 
 					setLocalValue('userToken', localUserToken);
 				} else {
 					localUserToken = await createAccount(contactInfo);
 					reservationAccountID = await createPatient(newUser, localUserToken);
-					user = formatNewUser(newUser);
+					user = { id: reservationAccountID, ...formatNewUser(newUser) };
 					redirectPath = '/citas';
 					appointmentCreationStep = '';
 
