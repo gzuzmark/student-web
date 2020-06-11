@@ -23,6 +23,7 @@ export interface AboutMeValues {
 }
 
 interface AboutMeFormProps {
+	aboutMeData: AboutMeValues | undefined;
 	onChangeStep: (values: AboutMeValues) => void;
 	openPrivacyPolicy: () => void;
 }
@@ -67,7 +68,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMeForm = ({ onChangeStep, openPrivacyPolicy }: AboutMeFormProps) => {
+const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy }: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const onSubmit = useCallback(
@@ -79,7 +80,7 @@ const AboutMeForm = ({ onChangeStep, openPrivacyPolicy }: AboutMeFormProps) => {
 	);
 
 	return (
-		<Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+		<Formik initialValues={aboutMeData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
 			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
 					<div>

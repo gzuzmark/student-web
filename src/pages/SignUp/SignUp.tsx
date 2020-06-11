@@ -100,7 +100,7 @@ const SignUp = () => {
 			<RightLayout>
 				<Switch>
 					<Route path="/registro/sobre_ti">
-						<AboutMe appointmentOwner={appointmentOwner} onChangeStep={onChangeStep} />
+						<AboutMe aboutMeData={aboutMeData} appointmentOwner={appointmentOwner} onChangeStep={onChangeStep} />
 					</Route>
 					<Route exact path="/registro/datos_medicos">
 						<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />

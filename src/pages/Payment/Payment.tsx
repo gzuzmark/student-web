@@ -9,6 +9,12 @@ import { PAYMENT_ROUTE } from 'routes';
 // @ts-ignore
 const createAppointment = async (useCase, reservationAccountID, scheduleID, triage, history, userToken) => {
 	if (useCase) {
+		const headers = userToken
+			? {
+					Authorization: `Bearer ${userToken}`,
+			  }
+			: {};
+
 		await aliviaAxios.post(
 			'/appointments',
 			{
@@ -19,9 +25,7 @@ const createAppointment = async (useCase, reservationAccountID, scheduleID, tria
 				questions: triage,
 			},
 			{
-				headers: {
-					Authorization: `Bearer ${userToken}`,
-				},
+				headers,
 			},
 		);
 
