@@ -54,6 +54,8 @@ const SignUp = () => {
 					setLocalValue('userToken', localUserToken);
 				} else {
 					localUserToken = await createAccount(contactInfo);
+					reservationAccountID = await createPatient(newUser, localUserToken);
+					user = formatNewUser(newUser);
 					redirectPath = '/citas';
 					appointmentCreationStep = '';
 

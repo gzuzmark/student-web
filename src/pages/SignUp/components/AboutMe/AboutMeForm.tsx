@@ -131,8 +131,8 @@ const AboutMeForm = ({ onChangeStep, openPrivacyPolicy }: AboutMeFormProps) => {
 								variant="outlined"
 								select
 							>
-								<MenuItem value={1}>Masculino</MenuItem>
-								<MenuItem value={2}>Femenino</MenuItem>
+								<MenuItem value={0}>Masculino</MenuItem>
+								<MenuItem value={1}>Femenino</MenuItem>
 							</Field>
 						</FormControl>
 					</div>
