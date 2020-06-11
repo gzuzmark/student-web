@@ -135,7 +135,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 								type="tel"
 								label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
 								variant="outlined"
-								helperText={t('contact.fields.phoneNumber.helperText')}
+								helperText={t(`contact.fields.phoneNumber.helperText.${contactKey}`)}
 								inputProps={{ maxLength: 9 }}
 								fullWidth
 							/>
