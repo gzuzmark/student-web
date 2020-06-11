@@ -7,13 +7,10 @@ import { redirectToURL } from 'utils';
 import { stylesWithTheme } from 'utils/createStyles';
 
 import ContactForm, { ContactValues } from './ContactForm';
-import { AppointmentOwner } from 'AppContext';
 
 interface ContactProps {
-	onChangeStep: (values: ContactValues) => void;
-	appointmentOwner: AppointmentOwner | undefined;
-	contactInfo: ContactValues | undefined;
-	changeLocalUserToken: (token: string) => void;
+	submitSignUp: (values: ContactValues) => Promise<void>;
+	isGuest: boolean;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -36,7 +33,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		paddingBottom: '44px',
 		[breakpoints.up('lg')]: {
 			paddingBottom: '35px',
-			maxWidth: '502px',
+			maxWidth: '472px',
 		},
 	},
 	subTitle: {
@@ -48,7 +45,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const Contact = ({ onChangeStep, appointmentOwner, contactInfo, changeLocalUserToken }: ContactProps) => {
+const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const gotToPolicy = () => {
@@ -65,19 +62,20 @@ const Contact = ({ onChangeStep, appointmentOwner, contactInfo, changeLocalUserT
 			</Typography>
 			<div className={classes.titleWrapper}>
 				<Typography variant="h2" component="span">
-					{t('contact.title')}
+					{t('contact.title.firstLine')}{' '}
+				</Typography>
+				<Typography className={classes.boldText} variant="h2" component="span">
+					{t('contact.title.secondLine')}
 				</Typography>
 			</div>
 			<Typography className={classes.subTitle} color="primary">
 				{t('contact.subTitle')}
 			</Typography>
 			<ContactForm
-				contactInfo={contactInfo}
-				onChangeStep={onChangeStep}
+				submitSignUp={submitSignUp}
 				openPrivacyPolicy={gotToPolicy}
 				openTermsAndConditions={gotToTermsAndConditions}
-				appointmentOwner={appointmentOwner}
-				changeLocalUserToken={changeLocalUserToken}
+				isGuest={isGuest}
 			/>
 		</div>
 	);

@@ -10,7 +10,7 @@ import { redirectToURL } from 'utils';
 import AboutMeForm, { AboutMeValues } from './AboutMeForm';
 
 interface AboutMeProps {
-	submitSignUp: (value: AboutMeValues, setSubmitting: Function, setFieldError: Function) => void;
+	onChangeStep: (values: AboutMeValues) => void;
 	appointmentOwner?: AppointmentOwner;
 }
 
@@ -45,7 +45,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMe = ({ submitSignUp, appointmentOwner }: AboutMeProps) => {
+const AboutMe = ({ onChangeStep, appointmentOwner }: AboutMeProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const userLabel = appointmentOwner === MYSELF ? 'forMe' : 'forSomeoneElse';
@@ -72,7 +72,7 @@ const AboutMe = ({ submitSignUp, appointmentOwner }: AboutMeProps) => {
 			<Typography className={classes.subTitle} color="primary">
 				{t(`aboutme.subTitle.${userLabel}`)}
 			</Typography>
-			<AboutMeForm submitSignUp={submitSignUp} openPrivacyPolicy={openDialog} />
+			<AboutMeForm onChangeStep={onChangeStep} openPrivacyPolicy={openDialog} />
 		</div>
 	);
 };

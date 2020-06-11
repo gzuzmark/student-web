@@ -1,19 +1,9 @@
 import aliviaAxios from 'utils/customAxios';
 import format from 'date-fns/format';
-import i18next from 'l18n/index';
 
 import { ContactValues } from 'pages/SignUp/components';
 
 import { TokenResponse } from './types';
-
-const errorMessages = {
-	contactPhoneNumber: i18next.t('signUp:contact.phoneNumber.error'),
-	contactEmail: i18next.t('signUp:contact.email.error'),
-};
-
-const patientErrorMessages = {
-	identification: i18next.t('signUp:aboutMe.fields.identification.error'),
-};
 
 interface NewUser {
 	name: string;
@@ -25,6 +15,8 @@ interface NewUser {
 	medicines?: string; // meds
 	allergies?: string;
 	moreMedicalInformation?: string; // extra_info
+	phoneNumber: string;
+	email?: string;
 }
 
 interface NewPatient extends NewUser {
@@ -37,58 +29,38 @@ interface CreatePatientResponse {
 
 type ContactValuesRequest = Omit<ContactValues, 'repeatPassword'>;
 
-export const createPatient = async (
-	user: NewUser,
-	setFieldError: Function,
-	authToken: string,
-): Promise<string | undefined> => {
-	try {
-		const resp = await aliviaAxios.post<CreatePatientResponse>(
-			'/patients',
-			{
-				name: user.name,
-				last_name: user.lastName,
-				second_last_name: user.secondSurname,
-				document_number: user.identification,
-				birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
-				allergies: user.allergies,
-				meds: user.medicines,
-				extra_info: user.moreMedicalInformation,
-			},
-			{
-				headers: {
-					Authorization: `Bearer ${authToken}`,
-				},
-			},
-		);
-		const data = resp.data.data;
+export const createPatient = async (user: NewUser, authToken: string | null): Promise<string> => {
+	const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
+	const resp = await aliviaAxios.post<CreatePatientResponse>(
+		'/patients',
+		{
+			name: user.name,
+			last_name: user.lastName,
+			second_last_name: user.secondSurname,
+			document_number: user.identification,
+			birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
+			allergies: user.allergies,
+			meds: user.medicines,
+			extra_info: user.moreMedicalInformation,
+			contact_email: user.email,
+			contact_phone: user.phoneNumber,
+		},
+		{
+			headers,
+		},
+	);
+	const data = resp.data.data;
 
-		return data.id;
-	} catch (e) {
-		console.log(e);
-		setFieldError('identification', patientErrorMessages.identification);
-	}
+	return data.id;
 };
 
-export const createAccount = async (
-	{ email, phoneNumber, password = '' }: ContactValuesRequest,
-	setFieldError: Function,
-): Promise<string | void> => {
-	try {
-		const resp = await aliviaAxios.post<TokenResponse>('/users', {
-			username: email,
-			phone: phoneNumber,
-			password,
-		});
-		const data = resp.data;
+export const createAccount = async ({ email, phoneNumber, password = '' }: ContactValuesRequest): Promise<string> => {
+	const resp = await aliviaAxios.post<TokenResponse>('/users', {
+		username: email,
+		phone: phoneNumber,
+		password,
+	});
+	const data = resp.data;
 
-		return data.token;
-	} catch (e) {
-		console.log(e);
-
-		setFieldError('phoneNumber', errorMessages.contactPhoneNumber);
-		if (email) {
-			setFieldError('email', errorMessages.contactEmail);
-		}
-	}
+	return data.token;
 };

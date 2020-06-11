@@ -1,89 +1,82 @@
 import React, { useState, useEffect, useContext, useCallback, useLayoutEffect } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { Location } from 'history';
-import { useTranslation } from 'react-i18next';
 
 import { Container, RightLayout } from 'pages/common';
-import { createPatient, getCurrentUser } from 'pages/api';
+import { createPatient, createAccount } from 'pages/api';
 import { usePageTitle, useCurrentUserRediction, setLocalValue } from 'utils';
-import AppContext, { PAYMENT_STEP } from 'AppContext';
+import AppContext, { PAYMENT_STEP, GUEST } from 'AppContext';
 
 import { LeftSide, AboutMe, AboutMeValues, MedicalData, MedicalDataValues, Contact, ContactValues } from './components';
-
-const subRoutes = ['contacto', 'datos_medicos', 'sobre_ti'];
-const findStep = (location: Location) =>
-	subRoutes.findIndex((route: string) => location && location.pathname === `/registro/${route}`);
-const checkStep = (
-	location: Location,
-	contactInfo: ContactValues | undefined,
-	push: Function,
-	medicalData: MedicalDataValues | undefined,
-) => {
-	const index = findStep(location);
-	if (index === 1 && !contactInfo) {
-		push('registro/sobre_ti');
-	} else if (index === 2 && !medicalData) {
-		push('registro/datos_medicos');
-	}
-};
+import { SUB_ROUTES, checkStep, findStep, formatNewUser } from './utils';
 
 const SignUp = () => {
 	const { push, listen, location } = useHistory();
-	const { t } = useTranslation('signUp');
 	const [step, setStep] = useState<number>(0);
-	const [localUserToken, setLocalUserToken] = useState<string>();
-	const [contactInfo, setContactInfo] = useState<ContactValues>();
+	const [aboutMeData, setAboutMeData] = useState<AboutMeValues>();
 	const [medicalData, setMedicalData] = useState<MedicalDataValues>();
-	const { userToken, updateState, appointmentOwner } = useContext(AppContext);
-	const changeLocalUserToken = (token: string) => {
-		setLocalUserToken(token);
-	};
-	const onChangeStep = (values: ContactValues | MedicalDataValues) => {
+	const { userToken, updateState, appointmentOwner, useCase } = useContext(AppContext);
+	const isGuest = appointmentOwner === GUEST;
+	const onChangeStep = (values: AboutMeValues | MedicalDataValues) => {
 		if (step === 0) {
-			setContactInfo(values as ContactValues);
+			setAboutMeData(values as AboutMeValues);
 		} else if (step === 1) {
 			setMedicalData(values as MedicalDataValues);
 		}
 
-		push(`/registro/${subRoutes[step + 1]}`);
+		push(`/registro/${SUB_ROUTES[step + 1]}`);
 	};
 	const submitSignUp = useCallback(
-		async (aboutUser: AboutMeValues, setSubmitting: Function, setFieldError: Function) => {
+		async (contactInfo: ContactValues) => {
 			if (updateState) {
 				const newUser = {
+					...(aboutMeData as AboutMeValues),
 					...(medicalData as MedicalDataValues),
-					...aboutUser,
+					...contactInfo,
 				};
+				let localUserToken = null;
+				let user = null;
+				let reservationAccountID = '';
+				let redirectPath = '/pago';
+				let appointmentCreationStep = PAYMENT_STEP;
 
-				if (localUserToken) {
-					const reservationAccountID = await createPatient(newUser, setFieldError, localUserToken);
+				// If the user is a Guest then, he is creating an appointment, thus an appointment is created with an empty token
+				// If the user is not a Guest, but is creating an appointment, then we need to create him an account token and with that token create an appoinment
+				// If the user is not a guest and is not creating an appointment, then we should only create him an account token and redirect him to /citas
 
-					if (reservationAccountID) {
-						// eslint-disable-next-line
-						const [_, user] = await getCurrentUser(localUserToken);
-						setLocalValue('userToken', localUserToken);
-						updateState({
-							reservationAccountID,
-							userToken: localUserToken,
-							user,
-							appointmentCreationStep: PAYMENT_STEP,
-						});
-						push('/pago');
-					} else {
-						setFieldError('identification', t('aboutMe.fields.identification.error'));
-					}
+				if (isGuest) {
+					reservationAccountID = await createPatient(newUser, localUserToken);
+				} else if (!isGuest && useCase) {
+					localUserToken = await createAccount(contactInfo);
+					reservationAccountID = await createPatient(newUser, localUserToken);
+					user = formatNewUser(newUser);
+
+					setLocalValue('userToken', localUserToken);
+				} else {
+					localUserToken = await createAccount(contactInfo);
+					redirectPath = '/citas';
+					appointmentCreationStep = '';
+
+					setLocalValue('userToken', localUserToken);
 				}
+
+				updateState({
+					reservationAccountID,
+					userToken: localUserToken,
+					user,
+					appointmentCreationStep,
+				});
+				push(redirectPath);
 			}
-			setSubmitting(false);
 		},
-		[localUserToken, medicalData, push, t, updateState],
+		[aboutMeData, isGuest, medicalData, push, updateState, useCase],
 	);
 
 	usePageTitle('Registro');
 	useCurrentUserRediction(userToken, '/citas');
 	useLayoutEffect(() => {
-		checkStep(location, contactInfo, push, medicalData);
-	}, [contactInfo, location, medicalData, push]);
+		checkStep(location, aboutMeData, push, medicalData);
+	}, [aboutMeData, location, medicalData, push]);
 
 	useEffect(() => {
 		const removeListener = listen((location: Location) => {
@@ -104,22 +97,14 @@ const SignUp = () => {
 			<LeftSide step={step} />
 			<RightLayout>
 				<Switch>
-					<Route exact path="/registro/contacto">
-						<Contact
-							contactInfo={contactInfo}
-							onChangeStep={onChangeStep}
-							appointmentOwner={appointmentOwner}
-							changeLocalUserToken={changeLocalUserToken}
-						/>
+					<Route path="/registro/sobre_ti">
+						<AboutMe appointmentOwner={appointmentOwner} onChangeStep={onChangeStep} />
 					</Route>
 					<Route exact path="/registro/datos_medicos">
 						<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
 					</Route>
-					<Route path="/registro/sobre_ti">
-						<AboutMe submitSignUp={submitSignUp} appointmentOwner={appointmentOwner} />
-					</Route>
-					<Route exact path="/registro/*">
-						<Redirect to="/registro/contacto" />
+					<Route exact path="/registro/contacto">
+						<Contact submitSignUp={submitSignUp} isGuest={isGuest} />
 					</Route>
 				</Switch>
 			</RightLayout>

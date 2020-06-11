@@ -8,6 +8,8 @@ const appointmentsL18n = {
 	'appointments.subTitle.mobile': 'Estas son tus consultas',
 	'appointments.of': 'por',
 	'appointments.seeDetail': 'VER DETALLE',
+	'appointments.when.title': '¿CUÁNDO?',
+	'appointments.patient.title': 'PACIENTE',
 };
 
 export default appointmentsL18n;

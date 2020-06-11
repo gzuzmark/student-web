@@ -11,10 +11,11 @@ import { stylesWithTheme, capitalizeDate } from 'utils';
 import { AppointDetail } from 'pages/api/appointments';
 import { ReactComponent as CalendarIcon } from 'icons/calendar.svg';
 import { ReactComponent as ClockIcon } from 'icons/clock.svg';
+import { ReactComponent as UserIcon } from 'icons/user.svg';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	card: {
-		borderRadious: '10xp',
+		borderRadius: '10px',
 		marginBottom: '16px',
 		boxShadow: 'none',
 		cursor: 'pointer',
@@ -31,19 +32,52 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			padding: '35px 30px 29px 35px',
 		},
 	},
+	infoWrapper: {
+		display: 'flex',
+		flexDirection: 'column-reverse',
+		[breakpoints.up('lg')]: {
+			flexDirection: 'row',
+		},
+	},
+	section: {
+		[breakpoints.up('lg')]: {
+			marginRight: '70px',
+		},
+	},
+	sectionTitle: {
+		display: 'none',
+		[breakpoints.up('lg')]: {
+			display: 'block',
+			opacity: 0.5,
+			paddingBottom: '13px',
+		},
+		'&.patient': {
+			[breakpoints.up('lg')]: {
+				marginLeft: '39px',
+			},
+		},
+	},
 	dateWrapper: {
+		alignItems: 'center',
 		display: 'flex',
 		paddingBottom: '14px',
-		[breakpoints.up('lg')]: {
-			alignItems: 'center',
+	},
+	dataWrapper: {
+		alignItems: 'center',
+		display: 'flex',
+		'&:first-child': {
+			paddingBottom: '8px',
+			[breakpoints.up('lg')]: {
+				paddingBottom: '5px',
+			},
 		},
 	},
 	clockWrapper: {
+		alignItems: 'center',
 		display: 'flex',
 		paddingBottom: '14px',
 		[breakpoints.up('lg')]: {
 			paddingBottom: '5px',
-			alignItems: 'center',
 		},
 	},
 	titleWrapper: {
@@ -69,21 +103,49 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	iconWrapper: {
 		marginRight: '13.25px',
+		width: '15px',
+		height: '15px',
+		'&.user': {
+			width: '17px',
+			height: '17px',
+			[breakpoints.up('lg')]: {
+				maxHeight: '26px',
+				width: 'auto',
+				height: 'auto',
+			},
+		},
 		[breakpoints.up('lg')]: {
 			maxHeight: '25px',
+			width: 'auto',
+			height: 'auto',
 		},
 	},
 	calendarIcon: {
 		stroke: palette.info.main,
+		width: '15px',
+		height: '15px',
 		[breakpoints.up('lg')]: {
 			width: '25px',
 			height: '25px',
 		},
 	},
 	clockIcon: {
+		width: '15px',
+		height: '15px',
 		[breakpoints.up('lg')]: {
 			width: '25px',
 			height: '25px',
+		},
+	},
+	userIcon: {
+		width: '17px',
+		height: '17px',
+		'& > path': {
+			fill: palette.info.main,
+		},
+		[breakpoints.up('lg')]: {
+			width: '26px',
+			height: '26px',
 		},
 	},
 	moreDetailWrapper: {
@@ -110,7 +172,7 @@ interface AppointmentCardProps {
 }
 
 const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
-	const { id, channel, disease, date, time } = appointment;
+	const { id, channel, disease, date, time, patient } = appointment;
 	const classes = useStyles();
 	const history = useHistory();
 	const { t } = useTranslation('appointmentList');
@@ -135,17 +197,35 @@ const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
 						{disease}
 					</Typography>
 				</div>
-				<div className={classes.dateWrapper}>
-					<div className={classes.iconWrapper}>
-						<CalendarIcon className={classes.calendarIcon} />
+				<div className={classes.infoWrapper}>
+					<div className={classes.section}>
+						<Typography className={classes.sectionTitle}>{t('appointments.when.title')}</Typography>
+						<div>
+							<div className={classes.dataWrapper}>
+								<div className={classes.iconWrapper}>
+									<CalendarIcon className={classes.calendarIcon} />
+								</div>
+								<Typography>{capitalizeDate(date)}</Typography>
+							</div>
+							<div className={classes.dataWrapper}>
+								<div className={classes.iconWrapper}>
+									<ClockIcon className={classes.clockIcon} />
+								</div>
+								<Typography>{time}</Typography>
+							</div>
+						</div>
 					</div>
-					<Typography>{capitalizeDate(date)}</Typography>
-				</div>
-				<div className={classes.clockWrapper}>
-					<div className={classes.iconWrapper}>
-						<ClockIcon className={classes.clockIcon} />
+					<div>
+						<Typography className={clsx(classes.sectionTitle, 'patient')}>{t('appointments.patient.title')}</Typography>
+						<div>
+							<div className={classes.dataWrapper}>
+								<div className={clsx(classes.iconWrapper, 'user')}>
+									<UserIcon className={classes.userIcon} />
+								</div>
+								<Typography>{patient}</Typography>
+							</div>
+						</div>
 					</div>
-					<Typography>{time}</Typography>
 				</div>
 				<div className={classes.moreDetailWrapper}>
 					<Button className={classes.moreDetailButton} onClick={onClick} variant="text">

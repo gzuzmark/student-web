@@ -17,10 +17,6 @@ const messages = {
 	secondSurname: {
 		required: i18next.t('signUp:aboutme.validation.secondSurname.required'),
 	},
-	identification: {
-		required: i18next.t('signUp:aboutme.validation.id.required'),
-		digits: i18next.t('signUp:aboutme.validation.id.digits'),
-	},
 	birthDate: {
 		required: i18next.t('signUp:aboutme.validation.birthDate.required'),
 	},
@@ -33,10 +29,6 @@ const validationSchema = object().shape({
 	name: string().required(messages.name.required),
 	lastName: string().required(messages.lastName.required),
 	secondSurname: string().required(messages.secondSurname.required),
-	identification: string()
-		.min(8, messages.identification.digits)
-		.max(12, messages.identification.digits)
-		.required(messages.identification.required),
 	birthDate: date()
 		.required(messages.birthDate.required)
 		.min(new Date('1900-01-01'), messages.birthDate.required)

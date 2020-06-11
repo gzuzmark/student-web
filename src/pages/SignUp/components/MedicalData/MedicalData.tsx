@@ -66,14 +66,22 @@ const MedicalData = ({ onChangeStep, medicalData }: MedicalDataProps) => {
 						<Typography variant="h2" className={classes.boldText} component="span">
 							{t('medicalData.title.secondSection')}{' '}
 						</Typography>
+						<Typography variant="h2" component="span">
+							{t('medicalData.title.thirdSection')}{' '}
+						</Typography>
 					</>
 				) : (
-					<Typography className={classes.boldText} variant="h2" component="span">
-						{t('medicalData.mobile.title.firstSection')}{' '}
-					</Typography>
+					<>
+						<Typography className={classes.boldText} variant="h2" component="span">
+							{t('medicalData.mobile.title.firstSection')}{' '}
+						</Typography>
+						<Typography variant="h2" component="span">
+							{t('medicalData.title.thirdSection')}{' '}
+						</Typography>
+					</>
 				)}
 				<Typography variant="h2" component={matches ? 'div' : 'span'}>
-					{t('medicalData.title.thirdSection')}
+					{t('medicalData.title.fourthSection')}
 				</Typography>
 			</div>
 			<Typography className={classes.subTitle} color="primary">

@@ -26,11 +26,6 @@ export interface SmallAppointment {
 	time: string;
 }
 
-interface ApiAppointmentList {
-	old: ApiSmallAppointment[];
-	current: ApiSmallAppointment[];
-}
-
 export interface AppointmentList {
 	old: SmallAppointment[];
 	current: SmallAppointment[];
