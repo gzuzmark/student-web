@@ -111,10 +111,8 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 					});
 
 					if (redirectPath === 'back') {
-						console.log('going back');
 						history.goBack();
 					} else {
-						console.log('to the redirection we go !');
 						history.push(redirectPath);
 					}
 				}
