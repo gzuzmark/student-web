@@ -15,21 +15,26 @@ const createAppointment = async (useCase, reservationAccountID, scheduleID, tria
 			  }
 			: {};
 
-		await aliviaAxios.post(
-			'/appointments',
-			{
-				reservation_account_id: reservationAccountID,
-				use_case_id: useCase.id,
-				schedule_id: scheduleID,
-				appointment_type_id: 'asdf',
-				questions: triage,
-			},
-			{
-				headers,
-			},
-		);
+		try {
+			await aliviaAxios.post(
+				'/appointments',
+				{
+					reservation_account_id: reservationAccountID,
+					use_case_id: useCase.id,
+					schedule_id: scheduleID,
+					appointment_type_id: 'asdf',
+					questions: triage,
+				},
+				{
+					headers,
+				},
+			);
 
-		history.push('/citas');
+			history.push('/citas');
+		} catch (e) {
+			console.log(e);
+			history.push('/citas');
+		}
 	}
 };
 
