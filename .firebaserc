@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "alivia-web-client-dev"
+    "default": "alivia-web-client-dev",
+    "prod": "alivia-pacientes"
   }
 }
