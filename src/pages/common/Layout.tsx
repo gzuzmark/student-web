@@ -15,12 +15,14 @@ const useStyles = makeStyles((theme: Theme) =>
 		container: {
 			display: 'flex',
 			flexDirection: 'column',
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				flexDirection: 'row',
 			},
 		},
 		leftLayout: {
-			[theme.breakpoints.up('md')]: {
+			position: 'relative',
+			overflow: 'hidden',
+			[theme.breakpoints.up('lg')]: {
 				width: 411,
 				paddingLeft: 104,
 			},
@@ -28,27 +30,28 @@ const useStyles = makeStyles((theme: Theme) =>
 		rightLayout: {
 			backgroundColor: BACKGROUND_DEFAULT,
 			flex: '1 1 auto',
-			minHeight: 'calc(100vh - 80px)',
-			[theme.breakpoints.up('md')]: {
+			minHeight: 'calc(100vh - 50px)',
+			[theme.breakpoints.up('lg')]: {
 				paddingLeft: 109,
+				minHeight: 'calc(100vh - 80px)',
 			},
 		},
 		circle: {
 			display: 'none',
 			position: 'absolute',
-			top: '528px',
+			top: '448px',
 			left: '0',
-			[theme.breakpoints.up('md')]: {
+			[theme.breakpoints.up('lg')]: {
 				display: 'block',
 			},
 		},
 	}),
 );
 
-export const Container = ({ children }: LayoutProps) => {
+export const Container = ({ children, className }: LayoutProps) => {
 	const classes = useStyles();
 
-	return <section className={classes.container}>{children}</section>;
+	return <section className={clsx(classes.container, className)}>{children}</section>;
 };
 
 export const LeftLayout = ({ children, className }: LayoutProps) => {

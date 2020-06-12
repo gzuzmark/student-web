@@ -11,7 +11,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			display: 'flex',
 			justifyContent: 'center',
 			padding: '30px 0',
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				display: 'block',
 				padding: '89px 0 0 104px',
 			},
@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		prefixTitleContainer: {
 			display: 'none',
 			paddingBottom: '17px',
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				display: 'block',
 			},
 		},
@@ -31,7 +31,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		titleContainer: {
 			display: 'none',
 			paddingBottom: '57px',
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				display: 'block',
 			},
 		},
@@ -48,7 +48,7 @@ const createSteps = (t: Function, isMobile: boolean) =>
 
 const LeftSide = () => {
 	const { t } = useTranslation('selectDoctor');
-	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('md'));
+	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
 	const steps = createSteps(t, !matches);
 

@@ -1,5 +1,8 @@
 import { ElementType } from 'react';
 import { createMuiTheme } from '@material-ui/core/styles';
+import { Overrides } from '@material-ui/core/styles/overrides';
+
+import { ReactComponent as DownArrow } from 'icons/down-arrow.svg';
 
 const defaultTheme = createMuiTheme();
 
@@ -9,12 +12,16 @@ const DISABLED = '#D9D9DC';
 const BLUE_STEEL = '#9EADCC';
 const PRIMARY_BLACK = '#535B6C';
 const SECONDARY_BLACK = '#353535';
+const RED_MAIN = '#FE6B6F';
 
 const palette = {
 	primary: {
 		main: MAIN_GREEN,
 		light: LIGHT_GREEN,
 		contrastText: 'white',
+	},
+	error: {
+		main: RED_MAIN,
 	},
 	divider: DISABLED,
 	info: {
@@ -33,68 +40,76 @@ const typography = {
 	fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 	fontWeightRegular: 500,
 	h1: {
+		// titles left side
 		fontFamily: ['Playfair Display', '-apple-system', 'sans-serif'].join(','),
+		fontWeight: 400,
 		fontSize: '22px',
 		lineHeight: '28px',
 		letterSpacing: '0.2px',
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '30px',
 			lineHeight: '40px',
 		},
 	},
 	h2: {
+		// some titles
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontSize: '20px',
 		lineHeight: '25px',
 		letterSpacing: '0.2px',
-		[defaultTheme.breakpoints.up('md')]: {
+		fontWeight: 400,
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '25px',
 			lineHeight: '30px',
+			fontWeight: 500,
 		},
 	},
 	h3: {
+		// subtitle
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontSize: '10px',
 		lineHeight: '15px',
 		letterSpacing: '5px',
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '15px',
 		},
 	},
 	button: {
+		// normal buttons
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontSize: '15px',
 		lineHeight: '18px',
-		[defaultTheme.breakpoints.up('md')]: {
+		fontWeight: 400,
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '20px',
 			lineHeight: '25px',
 		},
 	},
 	body1: {
+		// input boxes
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
-		fontSize: '15px',
-		lineHeight: '20px',
+		fontSize: '13px',
+		lineHeight: '18px',
 		letterSpacing: '0.2px',
-		[defaultTheme.breakpoints.up('md')]: {
-			fontSize: '12px',
-			lineHeight: '15px',
+		[defaultTheme.breakpoints.up('lg')]: {
+			fontSize: '15px',
+			lineHeight: '20px',
 		},
 	},
 	body2: {
+		// quotes
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
 		fontStyle: 'italic',
-		[defaultTheme.breakpoints.up('md')]: {
+		[defaultTheme.breakpoints.up('lg')]: {
 			fontSize: '13px',
 			lineHeight: '15px',
 		},
 	},
 	h4: {
-		// TODO
+		// Small buttons
 		fontFamily: ['Montserrat', '-apple-system', 'sans-serif'].join(','),
-		[defaultTheme.breakpoints.up('md')]: {
-			fontSize: '13px',
-			lineHeight: '18px',
-		},
+		fontSize: '13px',
+		lineHeight: '18px',
 	},
 };
 
@@ -111,6 +126,7 @@ type ButtonColor = 'inherit' | 'primary' | 'secondary' | 'default' | undefined;
 interface PropsTypes {
 	MuiTypography: { color: TypographyColor; component: ElementType };
 	MuiButton: { color: ButtonColor };
+	MuiSelect: { IconComponent: ElementType };
 }
 
 const props: PropsTypes = {
@@ -121,9 +137,12 @@ const props: PropsTypes = {
 	MuiButton: {
 		color: 'primary',
 	},
+	MuiSelect: {
+		IconComponent: DownArrow,
+	},
 };
 
-const overrides = {
+const overrides: Overrides = {
 	MuiPickersDay: {
 		day: {
 			color: palette.text.primary,
@@ -147,15 +166,35 @@ const overrides = {
 			backgroundColor: palette.primary.main,
 		},
 	},
+	MuiSelect: {
+		select: {
+			'&:focus': {
+				backgroundColor: 'white',
+			},
+		},
+		iconOutlined: {
+			top: 'calc(50% - 4px)',
+			right: '13px',
+			[defaultTheme.breakpoints.up('lg')]: {
+				right: '23px',
+				top: 'calc(50% - 3px)',
+			},
+		},
+	},
 	MuiButton: {
 		contained: {
 			boxShadow: 'none',
+			textTransform: 'unset',
+			padding: '16px 0',
 			'&:hover': {
 				boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
 			},
 			'&$disabled': {
 				color: 'white',
 				backgroundColor: DISABLED,
+			},
+			[defaultTheme.breakpoints.up('lg')]: {
+				padding: '21px 0',
 			},
 		},
 		containedPrimary: {
@@ -173,16 +212,56 @@ const overrides = {
 			},
 		},
 		textPrimary: {
+			color: MAIN_GREEN,
+			textDecoration: 'underline',
 			'&:hover': {
 				backgroundColor: 'transparent',
 				textDecoration: 'underline',
 			},
 		},
 	},
+	MuiFormLabel: {
+		root: {
+			color: PRIMARY_BLACK,
+		},
+	},
+	MuiInputLabel: {
+		root: {
+			color: PRIMARY_BLACK,
+			zIndex: 2,
+			'&$focused': {
+				color: PRIMARY_BLACK,
+			},
+		},
+		formControl: {
+			transform: 'translate(21px, 16px) scale(1)',
+			'&$shrink': {
+				transform: 'translate(0, -22px) scale(1)',
+			},
+			[defaultTheme.breakpoints.up('lg')]: {
+				transform: 'translate(21px, 14px) scale(1)',
+				'&$shrink': {
+					transform: 'translate(0, -28px) scale(1)',
+				},
+			},
+		},
+		outlined: {
+			transform: 'translate(21px, 16px) scale(1)',
+			'&$shrink': {
+				transform: 'translate(0, -22px) scale(1)',
+			},
+			[defaultTheme.breakpoints.up('lg')]: {
+				transform: 'translate(21px, 14px) scale(1)',
+				'&$shrink': {
+					transform: 'translate(0, -28px) scale(1)',
+				},
+			},
+		},
+	},
 	MuiOutlinedInput: {
 		root: {
 			backgroundColor: 'white',
-			'&:hover $notchedOutline': {
+			'&&:hover $notchedOutline': {
 				borderColor: BLUE_STEEL,
 			},
 			'&$focused $notchedOutline': {
@@ -192,13 +271,40 @@ const overrides = {
 		},
 		notchedOutline: {
 			borderColor: BLUE_STEEL,
+			'& > legend': {
+				// TODO check if this will be used
+				maxWidth: '0.01px',
+			},
 		},
 		input: {
 			fontSize: '13px',
 			lineHeight: '18px',
-			[defaultTheme.breakpoints.up('md')]: {
+			padding: '14px 18.5px 14px 21px',
+			[defaultTheme.breakpoints.up('lg')]: {
 				fontSize: '15px',
 				lineHeight: '20px',
+			},
+		},
+	},
+	MuiFormHelperText: {
+		root: {
+			'&$error': {
+				fontSize: '13px',
+				lineHeight: '18px',
+				textAlign: 'right',
+			},
+		},
+		contained: {
+			marginLeft: 0,
+			marginRight: 0,
+			textAlign: 'right',
+		},
+	},
+	MuiCard: {
+		root: {
+			boxShadow: 'none',
+			'&:hover': {
+				boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
 			},
 		},
 	},
@@ -208,7 +314,7 @@ export const leftPrefixTitleFontsStyles = {
 	fontSize: '10px',
 	lineHeight: '15px',
 	letterSpacing: '5px',
-	[defaultTheme.breakpoints.up('md')]: {
+	[defaultTheme.breakpoints.up('lg')]: {
 		fontSize: '15px',
 	},
 };
@@ -217,7 +323,7 @@ export const leftTitleFontsStyles = {
 	fontSize: '22px',
 	lineHeight: '28px',
 	letterSpacing: '0.2px',
-	[defaultTheme.breakpoints.up('md')]: {
+	[defaultTheme.breakpoints.up('lg')]: {
 		fontSize: '30px',
 		lineHeight: '40px',
 	},
@@ -227,7 +333,7 @@ export const leftStepsLabels = {
 	fontSize: '12px',
 	lineHeight: '15px',
 	letterSpacing: '0.2px',
-	[defaultTheme.breakpoints.up('md')]: {
+	[defaultTheme.breakpoints.up('lg')]: {
 		fontSize: '15px',
 		lineHeight: '28px',
 	},

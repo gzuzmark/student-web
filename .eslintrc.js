@@ -12,6 +12,7 @@ module.exports = {
 			version: 'detect', // Tells eslint-plugin-react to automatically detect the version of React to use
 		},
 	},
+	plugins: ['react-hooks', 'prettier'],
 	extends: [
 		'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
 		'plugin:@typescript-eslint/recommended', // Uses the recommended rules from @typescript-eslint/eslint-plugin
@@ -21,5 +22,51 @@ module.exports = {
 	rules: {
 		// Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
 		'@typescript-eslint/explicit-function-return-type': 'off',
+		'@typescript-eslint/no-use-before-define': 'off',
+		'react-hooks/rules-of-hooks': 'error',
+		'react-hooks/exhaustive-deps': 'warn',
+		'@typescript-eslint/camelcase': 'off',
+		'@typescript-eslint/naming-convention': [
+			'error',
+			{
+				'selector': 'default',
+				'format': ['camelCase'],
+				'filter': {
+					// you can expand this regex to add more allowed names
+					'regex': '[- ]',
+					'match': false
+				}
+			},
+
+			{
+				'selector': 'variable',
+				'format': ['camelCase', 'PascalCase', 'UPPER_CASE']
+			},
+			{
+				'selector': 'property',
+				'format': ['camelCase', 'snake_case', 'PascalCase'],
+				'filter': {
+					// you can expand this regex to add more allowed names
+					'regex': '[- ]',
+					'match': false
+				}
+			},
+			{
+				'selector': 'parameter',
+				'format': ['camelCase', 'snake_case', 'PascalCase'],
+				'leadingUnderscore': 'allow'
+			},
+			{
+				'selector': 'memberLike',
+				'modifiers': ['private'],
+				'format': ['camelCase'],
+				'leadingUnderscore': 'require'
+			},
+
+			{
+				'selector': 'typeLike',
+				'format': ['PascalCase']
+			}
+		]
 	},
 };

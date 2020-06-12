@@ -10,7 +10,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		root: {
 			padding: 0,
-			[breakpoints.up('md')]: {
+			[breakpoints.up('lg')]: {
 				padding: '0 46px 0 0',
 			},
 		},
@@ -30,7 +30,9 @@ const Stepper = ({ steps, ...stepperProps }: StepperProps) => {
 		<MuiStepper classes={{ root: classes.root }} {...stepperProps} connector={<StepConnector />}>
 			{steps.map((step: string) => (
 				<Step key={step}>
-					<StepLabel StepIconComponent={StepIcon}>{step}</StepLabel>
+					<StepLabel StepIconComponent={StepIcon} isEmpty={step === ''}>
+						{step}
+					</StepLabel>
 				</Step>
 			))}
 		</MuiStepper>

@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 				userSelect: 'none',
 				padding: '14.8px 14px',
 				paddingRight: 0,
-				[breakpoints.up('md')]: {
+				[breakpoints.up('lg')]: {
 					padding: '15.1px 14px',
 					paddingRight: 0,
 				},
