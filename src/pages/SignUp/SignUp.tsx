@@ -3,7 +3,7 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
-import { createPatient, createAccount } from 'pages/api';
+import { createPatient, createAccount, createGuestPatient } from 'pages/api';
 import { usePageTitle, useCurrentUserRediction, setLocalValue } from 'utils';
 import AppContext, { PAYMENT_STEP, GUEST } from 'AppContext';
 
@@ -45,7 +45,7 @@ const SignUp = () => {
 				// If the user is not a guest and is not creating an appointment, then we should only create him an account token and redirect him to /citas
 
 				if (isGuest) {
-					reservationAccountID = await createPatient(newUser, localUserToken);
+					reservationAccountID = await createGuestPatient(newUser);
 				} else if (!isGuest && useCase) {
 					localUserToken = await createAccount(contactInfo);
 					reservationAccountID = await createPatient(newUser, localUserToken);

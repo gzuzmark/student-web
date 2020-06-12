@@ -29,8 +29,26 @@ interface CreatePatientResponse {
 
 type ContactValuesRequest = Omit<ContactValues, 'repeatPassword'>;
 
-export const createPatient = async (user: NewUser, authToken: string | null): Promise<string> => {
-	const headers = authToken ? { Authorization: `Bearer ${authToken}` } : {};
+export const createGuestPatient = async (user: NewUser): Promise<string> => {
+	const resp = await aliviaAxios.post<CreatePatientResponse>('/patients-guest', {
+		name: user.name,
+		last_name: user.lastName,
+		second_last_name: user.secondSurname,
+		document_number: user.identification,
+		birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
+		allergies: user.allergies,
+		meds: user.medicines,
+		extra_info: user.moreMedicalInformation,
+		contact_email: user.email,
+		contact_phone: user.phoneNumber,
+	});
+	const data = resp.data.data;
+
+	return data.id;
+};
+
+export const createPatient = async (user: NewUser, authToken: string): Promise<string> => {
+	const headers = { Authorization: `Bearer ${authToken}` };
 	const resp = await aliviaAxios.post<CreatePatientResponse>(
 		'/patients',
 		{
