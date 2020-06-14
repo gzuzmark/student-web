@@ -17,6 +17,7 @@ interface ScheduleAPI {
 
 interface DoctorAvailabilityAPI {
 	name: string;
+	last_name: string;
 	cmp: string;
 	photo: string;
 	title: string;
@@ -39,6 +40,7 @@ export interface Schedule {
 
 export interface Doctor {
 	name: string;
+	lastName: string;
 	cmp: string;
 	profilePicture: string;
 	speciality: string;
@@ -50,8 +52,9 @@ export interface DoctorAvailability extends Doctor {
 }
 
 interface RequestProps {
-	day: number;
 	useCase: string;
+	from: number;
+	to: number;
 }
 
 // const mockResponse: DoctorAvailabilityAPI[] = [
@@ -94,8 +97,9 @@ interface RequestProps {
 // ];
 
 const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] =>
-	doctors.map(({ schedules, photo, title, description, ...rest }: DoctorAvailabilityAPI) => ({
+	doctors.map(({ schedules, last_name, photo, title, description, ...rest }: DoctorAvailabilityAPI) => ({
 		...rest,
+		lastName: last_name,
 		comment: description,
 		speciality: title,
 		profilePicture: photo,
@@ -109,16 +113,12 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 const createMedicalSpecialityQuery = (data: RequestProps): SnakeRequestProps =>
 	transformToSnakeCase<RequestProps, SnakeRequestProps>(data);
 
-export const getMedicalSpecialities = async (data: RequestProps): Promise<DoctorAvailability[] | undefined> => {
-	try {
-		const requestParams = createMedicalSpecialityQuery(data);
-		const response = await aliviaAxios.get<DoctorResponseAPI>('/doctors/schedules', {
-			params: { ...requestParams },
-		});
-		const parsedData = parseResponseData(response.data.data);
+export const getMedicalSpecialities = async (data: RequestProps): Promise<DoctorAvailability[]> => {
+	const requestParams = createMedicalSpecialityQuery(data);
+	const response = await aliviaAxios.get<DoctorResponseAPI>('/doctors/schedules', {
+		params: { ...requestParams },
+	});
+	const parsedData = parseResponseData(response.data.data);
 
-		return parsedData;
-	} catch (e) {
-		console.log(e);
-	}
+	return parsedData;
 };

@@ -36,6 +36,7 @@ interface ApiAppointmentDetail {
 	doctor: {
 		id: string;
 		name: string;
+		last_name: string;
 		title: string;
 		cmp: string;
 		photo: string;
@@ -122,6 +123,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 			cmp: doctor.cmp,
 			profilePicture: doctor.photo,
 			speciality: doctor.title,
+			lastName: doctor.last_name,
 		},
 		appointmentType,
 		date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),

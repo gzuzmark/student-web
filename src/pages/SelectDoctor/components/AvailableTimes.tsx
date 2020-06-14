@@ -4,7 +4,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { stylesWithTheme } from 'utils';
 import { ActiveDoctorTime } from './DoctorList/DoctorList';
 import TimeOption from './TimeOption';
-import { Schedule } from '../api';
+import { Schedule } from 'pages/api/selectDoctor';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {

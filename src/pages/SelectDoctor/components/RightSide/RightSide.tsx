@@ -7,7 +7,7 @@ import { RightLayout } from 'pages/common';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
 import isToday from 'date-fns/isToday';
 
-import { getMedicalSpecialities, DoctorAvailability } from '../../api';
+import { getMedicalSpecialities, DoctorAvailability } from 'pages/api/selectDoctor';
 import { DoctorList } from '../DoctorList';
 import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
