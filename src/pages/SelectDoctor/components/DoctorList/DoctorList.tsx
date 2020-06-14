@@ -3,10 +3,11 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
+import clsx from 'clsx';
 
 import { PRE_SIGNUP_STEP, PAYMENT_STEP } from 'AppContext';
 
-import { DoctorAvailability } from '../../api';
+import { DoctorAvailability } from 'pages/api/selectDoctor';
 import AvailableTimes from '../AvailableTimes';
 import useStyles from './styles';
 
@@ -54,7 +55,7 @@ const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListP
 				</Typography>
 			</div>
 			<div className={classes.doctorList}>
-				{doctors.map(({ name, cmp, comment, profilePicture, speciality, schedules }: DoctorAvailability) => (
+				{doctors.map(({ name, lastName, cmp, comment, profilePicture, speciality, schedules }: DoctorAvailability) => (
 					<div className={classes.doctorWrapper} key={cmp}>
 						<div className={classes.doctor}>
 							<div className={classes.photoWrapper}>
@@ -62,7 +63,12 @@ const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListP
 							</div>
 							<div className={classes.info}>
 								<div className={classes.nameWrapper}>
-									<Typography className={classes.name}>{name}</Typography>
+									<Typography component="span" className={clsx(classes.name, 'no-caps')}>
+										{t('right.doctor.prefix')}{' '}
+									</Typography>
+									<Typography component="span" className={classes.name}>
+										{name} {lastName}
+									</Typography>
 								</div>
 								<div className={classes.flexWrapper}>
 									<div className={classes.specialityWrapper}>

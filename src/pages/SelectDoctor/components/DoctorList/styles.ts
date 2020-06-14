@@ -59,6 +59,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		fontSize: '15px',
 		lineHeight: '18px',
 		textTransform: 'capitalize',
+		'&.no-caps': {
+			textTransform: 'none',
+		},
 		[breakpoints.up('lg')]: {
 			fontSize: '20px',
 			lineHeight: '25px',
