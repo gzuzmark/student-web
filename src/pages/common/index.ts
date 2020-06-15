@@ -8,3 +8,4 @@ export { default as PrivacyPolicyDialog } from './PrivacyPolicyDialog';
 export * from './OptionsGroup';
 export { default as Option } from './Option';
 export { default as PasswordField } from './PasswordField';
+export { default as Loading } from './Loading';

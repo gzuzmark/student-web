@@ -1,10 +1,12 @@
 import React from 'react';
 import { Theme } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 import { stylesWithTheme } from 'utils';
+import { Schedule } from 'pages/api';
+
 import { ActiveDoctorTime } from './DoctorList/DoctorList';
 import TimeOption from './TimeOption';
-import { Schedule } from '../api';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -66,7 +68,7 @@ interface AvailableTimesProps {
 	availableDates: Schedule[];
 	name: string;
 	doctorCmp: string;
-	selectTime: (scheduleId: string) => void;
+	selectTime: (scheduleId: string, scheduleIndex: number) => void;
 	activeDoctorTime: ActiveDoctorTime;
 }
 
@@ -74,10 +76,10 @@ const AvailableTimes = ({ availableDates, name, doctorCmp, selectTime, activeDoc
 	const classes = useStyles();
 	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 	const activateAll = () => {
-		selectTime('');
+		selectTime('', -1);
 	};
-	const onClick = (scheduleId: string) => () => {
-		selectTime(scheduleId);
+	const onClick = (scheduleId: string, scheduleIndex: number) => () => {
+		selectTime(scheduleId, scheduleIndex);
 	};
 	const format = matches ? 'k:mm' : undefined;
 	const isSelectedDoctor = activeDoctorTime.doctorCmp === doctorCmp;
@@ -91,10 +93,10 @@ const AvailableTimes = ({ availableDates, name, doctorCmp, selectTime, activeDoc
 		<div className={classes.container}>
 			{!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null}
 			<div className={classes.times}>
-				{availableDates.map(({ id, startTime }: Schedule) => (
+				{availableDates.map(({ id, startTime }: Schedule, scheduleIndex: number) => (
 					<TimeOption
 						date={startTime}
-						onClick={onClick(id)}
+						onClick={onClick(id, scheduleIndex)}
 						disabled={isButtonDisabled(id)}
 						active={isButtonActive(id)}
 						format={format}

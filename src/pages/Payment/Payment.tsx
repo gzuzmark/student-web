@@ -1,64 +1,94 @@
-import React, { useLayoutEffect } from 'react';
-
-import { usePageTitle, useAppointmentStepValidation } from 'utils';
-import aliviaAxios from 'utils/customAxios';
+import React, { useState, useEffect, MouseEvent } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
+import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
+import { useAppointmentStepValidation } from 'utils';
+import initCulqi from 'utils/culquiIntegration';
+import { CONFIRMATION_STEP } from 'AppContext';
 
-// eslint-disable-next-line
-// @ts-ignore
-const createAppointment = async (useCase, reservationAccountID, scheduleID, triage, history, userToken) => {
-	if (useCase) {
-		const headers = userToken
-			? {
-					Authorization: `Bearer ${userToken}`,
-			  }
-			: {};
-
-		try {
-			await aliviaAxios.post(
-				'/appointments',
-				{
-					reservation_account_id: reservationAccountID,
-					use_case_id: useCase.id,
-					schedule_id: scheduleID,
-					appointment_type_id: 'asdf',
-					questions: triage,
-				},
-				{
-					headers,
-				},
-			);
-
-			history.push('/citas');
-		} catch (e) {
-			console.log(e);
-			history.push('/citas');
-		}
-	}
-};
+import LeftSide from './components/LeftSide';
+import RightSide from './components/RightSide';
+import { createPayment, createAppointment } from 'pages/api';
 
 const Payment = () => {
+	const {
+		doctor,
+		user,
+		schedule,
+		channel,
+		useCase,
+		triage,
+		userToken,
+		reservationAccountID,
+		updateState: updateContextState,
+	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
-	const { userToken, triage, reservationAccountID, scheduleID, useCase } = useAppointmentStepValidation(PAYMENT_ROUTE);
+	const { t } = useTranslation('payment');
+	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
+	const [errorMessage, setErrorMessage] = useState<string>('');
+	const openPaymentModal = (e: MouseEvent) => {
+		e.preventDefault();
+		window.Culqi.open();
+	};
 
-	usePageTitle('Pago');
-	useLayoutEffect(() => {
-		createAppointment(useCase, reservationAccountID, scheduleID, triage, history, userToken);
-	}, [history, reservationAccountID, scheduleID, triage, useCase, userToken]);
+	useEffect(() => {
+		if (doctor?.totalCost) {
+			initCulqi(doctor?.totalCost);
 
-	return <div />;
+			window.culqi = async () => {
+				try {
+					setIsPaymentLoading(true);
+					if (schedule && updateContextState && reservationAccountID && useCase && triage) {
+						console.log(window.Culqi.token);
+						if (!!window.Culqi.token) {
+							const token = window.Culqi.token.id;
+							const email = window.Culqi.token.email;
 
-	// return (
-	// 	<Container>
-	// 		<LeftLayout>Titulo</LeftLayout>
-	// 		<RightLayout>
-	// 			<Button onClick={onClick} variant="outlined">
-	// 				Pago
-	// 			</Button>
-	// 		</RightLayout>
-	// 	</Container>
-	// );
+							await createPayment({
+								token,
+								scheduleID: schedule.id,
+								appointmentTypeID: 'ugito',
+								cost: doctor?.totalCost,
+								email,
+							});
+							await createAppointment(
+								{
+									reservationAccountID: reservationAccountID,
+									appointmentTypeID: 'ugito',
+									useCaseID: useCase.id,
+									scheduleID: schedule.id,
+									triage,
+								},
+								userToken,
+							);
+							updateContextState({
+								appointmentCreationStep: CONFIRMATION_STEP,
+							});
+							history.push('/confirmacion');
+						} else if (!!window.Culqi.error) {
+							setErrorMessage(window.Culqi.error.user_message);
+						}
+					}
+					setIsPaymentLoading(false);
+				} catch (e) {
+					setErrorMessage(t('payment.error.culqi'));
+					setIsPaymentLoading(false);
+				}
+			};
+		}
+		// eslint-disable-next-line
+	}, []);
+
+	return !isPaymentLoading ? (
+		<Container>
+			<LeftSide doctor={doctor} user={user} schedule={schedule} channel={channel} />
+			<RightSide totalCost={doctor?.totalCost} openPaymentModal={openPaymentModal} errorMessage={errorMessage} />
+		</Container>
+	) : (
+		<Loading fullScreen loadingMessage={t('payment.wait.message')} />
+	);
 };
 
 export default Payment;

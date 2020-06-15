@@ -7,11 +7,10 @@ import { RightLayout } from 'pages/common';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
 import isToday from 'date-fns/isToday';
 
-import { getMedicalSpecialities, DoctorAvailability } from '../../api';
 import { DoctorList } from '../DoctorList';
 import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
-import { UseCase } from 'pages/api';
+import { UseCase, getMedicalSpecialities, DoctorAvailability } from 'pages/api';
 
 const getDoctors = async (selectedDate: Date | null, useCase: UseCase | null | undefined, setDoctors: Function) => {
 	if (!!selectedDate && !!useCase) {
@@ -43,23 +42,25 @@ const RightSide = ({ useCase, updateContextState, isUserLoggedIn }: RightSidePro
 	}, [selectedDate, useCase]);
 
 	return (
-		<RightLayout className={classes.container}>
-			<div className={classes.titleContainer}>
-				<Typography component="span" className={classes.title}>
-					{t('right.title')}
-				</Typography>
-			</div>
-			<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={setSelectedDate} />
-			<Divider className={classes.divider} />
-			{doctors.length > 0 ? (
-				<DoctorList isUserLoggedIn={isUserLoggedIn} updateContextState={updateContextState} doctors={doctors} />
-			) : (
-				<div className={classes.emptyMessageWrapper}>
-					<Typography component="div" className={classes.emptyMessage}>
-						{t('right.notFoundDoctors')}
+		<RightLayout>
+			<div className={classes.wrapper}>
+				<div className={classes.titleContainer}>
+					<Typography component="span" className={classes.title}>
+						{t('right.title')}
 					</Typography>
 				</div>
-			)}
+				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={setSelectedDate} />
+				<Divider className={classes.divider} />
+				{doctors.length > 0 ? (
+					<DoctorList isUserLoggedIn={isUserLoggedIn} updateContextState={updateContextState} doctors={doctors} />
+				) : (
+					<div className={classes.emptyMessageWrapper}>
+						<Typography component="div" className={classes.emptyMessage}>
+							{t('right.notFoundDoctors')}
+						</Typography>
+					</div>
+				)}
+			</div>
 		</RightLayout>
 	);
 };

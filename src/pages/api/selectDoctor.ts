@@ -15,11 +15,17 @@ interface ScheduleAPI {
 	end_time: number;
 }
 
-interface DoctorAvailabilityAPI {
+export interface DoctorAPI {
+	id: string;
 	name: string;
+	last_name: string;
 	cmp: string;
 	photo: string;
 	title: string;
+	total_cost: string;
+}
+
+interface DoctorAvailabilityAPI extends DoctorAPI {
 	description: string;
 	schedules: ScheduleAPI[];
 }
@@ -38,10 +44,13 @@ export interface Schedule {
 }
 
 export interface Doctor {
+	id: string;
 	name: string;
+	lastName: string;
 	cmp: string;
 	profilePicture: string;
 	speciality: string;
+	totalCost: string;
 }
 
 export interface DoctorAvailability extends Doctor {
@@ -50,8 +59,9 @@ export interface DoctorAvailability extends Doctor {
 }
 
 interface RequestProps {
-	day: number;
 	useCase: string;
+	from: number;
+	to: number;
 }
 
 // const mockResponse: DoctorAvailabilityAPI[] = [
@@ -94,11 +104,13 @@ interface RequestProps {
 // ];
 
 const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] =>
-	doctors.map(({ schedules, photo, title, description, ...rest }: DoctorAvailabilityAPI) => ({
+	doctors.map(({ schedules, photo, title, description, last_name, total_cost, ...rest }: DoctorAvailabilityAPI) => ({
 		...rest,
+		lastName: last_name,
 		comment: description,
 		speciality: title,
 		profilePicture: photo,
+		totalCost: total_cost,
 		schedules: schedules.map(({ id, start_time, end_time }: ScheduleAPI) => ({
 			id,
 			startTime: parseUTCDate(start_time),
@@ -109,16 +121,12 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 const createMedicalSpecialityQuery = (data: RequestProps): SnakeRequestProps =>
 	transformToSnakeCase<RequestProps, SnakeRequestProps>(data);
 
-export const getMedicalSpecialities = async (data: RequestProps): Promise<DoctorAvailability[] | undefined> => {
-	try {
-		const requestParams = createMedicalSpecialityQuery(data);
-		const response = await aliviaAxios.get<DoctorResponseAPI>('/doctors/schedules', {
-			params: { ...requestParams },
-		});
-		const parsedData = parseResponseData(response.data.data);
+export const getMedicalSpecialities = async (data: RequestProps): Promise<DoctorAvailability[]> => {
+	const requestParams = createMedicalSpecialityQuery(data);
+	const response = await aliviaAxios.get<DoctorResponseAPI>('/doctors/schedules', {
+		params: { ...requestParams },
+	});
+	const parsedData = parseResponseData(response.data.data);
 
-		return parsedData;
-	} catch (e) {
-		console.log(e);
-	}
+	return parsedData;
 };

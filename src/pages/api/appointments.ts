@@ -4,7 +4,9 @@ import aliviaAxios from 'utils/customAxios';
 
 // import { formatUTCDate, parseUTCDate } from 'utils';
 import { formatUTCDate } from 'utils';
-import { Doctor } from './selectDoctor';
+import { TriagePair } from 'AppContext';
+
+import { Doctor, DoctorAPI } from './selectDoctor';
 
 export const INCOMING = 'incoming';
 export const PREVIOUS = 'previous';
@@ -31,15 +33,9 @@ export interface AppointmentList {
 	current: SmallAppointment[];
 }
 
-interface ApiAppointmentDetail {
+export interface ApiAppointmentDetail {
 	id: string;
-	doctor: {
-		id: string;
-		name: string;
-		title: string;
-		cmp: string;
-		photo: string;
-	};
+	doctor: DoctorAPI;
 	date: number;
 	appointment_type: {
 		id: string;
@@ -81,47 +77,25 @@ interface AppointmentListParams {
 	closed: number;
 }
 
-// const mockSmallAppointmentList: ApiAppointmentList = {
-// 	current: [
-// 		{ id: '123', channel: 'videollamada', disease: 'gripe', date: 1592238600 },
-// 		{ id: '124', channel: 'chat', disease: 'covid', date: 1592683200 },
-// 		{ id: '125', channel: 'videollamada', disease: 'pulmonia', date: 1592683200 },
-// 		{ id: '126', channel: 'chat', disease: 'dolor muscular', date: 1593507600 },
-// 	],
-// 	old: [
-// 		{ id: '110', channel: 'videollamada', disease: 'gripe', date: 1592238600 },
-// 		{ id: '111', channel: 'chat', disease: 'covid', date: 1592683200 },
-// 		{ id: '112', channel: 'videollamada', disease: 'pulmonia', date: 1592683200 },
-// 	],
-// };
-
-// const mockAppointmentDetail: ApiAppointmentDetail = {
-// 	id: '123',
-// 	channel: 'videollamada',
-// 	disease: 'resfrio',
-// 	patient: 'Joaquín Salinas',
-// 	speciality: 'MEDICINA GENERAL',
-// 	doctor: {
-// 		id: 333,
-// 		name: 'Jose Luis Perez Cuellar',
-// 		cmp: '948252',
-// 		profilePicture: 'https://picsum.photos/200/184',
-// 	},
-// 	// date: 1592238600, // June 15th - incoming date
-// 	date: 1590836400, // May 30th - previous date
-// 	paidAmount: '20',
-// 	treatment: { test: 'string' },
-// 	recomendations: { str: 'test' },
-// };
+interface NewAppointmentBody {
+	reservationAccountID: string;
+	useCaseID: string;
+	scheduleID: string;
+	appointmentTypeID: string;
+	triage: TriagePair[];
+}
 
 const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType: AppointmentType): AppointDetail[] =>
 	rawList.map(({ id, doctor, date, appointment_type, patient, use_case }: ApiAppointmentDetail) => ({
 		id: id || 'asdasd-erugitoer-asddff',
 		doctor: {
+			id: doctor.id,
 			name: doctor.name || 'Kris',
+			lastName: doctor.last_name,
 			cmp: doctor.cmp,
 			profilePicture: doctor.photo,
 			speciality: doctor.title,
+			totalCost: doctor.total_cost,
 		},
 		appointmentType,
 		date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
@@ -138,6 +112,14 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 // 	date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
 // 	time: formatUTCDate(date, 'h:mm aaa'),
 // });
+//
+const formatCreateParams = (params: NewAppointmentBody) => ({
+	reservation_account_id: params.reservationAccountID,
+	use_case_id: params.useCaseID,
+	schedule_id: params.scheduleID,
+	appointment_type_id: params.appointmentTypeID || '',
+	question: params.triage,
+});
 
 // TODO Update how we get the appointments
 export const getAppointmentList = async (
@@ -152,7 +134,6 @@ export const getAppointmentList = async (
 			},
 		});
 		const list = resp.data.data;
-		// const { current, old } = mockSmallAppointmentList;
 
 		return formatAppointmentList(list, params.closed === 1 ? PREVIOUS : INCOMING);
 	} catch (e) {
@@ -169,5 +150,18 @@ export const getAppoinmentDetails = async ({ id }: { id: string }): Promise<Appo
 		return undefined;
 	} catch (e) {
 		console.log(e);
+	}
+};
+
+export const createAppointment = async (
+	params: NewAppointmentBody,
+	token: string | null | undefined,
+): Promise<void> => {
+	try {
+		const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+		await aliviaAxios.post('/appointments', { ...formatCreateParams(params) }, { headers });
+	} catch (e) {
+		throw Error(e);
 	}
 };
