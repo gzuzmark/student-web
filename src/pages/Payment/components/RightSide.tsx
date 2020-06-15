@@ -51,7 +51,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface RightSideProps {
 	openPaymentModal: (e: MouseEvent) => void;
-	totalCost: number | undefined;
+	totalCost: string | undefined;
 	errorMessage: string;
 }
 

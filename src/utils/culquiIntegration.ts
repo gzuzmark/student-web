@@ -1,4 +1,4 @@
-const initCulqi = (amount: number) => {
+const initCulqi = (amount: string) => {
 	if (window.Culqi) {
 		window.Culqi.publicKey = process.env.REACT_APP_CULQI_PK_KEY || '';
 		window.Culqi.options({
@@ -15,7 +15,7 @@ const initCulqi = (amount: number) => {
 			title: 'Alivia',
 			currency: 'PEN',
 			description: 'Consulta',
-			amount: Math.round(amount * 100),
+			amount: Math.round(Number(amount) * 100),
 		});
 	}
 };

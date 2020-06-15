@@ -50,7 +50,7 @@ export interface Doctor {
 	cmp: string;
 	profilePicture: string;
 	speciality: string;
-	totalCost: number;
+	totalCost: string;
 }
 
 export interface DoctorAvailability extends Doctor {
@@ -110,7 +110,7 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 		comment: description,
 		speciality: title,
 		profilePicture: photo,
-		totalCost: Number(total_cost),
+		totalCost: total_cost,
 		schedules: schedules.map(({ id, start_time, end_time }: ScheduleAPI) => ({
 			id,
 			startTime: parseUTCDate(start_time),

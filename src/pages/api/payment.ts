@@ -1,7 +1,7 @@
 import aliviaAxios from 'utils/customAxios';
 
 interface PaymentRequestBody {
-	cost: number;
+	cost: string;
 	appointmentTypeID: string;
 	token: string;
 	scheduleID: string;
