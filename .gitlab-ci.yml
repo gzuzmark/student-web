@@ -24,6 +24,7 @@ build_stage_dev:
   stage: build
   variables:
     REACT_APP_BASE_URL: "$API_BASE_URL_DEV"
+    REACT_APP_CULQI_PK_KEY: "$CULQI_PK_KEY_DEV"
   script:
     - yarn build
   dependencies:
@@ -45,6 +46,7 @@ build_stage_prod:
   stage: build
   variables:
     REACT_APP_BASE_URL: "$API_BASE_URL_PROD"
+    REACT_APP_CULQI_PK_KEY: "$CULQI_PK_KEY_PROD"
   script:
     - yarn build
   dependencies:
