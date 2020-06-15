@@ -15,12 +15,17 @@ interface ScheduleAPI {
 	end_time: number;
 }
 
-interface DoctorAvailabilityAPI {
+export interface DoctorAPI {
+	id: string;
 	name: string;
 	last_name: string;
 	cmp: string;
 	photo: string;
 	title: string;
+	total_cost: string;
+}
+
+interface DoctorAvailabilityAPI extends DoctorAPI {
 	description: string;
 	schedules: ScheduleAPI[];
 }
@@ -39,11 +44,13 @@ export interface Schedule {
 }
 
 export interface Doctor {
+	id: string;
 	name: string;
 	lastName: string;
 	cmp: string;
 	profilePicture: string;
 	speciality: string;
+	totalCost: number;
 }
 
 export interface DoctorAvailability extends Doctor {
@@ -97,12 +104,13 @@ interface RequestProps {
 // ];
 
 const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] =>
-	doctors.map(({ schedules, last_name, photo, title, description, ...rest }: DoctorAvailabilityAPI) => ({
+	doctors.map(({ schedules, photo, title, description, last_name, total_cost, ...rest }: DoctorAvailabilityAPI) => ({
 		...rest,
 		lastName: last_name,
 		comment: description,
 		speciality: title,
 		profilePicture: photo,
+		totalCost: Number(total_cost),
 		schedules: schedules.map(({ id, start_time, end_time }: ScheduleAPI) => ({
 			id,
 			startTime: parseUTCDate(start_time),

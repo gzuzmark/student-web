@@ -33,8 +33,8 @@ export const dateToUTCUnixTimestamp = (date: Date | number): number => {
 	return getUnixTime(dateObj);
 };
 
-export const formatUTCDate = (date: number, strFormat: string) => {
-	const dateObj = parseUTCDate(date);
+export const formatUTCDate = (date: Date | number, strFormat: string) => {
+	const dateObj = date instanceof Date ? date : parseUTCDate(date);
 	const formattedDate = format(dateObj, strFormat, { locale: es });
 
 	return formattedDate;

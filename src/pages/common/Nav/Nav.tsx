@@ -107,7 +107,7 @@ const Nav = () => {
 			<nav className={classes.container}>
 				<LeftIcon className={classes.arrowIcon} onClick={onGoBack} />
 				<BrandLogo className={classes.brandLogo} />
-				{user ? (
+				{user && user.id !== '' ? (
 					<div className={classes.userIconWrapper}>
 						<Typography color="primary">{user.name}</Typography>
 						<IconButton onClick={handleProfileMenuOpen}>

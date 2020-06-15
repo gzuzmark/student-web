@@ -53,7 +53,8 @@ const NavMenu = ({ anchorEl, isMenuOpen, handleMenuClose }: NavMenuProps) => {
 				reservationAccountID: '',
 				channel: '',
 				triage: [],
-				scheduleID: '',
+				schedule: null,
+				doctor: null,
 				appointmentCreationStep: TRIAGE_STEP,
 			});
 			purgerLocalStorage();

@@ -2,13 +2,11 @@ import { Theme } from '@material-ui/core/styles';
 import { stylesWithTheme } from 'utils';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
-	container: {
+	wrapper: {
 		paddingTop: '26px',
-		minHeight: 'calc(100vh - 220px)',
 		[breakpoints.up('lg')]: {
 			paddingTop: '65px',
 			paddingRight: '104px',
-			minHeight: 'calc(100vh - 145px)',
 		},
 	},
 	titleContainer: {

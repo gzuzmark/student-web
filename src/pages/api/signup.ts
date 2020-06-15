@@ -12,9 +12,9 @@ interface NewUser {
 	identification: string; // document_number
 	birthDate: Date | null; // birth_date
 	gender: number | undefined;
-	medicines?: string; // meds
+	medicineList?: string; // meds
 	allergies?: string;
-	moreMedicalInformation?: string; // extra_info
+	moreInfo?: string; // extra_info
 	phoneNumber: string;
 	email?: string;
 }
@@ -35,11 +35,12 @@ export const createGuestPatient = async (user: NewUser): Promise<string> => {
 		last_name: user.lastName,
 		second_last_name: user.secondSurname,
 		document_number: user.identification,
+		gender: user.gender,
 		birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
-		allergies: user.allergies,
-		meds: user.medicines,
-		extra_info: user.moreMedicalInformation,
-		contact_email: user.email,
+		allergies: user.allergies || '',
+		meds: user.medicineList || '',
+		extra_info: user.moreInfo || '',
+		contact_email: user.email || '',
 		contact_phone: user.phoneNumber,
 	});
 	const data = resp.data.data;
@@ -55,12 +56,13 @@ export const createPatient = async (user: NewUser, authToken: string): Promise<s
 			name: user.name,
 			last_name: user.lastName,
 			second_last_name: user.secondSurname,
+			gender: user.gender,
 			document_number: user.identification,
 			birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
-			allergies: user.allergies,
-			meds: user.medicines,
-			extra_info: user.moreMedicalInformation,
-			contact_email: user.email,
+			allergies: user.allergies || '',
+			meds: user.medicineList || '',
+			extra_info: user.moreInfo || '',
+			contact_email: user.email || '',
 			contact_phone: user.phoneNumber,
 		},
 		{

@@ -35,7 +35,7 @@ export const sendLogin = async (fields: LoginFields): Promise<string | void> => 
 		const data = resp.data;
 
 		setLocalValue('userToken', data.token);
-		// setLocalValue('refreshToken', data.refresh_token);
+		setLocalValue('refreshToken', data.refresh_token);
 		return data.token;
 	} catch (e) {
 		console.log(e);

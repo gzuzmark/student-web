@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import AppContext from 'AppContext';
 import { getCurrentUser } from 'pages/api';
+import { getLocalValue } from 'utils';
 
 interface ValidatorProps {
 	isPrivate: boolean;
@@ -17,16 +18,18 @@ const requestCurrentUser = async (
 	if (userToken && updateContextState) {
 		const [reservationAccountID, user] = await getCurrentUser(userToken);
 		updateContextState({ user, reservationAccountID });
+		setLoading(false);
 	}
-	setLoading(false);
 };
 
 const Validator = ({ isPrivate, children }: ValidatorProps) => {
 	const [loading, setLoading] = useState<boolean>(true);
-	const { userToken, user, updateState } = useContext(AppContext);
+	const { user, updateState } = useContext(AppContext);
 	const { push } = useHistory();
 
 	useLayoutEffect(() => {
+		const userToken = getLocalValue('userToken');
+
 		if (isPrivate && !userToken && !user) {
 			push('/iniciar_sesion');
 		}
@@ -36,7 +39,8 @@ const Validator = ({ isPrivate, children }: ValidatorProps) => {
 		} else {
 			setLoading(false);
 		}
-	}, [isPrivate, push, updateState, user, userToken]);
+		// eslint-disable-next-line
+	}, []);
 
 	return loading ? <div /> : <>{children}</>;
 };
