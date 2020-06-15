@@ -146,7 +146,7 @@ const LeftSide = ({ doctor, user, schedule, channel }: LeftSideProps) => {
 						<Typography className={classes.infoTitle}>{t('payment.left.doctorTitle')}</Typography>
 						<div className={classes.doctorWrapper}>
 							<div className={classes.doctorImgWrapper}>
-								<img src={doctor?.profilePicture} alt="doctor" />
+								<img className={classes.doctorImg} src={doctor?.profilePicture} alt="doctor" />
 							</div>
 							<div>
 								<Typography className={classes.doctorName}>{doctor?.name}</Typography>
