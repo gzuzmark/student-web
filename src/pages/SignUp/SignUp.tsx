@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback, useLayoutEffect } from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
@@ -46,6 +46,7 @@ const SignUp = () => {
 
 				if (isGuest) {
 					reservationAccountID = await createGuestPatient(newUser);
+					user = { id: '', ...formatNewUser(newUser) };
 				} else if (!isGuest && useCase) {
 					localUserToken = await createAccount(contactInfo);
 					reservationAccountID = await createPatient(newUser, localUserToken);
@@ -107,6 +108,9 @@ const SignUp = () => {
 					</Route>
 					<Route exact path="/registro/contacto">
 						<Contact submitSignUp={submitSignUp} isGuest={isGuest} />
+					</Route>
+					<Route path="/registro/*">
+						<Redirect to="/registro/sobre_ti" />
 					</Route>
 				</Switch>
 			</RightLayout>
