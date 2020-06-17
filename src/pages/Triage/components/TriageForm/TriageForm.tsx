@@ -66,13 +66,12 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 		{ appointmentOwner, ...others }: TriageFromValues,
 		{ setSubmitting }: { setSubmitting: Function },
 	) => {
-		addGAEvent('event', 'Triaje', 'click');
 		if (updateContextState) {
 			const triageArr = createQuestionsAndAnswersArr({ appointmentOwner, ...others }, t);
 
 			updateContextState({ appointmentOwner, triage: triageArr, appointmentCreationStep: SELECT_DOCTOR_STEP });
-			history.push('/seleccionar_doctor');
 			setSubmitting(false);
+			history.push('/seleccionar_doctor');
 		}
 	};
 
@@ -221,7 +220,15 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 						</div>
 					</Form>
 					<div>
-						<Button className={classes.submit} onClick={submitForm} disabled={isSubmitting} variant="outlined">
+						<Button
+							className={classes.submit}
+							onClick={() => {
+								addGAEvent('event', 'Triaje', 'click');
+								submitForm();
+							}}
+							disabled={isSubmitting}
+							variant="outlined"
+						>
 							{t('triage.submit.label')}
 						</Button>
 					</div>

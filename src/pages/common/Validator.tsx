@@ -1,9 +1,9 @@
-import React, { ReactElement, useContext, useState, useLayoutEffect } from 'react';
+import React, { ReactElement, useContext, useState, useLayoutEffect, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import AppContext from 'AppContext';
 import { getCurrentUser } from 'pages/api';
-import { getLocalValue } from 'utils';
+import { getLocalValue, sendGANavigation, setLocalValue } from 'utils';
 
 interface ValidatorProps {
 	isPrivate: boolean;
@@ -25,7 +25,7 @@ const requestCurrentUser = async (
 const Validator = ({ isPrivate, children }: ValidatorProps) => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const { user, updateState } = useContext(AppContext);
-	const { push } = useHistory();
+	const { push, listen } = useHistory();
 
 	useLayoutEffect(() => {
 		const userToken = getLocalValue('userToken');
@@ -41,6 +41,18 @@ const Validator = ({ isPrivate, children }: ValidatorProps) => {
 		}
 		// eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		const numberOfRouteListeners = Number(getLocalValue('routeListeners'));
+
+		if (numberOfRouteListeners < 1) {
+			listen((location) => {
+				sendGANavigation(location.pathname);
+			});
+
+			setLocalValue('routeListeners', '1');
+		}
+	}, [listen]);
 
 	return loading ? <div /> : <>{children}</>;
 };
