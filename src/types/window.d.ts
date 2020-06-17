@@ -4,5 +4,6 @@ declare global {
 	interface Window {
 		Culqi: CulquiType;
 		culqi: () => void;
+		gtag: Function;
 	}
 }
