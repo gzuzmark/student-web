@@ -41,7 +41,6 @@ const Payment = () => {
 				try {
 					setIsPaymentLoading(true);
 					if (schedule && updateContextState && reservationAccountID && useCase && triage) {
-						console.log(window.Culqi.token);
 						if (!!window.Culqi.token) {
 							const token = window.Culqi.token.id;
 							const email = window.Culqi.token.email;

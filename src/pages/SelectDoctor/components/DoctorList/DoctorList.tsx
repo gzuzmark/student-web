@@ -7,6 +7,7 @@ import clsx from 'clsx';
 
 import { PRE_SIGNUP_STEP, PAYMENT_STEP } from 'AppContext';
 import { DoctorAvailability, Doctor, Schedule } from 'pages/api';
+import { addGAEvent } from 'utils';
 
 import AvailableTimes from '../AvailableTimes';
 import useStyles from './styles';
@@ -55,11 +56,14 @@ const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListP
 	};
 	const continueToPreRegister = () => {
 		if (updateContextState) {
+			addGAEvent('event', 'Cita seleccionada', 'click');
+
 			updateContextState({
 				appointmentCreationStep: isUserLoggedIn ? PAYMENT_STEP : PRE_SIGNUP_STEP,
 				schedule,
 				doctor: formatDoctor(doctor),
 			});
+
 			if (isUserLoggedIn) {
 				history.push('/pago');
 			} else {

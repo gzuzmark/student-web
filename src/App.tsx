@@ -11,7 +11,7 @@ import { parse } from 'query-string';
 import { routes, routeWithoutNav } from './routes';
 import { AppProvider } from './AppContext';
 import pageTheme from './theme';
-import { redirectToBaseAlivia } from './utils';
+import { redirectToBaseAlivia, setLocalValue } from './utils';
 
 import Validator from 'pages/common/Validator';
 
@@ -37,6 +37,8 @@ const RedirectWrapper = ({ location }: { location: Location }) => {
 };
 
 const App = () => {
+	setLocalValue('routeListeners', '0');
+
 	return (
 		<LocalizationProvider dateAdapter={DateFnsUtils} locale={esLocal} dateFormats={formats}>
 			<ThemeProvider theme={theme}>
