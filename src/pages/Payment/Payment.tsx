@@ -34,8 +34,8 @@ const Payment = () => {
 	};
 
 	useEffect(() => {
-		if (doctor?.totalCost) {
-			initCulqi(doctor?.totalCost);
+		if (useCase?.totalCost) {
+			initCulqi(useCase?.totalCost);
 
 			window.culqi = async () => {
 				try {
@@ -49,7 +49,7 @@ const Payment = () => {
 								token,
 								scheduleID: schedule.id,
 								appointmentTypeID: 'ugito',
-								cost: doctor?.totalCost,
+								cost: useCase?.totalCost,
 								email,
 							});
 							await createAppointment(
@@ -83,7 +83,7 @@ const Payment = () => {
 	return !isPaymentLoading ? (
 		<Container>
 			<LeftSide doctor={doctor} user={user} schedule={schedule} channel={channel} />
-			<RightSide totalCost={doctor?.totalCost} openPaymentModal={openPaymentModal} errorMessage={errorMessage} />
+			<RightSide totalCost={useCase?.totalCost} openPaymentModal={openPaymentModal} errorMessage={errorMessage} />
 		</Container>
 	) : (
 		<Loading fullScreen loadingMessage={t('payment.wait.message')} />

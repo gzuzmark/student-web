@@ -25,7 +25,6 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			title: 'MEDICINA GENERAL',
 			cmp: '948252',
 			photo: 'https://picsum.photos/200/184',
-			total_cost: '15.54',
 		},
 		date: 1590836400, // May 30th - previous date
 	},
@@ -53,7 +52,6 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			title: 'MEDICINA GENERAL',
 			cmp: '948312',
 			photo: 'https://picsum.photos/200/184',
-			total_cost: '15.54',
 		},
 		date: 1590836400, // May 30th - previous date
 	},
@@ -81,7 +79,6 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			title: 'MEDICINA GENERAL',
 			cmp: '951312',
 			photo: 'https://picsum.photos/200/184',
-			total_cost: '15.54',
 		},
 		date: 1590836400, // May 30th - previous date
 	},
@@ -109,7 +106,6 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			title: 'MEDICINA GENERAL',
 			cmp: '951312',
 			photo: 'https://picsum.photos/200/184',
-			total_cost: '15.54',
 		},
 		date: 1590836400, // May 30th - previous date
 	},
@@ -139,7 +135,6 @@ export const mockAppointmentDetail: ApiAppointmentDetail = {
 		title: 'MEDICINA GENERAL',
 		cmp: '948252',
 		photo: 'https://picsum.photos/200/184',
-		total_cost: '15.54',
 	},
 	date: 1590836400, // May 30th - previous date
 };
