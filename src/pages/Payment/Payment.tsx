@@ -56,17 +56,17 @@ const Payment = () => {
 			window.culqi = async () => {
 				try {
 					setIsPaymentLoading(true);
-					if (schedule && updateContextState && reservationAccountID && useCase && triage) {
+					if (schedule && updateContextState && reservationAccountID && useCase && triage && user) {
 						if (!!window.Culqi.token) {
 							const token = window.Culqi.token.id;
-							const email = window.Culqi.token.email;
 
 							await createPayment({
-								token,
-								scheduleID: schedule.id,
-								appointmentTypeID: 'ugito',
 								cost: useCase?.totalCost,
-								email,
+								appointmentTypeID: 'ugito',
+								scheduleID: schedule.id,
+								discountID: discount.id,
+								token,
+								dni: user.dni || '',
 							});
 							await createAppointment(
 								{

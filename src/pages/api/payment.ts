@@ -5,7 +5,8 @@ interface PaymentRequestBody {
 	appointmentTypeID: string;
 	token: string;
 	scheduleID: string;
-	email: string;
+	discountID: string;
+	dni: string;
 }
 
 interface DiscountRequestBody {
@@ -32,7 +33,8 @@ const formatParams = (params: PaymentRequestBody) => ({
 	appointment_type_id: params.appointmentTypeID || 'ugito',
 	token: params.token,
 	schedule_id: params.scheduleID,
-	email: params.email,
+	discount_id: params.discountID,
+	dni: params.dni || '',
 });
 
 export const createPayment = async (params: PaymentRequestBody): Promise<void> => {
