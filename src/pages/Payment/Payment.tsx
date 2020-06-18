@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent } from 'react';
+import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +10,7 @@ import { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import { createPayment, createAppointment } from 'pages/api';
+import { createPayment, createAppointment, applyDiscount, Discount } from 'pages/api';
 
 const Payment = () => {
 	const {
@@ -26,12 +26,28 @@ const Payment = () => {
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
 	const { t } = useTranslation('payment');
+	const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
-	const openPaymentModal = (e: MouseEvent) => {
+	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
+	const openPaymentModal = useCallback((e: MouseEvent) => {
 		e.preventDefault();
 		window.Culqi.open();
+	}, []);
+	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target) {
+			setDiscountCode(e.target.value);
+		}
 	};
+	const sendDiscount = useCallback(async () => {
+		try {
+			if (user) {
+				const reviewedDiscount = await applyDiscount({ couponCode: discountCode, dni: user.dni });
+
+				setDiscount(reviewedDiscount);
+			}
+		} catch (e) {}
+	}, [discountCode, user]);
 
 	useEffect(() => {
 		if (useCase?.totalCost) {
@@ -83,7 +99,15 @@ const Payment = () => {
 	return !isPaymentLoading ? (
 		<Container>
 			<LeftSide doctor={doctor} user={user} schedule={schedule} channel={channel} />
-			<RightSide totalCost={useCase?.totalCost} openPaymentModal={openPaymentModal} errorMessage={errorMessage} />
+			<RightSide
+				totalCost={discount.totalCost || useCase?.totalCost}
+				isCounponDisabled={!!discount.totalCost}
+				sendDiscount={sendDiscount}
+				discountCode={discountCode}
+				onChangeDiscount={onChangeDiscount}
+				openPaymentModal={openPaymentModal}
+				errorMessage={errorMessage}
+			/>
 		</Container>
 	) : (
 		<Loading fullScreen loadingMessage={t('payment.wait.message')} />

@@ -41,6 +41,7 @@ export interface SimpleUser {
 	name: string;
 	lastName: string;
 	secondSurname: string;
+	dni: string;
 }
 
 export interface User {
