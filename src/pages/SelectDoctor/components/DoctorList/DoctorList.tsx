@@ -32,7 +32,6 @@ const formatDoctor = (doctor: DoctorAvailability | null): Doctor | null =>
 				cmp: doctor.cmp,
 				profilePicture: doctor.profilePicture,
 				speciality: doctor.speciality,
-				totalCost: doctor.totalCost,
 		  }
 		: null;
 

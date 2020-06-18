@@ -95,7 +95,6 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 			cmp: doctor.cmp,
 			profilePicture: doctor.photo,
 			speciality: doctor.title,
-			totalCost: doctor.total_cost,
 		},
 		appointmentType,
 		date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),

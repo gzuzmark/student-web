@@ -30,7 +30,13 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			paddingRight: '50px',
 		},
 	},
-	useCaseField: {},
+	useCaseField: {
+		paddingBottom: '12px',
+		[breakpoints.up('lg')]: {
+			paddingRight: '39px',
+			paddingBottom: '0',
+		},
+	},
 	useCaseInput: {
 		fontSize: '13px',
 		lineHeight: '18px',

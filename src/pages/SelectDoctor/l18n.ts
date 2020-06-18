@@ -6,6 +6,7 @@ const selectDoctor = {
 	'right.title': 'Selecciona la fecha y el doctor/a.',
 	'right.dateLabel': 'FECHA:',
 	'right.useCaseLabel': 'CASO DE USO:',
+	'right.appointmentCostLabel': 'COSTO DE CONSULTA:',
 	'right.foundDoctors': 'TENEMOS {{doctors}}',
 	'right.availableDoctors.title': 'DISPONIBILIDAD',
 	'right.availableDoctors': 'DOCTOR DISPONIBLE',

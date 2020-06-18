@@ -52,6 +52,14 @@ const DoctorsHeader = ({ date, updateDate, useCase }: DoctorsHeaderProps) => {
 					{useCase ? useCase.name : ''}
 				</Typography>
 			</div>
+			<div>
+				<Typography component="div" className={classes.formLabel}>
+					{t('right.appointmentCostLabel')}
+				</Typography>
+				<Typography component="div" className={classes.useCaseInput}>
+					S/ {useCase ? useCase.totalCost : ''}
+				</Typography>
+			</div>
 		</div>
 	);
 };
