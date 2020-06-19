@@ -22,7 +22,6 @@ export interface DoctorAPI {
 	cmp: string;
 	photo: string;
 	title: string;
-	total_cost: string;
 }
 
 interface DoctorAvailabilityAPI extends DoctorAPI {
@@ -50,7 +49,6 @@ export interface Doctor {
 	cmp: string;
 	profilePicture: string;
 	speciality: string;
-	totalCost: string;
 }
 
 export interface DoctorAvailability extends Doctor {
@@ -104,13 +102,12 @@ interface RequestProps {
 // ];
 
 const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] =>
-	doctors.map(({ schedules, photo, title, description, last_name, total_cost, ...rest }: DoctorAvailabilityAPI) => ({
+	doctors.map(({ schedules, photo, title, description, last_name, ...rest }: DoctorAvailabilityAPI) => ({
 		...rest,
 		lastName: last_name,
 		comment: description,
 		speciality: title,
 		profilePicture: photo,
-		totalCost: total_cost,
 		schedules: schedules.map(({ id, start_time, end_time }: ScheduleAPI) => ({
 			id,
 			startTime: parseUTCDate(start_time),

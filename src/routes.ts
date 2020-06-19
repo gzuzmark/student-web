@@ -16,6 +16,21 @@ export const SELECT_DOCTOR_ROUTE = 'seleccionar_doctor';
 export const PRE_SIGN_UP_ROUTE = 'pre_registro';
 export const PAYMENT_ROUTE = 'pago';
 export const CONFIRMATION_ROUTE = 'confirmacion';
+export const LOGIN_ROUTE = 'iniciar_sesion';
+export const SIGN_UP_ROUTE = 'registro';
+export const APPOINTMENT_LIST_ROUTE = 'citas';
+
+export const routToTitle: Record<string, string> = {
+	[TRIAGE_ROUTE]: 'Triaje',
+	[SELECT_DOCTOR_ROUTE]: 'Seleccionar Doctor',
+	[PRE_SIGN_UP_ROUTE]: 'Pre Registro',
+	[PAYMENT_ROUTE]: 'Pago',
+	[CONFIRMATION_ROUTE]: 'Confirmacion',
+	[LOGIN_ROUTE]: 'Iniciar Sesion',
+	[SIGN_UP_ROUTE]: 'Registro',
+	[APPOINTMENT_LIST_ROUTE]: 'Citas',
+	'detalle-cita': 'Detalle Cita',
+};
 
 export type CreateAppointmentRoute = 'triaje' | 'seleccionar_doctor' | 'pre_registro' | 'pago' | 'confirmacion';
 

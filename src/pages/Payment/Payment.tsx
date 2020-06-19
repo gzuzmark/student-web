@@ -1,16 +1,16 @@
-import React, { useState, useEffect, MouseEvent } from 'react';
+import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
-import { useAppointmentStepValidation } from 'utils';
+import { useAppointmentStepValidation, getIntCurrency } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
 import { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import { createPayment, createAppointment } from 'pages/api';
+import { createPayment, createAppointment, applyDiscount, Discount } from 'pages/api';
 
 const Payment = () => {
 	const {
@@ -26,32 +26,59 @@ const Payment = () => {
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
 	const { t } = useTranslation('payment');
+	const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
-	const openPaymentModal = (e: MouseEvent) => {
+	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
+	const openPaymentModal = useCallback((e: MouseEvent) => {
 		e.preventDefault();
 		window.Culqi.open();
+	}, []);
+	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target) {
+			setDiscountCode(e.target.value);
+		}
 	};
+	const sendDiscount = useCallback(async () => {
+		try {
+			if (user && schedule) {
+				const reviewedDiscount = await applyDiscount({
+					couponCode: discountCode,
+					dni: user.identification,
+					scheduleID: schedule.id,
+				});
+
+				window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedDiscount.totalCost) });
+				setDiscount(reviewedDiscount);
+			}
+		} catch (e) {}
+	}, [discountCode, schedule, user]);
 
 	useEffect(() => {
-		if (doctor?.totalCost) {
-			initCulqi(doctor?.totalCost);
+		if (useCase?.totalCost) {
+			initCulqi(useCase?.totalCost);
+		}
+		// eslint-disable-next-line
+	}, []);
 
+	useEffect(() => {
+		if (useCase?.totalCost) {
 			window.culqi = async () => {
 				try {
 					setIsPaymentLoading(true);
-					if (schedule && updateContextState && reservationAccountID && useCase && triage) {
-						console.log(window.Culqi.token);
+					if (schedule && updateContextState && reservationAccountID && useCase && triage && user) {
 						if (!!window.Culqi.token) {
 							const token = window.Culqi.token.id;
 							const email = window.Culqi.token.email;
 
 							await createPayment({
-								token,
-								scheduleID: schedule.id,
+								cost: useCase?.totalCost,
 								appointmentTypeID: 'ugito',
-								cost: doctor?.totalCost,
+								scheduleID: schedule.id,
+								discountID: discount.id,
 								email,
+								token,
+								dni: user.identification || '',
 							});
 							await createAppointment(
 								{
@@ -79,12 +106,20 @@ const Payment = () => {
 			};
 		}
 		// eslint-disable-next-line
-	}, []);
+	}, [discount]);
 
 	return !isPaymentLoading ? (
 		<Container>
 			<LeftSide doctor={doctor} user={user} schedule={schedule} channel={channel} />
-			<RightSide totalCost={doctor?.totalCost} openPaymentModal={openPaymentModal} errorMessage={errorMessage} />
+			<RightSide
+				totalCost={discount.totalCost || useCase?.totalCost}
+				isCounponDisabled={!!discount.totalCost}
+				sendDiscount={sendDiscount}
+				discountCode={discountCode}
+				onChangeDiscount={onChangeDiscount}
+				openPaymentModal={openPaymentModal}
+				errorMessage={errorMessage}
+			/>
 		</Container>
 	) : (
 		<Loading fullScreen loadingMessage={t('payment.wait.message')} />

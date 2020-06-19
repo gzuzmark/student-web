@@ -14,7 +14,7 @@ import { ReactComponent as CompanionIcon } from 'icons/companion.svg';
 import { ReactComponent as MehIcon } from 'icons/meh.svg';
 import { ReactComponent as SadIcon } from 'icons/sad.svg';
 import { TriagePair, MYSELF, RELATIVE, SELECT_DOCTOR_STEP } from 'AppContext';
-import { getKeyValue } from 'utils';
+import { getKeyValue, addGAEvent } from 'utils';
 
 import validationSchema from './validationSchema';
 import useStyles from './styles';
@@ -70,8 +70,8 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 			const triageArr = createQuestionsAndAnswersArr({ appointmentOwner, ...others }, t);
 
 			updateContextState({ appointmentOwner, triage: triageArr, appointmentCreationStep: SELECT_DOCTOR_STEP });
-			history.push('/seleccionar_doctor');
 			setSubmitting(false);
+			history.push('/seleccionar_doctor');
 		}
 	};
 
@@ -220,7 +220,15 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 						</div>
 					</Form>
 					<div>
-						<Button className={classes.submit} onClick={submitForm} disabled={isSubmitting} variant="outlined">
+						<Button
+							className={classes.submit}
+							onClick={() => {
+								addGAEvent('event', 'Triaje', 'click');
+								submitForm();
+							}}
+							disabled={isSubmitting}
+							variant="outlined"
+						>
 							{t('triage.submit.label')}
 						</Button>
 					</div>

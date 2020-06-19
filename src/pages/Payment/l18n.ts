@@ -7,6 +7,8 @@ const paymentL18n = {
 	'payment.right.title': 'Paga tu cita con tu tarjeta de crédito o débito',
 	'payment.right.payment': 'EL PRECIO DE TU CONSULTA ES DE',
 	'payment.right.payButton': 'Pagar mi cita con tarjeta',
+	'payment.right.discountLabel': '¿Tienes un código de descuento? Ingrésalo:',
+	'payment.right.addDiscountLabel': 'Añadir código',
 	'payment.left.cmp': 'CMP:',
 	'payment.wait.message': 'Estamos procesando el pago.',
 	'payment.error.culqi': 'Hubo un problema con tu tarjeta, intenta otra vez',
