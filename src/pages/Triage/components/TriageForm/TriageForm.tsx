@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -6,6 +6,7 @@ import { Formik, Form, Field } from 'formik';
 import { TextField } from 'formik-material-ui';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
+import animateScrollTo from 'animated-scroll-to';
 import clsx from 'clsx';
 
 import { OptionsGroup, Option } from 'pages/common';
@@ -61,7 +62,14 @@ const createQuestionsAndAnswersArr = (values: TriageFromValues, t: Function): Tr
 const TriageForm = ({ updateContextState }: TriageFormProps) => {
 	const classes = useStyles();
 	const history = useHistory();
+	const howBadIsItQuestionRef = useRef<Element | null>(null);
+	const discomfortDescriptionQuestionRef = useRef<Element | null>(null);
 	const { t } = useTranslation('triage');
+	const scrollToElement = (element: Element | null) => () => {
+		if (element) {
+			animateScrollTo(element, { verticalOffset: -50, speed: 750 });
+		}
+	};
 	const onSubmit = (
 		{ appointmentOwner, ...others }: TriageFromValues,
 		{ setSubmitting }: { setSubmitting: Function },
@@ -74,6 +82,10 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 			history.push('/seleccionar_doctor');
 		}
 	};
+	useLayoutEffect(() => {
+		howBadIsItQuestionRef.current = document.querySelector('.how-bad-it-is-question');
+		discomfortDescriptionQuestionRef.current = document.querySelector('.discomfort-description-question');
+	}, []);
 
 	return (
 		<Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -100,6 +112,7 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 									className={classes.option}
 									classes={{ active: classes.optionActive }}
 									value={MYSELF}
+									onClick={scrollToElement(howBadIsItQuestionRef.current)}
 									disableRipple
 									disableFocusRipple
 									disableTouchRipple
@@ -117,6 +130,7 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 									classes={{ active: classes.optionActive }}
 									className={classes.option}
 									value={RELATIVE}
+									onClick={scrollToElement(howBadIsItQuestionRef.current)}
 									disableRipple
 									disableFocusRipple
 									disableTouchRipple
@@ -130,7 +144,7 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 								</Option>
 							</Field>
 						</div>
-						<div className={classes.fieldWrapper}>
+						<div className={clsx(classes.fieldWrapper, 'how-bad-it-is-question')}>
 							<Typography className={classes.fieldPrefix} variant="h3">
 								{t('triage.fields.discomfortLvl.prefix')}
 							</Typography>
@@ -144,6 +158,7 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 									classes={{ active: classes.optionActive }}
 									className={clsx(classes.option, 'long-text')}
 									value={STRONG}
+									onClick={scrollToElement(discomfortDescriptionQuestionRef.current)}
 									disableRipple
 									disableFocusRipple
 									disableTouchRipple
@@ -164,6 +179,7 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 									classes={{ active: classes.optionActive }}
 									className={clsx(classes.option, 'long-text')}
 									value={MODERATE}
+									onClick={scrollToElement(discomfortDescriptionQuestionRef.current)}
 									disableRipple
 									disableFocusRipple
 									disableTouchRipple
@@ -184,6 +200,7 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 									classes={{ active: classes.optionActive }}
 									className={clsx(classes.option, 'long-text')}
 									value={SLIGHT}
+									onClick={scrollToElement(discomfortDescriptionQuestionRef.current)}
 									disableRipple
 									disableFocusRipple
 									disableTouchRipple
@@ -200,14 +217,20 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 								</Option>
 							</Field>
 						</div>
-						<div className={clsx(classes.fieldWrapper, 'text-field')}>
+						<div className={clsx(classes.fieldWrapper, 'text-field', 'discomfort-description-question')}>
 							<Typography className={classes.fieldPrefix} variant="h3">
 								{t('triage.fields.discomfortDescription.prefix')}
 							</Typography>
 							<div className={classes.fieldLabelWrapper}>
 								<FormLabel className={classes.fieldLabel}>{t('triage.fields.discomfortDescription.label')}</FormLabel>
 							</div>
-							<Field component={TextField} name="discomfortDescription" type="text" fullWidth />
+							<Field
+								component={TextField}
+								name="discomfortDescription"
+								type="text"
+								placeholder={t('triage.fields.discomfortDescription.placeholder')}
+								fullWidth
+							/>
 						</div>
 						<div className={clsx(classes.fieldWrapper, 'text-field')}>
 							<Typography className={classes.fieldPrefix} variant="h3">
@@ -216,7 +239,13 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 							<div className={classes.fieldLabelWrapper}>
 								<FormLabel className={classes.fieldLabel}>{t('triage.fields.discomfortDuration.label')}</FormLabel>
 							</div>
-							<Field component={TextField} name="discomfortDuration" type="text" fullWidth />
+							<Field
+								component={TextField}
+								name="discomfortDuration"
+								type="text"
+								placeholder={t('triage.fields.discomfortDuration.placeholder')}
+								fullWidth
+							/>
 						</div>
 					</Form>
 					<div>
@@ -227,7 +256,7 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 								submitForm();
 							}}
 							disabled={isSubmitting}
-							variant="outlined"
+							variant="contained"
 						>
 							{t('triage.submit.label')}
 						</Button>

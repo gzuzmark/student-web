@@ -42,16 +42,23 @@ const mergeClasses = (optionClasses: Record<string, any>, customClasses: Record<
 	return copyOptionClasses;
 };
 
-const Option = ({ children, value, classes, wrapperClassName, ...props }: OptionProps) => {
+const Option = ({ children, value, classes, wrapperClassName, onClick: customOnClick, ...props }: OptionProps) => {
 	const { name, onChange, onBlur, formValue, ...buttonProps } = useContext(OptionsContext);
 	const defaultClasses = useOptionStyles();
 	const optionClasses = classes ? mergeClasses(defaultClasses, classes) : defaultClasses;
 	const inputRef = useRef(null);
-	const onClick = useCallback(() => {
-		// eslint-disable-next-line
-		// @ts-ignore
-		inputRef.current.click();
-	}, []);
+	const onClick = useCallback(
+		(e) => {
+			if (customOnClick) {
+				customOnClick(e);
+			}
+
+			// eslint-disable-next-line
+			// @ts-ignore
+			inputRef.current.click();
+		},
+		[customOnClick],
+	);
 	const checked = formValue === value;
 	const inputOnChange = useCallback(() => {
 		onChange(value);
