@@ -72,6 +72,7 @@ const signUp = {
 	'contact.validation.password.incorrectFormat': 'Usa 6 caracteres o más para tu contraseña',
 	'contact.validation.repeatPassword.required': 'La contraseña es obligatoria',
 	'contact.validation.repeatPassword.notEqual': 'Las contraseñas no coinciden. Intenta de nuevo',
+	'contact.validation.email.required': 'El correo electrónico es obligatorio',
 	'contact.validation.email.validEmail': 'Ingrese un correo de contacto valido',
 	'contact.legalInformation.firstSection': 'Al crear una cuenta estás confirmando que estás de acuerdo con nuestra',
 	'contact.legalInformation.privacyPolicyLink': 'política de privacidad',

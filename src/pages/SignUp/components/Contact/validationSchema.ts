@@ -16,6 +16,7 @@ const messages = {
 		required: i18next.t('signUp:contact.validation.phoneNumber.required'),
 	},
 	email: {
+		required: i18next.t('signUp:contact.validation.email.required'),
 		validEmail: i18next.t('signUp:contact.validation.email.validEmail'),
 	},
 	password: {
@@ -42,7 +43,7 @@ export const newUservalidationSchema = object().shape({
 		.required(messages.phoneNumber.required),
 	// eslint-disable-next-line
 	// @ts-ignore
-	email: string().validEmail(messages.email.validEmail),
+	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
 	password: string().required(messages.password.required).min(6, messages.password.minLength),
 	repeatPassword: string()
 		.required(messages.repeatPassword.required)
@@ -65,5 +66,5 @@ export const guestValidationSchema = object().shape({
 		.required(messages.phoneNumber.required),
 	// eslint-disable-next-line
 	// @ts-ignore
-	email: string().validEmail(messages.email.validEmail),
+	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
 });
