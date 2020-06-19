@@ -69,12 +69,14 @@ const Payment = () => {
 					if (schedule && updateContextState && reservationAccountID && useCase && triage && user) {
 						if (!!window.Culqi.token) {
 							const token = window.Culqi.token.id;
+							const email = window.Culqi.token.email;
 
 							await createPayment({
 								cost: useCase?.totalCost,
 								appointmentTypeID: 'ugito',
 								scheduleID: schedule.id,
 								discountID: discount.id,
+								email,
 								token,
 								dni: user.identification || '',
 							});

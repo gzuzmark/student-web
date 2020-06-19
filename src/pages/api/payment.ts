@@ -4,6 +4,7 @@ interface PaymentRequestBody {
 	cost: string;
 	appointmentTypeID: string;
 	token: string;
+	email: string;
 	scheduleID: string;
 	discountID: string;
 	dni: string;
@@ -35,6 +36,7 @@ const formatParams = (params: PaymentRequestBody) => ({
 	cost: params.cost,
 	appointment_type_id: params.appointmentTypeID || 'ugito',
 	token: params.token,
+	email: params.email,
 	schedule_id: params.scheduleID,
 	discount_id: params.discountID || '',
 	patient_dni: params.dni || '',
