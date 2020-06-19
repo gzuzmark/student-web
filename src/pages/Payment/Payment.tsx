@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
-import { useAppointmentStepValidation } from 'utils';
+import { useAppointmentStepValidation, getIntCurrency } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
 import { CONFIRMATION_STEP } from 'AppContext';
 
@@ -41,18 +41,28 @@ const Payment = () => {
 	};
 	const sendDiscount = useCallback(async () => {
 		try {
-			if (user) {
-				const reviewedDiscount = await applyDiscount({ couponCode: discountCode, dni: user.dni });
+			if (user && schedule) {
+				const reviewedDiscount = await applyDiscount({
+					couponCode: discountCode,
+					dni: user.identification,
+					scheduleID: schedule.id,
+				});
 
+				window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedDiscount.totalCost) });
 				setDiscount(reviewedDiscount);
 			}
 		} catch (e) {}
-	}, [discountCode, user]);
+	}, [discountCode, schedule, user]);
 
 	useEffect(() => {
 		if (useCase?.totalCost) {
 			initCulqi(useCase?.totalCost);
+		}
+		// eslint-disable-next-line
+	}, []);
 
+	useEffect(() => {
+		if (useCase?.totalCost) {
 			window.culqi = async () => {
 				try {
 					setIsPaymentLoading(true);
@@ -66,7 +76,7 @@ const Payment = () => {
 								scheduleID: schedule.id,
 								discountID: discount.id,
 								token,
-								dni: user.dni || '',
+								dni: user.identification || '',
 							});
 							await createAppointment(
 								{
@@ -94,7 +104,7 @@ const Payment = () => {
 			};
 		}
 		// eslint-disable-next-line
-	}, []);
+	}, [discount]);
 
 	return !isPaymentLoading ? (
 		<Container>

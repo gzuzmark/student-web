@@ -12,6 +12,7 @@ interface PaymentRequestBody {
 interface DiscountRequestBody {
 	couponCode: string;
 	dni: string;
+	scheduleID: string;
 }
 
 export interface Discount {
@@ -20,8 +21,10 @@ export interface Discount {
 }
 
 interface DiscountAPI {
-	id: string;
-	total_cost: string;
+	coupon: {
+		id: string;
+		total_cost: string;
+	};
 }
 
 interface DiscountDataResponse {
@@ -33,8 +36,8 @@ const formatParams = (params: PaymentRequestBody) => ({
 	appointment_type_id: params.appointmentTypeID || 'ugito',
 	token: params.token,
 	schedule_id: params.scheduleID,
-	discount_id: params.discountID,
-	dni: params.dni || '',
+	discount_id: params.discountID || '',
+	patient_dni: params.dni || '',
 });
 
 export const createPayment = async (params: PaymentRequestBody): Promise<void> => {
@@ -45,13 +48,15 @@ export const createPayment = async (params: PaymentRequestBody): Promise<void> =
 	}
 };
 
-export const applyDiscount = async ({ couponCode, dni }: DiscountRequestBody): Promise<Discount> => {
+export const applyDiscount = async ({ couponCode, dni, scheduleID }: DiscountRequestBody): Promise<Discount> => {
 	try {
-		const resp = await aliviaAxios.post<DiscountDataResponse>('/discount', {
+		const resp = await aliviaAxios.post<DiscountDataResponse>('/coupons/validate', {
 			coupon_code: couponCode,
 			patient_dni: dni || '',
+			schedule_id: scheduleID,
+			appointment_type_id: 'ugito',
 		});
-		const discountAPI = resp.data.data;
+		const discountAPI = resp.data.data.coupon;
 
 		return { id: discountAPI.id, totalCost: discountAPI.total_cost };
 	} catch (e) {

@@ -6,3 +6,4 @@ export * from './localStorage';
 export * from './redirects';
 export * from './date';
 export * from './googleAnalytics';
+export * from './culquiIntegration';

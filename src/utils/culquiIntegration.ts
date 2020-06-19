@@ -1,3 +1,5 @@
+export const getIntCurrency = (currency: string) => Math.round(Number(currency) * 100);
+
 const initCulqi = (amount: string) => {
 	if (window.Culqi) {
 		window.Culqi.publicKey = process.env.REACT_APP_CULQI_PK_KEY || '';
@@ -15,7 +17,7 @@ const initCulqi = (amount: string) => {
 			title: 'Alivia',
 			currency: 'PEN',
 			description: 'Consulta',
-			amount: Math.round(Number(amount) * 100),
+			amount: getIntCurrency(amount),
 		});
 	}
 };

@@ -26,11 +26,17 @@ export const getCurrentUser = async (token?: string): Promise<[string, SimpleUse
 
 		return [
 			data.id,
-			{ id: data.id, name: data.name, lastName: data.last_name, secondSurname: data.second_last_name, dni: data.dni },
+			{
+				id: data.id,
+				name: data.name,
+				lastName: data.last_name,
+				secondSurname: data.second_last_name,
+				identification: data.dni,
+			},
 		];
 	} catch (e) {
 		console.log(e);
 
-		return ['', { id: '', name: '', lastName: '', secondSurname: '', dni: '' }];
+		return ['', { id: '', name: '', lastName: '', secondSurname: '', identification: '' }];
 	}
 };
