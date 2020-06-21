@@ -16,6 +16,7 @@
 		"@types/react-dom": "16.9.8",
 		"@types/react-router-dom": "5.1.5",
 		"@types/yup": "0.29.0",
+		"animated-scroll-to": "2.0.8",
 		"axios": "0.19.2",
 		"date-fns": "2.13.0",
 		"date-fns-tz": "1.0.10",
