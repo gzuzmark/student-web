@@ -39,6 +39,21 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <!-- Twakto sdk --> 
+    <script type="text/javascript">
+      if ("%NODE_ENV%" === "production") {
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+          var s1=document.createElement("script"), s0=document.getElementsByTagName("script")[0];
+          s1.async=true;
+          s1.src='https://embed.tawk.to/5ef28df99e5f694422912d9a/default';
+          s1.charset='UTF-8';
+          s1.setAttribute('crossorigin','*');
+          s0.parentNode.insertBefore(s1,s0);
+        })();
+      }
+    </script>
+    <!-- Culqi sdk --> 
     <script src="https://checkout.culqi.com/js/v3" async></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162231349-2"></script>
@@ -51,6 +66,7 @@
         gtag('config', 'UA-162231349-2');
       }
     </script>
+    <!-- HotJar sdk --> 
     <script>
       if ("%NODE_ENV%" === "production") {
         (function(h,o,t,j,a,r){
