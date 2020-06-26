@@ -8,12 +8,13 @@ import RightSide from './components/RightSide';
 import LeftSide from './components/LeftSide';
 
 const Confirmation = () => {
-	const { user, doctor, schedule } = useAppointmentStepValidation(CONFIRMATION_ROUTE);
+	const { user, doctor, schedule, useCase } = useAppointmentStepValidation(CONFIRMATION_ROUTE);
 
 	useEffect(() => {
 		if (process.env.NODE_ENV === 'production') {
-			window.fbq('track', 'Purchase');
+			window.fbq('track', 'Purchase', { currency: 'PEN', value: useCase?.totalCost });
 		}
+		// eslint-disable-next-line
 	}, []);
 
 	return (

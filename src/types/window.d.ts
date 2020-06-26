@@ -5,6 +5,6 @@ declare global {
 		Culqi: CulquiType;
 		culqi: () => void;
 		gtag: Function;
-		fbq: (event: string, info: string) => void;
+		fbq: (event: string, info: string, extraInfo: Record<string, any>) => void;
 	}
 }

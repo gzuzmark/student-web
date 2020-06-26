@@ -91,6 +91,7 @@ const Payment = () => {
 								userToken,
 							);
 							updateContextState({
+								useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
 								appointmentCreationStep: CONFIRMATION_STEP,
 							});
 							history.push('/confirmacion');
