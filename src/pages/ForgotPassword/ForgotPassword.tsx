@@ -12,7 +12,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		backgroundColor: BACKGROUND_DEFAULT,
 		minHeight: 'calc(100vh - 50px)',
 		[breakpoints.up('lg')]: {
-			alignItems: 'center',
 			display: 'flex',
 			justifyContent: 'center',
 			minHeight: 'calc(100vh - 80px)',

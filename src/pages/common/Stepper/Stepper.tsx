@@ -20,17 +20,18 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 
 interface StepperProps extends Omit<MuiStepperProps, 'children'> {
 	steps: string[];
+	stepClassName?: string;
 	StepIconComponent?: never;
 	connector?: never;
 }
 
-const Stepper = ({ steps, ...stepperProps }: StepperProps) => {
+const Stepper = ({ steps, stepClassName, ...stepperProps }: StepperProps) => {
 	const classes = useStyles();
 
 	return (
 		<MuiStepper classes={{ root: classes.root }} {...stepperProps} connector={<StepConnector />}>
 			{steps.map((step: string) => (
-				<Step key={step}>
+				<Step className={stepClassName} key={step}>
 					<StepLabel StepIconComponent={StepIcon} isEmpty={step === ''}>
 						{step}
 					</StepLabel>
