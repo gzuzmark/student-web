@@ -8,3 +8,4 @@ export * from './Appointment';
 export * from './Triage';
 export * from './Payment';
 export * from './Confirmation';
+export * from './ForgotPassword';
