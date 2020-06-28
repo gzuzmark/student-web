@@ -16,6 +16,9 @@ const appointmentDetailL18n = {
 	'appointmentDetail.when.title': '¿CUÁNDO?',
 	'appointmentDetail.patient.title': 'PACIENTE',
 	'appointmentDetail.finished.label': 'REALIZADA',
+	'appointmentDetail.treatment.title': 'Tratamiento',
+	'appointmentDetail.treatment.doctorNotesLabel': 'NOTA DEL DOCTOR:',
+	'appointmentDetail.recomendations.title': 'Recomendaciones',
 };
 
 export default appointmentDetailL18n;
