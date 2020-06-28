@@ -6,8 +6,12 @@ import { Stepper } from 'pages/common';
 import { stylesWithTheme } from 'utils';
 
 import ValidateDocumentStep from './ValidateDocumentStep';
-// import ValidateOTPStep from './ValidateOTPStep';
-// import UpdatePasswordStep from './UpdatePasswordStep';
+import ValidateOTPStep from './ValidateOTPStep';
+import UpdatePasswordStep from './UpdatePasswordStep';
+
+interface StylesProps {
+	step: number;
+}
 
 const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	wrapper: {
@@ -21,13 +25,13 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 		padding: '18px 24px 0',
 		[breakpoints.up('lg')]: {
 			backgroundColor: 'white',
-			padding: '110px 191px 129px 173px',
-			maxWidth: '856px',
-			maxHeight: '580px',
+			padding: ({ step }: StylesProps) => `${step === 2 ? '76px 0 34px' : '110px 0 0'} 173px`,
+			width: '683px',
+			height: '470px',
 		},
 	},
 	stepperWrapper: {
-		padding: '0 36px',
+		padding: '0 16px',
 		[breakpoints.up('lg')]: {
 			padding: '0',
 			width: '260px',
@@ -55,8 +59,11 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 }));
 
 const ForgotPasswordForm = () => {
-	const classes = useStyles();
 	const [step, setStep] = useState<number>(0);
+	const [documentNumber, setDocumentNumber] = useState<string>('');
+	const [phoneNumber, setPhoneNumber] = useState<string>('');
+	const [userID, setUserID] = useState<string>('');
+	const classes = useStyles({ step });
 	const goToNextStep = () => {
 		setStep(step + 1);
 	};
@@ -74,9 +81,22 @@ const ForgotPasswordForm = () => {
 						stepClassName={classes.step}
 					/>
 				</div>
-				{step === 0 ? <ValidateDocumentStep goToNextStep={goToNextStep} /> : null}
-				{/* step === 1 ? <ValidateOTPStep goToNextStep={goToNextStep} /> : null */}
-				{/* step === 2 ? <UpdatePasswordStep /> : null */}
+				{step === 0 ? (
+					<ValidateDocumentStep
+						setDocumentNumber={setDocumentNumber}
+						setPhoneNumber={setPhoneNumber}
+						goToNextStep={goToNextStep}
+					/>
+				) : null}
+				{step === 1 ? (
+					<ValidateOTPStep
+						phoneNumber={phoneNumber}
+						documentNumber={documentNumber}
+						setUserID={setUserID}
+						goToNextStep={goToNextStep}
+					/>
+				) : null}
+				{step === 2 ? <UpdatePasswordStep documentNumber={documentNumber} userID={userID} /> : null}
 			</div>
 			<div className={classes.backRectangle} />
 		</div>

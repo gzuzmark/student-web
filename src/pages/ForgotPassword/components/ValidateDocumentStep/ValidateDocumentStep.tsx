@@ -5,12 +5,13 @@ import Button from '@material-ui/core/Button';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import { Theme } from '@material-ui/core/styles';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import { stylesWithTheme } from 'utils';
+import { requestRecoverToken } from 'pages/api';
 
 import useSharedStyles from '../sharedStyles';
 import validationSchema from './validationSchema';
-import { FormLabel } from '@material-ui/core';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -34,31 +35,39 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface ValidateDocumentStepProps {
 	goToNextStep: () => void;
+	setPhoneNumber: Function;
+	setDocumentNumber: Function;
 }
 
 interface FormValues {
-	documentValue: string;
+	documentNumber: string;
 }
 
-const ValidateDocumentStep = ({ goToNextStep }: ValidateDocumentStepProps) => {
+const ValidateDocumentStep = ({ goToNextStep, setDocumentNumber, setPhoneNumber }: ValidateDocumentStepProps) => {
 	const sharedClasses = useSharedStyles();
 	const classes = useStyles();
 	const { t } = useTranslation('forgotPassword');
 	const validateDocument = useCallback(
-		async ({ documentValue }: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
-			console.log(documentValue);
-			// api call
-			setSubmitting(false);
-			goToNextStep();
+		async ({ documentNumber }: FormValues, { setSubmitting, setFieldError }: FormikHelpers<FormValues>) => {
+			try {
+				const phoneNumber = await requestRecoverToken({ documentNumber });
+
+				setPhoneNumber(phoneNumber);
+				setDocumentNumber(documentNumber);
+				setSubmitting(false);
+				goToNextStep();
+			} catch (e) {
+				setFieldError('documentNumber', t('forgotPassword.validation.id.notFound'));
+			}
 		},
-		[goToNextStep],
+		[goToNextStep, setDocumentNumber, setPhoneNumber, t],
 	);
 
 	return (
 		<div className={classes.wrapper}>
 			<Typography className={sharedClasses.title}>{t('forgotPassword.validateDocument.title')}</Typography>
 			<Typography className={sharedClasses.subTitle}>{t('forgotPassword.validateDocument.subTitle')}</Typography>
-			<Formik onSubmit={validateDocument} initialValues={{ documentValue: '' }} validationSchema={validationSchema}>
+			<Formik onSubmit={validateDocument} initialValues={{ documentNumber: '' }} validationSchema={validationSchema}>
 				{({ submitForm, isSubmitting }) => (
 					<Form className={classes.form}>
 						<div className={classes.inputDocumentWrapper}>
@@ -67,7 +76,7 @@ const ValidateDocumentStep = ({ goToNextStep }: ValidateDocumentStepProps) => {
 							</div>
 							<Field
 								component={TextField}
-								name="documentValue"
+								name="documentNumber"
 								type="tel"
 								variant="outlined"
 								inputProps={{ maxLength: 12 }}

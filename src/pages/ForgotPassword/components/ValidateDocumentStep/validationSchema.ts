@@ -9,7 +9,7 @@ const messages = {
 };
 
 export const validationSchema = object().shape({
-	documentValue: string()
+	documentNumber: string()
 		.min(8, messages.identification.digits)
 		.max(12, messages.identification.digits)
 		.required(messages.identification.required),
