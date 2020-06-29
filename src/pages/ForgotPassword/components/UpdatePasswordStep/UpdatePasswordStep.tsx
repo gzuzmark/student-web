@@ -52,9 +52,10 @@ interface FormValues {
 interface ValidateOTPStepProps {
 	documentNumber: string;
 	userID: string;
+	otpCode: string;
 }
 
-const UpdatePasswordStep = ({ documentNumber, userID: userId }: ValidateOTPStepProps) => {
+const UpdatePasswordStep = ({ documentNumber, userID: userId, otpCode }: ValidateOTPStepProps) => {
 	const sharedClasses = useSharedStyles();
 	const classes = useStyles();
 	const { t } = useTranslation('forgotPassword');
@@ -62,13 +63,13 @@ const UpdatePasswordStep = ({ documentNumber, userID: userId }: ValidateOTPStepP
 	const changePassword = useCallback(
 		async ({ password }: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
 			try {
-				await resetPassword({ password, documentNumber, userId });
+				await resetPassword({ password, documentNumber, userId, otpCode });
 
 				setSubmitting(false);
 				history.push('/citas');
 			} catch (e) {}
 		},
-		[documentNumber, history, userId],
+		[documentNumber, history, otpCode, userId],
 	);
 
 	return (

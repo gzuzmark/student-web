@@ -8,7 +8,9 @@ interface RequestRecoverTokenBody {
 }
 
 interface ResponseRecoverToken {
-	contact_phone: string;
+	data: {
+		phone: string;
+	};
 }
 
 interface VerifyOTPCodeBody {
@@ -24,6 +26,7 @@ interface ResetPasswordBody {
 	documentNumber: string;
 	userId: string;
 	password: string;
+	otpCode: string;
 }
 
 export const requestRecoverToken = async (params: RequestRecoverTokenBody): Promise<string> => {
@@ -31,7 +34,7 @@ export const requestRecoverToken = async (params: RequestRecoverTokenBody): Prom
 		const resp = await aliviaAxios.post<ResponseRecoverToken>('/accounts/recover', {
 			document_number: params.documentNumber,
 		});
-		const contactPhone = resp.data.contact_phone;
+		const contactPhone = resp.data.data.phone;
 
 		return contactPhone;
 	} catch (e) {
@@ -60,8 +63,8 @@ export const resetPassword = async (params: ResetPasswordBody): Promise<string> 
 		const resp = await aliviaAxios.post<TokenResponse>('/accounts/reset-password', {
 			document_number: params.documentNumber,
 			user_id: params.userId,
-			password: params.password,
-			// code: params.password,
+			new_password: params.password,
+			code: params.otpCode,
 		});
 		const data = resp.data;
 

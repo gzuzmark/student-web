@@ -59,12 +59,16 @@ interface ValidateOTPStepProps {
 	phoneNumber: string;
 	documentNumber: string;
 	setUserID: Function;
+	setOtpCode: Function;
 }
 
-const addSimpleMaskToPhone = (phoneNumber: string): string =>
-	[phoneNumber.substr(0, 3), '***', phoneNumber.substr(6)].join('');
-
-const ValidateOTPStep = ({ goToNextStep, phoneNumber, documentNumber, setUserID }: ValidateOTPStepProps) => {
+const ValidateOTPStep = ({
+	goToNextStep,
+	phoneNumber,
+	documentNumber,
+	setUserID,
+	setOtpCode,
+}: ValidateOTPStepProps) => {
 	const sharedClasses = useSharedStyles();
 	const classes = useStyles();
 	const { t } = useTranslation('forgotPassword');
@@ -73,10 +77,11 @@ const ValidateOTPStep = ({ goToNextStep, phoneNumber, documentNumber, setUserID 
 			const userID = await verifyResetPasswordCode({ otpCode, documentNumber });
 
 			setUserID(userID);
+			setOtpCode(otpCode);
 			setSubmitting(false);
 			goToNextStep();
 		},
-		[documentNumber, goToNextStep, setUserID],
+		[documentNumber, goToNextStep, setOtpCode, setUserID],
 	);
 	const resendOtpCode = useCallback(async () => {
 		try {
@@ -88,7 +93,7 @@ const ValidateOTPStep = ({ goToNextStep, phoneNumber, documentNumber, setUserID 
 		<div className={classes.wrapper}>
 			<Typography className={sharedClasses.title}>{t('forgotPassword.validateOTP.title')}</Typography>
 			<Typography className={sharedClasses.subTitle}>
-				{t('forgotPassword.validateOTP.subTitle')} {addSimpleMaskToPhone(phoneNumber || '994111473')}
+				{t('forgotPassword.validateOTP.subTitle')} {phoneNumber}
 			</Typography>
 			<Formik onSubmit={validateOTP} initialValues={{ otpCode: '' }} validationSchema={validationSchema}>
 				{({ submitForm, isSubmitting }) => (

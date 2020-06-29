@@ -63,6 +63,7 @@ const ForgotPasswordForm = () => {
 	const [documentNumber, setDocumentNumber] = useState<string>('');
 	const [phoneNumber, setPhoneNumber] = useState<string>('');
 	const [userID, setUserID] = useState<string>('');
+	const [otpCode, setOtpCode] = useState<string>('');
 	const classes = useStyles({ step });
 	const goToNextStep = () => {
 		setStep(step + 1);
@@ -93,10 +94,11 @@ const ForgotPasswordForm = () => {
 						phoneNumber={phoneNumber}
 						documentNumber={documentNumber}
 						setUserID={setUserID}
+						setOtpCode={setOtpCode}
 						goToNextStep={goToNextStep}
 					/>
 				) : null}
-				{step === 2 ? <UpdatePasswordStep documentNumber={documentNumber} userID={userID} /> : null}
+				{step === 2 ? <UpdatePasswordStep otpCode={otpCode} documentNumber={documentNumber} userID={userID} /> : null}
 			</div>
 			<div className={classes.backRectangle} />
 		</div>
