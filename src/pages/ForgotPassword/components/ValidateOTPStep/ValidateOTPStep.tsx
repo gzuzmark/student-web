@@ -73,15 +73,19 @@ const ValidateOTPStep = ({
 	const classes = useStyles();
 	const { t } = useTranslation('forgotPassword');
 	const validateOTP = useCallback(
-		async ({ otpCode }: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
-			const userID = await verifyResetPasswordCode({ otpCode, documentNumber });
+		async ({ otpCode }: FormValues, { setSubmitting, setFieldError }: FormikHelpers<FormValues>) => {
+			try {
+				const userID = await verifyResetPasswordCode({ otpCode, documentNumber });
 
-			setUserID(userID);
-			setOtpCode(otpCode);
-			setSubmitting(false);
-			goToNextStep();
+				setUserID(userID);
+				setOtpCode(otpCode);
+				setSubmitting(false);
+				goToNextStep();
+			} catch (e) {
+				setFieldError('otpCode', t('forgotPassword.validation.otpCode.notFound'));
+			}
 		},
-		[documentNumber, goToNextStep, setOtpCode, setUserID],
+		[documentNumber, goToNextStep, setOtpCode, setUserID, t],
 	);
 	const resendOtpCode = useCallback(async () => {
 		try {

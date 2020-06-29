@@ -20,7 +20,7 @@ const forgotPassword = {
 	'forgotPassword.validation.id.notFound': 'El DNI o CE del paciente no existe',
 	'forgotPassword.validation.otpCode.required': 'El codigo de verificación es obligatorio',
 	'forgotPassword.validation.otpCode.digits': 'Ingrese solo números',
-	'forgotPassword.validation.otpCode.notFound': 'El codigo de verificación no existe, intenta otra vez',
+	'forgotPassword.validation.otpCode.notFound': 'El codigo de verificación es incorrecto, intenta otra vez',
 };
 
 export default forgotPassword;
