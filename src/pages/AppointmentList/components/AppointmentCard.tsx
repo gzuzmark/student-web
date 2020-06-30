@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme, capitalizeDate } from 'utils';
-import { AppointDetail, INCOMING } from 'pages/api/appointments';
+import { AppointDetail } from 'pages/api/appointments';
 import { ReactComponent as CalendarIcon } from 'icons/calendar.svg';
 import { ReactComponent as ClockIcon } from 'icons/clock.svg';
 import { ReactComponent as UserIcon } from 'icons/user.svg';
@@ -175,7 +175,7 @@ interface AppointmentCardProps {
 }
 
 const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
-	const { id, channel, disease, date, time, patient, scheduleID, appointmentType } = appointment;
+	const { id, channel, disease, date, time, patient, scheduleID } = appointment;
 	const classes = useStyles();
 	const history = useHistory();
 	const { t } = useTranslation('appointmentList');
