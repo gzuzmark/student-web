@@ -9,6 +9,7 @@ import appointmentDetailL18n from 'pages/Appointment/l18n';
 import triageL18n from 'pages/Triage/l18n';
 import paymentL18n from 'pages/Payment/l18n';
 import confirmationL18n from 'pages/Confirmation/l18n';
+import forgotPasswordL18n from 'pages/ForgotPassword/l18n';
 
 export default {
 	nav: {
@@ -32,4 +33,5 @@ export default {
 	triage: { ...triageL18n },
 	payment: { ...paymentL18n },
 	confirmation: { ...confirmationL18n },
+	forgotPassword: { ...forgotPasswordL18n },
 };

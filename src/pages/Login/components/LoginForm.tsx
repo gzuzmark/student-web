@@ -158,7 +158,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 						</div>
 					</div>
 					<div className={classes.linkWrapper}>
-						<Link to="/recuperar_contrasena" className={classes.link}>
+						<Link to="/reestablecer_contrasena" className={classes.link}>
 							<Typography className={classes.linkLabel} component="span">
 								{t('login.forgotPassword.link')}
 							</Typography>

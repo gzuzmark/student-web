@@ -74,11 +74,17 @@ export const createPatient = async (user: NewUser, authToken: string): Promise<s
 	return data.id;
 };
 
-export const createAccount = async ({ email, phoneNumber, password = '' }: ContactValuesRequest): Promise<string> => {
+export const createAccount = async ({
+	email,
+	phoneNumber,
+	password = '',
+	identification,
+}: ContactValuesRequest): Promise<string> => {
 	const resp = await aliviaAxios.post<TokenResponse>('/users', {
 		username: email,
 		phone: phoneNumber,
 		password,
+		document_number: identification,
 	});
 	const data = resp.data;
 

@@ -27,6 +27,8 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			photo: 'https://picsum.photos/200/184',
 		},
 		date: 1590836400, // May 30th - previous date
+		prescribed_medicines: [],
+		recomendations: [],
 	},
 	{
 		id: '125',
@@ -54,6 +56,8 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			photo: 'https://picsum.photos/200/184',
 		},
 		date: 1590836400, // May 30th - previous date
+		prescribed_medicines: [],
+		recomendations: [],
 	},
 	{
 		id: '129',
@@ -81,6 +85,8 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			photo: 'https://picsum.photos/200/184',
 		},
 		date: 1590836400, // May 30th - previous date
+		prescribed_medicines: [],
+		recomendations: [],
 	},
 	{
 		id: '127',
@@ -108,6 +114,8 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			photo: 'https://picsum.photos/200/184',
 		},
 		date: 1590836400, // May 30th - previous date
+		prescribed_medicines: [],
+		recomendations: [],
 	},
 ];
 
@@ -137,4 +145,6 @@ export const mockAppointmentDetail: ApiAppointmentDetail = {
 		photo: 'https://picsum.photos/200/184',
 	},
 	date: 1590836400, // May 30th - previous date
+	prescribed_medicines: [],
+	recomendations: [],
 };

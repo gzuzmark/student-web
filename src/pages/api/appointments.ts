@@ -13,6 +13,16 @@ export const PREVIOUS = 'previous';
 
 type AppointmentType = 'incoming' | 'previous';
 
+export interface Medicine {
+	frequency: string;
+	name: string;
+	notes: string;
+}
+
+export interface Recomendation {
+	description: string;
+}
+
 interface ApiSmallAppointment {
 	id: string;
 	channel: string;
@@ -52,6 +62,8 @@ export interface ApiAppointmentDetail {
 		id: string;
 		title: string;
 	};
+	prescribed_medicines: Medicine[];
+	recomendations: Recomendation[];
 }
 
 export interface AppointDetail {
@@ -64,8 +76,8 @@ export interface AppointDetail {
 	appointmentType: AppointmentType;
 	paidAmount: string;
 	patient: string;
-	// treatment: Record<string, any>;
-	// recomendations: Record<string, any>;
+	medicines: Medicine[];
+	recomendations: Recomendation[];
 }
 
 interface AppointmentListResponse {
@@ -86,24 +98,37 @@ interface NewAppointmentBody {
 }
 
 const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType: AppointmentType): AppointDetail[] =>
-	rawList.map(({ id, doctor, date, appointment_type, patient, use_case }: ApiAppointmentDetail) => ({
-		id: id || 'asdasd-erugitoer-asddff',
-		doctor: {
-			id: doctor.id,
-			name: doctor.name || 'Kris',
-			lastName: doctor.last_name,
-			cmp: doctor.cmp,
-			profilePicture: doctor.photo,
-			speciality: doctor.title,
-		},
-		appointmentType,
-		date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
-		time: formatUTCDate(date, 'hh:mm aaa'),
-		disease: use_case.title,
-		channel: appointment_type.name,
-		paidAmount: appointment_type.cost,
-		patient: `${patient.name} ${patient.last_name}`,
-	}));
+	rawList.map(
+		({
+			id,
+			doctor,
+			date,
+			appointment_type,
+			patient,
+			use_case,
+			prescribed_medicines,
+			recomendations,
+		}: ApiAppointmentDetail) => ({
+			id: id || 'asdasd-erugitoer-asddff',
+			doctor: {
+				id: doctor.id,
+				name: doctor.name || 'Kris',
+				lastName: doctor.last_name,
+				cmp: doctor.cmp,
+				profilePicture: doctor.photo,
+				speciality: doctor.title,
+			},
+			appointmentType,
+			date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
+			time: formatUTCDate(date, 'hh:mm aaa'),
+			disease: use_case.title,
+			channel: appointment_type.name,
+			paidAmount: appointment_type.cost,
+			patient: `${patient.name} ${patient.last_name}`,
+			medicines: prescribed_medicines,
+			recomendations,
+		}),
+	);
 
 // const formatAppointmentDetail = ({ date, ...rest }: ApiAppointmentDetail): AppointDetail => ({
 // 	...rest,
