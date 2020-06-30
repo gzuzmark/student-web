@@ -18,6 +18,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			last_name: 'Salinas',
 			second_last_name: 'Herreda',
 		},
+		schedule_id: 'asgj2',
 		doctor: {
 			id: '333',
 			name: 'Jose Luis',
@@ -47,6 +48,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			last_name: 'Perez',
 			second_last_name: 'Alvarado',
 		},
+		schedule_id: 'asgj2',
 		doctor: {
 			id: '334',
 			name: 'Luis',
@@ -76,6 +78,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			last_name: 'del Solar',
 			second_last_name: '',
 		},
+		schedule_id: 'asgj2',
 		doctor: {
 			id: '334',
 			name: 'Julio Ramon',
@@ -105,6 +108,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			last_name: 'Martines',
 			second_last_name: 'de la Torre',
 		},
+		schedule_id: 'asgj2',
 		doctor: {
 			id: '334',
 			name: 'Mario',
@@ -136,6 +140,7 @@ export const mockAppointmentDetail: ApiAppointmentDetail = {
 		last_name: 'Salinas',
 		second_last_name: 'Herreda',
 	},
+	schedule_id: 'asgj2',
 	doctor: {
 		id: '333',
 		name: 'Jose Luis',

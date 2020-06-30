@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme, capitalizeDate } from 'utils';
-import { AppointDetail } from 'pages/api/appointments';
+import { AppointDetail, INCOMING } from 'pages/api/appointments';
 import { ReactComponent as CalendarIcon } from 'icons/calendar.svg';
 import { ReactComponent as ClockIcon } from 'icons/clock.svg';
 import { ReactComponent as UserIcon } from 'icons/user.svg';
@@ -137,6 +137,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			height: '25px',
 		},
 	},
+	conferenceLink: {
+		textDecoration: 'underline',
+	},
 	userIcon: {
 		width: '17px',
 		height: '17px',
@@ -172,7 +175,7 @@ interface AppointmentCardProps {
 }
 
 const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
-	const { id, channel, disease, date, time, patient } = appointment;
+	const { id, channel, disease, date, time, patient, scheduleID, appointmentType } = appointment;
 	const classes = useStyles();
 	const history = useHistory();
 	const { t } = useTranslation('appointmentList');
@@ -181,6 +184,10 @@ const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
 		// @ts-ignore
 		window.appointment = appointment;
 		history.push(`/citas/${id}`);
+	};
+	const openConference = (e: MouseEvent) => {
+		e.stopPropagation();
+		window.open(`${process.env.REACT_APP_CONFERENCE_URL}/${scheduleID}`, '_blank');
 	};
 
 	return (
@@ -211,7 +218,9 @@ const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
 								<div className={classes.iconWrapper}>
 									<ClockIcon className={classes.clockIcon} />
 								</div>
-								<Typography>{time}</Typography>
+								<Typography color="primary" className={classes.conferenceLink} onClick={openConference}>
+									{time}
+								</Typography>
 							</div>
 						</div>
 					</div>
