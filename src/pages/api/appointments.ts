@@ -47,6 +47,7 @@ export interface ApiAppointmentDetail {
 	id: string;
 	doctor: DoctorAPI;
 	date: number;
+	schedule_id: string;
 	appointment_type: {
 		id: string;
 		name: string;
@@ -73,6 +74,7 @@ export interface AppointDetail {
 	time: string;
 	channel: string;
 	disease: string;
+	scheduleID: string;
 	appointmentType: AppointmentType;
 	paidAmount: string;
 	patient: string;
@@ -106,6 +108,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 			appointment_type,
 			patient,
 			use_case,
+			schedule_id,
 			prescribed_medicines,
 			recomendations,
 		}: ApiAppointmentDetail) => ({
@@ -125,6 +128,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 			channel: appointment_type.name,
 			paidAmount: appointment_type.cost,
 			patient: `${patient.name} ${patient.last_name}`,
+			scheduleID: schedule_id,
 			medicines: prescribed_medicines,
 			recomendations,
 		}),
