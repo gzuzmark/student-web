@@ -10,6 +10,7 @@ import triageL18n from 'pages/Triage/l18n';
 import paymentL18n from 'pages/Payment/l18n';
 import confirmationL18n from 'pages/Confirmation/l18n';
 import forgotPasswordL18n from 'pages/ForgotPassword/l18n';
+import selectProfileL18n from 'pages/SelectProfile/l18n';
 
 export default {
 	nav: {
@@ -19,6 +20,7 @@ export default {
 		'userMenu.logout': 'Cerrar sesión',
 	},
 	global: {
+		'selectAccount.new.account': 'Nuevo perfil',
 		'privacyPolicy.title.firstLine': 'POLÍTICA DE PRIVACIDAD',
 		'privacyPolicy.title.secondLine': 'Las cosas claras ',
 		'privacyPolicy.body':
@@ -34,4 +36,5 @@ export default {
 	payment: { ...paymentL18n },
 	confirmation: { ...confirmationL18n },
 	forgotPassword: { ...forgotPasswordL18n },
+	selectProfile: { ...selectProfileL18n },
 };

@@ -10,3 +10,4 @@ export { default as Option } from './Option';
 export { default as PasswordField } from './PasswordField';
 export { default as Loading } from './Loading';
 export { default as Circle } from './Circle';
+export * from './ProfileList';

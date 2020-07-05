@@ -9,3 +9,4 @@ export * from './Triage';
 export * from './Payment';
 export * from './Confirmation';
 export * from './ForgotPassword';
+export * from './SelectProfile';

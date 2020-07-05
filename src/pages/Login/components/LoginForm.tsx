@@ -84,7 +84,7 @@ const getRedirectPath = (appointmentCreationStep: AppointmentCreationStep | unde
 		case SELECT_DOCTOR_STEP:
 			return 'back';
 		case PRE_SIGNUP_STEP:
-			return '/pago';
+			return '/seleccionar_usuario';
 		default:
 			return '/citas';
 	}

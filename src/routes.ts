@@ -10,6 +10,7 @@ import {
 	Payment,
 	Confirmation,
 	ForgotPassword,
+	SelectProfile,
 } from 'pages';
 
 export const TRIAGE_ROUTE = 'triaje';
@@ -21,6 +22,7 @@ export const LOGIN_ROUTE = 'iniciar_sesion';
 export const SIGN_UP_ROUTE = 'registro';
 export const FORGORT_PASSWORD_ROUTE = 'reestablecer_contrasena';
 export const APPOINTMENT_LIST_ROUTE = 'citas';
+export const SELECT_PROFILE_ROUTE = 'seleccionar_perfil';
 
 export const routToTitle: Record<string, string> = {
 	[TRIAGE_ROUTE]: 'Triaje',
@@ -32,6 +34,7 @@ export const routToTitle: Record<string, string> = {
 	[SIGN_UP_ROUTE]: 'Registro',
 	[APPOINTMENT_LIST_ROUTE]: 'Citas',
 	[FORGORT_PASSWORD_ROUTE]: 'Reestrablecer contraseña',
+	[SELECT_PROFILE_ROUTE]: 'Seleccionar perfil',
 	'detalle-cita': 'Detalle Cita',
 };
 
@@ -57,6 +60,7 @@ export const routes: RoutesType = [
 	{ id: 'AppointmentList', path: '/citas', component: AppointmentList, guard: true, exact: true },
 	{ id: 'Appointments', path: '/citas/:id', component: Appointment, guard: true, exact: true },
 	{ id: 'ForgotPassword', path: '/reestablecer_contrasena', component: ForgotPassword },
+	{ id: 'SelectUser', path: '/seleccionar_perfil', component: SelectProfile },
 ];
 
 export const routeWithoutNav: RoutesType = [{ id: 'Login', path: '/iniciar_sesion', component: Login }];
