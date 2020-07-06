@@ -8,14 +8,16 @@ const confirmationL18n = {
 	'confirmation.left.doctor.cmp': 'CMP:',
 	'confirmation.right.title': 'TIPS PARA UNA CITA EXITOSA:',
 	'confirmation.right.before.title': 'ANTES',
-	'confirmation.right.before.message':
-		'Abre el mail “Correo Alivia” y haz click en el enlace. Ahí te estará esperando el doctor el',
+	'confirmation.right.before.messageUnlogged':
+		'Accede al enlace de la videollamada que enviaremos a tu correo. Si este no llega luego de 10 minutos, contáctanos a ',
+	'confirmation.right.before.messageLogged': 'Ahí encontrarás el enlace de la videollamada.',
 	'confirmation.right.during.title': 'DURANTE',
 	'confirmation.right.during.message':
 		'El Doctor te esperará por 5 minutos, procura estar antes para confirmar tu conexión.',
 	'confirmation.right.after.title': 'DESPUÉS',
-	'confirmation.right.after.message':
-		'Al finalizar la consulta, recibirás un resúmen a tu orientación médica al correo que ingresaste.',
+	'confirmation.right.after.message': 'Al finalizar la consulta, recibirás un resúmen a ',
+	'confirmation.right.profileButton': 'Ingresa a tu perfil',
+	'confirmation.right.profileLink': 'Ingresa a tu perfil en Alivia. ',
 	'confirmation.right.goodbye.message': 'Hasta entonces, cuídate mucho.',
 };
 
