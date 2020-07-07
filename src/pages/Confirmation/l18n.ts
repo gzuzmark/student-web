@@ -12,7 +12,7 @@ const confirmationL18n = {
 		'Accede al enlace de la videollamada que enviaremos a tu correo. Si este no llega luego de 10 minutos o deseas reagendar tu cita, contáctanos a ',
 	'confirmation.right.before.messageWhatsapp': ' o al Whatsapp ',
 	'confirmation.right.before.messageLogged':
-		'Ahí encontrarás el enlace de la videollamada. Si deseas reagendar o tienes alguna duda contáctanos al Whatsapp ',
+		'Ahí encontrarás el enlace de la videollamada. Si deseas reagendar o tienes alguna duda, contáctanos al Whatsapp ',
 	'confirmation.right.during.title': 'DURANTE',
 	'confirmation.right.during.message':
 		'El Doctor te esperará por 5 minutos, procura estar antes para confirmar tu conexión.',

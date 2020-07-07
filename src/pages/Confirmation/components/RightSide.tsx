@@ -101,12 +101,13 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	profileLink: {
 		color: palette.primary.main,
 		cursor: 'pointer',
+		textDecoration: 'none',
 	},
 }));
 
 const renderAliviaWhatsapp = (classes: Record<string, string>) => (
 	<a className={classes.profileLink} href={ALIVIA_CONTACT_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-		{ALIVIA_CONTACT_WHATSAPP_NUMBER}
+		{ALIVIA_CONTACT_WHATSAPP_NUMBER}.
 	</a>
 );
 
@@ -149,14 +150,16 @@ const RightSide = ({ isGuest, email }: RightSideProps) => {
 										<span className={classes.profileLink} onClick={goToAppointments}>
 											{t('confirmation.right.profileLink')}
 										</span>
-										{t('confirmation.right.before.messageLogged')}({renderAliviaWhatsapp(classes)})
+										{t('confirmation.right.before.messageLogged')}
+										{renderAliviaWhatsapp(classes)}
 									</Typography>
 								</React.Fragment>
 							) : (
 								<Typography>
 									{t('confirmation.right.before.messageUnlogged')}{' '}
 									<span className={classes.profileLink}>{ALIVIA_CONTACT_EMAIL}</span>
-									{t('confirmation.right.before.messageWhatsapp')}({renderAliviaWhatsapp(classes)})
+									{t('confirmation.right.before.messageWhatsapp')}
+									{renderAliviaWhatsapp(classes)}
 								</Typography>
 							)}
 						</div>
