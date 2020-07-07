@@ -57,7 +57,7 @@ const SelectDoctor = () => {
 				requestUseCaseID(useCaseParam, updateState);
 			}
 		}
-	}, [location.search, updateState, useCase]);
+	}, [location.search, updateState, useCase, comeFromTriage, params.malestar]);
 
 	return (
 		<Container>
