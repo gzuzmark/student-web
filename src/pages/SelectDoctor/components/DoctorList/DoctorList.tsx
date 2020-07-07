@@ -16,6 +16,7 @@ interface DoctorListProps {
 	doctors: DoctorAvailability[];
 	updateContextState: Function | undefined;
 	isUserLoggedIn: boolean;
+	comeFromTriage: boolean;
 }
 
 export interface ActiveDoctorTime {
@@ -35,7 +36,7 @@ const formatDoctor = (doctor: DoctorAvailability | null): Doctor | null =>
 		  }
 		: null;
 
-const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListProps) => {
+const DoctorList = ({ doctors, updateContextState, isUserLoggedIn, comeFromTriage }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const history = useHistory();
@@ -66,7 +67,11 @@ const DoctorList = ({ doctors, updateContextState, isUserLoggedIn }: DoctorListP
 			if (isUserLoggedIn) {
 				history.push('/pago');
 			} else {
-				history.push('/pre_registro');
+				if (!comeFromTriage) {
+					history.push('/registro/sobre_ti');
+				} else {
+					history.push('/pre_registro');
+				}
 			}
 		}
 	};
