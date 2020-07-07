@@ -105,7 +105,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 }));
 
 const renderAliviaWhatsapp = (classes: Record<string, string>) => (
-	<a className={classes.profileLink} href={ALIVIA_CONTACT_WHATSAPP_URL} target="_blank">
+	<a className={classes.profileLink} href={ALIVIA_CONTACT_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
 		{ALIVIA_CONTACT_WHATSAPP_NUMBER}
 	</a>
 );
