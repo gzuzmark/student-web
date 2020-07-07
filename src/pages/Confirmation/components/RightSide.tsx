@@ -13,6 +13,8 @@ import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
 import { ReactComponent as ChecklistIcon } from 'icons/afterSection.svg';
 
 const ALIVIA_CONTACT_EMAIL = 'alivia@lavictoria.pe';
+const ALIVIA_CONTACT_WHATSAPP_NUMBER = '947907184';
+const ALIVIA_CONTACT_WHATSAPP_URL = 'https://api.whatsapp.com/send?phone=51947907184&text=Hola%20Alivia';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	wrapper: {
@@ -102,6 +104,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
+const renderAliviaWhatsapp = (classes: Record<string, string>) => (
+	<a className={classes.profileLink} href={ALIVIA_CONTACT_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+		{ALIVIA_CONTACT_WHATSAPP_NUMBER}
+	</a>
+);
+
 interface RightSideProps {
 	isGuest: boolean;
 	email: string;
@@ -141,13 +149,14 @@ const RightSide = ({ isGuest, email }: RightSideProps) => {
 										<span className={classes.profileLink} onClick={goToAppointments}>
 											{t('confirmation.right.profileLink')}
 										</span>
-										{t('confirmation.right.before.messageLogged')}
+										{t('confirmation.right.before.messageLogged')}({renderAliviaWhatsapp(classes)})
 									</Typography>
 								</React.Fragment>
 							) : (
 								<Typography>
 									{t('confirmation.right.before.messageUnlogged')}{' '}
 									<span className={classes.profileLink}>{ALIVIA_CONTACT_EMAIL}</span>
+									{t('confirmation.right.before.messageWhatsapp')}({renderAliviaWhatsapp(classes)})
 								</Typography>
 							)}
 						</div>
