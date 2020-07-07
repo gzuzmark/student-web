@@ -11,6 +11,7 @@ import paymentL18n from 'pages/Payment/l18n';
 import confirmationL18n from 'pages/Confirmation/l18n';
 import forgotPasswordL18n from 'pages/ForgotPassword/l18n';
 import selectProfileL18n from 'pages/SelectProfile/l18n';
+import createProfileL18n from 'pages/CreateProfile/l18n';
 
 export default {
 	nav: {
@@ -37,4 +38,5 @@ export default {
 	confirmation: { ...confirmationL18n },
 	forgotPassword: { ...forgotPasswordL18n },
 	selectProfile: { ...selectProfileL18n },
+	createProfile: { ...createProfileL18n },
 };

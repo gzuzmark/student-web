@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-import { Stepper } from 'pages/common';
+import { Stepper, FloatCard } from 'pages/common';
 import { stylesWithTheme } from 'utils';
 
 import ValidateDocumentStep from './ValidateDocumentStep';
@@ -13,12 +13,10 @@ interface StylesProps {
 	step: number;
 }
 
-const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
+const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		[breakpoints.up('lg')]: {
 			marginTop: '136px',
-			position: 'relative',
-			zIndex: '0',
 		},
 	},
 	content: {
@@ -26,8 +24,6 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			backgroundColor: 'white',
 			padding: ({ step }: StylesProps) => `${step === 2 ? '76px 0 34px' : '110px 0 0'} 173px`,
-			width: '683px',
-			height: '470px',
 		},
 	},
 	stepperWrapper: {
@@ -42,19 +38,6 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	},
 	step: {
 		padding: 0,
-	},
-	backRectangle: {
-		display: 'none',
-		[breakpoints.up('lg')]: {
-			display: 'block',
-			backgroundColor: palette.primary.main,
-			width: '855px',
-			height: '570px',
-			position: 'absolute',
-			top: '19px',
-			left: '9px',
-			zIndex: '-1',
-		},
 	},
 }));
 
@@ -72,35 +55,36 @@ const ForgotPasswordForm = () => {
 
 	return (
 		<div className={classes.wrapper}>
-			<div className={classes.content}>
-				<div className={classes.stepperWrapper}>
-					<Stepper
-						steps={['', '', '']}
-						activeStep={step}
-						orientation="horizontal"
-						alternativeLabel={!matches}
-						stepClassName={classes.step}
-					/>
+			<FloatCard>
+				<div className={classes.content}>
+					<div className={classes.stepperWrapper}>
+						<Stepper
+							steps={['', '', '']}
+							activeStep={step}
+							orientation="horizontal"
+							alternativeLabel={!matches}
+							stepClassName={classes.step}
+						/>
+					</div>
+					{step === 0 ? (
+						<ValidateDocumentStep
+							setDocumentNumber={setDocumentNumber}
+							setPhoneNumber={setPhoneNumber}
+							goToNextStep={goToNextStep}
+						/>
+					) : null}
+					{step === 1 ? (
+						<ValidateOTPStep
+							phoneNumber={phoneNumber}
+							documentNumber={documentNumber}
+							setUserID={setUserID}
+							setOtpCode={setOtpCode}
+							goToNextStep={goToNextStep}
+						/>
+					) : null}
+					{step === 2 ? <UpdatePasswordStep otpCode={otpCode} documentNumber={documentNumber} userID={userID} /> : null}
 				</div>
-				{step === 0 ? (
-					<ValidateDocumentStep
-						setDocumentNumber={setDocumentNumber}
-						setPhoneNumber={setPhoneNumber}
-						goToNextStep={goToNextStep}
-					/>
-				) : null}
-				{step === 1 ? (
-					<ValidateOTPStep
-						phoneNumber={phoneNumber}
-						documentNumber={documentNumber}
-						setUserID={setUserID}
-						setOtpCode={setOtpCode}
-						goToNextStep={goToNextStep}
-					/>
-				) : null}
-				{step === 2 ? <UpdatePasswordStep otpCode={otpCode} documentNumber={documentNumber} userID={userID} /> : null}
-			</div>
-			<div className={classes.backRectangle} />
+			</FloatCard>
 		</div>
 	);
 };

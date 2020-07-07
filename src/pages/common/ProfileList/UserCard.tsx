@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { MouseEvent, ReactElement } from 'react';
 import Card from '@material-ui/core/Card';
 import { Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -35,12 +35,17 @@ interface UserCardProps {
 	children: ReactElement;
 	className?: string;
 	isCurrentAccount?: boolean;
+	onClick?: (e: MouseEvent) => void;
 }
 
-const UserCard = ({ children, className, isCurrentAccount = false }: UserCardProps) => {
+const UserCard = ({ children, onClick, className, isCurrentAccount = false }: UserCardProps) => {
 	const classes = useStyles({ isCurrentAccount });
 
-	return <Card className={clsx(classes.card, className)}>{children}</Card>;
+	return (
+		<Card onClick={onClick} className={clsx(classes.card, className)}>
+			{children}
+		</Card>
+	);
 };
 
 export default UserCard;

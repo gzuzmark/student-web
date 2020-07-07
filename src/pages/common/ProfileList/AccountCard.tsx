@@ -8,7 +8,11 @@ import { stylesWithTheme } from 'utils';
 
 import UserCard from './UserCard';
 
-const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+interface StylesProps {
+	isCurrentAccount: boolean;
+}
+
+const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	wrapper: {
 		textAlign: 'center',
 		marginRight: '8px',
@@ -33,6 +37,9 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	userSmileIcon: {
 		height: '68px',
 		width: '68px',
+		'& > path': {
+			fill: ({ isCurrentAccount }: StylesProps) => (isCurrentAccount ? 'white' : palette.primary.main),
+		},
 		[breakpoints.up('lg')]: {
 			height: '106px',
 			width: '106px',

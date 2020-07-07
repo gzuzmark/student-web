@@ -11,6 +11,7 @@ import {
 	Confirmation,
 	ForgotPassword,
 	SelectProfile,
+	CreateProfile,
 } from 'pages';
 
 export const TRIAGE_ROUTE = 'triaje';
@@ -60,7 +61,8 @@ export const routes: RoutesType = [
 	{ id: 'AppointmentList', path: '/citas', component: AppointmentList, guard: true, exact: true },
 	{ id: 'Appointments', path: '/citas/:id', component: Appointment, guard: true, exact: true },
 	{ id: 'ForgotPassword', path: '/reestablecer_contrasena', component: ForgotPassword },
-	{ id: 'SelectUser', path: '/seleccionar_perfil', component: SelectProfile },
+	{ id: 'SelectProfile', path: '/seleccionar_perfil', component: SelectProfile },
+	{ id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile },
 ];
 
 export const routeWithoutNav: RoutesType = [{ id: 'Login', path: '/iniciar_sesion', component: Login }];

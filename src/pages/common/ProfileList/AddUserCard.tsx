@@ -2,6 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
 
 import { ReactComponent as PlusIcon } from 'icons/plus.svg';
 import { stylesWithTheme } from 'utils';
@@ -40,11 +41,15 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 
 const AddUserCard = () => {
 	const { t } = useTranslation('global');
+	const history = useHistory();
 	const classes = useStyles();
+	const goToCreateProfile = () => {
+		history.push('/crear_perfil');
+	};
 
 	return (
 		<div>
-			<UserCard className={classes.card}>
+			<UserCard className={classes.card} onClick={goToCreateProfile}>
 				<PlusIcon className={classes.plusIcon} />
 			</UserCard>
 			<div>

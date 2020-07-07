@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { Theme } from '@material-ui/core/styles';
 
 import AppContext from 'AppContext';
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, usePageTitle } from 'utils';
 // import { getAccounts } from 'pages/api';
 
 import AccountCard from './AccountCard';
@@ -57,6 +57,7 @@ const ProfileList = () => {
 	const { accountUsers, user: currentUser, updateState } = useContext(AppContext);
 	const classes = useStyles();
 
+	usePageTitle('Seleccionar Perfil');
 	useEffect(() => {
 		if (updateState) {
 			requestAccounts(updateState);
