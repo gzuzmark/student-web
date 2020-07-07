@@ -30,9 +30,10 @@ interface RightSideProps {
 	useCase: UseCase | null | undefined;
 	updateContextState: Function | undefined;
 	isUserLoggedIn: boolean;
+	comeFromTriage: boolean;
 }
 
-const RightSide = ({ useCase, updateContextState, isUserLoggedIn }: RightSideProps) => {
+const RightSide = ({ useCase, updateContextState, isUserLoggedIn, comeFromTriage }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -52,7 +53,12 @@ const RightSide = ({ useCase, updateContextState, isUserLoggedIn }: RightSidePro
 				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={setSelectedDate} />
 				<Divider className={classes.divider} />
 				{doctors.length > 0 ? (
-					<DoctorList isUserLoggedIn={isUserLoggedIn} updateContextState={updateContextState} doctors={doctors} />
+					<DoctorList
+						isUserLoggedIn={isUserLoggedIn}
+						updateContextState={updateContextState}
+						doctors={doctors}
+						comeFromTriage={comeFromTriage}
+					/>
 				) : (
 					<div className={classes.emptyMessageWrapper}>
 						<Typography component="div" className={classes.emptyMessage}>

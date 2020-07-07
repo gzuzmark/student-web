@@ -42,6 +42,7 @@ export interface SimpleUser {
 	lastName: string;
 	secondSurname: string;
 	identification: string;
+	email?: string;
 }
 
 export interface User {
