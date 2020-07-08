@@ -36,10 +36,7 @@ interface RightSideProps {
 const RightSide = ({ useCase, updateContextState, isUserLoggedIn, comeFromTriage }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
-	const currentDate = new Date();
-	const addedMinutesDate = new Date(currentDate);
-	addedMinutesDate.setMinutes(currentDate.getMinutes() + 30);
-	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(addedMinutesDate));
+	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	useEffect(() => {
 		getDoctors(selectedDate, useCase, setDoctors);
