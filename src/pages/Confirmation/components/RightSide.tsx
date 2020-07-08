@@ -1,13 +1,20 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import { Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import capitalize from 'lodash/capitalize';
 
-import { Schedule } from 'pages/api/selectDoctor';
 import { RightLayout } from 'pages/common';
 import { ReactComponent as SmileIcon } from 'icons/smile.svg';
-import { formatUTCDate, stylesWithTheme } from 'utils';
+import { stylesWithTheme } from 'utils';
+import { ReactComponent as MailIcon } from 'icons/beforeSection.svg';
+import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
+import { ReactComponent as ChecklistIcon } from 'icons/afterSection.svg';
+
+const ALIVIA_CONTACT_EMAIL = 'alivia@lavictoria.pe';
+const ALIVIA_CONTACT_WHATSAPP_NUMBER = '947907184';
+const ALIVIA_CONTACT_WHATSAPP_URL = 'https://api.whatsapp.com/send?phone=51947907184&text=Hola%20Alivia';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	wrapper: {
@@ -47,9 +54,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	tipTitle: {
 		color: palette.info.main,
-		fontSize: '15px',
+		fontSize: '10px',
 		lineHeight: '15px',
-		paddingBottom: '6px',
+		paddingBottom: '11px',
 	},
 	beforeSection: {
 		paddingBottom: '48px',
@@ -71,15 +78,50 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			display: 'block',
 		},
 	},
+	sectionContainer: {
+		display: 'flex',
+	},
+	textContainer: {
+		marginLeft: '43px',
+	},
+	footerButtons: {
+		textAlign: 'right',
+		paddingTop: '24px',
+		[breakpoints.up('sm')]: {
+			borderTop: '1px solid rgba(83, 91, 108, 0.2)',
+		},
+	},
+	profileButton: {
+		fontSize: '15px',
+		padding: '15px 23px',
+		[breakpoints.up('sm')]: {
+			width: 'auto',
+		},
+	},
+	profileLink: {
+		color: palette.primary.main,
+		cursor: 'pointer',
+		textDecoration: 'none',
+	},
 }));
 
+const renderAliviaWhatsapp = (classes: Record<string, string>) => (
+	<a className={classes.profileLink} href={ALIVIA_CONTACT_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+		{ALIVIA_CONTACT_WHATSAPP_NUMBER}.
+	</a>
+);
+
 interface RightSideProps {
-	schedule: Schedule | null | undefined;
+	isGuest: boolean;
+	email: string;
 }
 
-const RightSide = ({ schedule }: RightSideProps) => {
+const RightSide = ({ isGuest, email }: RightSideProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('confirmation');
+	const { push } = useHistory();
+
+	const goToAppointments = () => push('/citas');
 
 	return (
 		<RightLayout>
@@ -97,32 +139,67 @@ const RightSide = ({ schedule }: RightSideProps) => {
 					<Typography className={classes.tipTitle} variant="h3">
 						{t('confirmation.right.before.title')}
 					</Typography>
-					<div>
-						<Typography>{t('confirmation.right.before.message')} </Typography>
-						<Typography color="primary">
-							{schedule?.startTime
-								? capitalize(formatUTCDate(schedule?.startTime, "EEEE dd 'de' MMMM 'a las' h:mm aaaa"))
-								: ''}
-						</Typography>
+					<div className={classes.sectionContainer}>
+						<div>
+							<MailIcon />
+						</div>
+						<div className={classes.textContainer}>
+							{!isGuest ? (
+								<React.Fragment>
+									<Typography>
+										<span className={classes.profileLink} onClick={goToAppointments}>
+											{t('confirmation.right.profileLink')}
+										</span>
+										{t('confirmation.right.before.messageLogged')}
+										{renderAliviaWhatsapp(classes)}
+									</Typography>
+								</React.Fragment>
+							) : (
+								<Typography>
+									{t('confirmation.right.before.messageUnlogged')}{' '}
+									<span className={classes.profileLink}>{ALIVIA_CONTACT_EMAIL}</span>
+									{t('confirmation.right.before.messageWhatsapp')}
+									{renderAliviaWhatsapp(classes)}
+								</Typography>
+							)}
+						</div>
 					</div>
 				</div>
 				<div className={classes.duringSection}>
 					<Typography className={classes.tipTitle} variant="h3">
 						{t('confirmation.right.during.title')}
 					</Typography>
-					<div>
-						<Typography component="span">{t('confirmation.right.during.message')}</Typography>
+					<div className={classes.sectionContainer}>
+						<div>
+							<VideocallIcon />
+						</div>
+						<div className={classes.textContainer}>
+							<Typography component="span">{t('confirmation.right.during.message')}</Typography>
+						</div>
 					</div>
 				</div>
 				<div className={classes.afterSection}>
 					<Typography className={classes.tipTitle} variant="h3">
 						{t('confirmation.right.after.title')}
 					</Typography>
-					<div>
-						<Typography component="span">{t('confirmation.right.after.message')}</Typography>
+					<div className={classes.sectionContainer}>
+						<div>
+							<ChecklistIcon />
+						</div>
+						<div className={classes.textContainer}>
+							<Typography component="span">
+								{t('confirmation.right.after.message')} <span className={classes.profileLink}>{email}</span>
+							</Typography>
+						</div>
 					</div>
 				</div>
-				<Typography className={classes.goodbyeMessage}>{t('confirmation.right.goodbye.message')}</Typography>
+				{!isGuest && (
+					<div className={classes.footerButtons}>
+						<Button className={classes.profileButton} variant="contained" onClick={goToAppointments} fullWidth>
+							{t('confirmation.right.profileButton')}
+						</Button>
+					</div>
+				)}
 			</div>
 		</RightLayout>
 	);

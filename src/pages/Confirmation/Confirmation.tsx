@@ -6,9 +6,11 @@ import { CONFIRMATION_ROUTE } from 'routes';
 
 import RightSide from './components/RightSide';
 import LeftSide from './components/LeftSide';
+import { GUEST } from 'AppContext';
 
 const Confirmation = () => {
-	const { user, doctor, schedule, useCase } = useAppointmentStepValidation(CONFIRMATION_ROUTE);
+	const { appointmentOwner, user, doctor, schedule, useCase } = useAppointmentStepValidation(CONFIRMATION_ROUTE);
+	const isGuest = appointmentOwner === GUEST;
 
 	useEffect(() => {
 		if (process.env.NODE_ENV === 'production') {
@@ -20,7 +22,7 @@ const Confirmation = () => {
 	return (
 		<Container>
 			<LeftSide user={user} doctor={doctor} schedule={schedule} />
-			<RightSide schedule={schedule} />
+			<RightSide isGuest={isGuest} email={user?.email || ''} />
 		</Container>
 	);
 };
