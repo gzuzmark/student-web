@@ -146,7 +146,7 @@ const formatCreateParams = (params: NewAppointmentBody) => ({
 	use_case_id: params.useCaseID,
 	schedule_id: params.scheduleID,
 	appointment_type_id: params.appointmentTypeID || '',
-	question: params.triage,
+	questions: params.triage,
 });
 
 // TODO Update how we get the appointments
