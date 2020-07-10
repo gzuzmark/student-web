@@ -7,6 +7,11 @@ interface SimpleUseAPI {
 	last_name: string;
 	second_last_name: string;
 	dni: string;
+	is_main: boolean;
+}
+
+interface ProfilesAPIResponse {
+	data: SimpleUseAPI[];
 }
 
 interface CurrentUserDataResponse {
@@ -32,11 +37,26 @@ export const getCurrentUser = async (token?: string): Promise<[string, SimpleUse
 				lastName: data.last_name,
 				secondSurname: data.second_last_name,
 				identification: data.dni,
+				isMain: data.is_main,
 			},
 		];
 	} catch (e) {
 		console.log(e);
 
-		return ['', { id: '', name: '', lastName: '', secondSurname: '', identification: '' }];
+		return ['', { id: '', name: '', lastName: '', secondSurname: '', identification: '', isMain: false }];
 	}
+};
+
+export const getProfiles = async () => {
+	const response = await aliviaAxios.get<ProfilesAPIResponse>('/accounts/profiles');
+	const data = response.data.data;
+
+	return data.map((user) => ({
+		id: user.id,
+		name: user.name,
+		lastName: user.last_name,
+		secondSurname: user.second_last_name,
+		identification: user.dni,
+		isMain: user.is_main,
+	}));
 };

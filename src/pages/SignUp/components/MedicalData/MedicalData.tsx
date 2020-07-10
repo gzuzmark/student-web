@@ -40,11 +40,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 interface MedicalDataProps {
-	onChangeStep: (values: MedicalDataValues) => void;
+	onChangeStep: (values: MedicalDataValues, onError?: Function) => void;
 	medicalData: MedicalDataValues | undefined;
+	defaultLabelType?: string;
 }
 
-const MedicalData = ({ onChangeStep, medicalData }: MedicalDataProps) => {
+const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDataProps) => {
 	const { t } = useTranslation('signUp');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
@@ -55,7 +56,7 @@ const MedicalData = ({ onChangeStep, medicalData }: MedicalDataProps) => {
 	return (
 		<div className={classes.wrapper}>
 			<Typography className={classes.mobileSubtitle} color="primary">
-				{t('medicalData.subTitle')}
+				{t(defaultLabelType ? `medicalData.subTitle.${defaultLabelType}` : 'medicalData.subTitle')}
 			</Typography>
 			<div className={classes.titleWrapper}>
 				{matches ? (
@@ -81,11 +82,15 @@ const MedicalData = ({ onChangeStep, medicalData }: MedicalDataProps) => {
 					</>
 				)}
 				<Typography variant="h2" component={matches ? 'div' : 'span'}>
-					{t('medicalData.title.fourthSection')}
+					{t(
+						defaultLabelType
+							? `medicalData.title.fourthSection.${defaultLabelType}`
+							: 'medicalData.title.fourthSection',
+					)}
 				</Typography>
 			</div>
 			<Typography className={classes.subTitle} color="primary">
-				{t('medicalData.subTitle')}
+				{t(defaultLabelType ? `medicalData.subTitle.${defaultLabelType}` : 'medicalData.subTitle')}
 			</Typography>
 			<MedicalDataForm medicalData={medicalData} onChangeStep={onChangeStep} openPrivacyPolicy={openDialog} />
 		</div>

@@ -57,7 +57,7 @@ const SignUp = () => {
 					localUserToken = await createAccount(contactInfo);
 					reservationAccountID = await createPatient(newUser, localUserToken);
 					user = { id: reservationAccountID, ...formatNewUser(newUser) };
-					redirectPath = '/citas';
+					redirectPath = '/dashboard/citas';
 					appointmentCreationStep = '';
 
 					setLocalValue('userToken', localUserToken);
@@ -76,7 +76,7 @@ const SignUp = () => {
 	);
 
 	usePageTitle('Registro');
-	useCurrentUserRediction(userToken, '/citas');
+	useCurrentUserRediction(userToken, '/dashboard/citas');
 	useLayoutEffect(() => {
 		checkStep(location, aboutMeData, push, medicalData);
 	}, [aboutMeData, location, medicalData, push]);

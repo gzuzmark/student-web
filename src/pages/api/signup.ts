@@ -19,6 +19,11 @@ interface NewUser {
 	email?: string;
 }
 
+interface NewProfile extends Omit<NewUser, 'phoneNumber' | 'email'> {
+	documentIssueDate?: Date | null; // document_validation_date
+	familyRelationship: string; // family_relationship
+}
+
 interface NewPatient extends NewUser {
 	id: string;
 }
@@ -64,6 +69,34 @@ export const createPatient = async (user: NewUser, authToken: string): Promise<s
 			extra_info: user.moreInfo || '',
 			contact_email: user.email || '',
 			contact_phone: user.phoneNumber,
+		},
+		{
+			headers,
+		},
+	);
+	const data = resp.data.data;
+
+	return data.id;
+};
+
+export const createNewProfile = async (newProfile: NewProfile, authToken: string): Promise<string> => {
+	const headers = { Authorization: `Bearer ${authToken}` };
+	const resp = await aliviaAxios.post<CreatePatientResponse>(
+		'/patients',
+		{
+			name: newProfile.name,
+			last_name: newProfile.lastName,
+			second_last_name: newProfile.secondSurname,
+			gender: newProfile.gender,
+			document_number: newProfile.identification,
+			document_validation_date: newProfile.documentIssueDate
+				? format(new Date(newProfile.documentIssueDate), 'dd/MM/yyyy')
+				: '',
+			birth_date: newProfile.birthDate ? format(new Date(newProfile.birthDate), 'dd/MM/yyyy') : '',
+			allergies: newProfile.allergies || '',
+			meds: newProfile.medicineList || '',
+			extra_info: newProfile.moreInfo || '',
+			family_relationship: newProfile.familyRelationship,
 		},
 		{
 			headers,

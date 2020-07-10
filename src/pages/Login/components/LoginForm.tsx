@@ -9,9 +9,10 @@ import { Link, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils/createStyles';
+import { getAppointmentRedirectPath } from 'utils';
 import { sendLogin, getCurrentUser } from 'pages/api';
 import { PasswordField } from 'pages/common';
-import { AppointmentCreationStep, PRE_SIGNUP_STEP, SELECT_DOCTOR_STEP, TRIAGE_STEP, PAYMENT_STEP } from 'AppContext';
+import { AppointmentCreationStep, PRE_SIGNUP_STEP, PAYMENT_STEP } from 'AppContext';
 
 import validationSchema from '../validationSchema';
 
@@ -78,17 +79,6 @@ interface LoginFormProps {
 	appointmentCreationStep: AppointmentCreationStep | undefined;
 	updateContextState: Function | undefined;
 }
-const getRedirectPath = (appointmentCreationStep: AppointmentCreationStep | undefined): string => {
-	switch (appointmentCreationStep) {
-		case TRIAGE_STEP:
-		case SELECT_DOCTOR_STEP:
-			return 'back';
-		case PRE_SIGNUP_STEP:
-			return '/pago';
-		default:
-			return '/citas';
-	}
-};
 
 const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormProps) => {
 	const { t } = useTranslation('login');
@@ -100,7 +90,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 				const token = await sendLogin({ username: phoneNumber, password });
 				if (token && updateContextState) {
 					const [reservationToken, currentUser] = await getCurrentUser(token);
-					const redirectPath = getRedirectPath(appointmentCreationStep);
+					const redirectPath = getAppointmentRedirectPath(appointmentCreationStep);
 
 					updateContextState({
 						userToken: token,

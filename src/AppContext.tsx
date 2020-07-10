@@ -43,6 +43,7 @@ export interface SimpleUser {
 	secondSurname: string;
 	identification: string;
 	email?: string;
+	isMain: boolean;
 }
 
 export interface User {
@@ -69,6 +70,7 @@ export interface TriagePair {
 interface ContextProps {
 	user: SimpleUser | null;
 	userToken: string | null;
+	accountUsers: SimpleUser[];
 	guestToken: string | null;
 	reservationAccountID: string;
 	channel: string;
@@ -84,6 +86,7 @@ interface ContextProps {
 const defaultState: ContextProps = {
 	user: null,
 	userToken: getLocalValue('userToken'),
+	accountUsers: [],
 	guestToken: null,
 	reservationAccountID: '',
 	channel: 'Videollamada',
