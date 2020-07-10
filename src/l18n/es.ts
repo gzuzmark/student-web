@@ -12,6 +12,7 @@ import confirmationL18n from 'pages/Confirmation/l18n';
 import forgotPasswordL18n from 'pages/ForgotPassword/l18n';
 import selectProfileL18n from 'pages/SelectProfile/l18n';
 import createProfileL18n from 'pages/CreateProfile/l18n';
+import familyMembersL18n from 'pages/FamilyMembers/l18n';
 
 export default {
 	nav: {
@@ -19,6 +20,15 @@ export default {
 		'userMenu.appointments': 'Citas',
 		'userMenu.myAccount': 'Mi cuenta',
 		'userMenu.logout': 'Cerrar sesión',
+	},
+	dashboard: {
+		'dashboard.prefix': 'Hola',
+		'dashboard.title': '¿Cómo te podemos ayudar hoy?',
+		'dashboard.appointments': 'Citas',
+		'dashboard.treatments': 'Tratamientos',
+		'dashboard.medialHistory': 'Historial de comporas',
+		'dashboard.familyMembers': 'Parientes',
+		'dashboard.newAppointment': 'Agendar cita',
 	},
 	global: {
 		'selectAccount.new.account': 'Nuevo perfil',
@@ -39,4 +49,5 @@ export default {
 	forgotPassword: { ...forgotPasswordL18n },
 	selectProfile: { ...selectProfileL18n },
 	createProfile: { ...createProfileL18n },
+	familyMembers: { ...familyMembersL18n },
 };
