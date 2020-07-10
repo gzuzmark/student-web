@@ -17,7 +17,7 @@ const initialValues = {
 	familyRelationship: '',
 };
 
-const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	title: {
 		fontSize: '15px',
 		lineHeight: '20px',
@@ -28,6 +28,41 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			lineHeight: '35px',
 			padding: '0 0 28px',
 		},
+	},
+	form: {
+		paddingBottom: '28px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '18px',
+			width: '403px',
+		},
+	},
+	fieldWrapper: {
+		textAlign: 'left',
+		marginBottom: '17px',
+		[breakpoints.up('lg')]: {
+			marginBottom: '28px',
+		},
+	},
+	label: {
+		paddingBottom: '4px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '8px',
+		},
+	},
+	submitWrapper: {
+		[breakpoints.up('lg')]: {
+			paddingRight: '103px',
+		},
+	},
+	disclosureWrapper: {
+		textAlign: 'left',
+		width: '286px',
+		[breakpoints.up('lg')]: {
+			width: '547px',
+		},
+	},
+	disclosureText: {
+		color: palette.info.main,
 	},
 }));
 
@@ -55,21 +90,18 @@ const NewMinorProfile = ({ onSubmit }: NewMinorProfileProps) => {
 			<Typography className={classes.title}>{t('createProfile.relationshipToTheMinor.title')}</Typography>
 			<Formik initialValues={initialValues} onSubmit={onSubmitCallback} validationSchema={validationSchema}>
 				{({ submitForm, isSubmitting }) => (
-					<Form>
+					<Form className={classes.form}>
 						<FormControl className={classes.fieldWrapper} fullWidth>
-							<FormLabel>{t('createProfile.relationshipToTheMinor.label')}</FormLabel>
-							<Field
-								component={TextField}
-								placeholder={t('createProfile.relationshipToTheMinor.placeholder')}
-								name="familyRelationship"
-								variant="outlined"
-								select
-							>
-								<MenuItem value={0}>Masculino</MenuItem>
-								<MenuItem value={1}>Femenino</MenuItem>
+							<FormLabel className={classes.label}>{t('createProfile.relationshipToTheMinor.label')}</FormLabel>
+							<Field component={TextField} name="familyRelationship" variant="outlined" select>
+								<MenuItem value={0}>{t('createProfile.relationshipToTheMinor.fatherOption')}</MenuItem>
+								<MenuItem value={1}>{t('createProfile.relationshipToTheMinor.motherOption')}</MenuItem>
+								<MenuItem value={2}>{t('createProfile.relationshipToTheMinor.siblingOption')}</MenuItem>
+								<MenuItem value={3}>{t('createProfile.relationshipToTheMinor.uncleOption')}</MenuItem>
+								<MenuItem value={4}>{t('createProfile.relationshipToTheMinor.granpaOption')}</MenuItem>
 							</Field>
 						</FormControl>
-						<div className={classes.fieldWrapper}>
+						<div className={classes.submitWrapper}>
 							<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
 								{t('createProfile.relationshipToTheMinor.continue')}
 							</Button>
@@ -77,6 +109,17 @@ const NewMinorProfile = ({ onSubmit }: NewMinorProfileProps) => {
 					</Form>
 				)}
 			</Formik>
+			<div className={classes.disclosureWrapper}>
+				<Typography component="span" className={classes.disclosureText}>
+					{t('createProfile.relationshipToTheMinor.disclosure.firstPart')}{' '}
+				</Typography>
+				<Typography component="span" color="primary">
+					{t('createProfile.relationshipToTheMinor.disclosure.secondPart')}{' '}
+				</Typography>
+				<Typography component="span" className={classes.disclosureText}>
+					{t('createProfile.relationshipToTheMinor.disclosure.thridPart')}
+				</Typography>
+			</div>
 		</>
 	);
 };

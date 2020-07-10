@@ -53,14 +53,15 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 interface AccountCardProps {
 	account: SimpleUser;
 	isCurrentAccount: boolean;
+	onChangeProfile: (user: SimpleUser) => () => void;
 }
 
-const AccountCard = ({ account, isCurrentAccount }: AccountCardProps) => {
+const AccountCard = ({ account, isCurrentAccount, onChangeProfile }: AccountCardProps) => {
 	const classes = useStyles({ isCurrentAccount });
 
 	return (
 		<div className={classes.wrapper}>
-			<UserCard className={classes.card} isCurrentAccount={isCurrentAccount}>
+			<UserCard onClick={onChangeProfile(account)} className={classes.card} isCurrentAccount={isCurrentAccount}>
 				<UserSmile className={classes.userSmileIcon} />
 			</UserCard>
 			<Typography className={classes.name} variant="button">

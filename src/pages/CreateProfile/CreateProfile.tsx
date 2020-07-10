@@ -57,7 +57,9 @@ const CreateProfile = () => {
 		<Container className={classes.container}>
 			{step === SELECT_PROFILE_TYPE ? <SelectProfileType onSubmit={createMinorProfile} /> : null}
 			{step === MINOR_SIGN_UP ? <MinorSignUp familyRelationship={familyRelationship} /> : null}
-			<Circle className={classes.desktopCircle} radius="80" right="-104" bottom="-122" />
+			{step !== MINOR_SIGN_UP ? (
+				<Circle className={classes.desktopCircle} radius="80" right="-104" bottom="-122" />
+			) : null}
 		</Container>
 	);
 };

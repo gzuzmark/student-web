@@ -34,7 +34,7 @@ const NavMenu = ({ anchorEl, isMenuOpen, handleMenuClose }: NavMenuProps) => {
 	const { updateState } = useContext(AppContext);
 	const goToAppointments = () => {
 		handleMenuClose();
-		push('/citas');
+		push('/dashboard/citas');
 	};
 	// const goToMyAccount = () => {
 	// 	handleMenuClose();

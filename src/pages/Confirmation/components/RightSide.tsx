@@ -121,7 +121,7 @@ const RightSide = ({ isGuest, email }: RightSideProps) => {
 	const { t } = useTranslation('confirmation');
 	const { push } = useHistory();
 
-	const goToAppointments = () => push('/citas');
+	const goToAppointments = () => push('/dashboard/citas');
 
 	return (
 		<RightLayout>

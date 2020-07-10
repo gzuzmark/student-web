@@ -2,10 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
+import { useHistory } from 'react-router';
 
 import { ProfileList, Container, Circle } from 'pages/common';
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, usePageTitle, getAppointmentRedirectPath } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
+import { AppointmentCreationStep } from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -43,7 +45,17 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 const SelectProfile = () => {
 	const { t } = useTranslation('selectProfile');
 	const classes = useStyles();
+	const history = useHistory();
+	const redirectCallback = (appointmentCreationStep: AppointmentCreationStep | undefined) => {
+		const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, '/dashboard/citas');
+		if (redirectPath === 'back') {
+			history.goBack();
+		} else {
+			history.push(redirectPath);
+		}
+	};
 
+	usePageTitle('Seleccionar Perfil');
 	return (
 		<Container className={classes.container}>
 			<div className={classes.wrapper}>
@@ -53,7 +65,7 @@ const SelectProfile = () => {
 				<Typography className={classes.title} variant="h1">
 					<b>{t('selectProfile.title')}</b>
 				</Typography>
-				<ProfileList />
+				<ProfileList redirectCallback={redirectCallback} />
 			</div>
 			<Circle className={classes.desktopCircle} radius="80" right="-104" bottom="-122" />
 		</Container>

@@ -10,12 +10,18 @@ const createProfileL18n = {
 	'createProfile.relationshipToTheMinor.title': '¿Que relación tienes con el menor de edad?',
 	'createProfile.relationshipToTheMinor.label': 'Relación con el menor de edad:',
 	'createProfile.relationshipToTheMinor.placeholder': 'Seleccionar',
+	'createProfile.relationshipToTheMinor.fatherOption': 'Soy su padre',
+	'createProfile.relationshipToTheMinor.motherOption': 'Soy su madre',
+	'createProfile.relationshipToTheMinor.siblingOption': 'Soy su hermano',
+	'createProfile.relationshipToTheMinor.uncleOption': 'Soy su tío(a)',
+	'createProfile.relationshipToTheMinor.granpaOption': 'Soy su abuelo(a)',
 	'createProfile.relationshipToTheMinor.continue': 'Continuar',
 	'createProfile.relationshipToTheMinor.disclosure.firstPart': 'Al continuar,',
 	'createProfile.relationshipToTheMinor.disclosure.secondPart':
 		'declaras que toda la información que estás ingresando es verídica',
 	'createProfile.relationshipToTheMinor.disclosure.thridPart':
 		'y que efectivamente, eres responsable del menor de edad.',
+	'createProfile.relationshipToTheMinor.validation.required': 'Debe seeleccionar una opción',
 	'createProfile.signUpMinor.left.prefix': 'AHORA,',
 	'createProfile.signUpMinor.left.title': 'Creación de perfil',
 	'createProfile.signUpMinor.left.firstStep': 'SOBRE EL MENOR',

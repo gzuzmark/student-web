@@ -1,9 +1,9 @@
 import React, { useEffect, useContext } from 'react';
 import { Theme } from '@material-ui/core/styles';
 
-import AppContext from 'AppContext';
-import { stylesWithTheme, usePageTitle } from 'utils';
-// import { getAccounts } from 'pages/api';
+import AppContext, { SimpleUser, AppointmentCreationStep } from 'AppContext';
+import { stylesWithTheme } from 'utils';
+import { getProfiles } from 'pages/api';
 
 import AccountCard from './AccountCard';
 import AddUserCard from './AddUserCard';
@@ -23,41 +23,27 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 const requestAccounts = async (updateState: Function) => {
-	// const accounts = await getAccounts();
+	const profiles = await getProfiles();
 
-	// updateState({ accountUsers: accounts });
-	updateState({
-		accountUsers: [
-			{
-				id: 'sadasdas',
-				name: 'Jhon',
-				lastName: 'Doe',
-				secondSurname: 'Lololol',
-				identification: '1234567',
-			},
-			{
-				id: 'sadasdasadfadsf',
-				name: 'Armando',
-				lastName: 'Puertas',
-				secondSurname: 'Paredes',
-				identification: '1234568',
-			},
-			{
-				id: 'sadasdasadfadsf',
-				name: 'Armando',
-				lastName: 'Puertas',
-				secondSurname: 'Paredes',
-				identification: '1234568',
-			},
-		],
-	});
+	updateState({ accountUsers: profiles });
 };
 
-const ProfileList = () => {
-	const { accountUsers, user: currentUser, updateState } = useContext(AppContext);
-	const classes = useStyles();
+interface PropfileListProps {
+	redirectCallback?: (appointmentCreationStep: AppointmentCreationStep | undefined) => void;
+}
 
-	usePageTitle('Seleccionar Perfil');
+const ProfileList = ({ redirectCallback }: PropfileListProps) => {
+	const { accountUsers, user: currentUser, updateState, appointmentCreationStep } = useContext(AppContext);
+	const classes = useStyles();
+	const onChangeProfile = (user: SimpleUser) => () => {
+		if (updateState) {
+			updateState({ user, reservationAccountID: user.id });
+		}
+		if (redirectCallback) {
+			redirectCallback(appointmentCreationStep);
+		}
+	};
+
 	useEffect(() => {
 		if (updateState) {
 			requestAccounts(updateState);
@@ -71,6 +57,7 @@ const ProfileList = () => {
 					key={`user-${account.id}`}
 					account={account}
 					isCurrentAccount={!!currentUser && account.id === currentUser.id}
+					onChangeProfile={onChangeProfile}
 				/>
 			))}
 			<AddUserCard />

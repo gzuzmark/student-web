@@ -183,7 +183,7 @@ const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
 		// eslint-disable-next-line
 		// @ts-ignore
 		window.appointment = appointment;
-		history.push(`/citas/${id}`);
+		history.push(`/dashboard/citas/${id}`);
 	};
 	const openConference = (e: MouseEvent) => {
 		e.stopPropagation();

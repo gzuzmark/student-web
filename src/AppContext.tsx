@@ -43,6 +43,7 @@ export interface SimpleUser {
 	secondSurname: string;
 	identification: string;
 	email?: string;
+	isMain: boolean;
 }
 
 export interface User {

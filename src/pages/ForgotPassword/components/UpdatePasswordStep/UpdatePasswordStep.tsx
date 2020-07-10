@@ -66,7 +66,7 @@ const UpdatePasswordStep = ({ documentNumber, userID: userId, otpCode }: Validat
 				await resetPassword({ password, documentNumber, userId, otpCode });
 
 				setSubmitting(false);
-				history.push('/citas');
+				history.push('/dashboard/citas');
 			} catch (e) {}
 		},
 		[documentNumber, history, otpCode, userId],

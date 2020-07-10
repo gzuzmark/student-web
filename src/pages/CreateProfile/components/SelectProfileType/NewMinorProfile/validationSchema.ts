@@ -3,7 +3,7 @@ import i18next from 'l18n/index';
 
 const messages = {
 	familyRelationship: {
-		required: i18next.t('createProfile:createProfile.minorSeciton.validation.familyRelationship.required'),
+		required: i18next.t('createProfile:createProfile.relationshipToTheMinor.validation.required'),
 	},
 };
 

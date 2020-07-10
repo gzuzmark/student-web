@@ -27,7 +27,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	cardContent: {
 		textAlign: 'center',
 		[breakpoints.up('lg')]: {
-			paddingTop: '82px',
+			padding: ({ profileType }: StylesProps) => (profileType === MINOR_PROFILE ? '49px 0 0 69px' : '82px 0 0 0'),
 		},
 	},
 }));
