@@ -69,6 +69,7 @@ export const createPatient = async (user: NewUser, authToken: string): Promise<s
 			extra_info: user.moreInfo || '',
 			contact_email: user.email || '',
 			contact_phone: user.phoneNumber,
+			is_main: true,
 		},
 		{
 			headers,
@@ -97,6 +98,7 @@ export const createNewProfile = async (newProfile: NewProfile, authToken: string
 			meds: newProfile.medicineList || '',
 			extra_info: newProfile.moreInfo || '',
 			family_relationship: newProfile.familyRelationship,
+			is_main: false,
 		},
 		{
 			headers,
