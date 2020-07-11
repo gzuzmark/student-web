@@ -11,8 +11,9 @@ import AboutMeForm, { AboutMeValues } from './AboutMeForm';
 
 interface AboutMeProps {
 	aboutMeData: AboutMeValues | undefined;
-	onChangeStep: (values: AboutMeValues) => void;
+	onChangeStep: (values: AboutMeValues, onError?: Function) => void;
 	appointmentOwner?: AppointmentOwner;
+	defaultLabelType?: string;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -46,10 +47,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMe = ({ aboutMeData, onChangeStep, appointmentOwner }: AboutMeProps) => {
+const AboutMe = ({ aboutMeData, onChangeStep, appointmentOwner, defaultLabelType }: AboutMeProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
-	const userLabel = appointmentOwner === MYSELF ? 'forMe' : 'forSomeoneElse';
+	const userLabel = defaultLabelType || (appointmentOwner === MYSELF ? 'forMe' : 'forSomeoneElse');
 	const openDialog = () => {
 		redirectToURL('https://drive.google.com/open?id=12DfeCL1FGluiEmYcH_fo4uZBUu1k-LtV', true);
 	};
@@ -57,14 +58,14 @@ const AboutMe = ({ aboutMeData, onChangeStep, appointmentOwner }: AboutMeProps) 
 	return (
 		<div className={classes.wrapper}>
 			<Typography className={classes.mobileSubtitle} color="primary">
-				{t('aboutme.subTitle')}
+				{t(`aboutme.subTitle.${userLabel}`)}
 			</Typography>
 			<div className={classes.titleWrapper}>
 				<Typography variant="h2" component="span">
 					{t('aboutme.title.firstSection')}{' '}
 				</Typography>
 				<Typography variant="h2" className={classes.boldText} component="span">
-					{t('aboutme.title.secondSection')}{' '}
+					{t(defaultLabelType ? `aboutme.title.secondSection.${userLabel}` : 'aboutme.title.secondSection')}{' '}
 				</Typography>
 				<Typography variant="h2" component="span">
 					{t('aboutme.title.thirdSection')}
@@ -73,7 +74,12 @@ const AboutMe = ({ aboutMeData, onChangeStep, appointmentOwner }: AboutMeProps) 
 			<Typography className={classes.subTitle} color="primary">
 				{t(`aboutme.subTitle.${userLabel}`)}
 			</Typography>
-			<AboutMeForm aboutMeData={aboutMeData} onChangeStep={onChangeStep} openPrivacyPolicy={openDialog} />
+			<AboutMeForm
+				userLabel={defaultLabelType}
+				aboutMeData={aboutMeData}
+				onChangeStep={onChangeStep}
+				openPrivacyPolicy={openDialog}
+			/>
 		</div>
 	);
 };

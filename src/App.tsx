@@ -67,6 +67,9 @@ const App = () => {
 							<Route exact path="/registro">
 								<Redirect to="/registro/sobre_ti" />
 							</Route>
+							<Route path="/dashboard">
+								<Redirect to="/dashboard/citas" />
+							</Route>
 							<Route path="/*" component={RedirectWrapper} />
 						</Switch>
 					</Router>

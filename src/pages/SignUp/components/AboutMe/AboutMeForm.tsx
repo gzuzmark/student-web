@@ -11,30 +11,33 @@ import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils/createStyles';
 import { DatePickerField } from 'pages/common';
 
-import validationSchema from './validationSchema';
+import validationSchema, { minorValidationSchema } from './validationSchema';
 
 export interface AboutMeValues {
 	name: string;
 	lastName: string;
 	secondSurname: string;
-	identification: string;
 	birthDate: Date | null;
 	gender: number | undefined;
+	identification?: string;
+	documentIssueDate?: Date | null;
 }
 
 interface AboutMeFormProps {
 	aboutMeData: AboutMeValues | undefined;
 	onChangeStep: (values: AboutMeValues) => void;
 	openPrivacyPolicy: () => void;
+	userLabel?: string;
 }
 
 const initialValues = {
 	name: '',
 	lastName: '',
 	secondSurname: '',
-	identification: '',
 	birthDate: null,
 	gender: undefined,
+	identification: '',
+	documentIssueDate: null,
 };
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -68,7 +71,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy }: AboutMeFormProps) => {
+const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy, userLabel }: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const onSubmit = useCallback(
@@ -78,9 +81,14 @@ const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy }: AboutMeFo
 		},
 		[onChangeStep],
 	);
+	const userLabelExists = !!userLabel;
 
 	return (
-		<Formik initialValues={aboutMeData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+		<Formik
+			initialValues={aboutMeData || initialValues}
+			onSubmit={onSubmit}
+			validationSchema={userLabelExists ? minorValidationSchema : validationSchema}
+		>
 			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
 					<div>
@@ -88,7 +96,7 @@ const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy }: AboutMeFo
 							<Field
 								component={TextField}
 								name="name"
-								label={t('aboutme.fields.name.label')}
+								label={t(userLabel ? `aboutme.fields.name.label.${userLabel}` : 'aboutme.fields.name.label')}
 								variant="outlined"
 								fullWidth
 							/>
@@ -97,7 +105,7 @@ const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy }: AboutMeFo
 							<Field
 								component={TextField}
 								name="lastName"
-								label={t('aboutme.fields.lastName.label')}
+								label={t(userLabel ? `aboutme.fields.lastName.label.${userLabel}` : 'aboutme.fields.lastName.label')}
 								variant="outlined"
 								fullWidth
 							/>
@@ -136,6 +144,33 @@ const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy }: AboutMeFo
 								<MenuItem value={1}>Femenino</MenuItem>
 							</Field>
 						</FormControl>
+						{userLabelExists ? (
+							<>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={TextField}
+										name="identification"
+										label={t('aboutme.fields.document.label.minor')}
+										variant="outlined"
+										inputProps={{ maxLength: 11 }}
+										fullWidth
+									/>
+								</div>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={DatePickerField}
+										name="documentIssueDate"
+										TextFieldProps={{
+											label: t('aboutme.fields.documentIssueDate.label.minor'),
+											variant: 'outlined',
+											helperText: '',
+											fullWidth: true,
+											placeholder: 'DD/MM/YYYY',
+										}}
+									/>
+								</div>
+							</>
+						) : null}
 					</div>
 					<div className={classes.privacyPolicyWrapper}>
 						<Typography component="span">{t('aboutme.privacyPolicy.firstSection')} </Typography>

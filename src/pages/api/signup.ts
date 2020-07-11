@@ -4,6 +4,7 @@ import format from 'date-fns/format';
 import { ContactValues } from 'pages/SignUp/components';
 
 import { TokenResponse } from './types';
+import { getLocalValue } from 'utils';
 
 interface NewUser {
 	name: string;
@@ -17,6 +18,11 @@ interface NewUser {
 	moreInfo?: string; // extra_info
 	phoneNumber: string;
 	email?: string;
+}
+
+interface NewProfile extends Omit<NewUser, 'phoneNumber' | 'email'> {
+	documentIssueDate?: Date | null; // document_validation_date
+	familyRelationship: string; // family_relationship
 }
 
 interface NewPatient extends NewUser {
@@ -64,6 +70,37 @@ export const createPatient = async (user: NewUser, authToken: string): Promise<s
 			extra_info: user.moreInfo || '',
 			contact_email: user.email || '',
 			contact_phone: user.phoneNumber,
+			is_main: true,
+		},
+		{
+			headers,
+		},
+	);
+	const data = resp.data.data;
+
+	return data.id;
+};
+
+export const createNewProfile = async (newProfile: NewProfile): Promise<string> => {
+	const authToken = getLocalValue('userToken');
+	const headers = { Authorization: `Bearer ${authToken}` };
+	const resp = await aliviaAxios.post<CreatePatientResponse>(
+		'/patients',
+		{
+			name: newProfile.name,
+			last_name: newProfile.lastName,
+			second_last_name: newProfile.secondSurname,
+			gender: newProfile.gender,
+			document_number: newProfile.identification,
+			document_validation_date: newProfile.documentIssueDate
+				? format(new Date(newProfile.documentIssueDate), 'dd/MM/yyyy')
+				: '',
+			birth_date: newProfile.birthDate ? format(new Date(newProfile.birthDate), 'dd/MM/yyyy') : '',
+			allergies: newProfile.allergies || '',
+			meds: newProfile.medicineList || '',
+			extra_info: newProfile.moreInfo || '',
+			family_relationship: newProfile.familyRelationship,
+			is_main: false,
 		},
 		{
 			headers,

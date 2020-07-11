@@ -34,7 +34,11 @@ const NavMenu = ({ anchorEl, isMenuOpen, handleMenuClose }: NavMenuProps) => {
 	const { updateState } = useContext(AppContext);
 	const goToAppointments = () => {
 		handleMenuClose();
-		push('/citas');
+		push('/dashboard/citas');
+	};
+	const goToFamilyMembers = () => {
+		handleMenuClose();
+		push('/dashboard/parientes');
 	};
 	// const goToMyAccount = () => {
 	// 	handleMenuClose();
@@ -86,6 +90,9 @@ const NavMenu = ({ anchorEl, isMenuOpen, handleMenuClose }: NavMenuProps) => {
 		>
 			<MenuItem className={classes.userItem} onClick={goToAppointments} divider>
 				{t('userMenu.appointments')}
+			</MenuItem>
+			<MenuItem className={classes.userItem} onClick={goToFamilyMembers} divider>
+				{t('userMenu.familyMembers')}
 			</MenuItem>
 			{/* <MenuItem className={classes.userItem} onClick={goToMyAccount}>
 				{t('userMenu.myAccount')}

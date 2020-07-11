@@ -10,15 +10,29 @@ import triageL18n from 'pages/Triage/l18n';
 import paymentL18n from 'pages/Payment/l18n';
 import confirmationL18n from 'pages/Confirmation/l18n';
 import forgotPasswordL18n from 'pages/ForgotPassword/l18n';
+import selectProfileL18n from 'pages/SelectProfile/l18n';
+import createProfileL18n from 'pages/CreateProfile/l18n';
+import familyMembersL18n from 'pages/FamilyMembers/l18n';
 
 export default {
 	nav: {
 		login: 'Iniciar sesión',
 		'userMenu.appointments': 'Citas',
+		'userMenu.familyMembers': 'Parientes',
 		'userMenu.myAccount': 'Mi cuenta',
 		'userMenu.logout': 'Cerrar sesión',
 	},
+	dashboard: {
+		'dashboard.prefix': 'Hola',
+		'dashboard.title': '¿Cómo te podemos ayudar hoy?',
+		'dashboard.appointments': 'Citas',
+		'dashboard.treatments': 'Tratamientos',
+		'dashboard.medialHistory': 'Historial de comporas',
+		'dashboard.familyMembers': 'Parientes',
+		'dashboard.newAppointment': 'Agendar cita',
+	},
 	global: {
+		'selectAccount.new.account': 'Nuevo perfil',
 		'privacyPolicy.title.firstLine': 'POLÍTICA DE PRIVACIDAD',
 		'privacyPolicy.title.secondLine': 'Las cosas claras ',
 		'privacyPolicy.body':
@@ -34,4 +48,7 @@ export default {
 	payment: { ...paymentL18n },
 	confirmation: { ...confirmationL18n },
 	forgotPassword: { ...forgotPasswordL18n },
+	selectProfile: { ...selectProfileL18n },
+	createProfile: { ...createProfileL18n },
+	familyMembers: { ...familyMembersL18n },
 };
