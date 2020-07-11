@@ -17,10 +17,9 @@ export interface AboutMeValues {
 	name: string;
 	lastName: string;
 	secondSurname: string;
-	identification: string;
 	birthDate: Date | null;
 	gender: number | undefined;
-	document?: string;
+	identification?: string;
 	documentIssueDate?: Date | null;
 }
 
@@ -35,10 +34,9 @@ const initialValues = {
 	name: '',
 	lastName: '',
 	secondSurname: '',
-	identification: '',
 	birthDate: null,
 	gender: undefined,
-	document: '',
+	identification: '',
 	documentIssueDate: null,
 };
 
@@ -151,7 +149,7 @@ const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy, userLabel }
 								<div className={classes.fieldWrapper}>
 									<Field
 										component={TextField}
-										name="document"
+										name="identification"
 										label={t('aboutme.fields.document.label.minor')}
 										variant="outlined"
 										inputProps={{ maxLength: 11 }}

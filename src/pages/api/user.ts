@@ -1,5 +1,6 @@
 import aliviaAxios from 'utils/customAxios';
 import { SimpleUser } from 'AppContext';
+import { getLocalValue } from 'utils';
 
 interface SimpleUseAPI {
 	id: string;
@@ -48,7 +49,9 @@ export const getCurrentUser = async (token?: string): Promise<[string, SimpleUse
 };
 
 export const getProfiles = async () => {
-	const response = await aliviaAxios.get<ProfilesAPIResponse>('/accounts/profiles');
+	const token = getLocalValue('userToken');
+	const headers = token ? { Authorization: `Bearer ${token}` } : {};
+	const response = await aliviaAxios.get<ProfilesAPIResponse>('/accounts/profiles', { headers });
 	const data = response.data.data;
 
 	return data.map((user) => ({

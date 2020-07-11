@@ -23,7 +23,7 @@ const messages = {
 	gender: {
 		required: i18next.t('signUp:aboutme.validation.gender.required'),
 	},
-	document: {
+	identification: {
 		required: i18next.t('signUp:aboutme.validation.document.required'),
 	},
 	documentIssueDate: {
@@ -55,7 +55,7 @@ export const minorValidationSchema = object().shape({
 		.typeError(messages.birthDate.required)
 		.nullable(),
 	gender: number().required(messages.gender.required),
-	document: string().required(messages.document.required),
+	identification: string().required(messages.identification.required),
 	documentIssueDate: date()
 		.required(messages.documentIssueDate.required)
 		.min(new Date('1900-01-01'), messages.documentIssueDate.required)
