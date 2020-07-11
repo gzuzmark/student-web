@@ -18,6 +18,7 @@ export default {
 	nav: {
 		login: 'Iniciar sesión',
 		'userMenu.appointments': 'Citas',
+		'userMenu.familyMembers': 'Parientes',
 		'userMenu.myAccount': 'Mi cuenta',
 		'userMenu.logout': 'Cerrar sesión',
 	},

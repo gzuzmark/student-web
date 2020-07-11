@@ -47,6 +47,10 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	name: {
 		textTransform: 'none',
+		maxWidth: '124px',
+		[breakpoints.up('lg')]: {
+			maxWidth: '194px',
+		},
 	},
 }));
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { Theme } from '@material-ui/core/styles';
+import clsx from 'clsx';
 
 import AppContext, { SimpleUser, AppointmentCreationStep } from 'AppContext';
 import { stylesWithTheme } from 'utils';
@@ -29,10 +30,11 @@ const requestAccounts = async (updateState: Function) => {
 };
 
 interface PropfileListProps {
+	className?: string;
 	redirectCallback?: (appointmentCreationStep: AppointmentCreationStep | undefined) => void;
 }
 
-const ProfileList = ({ redirectCallback }: PropfileListProps) => {
+const ProfileList = ({ className, redirectCallback }: PropfileListProps) => {
 	const { accountUsers, user: currentUser, updateState, appointmentCreationStep } = useContext(AppContext);
 	const classes = useStyles();
 	const onChangeProfile = (user: SimpleUser) => () => {
@@ -51,7 +53,7 @@ const ProfileList = ({ redirectCallback }: PropfileListProps) => {
 	}, [updateState]);
 
 	return (
-		<div className={classes.list}>
+		<div className={clsx(classes.list, className)}>
 			{(accountUsers || []).map((account) => (
 				<AccountCard
 					key={`user-${account.id}`}

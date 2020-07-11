@@ -21,9 +21,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			paddingBottom: '41px',
 		},
 	},
-	profileListWrapper: {
+	profileList: {
 		[breakpoints.up('lg')]: {
-			maxWidth: '625px',
+			'&&': {
+				justifyContent: 'flex-start',
+			},
 		},
 	},
 }));
@@ -38,9 +40,7 @@ const RightSide = () => {
 				<Typography className={classes.title} variant="h1">
 					<b>{t('familyMembers.title')}</b>
 				</Typography>
-				<div className={classes.profileListWrapper}>
-					<ProfileList />
-				</div>
+				<ProfileList className={classes.profileList} />
 			</div>
 		</RightLayout>
 	);
