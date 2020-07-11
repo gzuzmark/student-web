@@ -4,6 +4,7 @@ import format from 'date-fns/format';
 import { ContactValues } from 'pages/SignUp/components';
 
 import { TokenResponse } from './types';
+import { getLocalValue } from 'utils';
 
 interface NewUser {
 	name: string;
@@ -80,7 +81,8 @@ export const createPatient = async (user: NewUser, authToken: string): Promise<s
 	return data.id;
 };
 
-export const createNewProfile = async (newProfile: NewProfile, authToken: string): Promise<string> => {
+export const createNewProfile = async (newProfile: NewProfile): Promise<string> => {
+	const authToken = getLocalValue('userToken');
 	const headers = { Authorization: `Bearer ${authToken}` };
 	const resp = await aliviaAxios.post<CreatePatientResponse>(
 		'/patients',

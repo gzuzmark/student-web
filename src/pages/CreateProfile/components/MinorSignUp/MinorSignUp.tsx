@@ -19,10 +19,7 @@ const MinorSignUp = ({ familyRelationship }: MinorSignUpProps) => {
 	const onSubmit = useCallback(
 		async (newProfile: AboutMeValues & MedicalDataValues, onError: Function | undefined) => {
 			try {
-				await createNewProfile(
-					{ ...newProfile, identification: newProfile.identification || '', familyRelationship },
-					'token',
-				);
+				await createNewProfile({ ...newProfile, identification: newProfile.identification || '', familyRelationship });
 				history.push('/seleccionar_perfil');
 			} catch (e) {
 				if (onError) {
