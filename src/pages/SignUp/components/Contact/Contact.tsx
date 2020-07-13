@@ -49,7 +49,7 @@ const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const gotToPolicy = () => {
-		redirectToURL('https://drive.google.com/open?id=12DfeCL1FGluiEmYcH_fo4uZBUu1k-LtV', true);
+		redirectToURL('https://drive.google.com/open?id=1RjgoOp4wR2zCUtktj0d_PqhT9FC7TGyR', true);
 	};
 	const gotToTermsAndConditions = () => {
 		redirectToURL('https://drive.google.com/open?id=12DfeCL1FGluiEmYcH_fo4uZBUu1k-LtV', true);
