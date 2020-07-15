@@ -38,6 +38,8 @@ const SelectDoctor = () => {
 	const location = useLocation();
 	const params = parse(location.search);
 	const comeFromTriage = !params.malestar;
+	const minutes = (params.minutes as string) || '';
+	const numSessions = (params.num_sessions as string) || '';
 	const { useCase, userToken, updateState } = useHookBasedOnURLAccess(
 		comeFromTriage,
 		useAppointmentStepValidation,
@@ -67,6 +69,8 @@ const SelectDoctor = () => {
 				useCase={useCase}
 				updateContextState={updateState}
 				comeFromTriage={comeFromTriage}
+				minutes={minutes}
+				numSessions={numSessions}
 			/>
 		</Container>
 	);

@@ -60,6 +60,7 @@ interface RequestProps {
 	useCase: string;
 	from: number;
 	to: number;
+	window?: number;
 }
 
 // const mockResponse: DoctorAvailabilityAPI[] = [
