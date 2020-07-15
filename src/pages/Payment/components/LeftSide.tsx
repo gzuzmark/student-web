@@ -6,7 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { LeftLayout } from 'pages/common';
 import { Doctor, Schedule } from 'pages/api';
 import { stylesWithTheme, formatUTCDate } from 'utils';
-import { SimpleUser } from 'AppContext';
+import { User } from 'AppContext';
 import { useTranslation } from 'react-i18next';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -106,7 +106,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface LeftSideProps {
 	doctor: Doctor | null | undefined;
-	user: SimpleUser | null | undefined;
+	user: User | null | undefined;
 	schedule: Schedule | null | undefined;
 	channel: string | undefined;
 }
