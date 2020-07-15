@@ -12,17 +12,31 @@ import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
 import { UseCase, getMedicalSpecialities, DoctorAvailability } from 'pages/api';
 
-const getDoctors = async (selectedDate: Date | null, useCase: UseCase | null | undefined, setDoctors: Function) => {
+const limitDoctors = (numSessions: string) => (_: any, i: number) => {
+	const limit = numSessions && !isNaN(+numSessions) && +numSessions;
+	return limit ? i < limit : true;
+};
+
+const getDoctors = async (
+	selectedDate: Date | null,
+	useCase: UseCase | null | undefined,
+	setDoctors: Function,
+	minutes: string,
+	numSessions: string,
+) => {
 	if (!!selectedDate && !!useCase) {
+		const minAmount = minutes && !isNaN(+minutes) ? +minutes : null;
+		const window = minAmount ? minAmount * 60 : undefined;
 		const doctors = await getMedicalSpecialities({
 			useCase: useCase.id,
 			from: isToday(selectedDate)
 				? dateToUTCUnixTimestamp(selectedDate)
 				: dateToUTCUnixTimestamp(getStartOfDay(selectedDate)),
 			to: dateToUTCUnixTimestamp(getEndOfDay(selectedDate)),
+			window,
 		});
 
-		setDoctors(doctors);
+		setDoctors(doctors.filter(limitDoctors(numSessions)));
 	}
 };
 
@@ -31,16 +45,25 @@ interface RightSideProps {
 	updateContextState: Function | undefined;
 	isUserLoggedIn: boolean;
 	comeFromTriage: boolean;
+	minutes: string;
+	numSessions: string;
 }
 
-const RightSide = ({ useCase, updateContextState, isUserLoggedIn, comeFromTriage }: RightSideProps) => {
+const RightSide = ({
+	useCase,
+	updateContextState,
+	isUserLoggedIn,
+	comeFromTriage,
+	minutes,
+	numSessions,
+}: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	useEffect(() => {
-		getDoctors(selectedDate, useCase, setDoctors);
-	}, [selectedDate, useCase]);
+		getDoctors(selectedDate, useCase, setDoctors, minutes, numSessions);
+	}, [selectedDate, useCase, minutes, numSessions]);
 
 	return (
 		<RightLayout>
