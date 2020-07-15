@@ -12,7 +12,7 @@ import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
 import { UseCase, getMedicalSpecialities, DoctorAvailability } from 'pages/api';
 
-const limitDoctors = (numSessions: string) => (_: any, i: number) => {
+const limitSchedules = (numSessions: string) => (_: any, i: number) => {
 	const limit = numSessions && !isNaN(+numSessions) && +numSessions;
 	return limit ? i < limit : true;
 };
@@ -36,7 +36,11 @@ const getDoctors = async (
 			window,
 		});
 
-		setDoctors(doctors.filter(limitDoctors(numSessions)));
+		const filteredDoctors = doctors.map((doc) => ({
+			...doc,
+			schedules: doc.schedules.filter(limitSchedules(numSessions)),
+		}));
+		setDoctors(filteredDoctors);
 	}
 };
 
