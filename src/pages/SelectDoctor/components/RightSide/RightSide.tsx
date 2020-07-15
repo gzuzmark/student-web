@@ -63,7 +63,7 @@ const RightSide = ({
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	useEffect(() => {
 		getDoctors(selectedDate, useCase, setDoctors, minutes, numSessions);
-	}, [selectedDate, useCase]);
+	}, [selectedDate, useCase, minutes, numSessions]);
 
 	return (
 		<RightLayout>
