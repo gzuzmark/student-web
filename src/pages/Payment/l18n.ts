@@ -13,7 +13,7 @@ const paymentL18n = {
 	'payment.left.cmp': 'CMP:',
 	'payment.wait.message': 'Estamos procesando el pago.',
 	'payment.error.culqi': 'Hubo un problema con tu tarjeta, intenta otra vez',
-	'payment.error.pe': 'Hubo un problema con método de pago, intenta otra vez',
+	'payment.error.pe': 'Hubo un problema con el método de pago, intenta otra vez',
 };
 
 export default paymentL18n;

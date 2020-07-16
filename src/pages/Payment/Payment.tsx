@@ -42,7 +42,7 @@ const Payment = () => {
 					scheduleID: schedule.id,
 					discountID: discount.id,
 					email: user.email || userCtx?.email || '',
-					token: '',
+					token: 'SnzVSB3cSA',
 					dni: user.identification || '',
 					name: user.name,
 					lastName: user.lastName,
