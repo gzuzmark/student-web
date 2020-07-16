@@ -48,7 +48,7 @@ const formatParams = (params: PaymentRequestBody) => ({
 	discount_id: params.discountID || '',
 	patient_dni: params.dni || '',
 	name: params.name || '',
-	last_ame: params.lastName || '',
+	last_name: params.lastName || '',
 	phone: params.phone || '',
 	payment_type: params.paymentType,
 });
