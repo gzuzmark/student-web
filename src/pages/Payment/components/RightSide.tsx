@@ -109,9 +109,14 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	buttonWrapper: {
 		display: 'flex',
 		marginTop: '10px',
-		marginBottom: '30px',
 		[breakpoints.up('lg')]: {
 			maxWidth: '601px',
+		},
+	},
+	errorWrapper: {
+		marginBottom: 'auto',
+		[breakpoints.up('lg')]: {
+			marginBottom: '30px',
 		},
 	},
 	payButton: {
@@ -286,8 +291,12 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					{errorMessage ? <FormHelperText error>{errorMessage}</FormHelperText> : null}
 				</div>
+				{errorMessage ? (
+					<div className={classes.errorWrapper}>
+						<FormHelperText error>{errorMessage}</FormHelperText>
+					</div>
+				) : null}
 			</div>
 		</RightLayout>
 	);
