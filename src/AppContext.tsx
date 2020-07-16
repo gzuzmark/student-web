@@ -44,6 +44,7 @@ export interface SimpleUser {
 	identification: string;
 	email?: string;
 	isMain: boolean;
+	phoneNumber?: string;
 }
 
 export interface User {
