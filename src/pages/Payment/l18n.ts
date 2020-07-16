@@ -4,14 +4,16 @@ const paymentL18n = {
 	'payment.left.appointmentTitle': 'DATOS DE CONSULTA',
 	'payment.left.pacientTitle': 'PARA PACIENTE',
 	'payment.left.doctorTitle': 'DOCTOR:',
-	'payment.right.title': 'Paga tu cita con tu tarjeta de crédito o débito',
-	'payment.right.payment': 'EL PRECIO DE TU CONSULTA ES DE',
-	'payment.right.payButton': 'Pagar mi cita con tarjeta',
+	'payment.right.method': 'Elige un método de pago',
+	'payment.right.payment': 'El precio de tu consulta es de',
+	'payment.right.payCulqiButton': 'Tarjeta de crédito o débito',
+	'payment.right.payPEButton': 'Agencias y banca por internet',
 	'payment.right.discountLabel': '¿Tienes un código de descuento? Ingrésalo:',
 	'payment.right.addDiscountLabel': 'Añadir código',
 	'payment.left.cmp': 'CMP:',
 	'payment.wait.message': 'Estamos procesando el pago.',
 	'payment.error.culqi': 'Hubo un problema con tu tarjeta, intenta otra vez',
+	'payment.error.pe': 'Hubo un problema con método de pago, intenta otra vez',
 };
 
 export default paymentL18n;
