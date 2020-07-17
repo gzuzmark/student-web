@@ -7,7 +7,7 @@ const paymentL18n = {
 	'payment.right.method': 'Elige un método de pago',
 	'payment.right.payment': 'El precio de tu consulta es de',
 	'payment.right.payCulqiButton': 'Tarjeta de crédito o débito',
-	'payment.right.payPEButton': 'Agencias y banca por internet',
+	'payment.right.payTransaction': 'Transferencia Bancaria',
 	'payment.right.discountLabel': '¿Tienes un código de descuento? Ingrésalo:',
 	'payment.right.addDiscountLabel': 'Añadir código',
 	'payment.left.cmp': 'CMP:',
