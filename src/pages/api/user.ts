@@ -48,13 +48,12 @@ const parseUser = (apiUser: UserAPI): User => ({
 	email: apiUser.contact_email,
 });
 
-const parseAPIUser = (user: User): Omit<UserAPI, 'contact_phone' | 'contact_email'> => ({
+const parseAPIUser = (user: User): Omit<UserAPI, 'contact_phone' | 'contact_email' | 'is_main'> => ({
 	id: user.id,
 	name: user.name,
 	last_name: user.lastName,
 	second_last_name: user.secondSurname,
 	dni: user.identification,
-	is_main: user.isMain,
 	birth_date: user.birthDate,
 	gender: user.gender,
 	meds: user.medicines || '',
