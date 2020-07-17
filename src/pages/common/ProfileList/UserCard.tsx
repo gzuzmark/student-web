@@ -1,15 +1,19 @@
-import React, { MouseEvent, ReactElement } from 'react';
+import React, { MouseEvent, ReactElement, FC } from 'react';
 import Card from '@material-ui/core/Card';
 import { Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils';
+import { User } from 'AppContext';
 
 interface StylesProps {
 	isCurrentAccount: boolean;
 }
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+	cardWrapper: {
+		position: 'relative',
+	},
 	card: {
 		alignItems: 'center',
 		backgroundColor: ({ isCurrentAccount }: StylesProps) => (isCurrentAccount ? palette.primary.main : 'white'),
@@ -33,18 +37,32 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 
 interface UserCardProps {
 	children: ReactElement;
+	account?: User;
 	className?: string;
 	isCurrentAccount?: boolean;
 	onClick?: (e: MouseEvent) => void;
+	overlayActive?: boolean;
+	overlay?: FC<any>;
 }
 
-const UserCard = ({ children, onClick, className, isCurrentAccount = false }: UserCardProps) => {
+const UserCard = ({
+	children,
+	onClick,
+	className,
+	account,
+	isCurrentAccount = false,
+	overlayActive = false,
+	overlay: Overlay,
+}: UserCardProps) => {
 	const classes = useStyles({ isCurrentAccount });
 
 	return (
-		<Card onClick={onClick} className={clsx(classes.card, className)}>
-			{children}
-		</Card>
+		<div className={classes.cardWrapper}>
+			<Card onClick={onClick} className={clsx(classes.card, className)}>
+				{children}
+			</Card>
+			{overlayActive && Overlay ? <Overlay user={account} /> : null}
+		</div>
 	);
 };
 

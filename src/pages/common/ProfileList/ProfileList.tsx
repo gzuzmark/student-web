@@ -1,8 +1,8 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, FC } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import AppContext, { SimpleUser, AppointmentCreationStep } from 'AppContext';
+import AppContext, { User, AppointmentCreationStep } from 'AppContext';
 import { stylesWithTheme } from 'utils';
 import { getProfiles } from 'pages/api';
 
@@ -32,12 +32,14 @@ const requestAccounts = async (updateState: Function) => {
 interface PropfileListProps {
 	className?: string;
 	redirectCallback?: (appointmentCreationStep: AppointmentCreationStep | undefined) => void;
+	editEnable?: boolean;
+	editOverlay?: FC<any>;
 }
 
-const ProfileList = ({ className, redirectCallback }: PropfileListProps) => {
+const ProfileList = ({ className, redirectCallback, editEnable = false, editOverlay }: PropfileListProps) => {
 	const { accountUsers, user: currentUser, updateState, appointmentCreationStep } = useContext(AppContext);
 	const classes = useStyles();
-	const onChangeProfile = (user: SimpleUser) => () => {
+	const onChangeProfile = (user: User) => () => {
 		if (updateState) {
 			updateState({ user, reservationAccountID: user.id });
 		}
@@ -60,6 +62,8 @@ const ProfileList = ({ className, redirectCallback }: PropfileListProps) => {
 					account={account}
 					isCurrentAccount={!!currentUser && account.id === currentUser.id}
 					onChangeProfile={onChangeProfile}
+					editEnable={editEnable}
+					editOverlay={editOverlay}
 				/>
 			))}
 			<AddUserCard />

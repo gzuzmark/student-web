@@ -36,23 +36,13 @@ interface AppProviderProps {
 	children: ReactElement;
 }
 
-export interface SimpleUser {
+export interface User {
 	id: string;
 	name: string;
 	lastName: string;
 	secondSurname: string;
 	identification: string;
-	email?: string;
-	isMain: boolean;
-	phoneNumber?: string;
-}
-
-export interface User {
-	name: string;
-	lastName: string;
-	secondSurname: string;
-	identification: string;
-	birthDate: string;
+	birthDate: number;
 	gender: string;
 	takeMedicines: boolean;
 	medicines?: string;
@@ -61,6 +51,7 @@ export interface User {
 	moreMedicalInformation?: string;
 	phoneNumber: string;
 	email?: string;
+	isMain: boolean;
 }
 
 export interface TriagePair {
@@ -69,9 +60,9 @@ export interface TriagePair {
 }
 
 interface ContextProps {
-	user: SimpleUser | null;
+	user: User | null;
 	userToken: string | null;
-	accountUsers: SimpleUser[];
+	accountUsers: User[];
 	guestToken: string | null;
 	reservationAccountID: string;
 	channel: string;

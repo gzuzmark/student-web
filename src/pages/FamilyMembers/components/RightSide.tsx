@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState, FC } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils';
-import { RightLayout, ProfileList } from 'pages/common';
-import { useTranslation } from 'react-i18next';
+import { RightLayout, ProfileList, EditOverlay } from 'pages/common';
+import { User } from 'AppContext';
+
+import EditFamilyMemberForm from './EditFamilyMemberForm';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -22,25 +26,112 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	profileList: {
+		paddingBottom: '44px',
 		[breakpoints.up('lg')]: {
 			'&&': {
 				justifyContent: 'flex-start',
+				paddingBottom: '47px',
 			},
+		},
+	},
+	editWrapper: {
+		padding: '0 26px 30px 26px',
+		[breakpoints.up('lg')]: {
+			padding: '0 0 87px 0',
+		},
+	},
+	editTitleWrapper: {
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'space-between',
+		paddingBottom: '37px',
+		[breakpoints.up('lg')]: {
+			width: '403px',
+		},
+	},
+	editButtonWrapper: {
+		textAlign: 'center',
+	},
+	editButton: {
+		fontSize: '15px',
+		padding: '10px 15px',
+		textTransform: 'none',
+		width: '197px',
+		[breakpoints.up('lg')]: {
+			padding: '6.5px 15px',
+		},
+	},
+	deleteButton: {
+		textTransform: 'none',
+		padding: '10px 15px',
+		fontSize: '15px',
+		[breakpoints.up('lg')]: {
+			padding: '6.5px 15px',
 		},
 	},
 }));
 
+interface EditOverlayWrapperProps {
+	user: User;
+}
+
+const EditOverlayWrapper = (onClick: (user: User) => () => void): FC<EditOverlayWrapperProps> => ({
+	user,
+}: {
+	user: User;
+}) => <EditOverlay onClick={onClick(user)} />;
+
 const RightSide = () => {
 	const { t } = useTranslation('familyMembers');
 	const classes = useStyles();
+	const [editEnable, setEditEnable] = useState<boolean>(false);
+	const [showEditForm, setShowEditForm] = useState<boolean>(false);
+	const [editableUser, setEditableUser] = useState<User>();
+	const toggleEditEnable = () => {
+		setEditEnable(!editEnable);
+	};
+	const onClickOverlay = (user: User) => () => {
+		setShowEditForm(true);
+		setEditableUser(user);
+	};
+	const cancelAction = () => {
+		setEditEnable(false);
+		setShowEditForm(false);
+		setEditableUser(undefined);
+	};
 
 	return (
 		<RightLayout>
 			<div className={classes.wrapper}>
-				<Typography className={classes.title} variant="h1">
-					<b>{t('familyMembers.title')}</b>
-				</Typography>
-				<ProfileList className={classes.profileList} />
+				{showEditForm && editableUser ? (
+					<div className={classes.editWrapper}>
+						<div className={classes.editTitleWrapper}>
+							<Typography variant="h1">
+								<b>{t('familyMembers.editProfile.title')}</b>
+							</Typography>
+							<Button className={classes.deleteButton} variant="outlined">
+								{t('familyMembers.editProfile.delete')}
+							</Button>
+						</div>
+						<EditFamilyMemberForm user={editableUser} cancelAction={cancelAction} />
+					</div>
+				) : (
+					<>
+						<Typography className={classes.title} variant="h1">
+							<b>{t('familyMembers.title')}</b>
+						</Typography>
+						<ProfileList
+							className={classes.profileList}
+							editEnable={editEnable}
+							editOverlay={EditOverlayWrapper(onClickOverlay)}
+						/>
+						<div className={classes.editButtonWrapper}>
+							<Button onClick={toggleEditEnable} className={classes.editButton} variant="outlined">
+								{editEnable ? t('familyMembers.disableEditProfile') : t('familyMembers.editProfile')}
+							</Button>
+						</div>
+					</>
+				)}
 			</div>
 		</RightLayout>
 	);
