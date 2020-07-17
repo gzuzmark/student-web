@@ -14,7 +14,10 @@ import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
-import pagoefectivo from 'icons/pagoefectivo.png';
+import interbank from 'icons/interbank.png';
+import bcp from 'icons/bcp.png';
+import scotia from 'icons/scotia.png';
+import bbva from 'icons/bbva.png';
 import { CULQI_PAYMENT_ID, TRANSACTION_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -194,6 +197,11 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		width: '80px',
 		height: '30px',
 	},
+	banksImage: {
+		width: '35px',
+		height: '30px',
+		paddingRight: '10px',
+	},
 }));
 
 interface RightSideProps {
@@ -284,10 +292,13 @@ const RightSide = ({
 								<CashierIcon />
 							</div>
 							<Typography className={classes.optionLabel} variant="h3">
-								{t('payment.right.payPEButton')}
+								{t('payment.right.payTransaction')}
 							</Typography>
 							<div className={classes.optionBrandWrapper}>
-								<img src={pagoefectivo} className={classes.pagoEfectivoImage} alt="Brand Pago Efectivo" />
+								<img src={interbank} title="Interbank" className={classes.banksImage} alt="Brand Interbank" />
+								<img src={bcp} title="Bcp" className={classes.banksImage} alt="Brand BCP" />
+								<img src={scotia} title="Scotiabank" className={classes.banksImage} alt="Brand Scotia" />
+								<img src={bbva} title="Bbva" className={classes.banksImage} alt="Brand BBVA" />
 							</div>
 						</div>
 					</Button>
