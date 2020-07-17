@@ -9,6 +9,8 @@ interface SimpleUseAPI {
 	second_last_name: string;
 	dni: string;
 	is_main: boolean;
+	contact_email: string;
+	contact_phone: string;
 }
 
 interface ProfilesAPIResponse {
@@ -39,12 +41,26 @@ export const getCurrentUser = async (token?: string): Promise<[string, SimpleUse
 				secondSurname: data.second_last_name,
 				identification: data.dni,
 				isMain: data.is_main,
+				email: data.contact_email,
+				phoneNumber: data.contact_phone,
 			},
 		];
 	} catch (e) {
 		console.log(e);
 
-		return ['', { id: '', name: '', lastName: '', secondSurname: '', identification: '', isMain: false }];
+		return [
+			'',
+			{
+				id: '',
+				name: '',
+				lastName: '',
+				secondSurname: '',
+				identification: '',
+				isMain: false,
+				email: '',
+				phoneNumber: '',
+			},
+		];
 	}
 };
 
@@ -61,5 +77,7 @@ export const getProfiles = async () => {
 		secondSurname: user.second_last_name,
 		identification: user.dni,
 		isMain: user.is_main,
+		email: user.contact_email,
+		phoneNumber: user.contact_phone,
 	}));
 };
