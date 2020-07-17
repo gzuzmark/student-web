@@ -109,7 +109,6 @@ const EditFamilyMemberForm = ({ user, cancelAction }: EditFamilyMemberFormProps)
 			try {
 				if (values.birthDate) {
 					await updateProfile({ ...values, birthDate: values.birthDate });
-					setSubmitting(false);
 					cancelAction();
 				}
 			} catch (e) {
