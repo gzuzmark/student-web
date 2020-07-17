@@ -1,4 +1,5 @@
 import React, { MouseEvent, ChangeEvent } from 'react';
+import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -7,10 +8,19 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
-import { stylesWithTheme } from 'utils';
 import { RightLayout } from 'pages/common';
+import { stylesWithTheme } from 'utils';
+import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
+import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
+import mastercard from 'icons/mastercard.png';
+import visa from 'icons/visa.png';
+import interbank from 'icons/interbank.png';
+import bcp from 'icons/bcp.png';
+import scotia from 'icons/scotia.png';
+import bbva from 'icons/bbva.png';
+import { CULQI_PAYMENT_ID, TRANSACTION_PAYMENT_ID } from 'pages/api';
 
-const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	container: {
 		'&&': {
 			minHeight: 'calc(100vh - 301px)',
@@ -39,16 +49,19 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	amount: {
 		fontWeight: 'bold',
+		letterSpacing: '0.2px',
 	},
-	subTitleWrapper: {
-		paddingBottom: '41px',
+	subtitle: {
+		fontSize: '13px',
+		paddingBottom: '5px',
 		[breakpoints.up('lg')]: {
-			paddingBottom: '56px',
+			fontSize: '17px',
 		},
 	},
 	discountWrapper: {
 		paddingBottom: '30px',
 		[breakpoints.up('lg')]: {
+			marginTop: '28px',
 			paddingBottom: '50px',
 			width: '399px',
 		},
@@ -97,9 +110,97 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	buttonWrapper: {
+		display: 'flex',
+		marginTop: '10px',
 		[breakpoints.up('lg')]: {
-			maxWidth: '401px',
+			maxWidth: '601px',
 		},
+	},
+	errorWrapper: {
+		marginBottom: 'auto',
+		[breakpoints.up('lg')]: {
+			marginBottom: '30px',
+		},
+	},
+	payButton: {
+		marginRight: '10px',
+	},
+
+	optionWrapper: {
+		margin: 0,
+		[breakpoints.up('lg')]: {
+			marginRight: '5px',
+			maxWidth: '290px',
+		},
+	},
+	option: {
+		border: '1px solid white',
+		boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
+		marginRight: '10px',
+		justifyContent: 'flex-start',
+		padding: '26px',
+		'&.long-text': {
+			padding: '26px 15px 26px 26px',
+		},
+		'&:last-child': {
+			marginBottom: '0',
+		},
+		'&:hover': {
+			boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
+			'& .option-icon-wrapper': {
+				backgroundColor: palette.primary.light,
+			},
+		},
+		[breakpoints.up('lg')]: {
+			marginBottom: 0,
+			padding: '28px 13px 28px 22px',
+			boxShadow: 'none',
+		},
+	},
+	optionBody: {
+		alignItems: 'center',
+		display: 'block',
+		textAlign: 'center',
+	},
+	optionIconWrapper: {
+		alignItems: 'center',
+		borderRadius: '50%',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		height: '77px',
+		width: '77px',
+		margin: 'auto',
+	},
+	optionLabel: {
+		color: palette.primary.main,
+		fontSize: '15px',
+		fontWeight: '500',
+		letterSpacing: '1px',
+	},
+	optionBrandWrapper: {
+		display: 'flex',
+		marginTop: '10px',
+		justifyContent: 'center',
+		minHeight: '40px',
+	},
+	masterCardImage: {
+		width: '28px',
+		height: '18px',
+		paddingRight: '5px',
+	},
+	visaImage: {
+		width: '35px',
+		height: '12px',
+	},
+	pagoEfectivoImage: {
+		width: '80px',
+		height: '30px',
+	},
+	banksImage: {
+		width: '35px',
+		height: '30px',
+		paddingRight: '10px',
 	},
 }));
 
@@ -109,7 +210,7 @@ interface RightSideProps {
 	sendDiscount: () => Promise<void>;
 	discountCode: string;
 	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
-	openPaymentModal: (e: MouseEvent) => void;
+	executePayment: (pm: number) => (e: MouseEvent) => void;
 	errorMessage: string;
 }
 
@@ -119,7 +220,7 @@ const RightSide = ({
 	sendDiscount,
 	discountCode,
 	onChangeDiscount,
-	openPaymentModal,
+	executePayment,
 	errorMessage,
 }: RightSideProps) => {
 	const { t } = useTranslation('payment');
@@ -134,15 +235,16 @@ const RightSide = ({
 	return (
 		<RightLayout className={classes.container}>
 			<div className={classes.wrapper}>
-				<Typography className={classes.title}>{t('payment.right.title')}</Typography>
-				<div className={classes.subTitleWrapper}>
-					<Typography component="span" variant={matches ? 'h3' : 'body1'}>
-						{t('payment.right.payment')}{' '}
-					</Typography>
-					<Typography className={classes.amount} component="span" variant={matches ? 'h3' : 'body1'}>
+				<Typography className={classes.title}>
+					{t('payment.right.payment')}{' '}
+					<Typography
+						className={clsx(classes.title, classes.amount)}
+						component="span"
+						variant={matches ? 'h3' : 'body1'}
+					>
 						S/{totalCost}
 					</Typography>
-				</div>
+				</Typography>
 				<div className={classes.discountWrapper}>
 					<TextField
 						value={discountCode}
@@ -166,12 +268,46 @@ const RightSide = ({
 						</Button>
 					</div>
 				</div>
+				<Typography className={classes.subtitle} component="span" variant={matches ? 'h3' : 'body1'}>
+					{t('payment.right.method')}:
+				</Typography>
 				<div className={classes.buttonWrapper}>
-					<Button variant="contained" onClick={openPaymentModal} fullWidth>
-						{t('payment.right.payButton')}
+					<Button className={classes.option} onClick={executePayment(CULQI_PAYMENT_ID)} variant="outlined">
+						<div className={classes.optionBody}>
+							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+								<CreditCardIcon />
+							</div>
+							<Typography className={classes.optionLabel} variant="h3">
+								{t('payment.right.payCulqiButton')}
+							</Typography>
+							<div className={classes.optionBrandWrapper}>
+								<img src={mastercard} className={classes.masterCardImage} alt="Brand Mastercard" />
+								<img src={visa} className={classes.visaImage} alt="Brand Visa" />
+							</div>
+						</div>
 					</Button>
-					{errorMessage ? <FormHelperText error>{errorMessage}</FormHelperText> : null}
+					<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
+						<div className={classes.optionBody}>
+							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+								<CashierIcon />
+							</div>
+							<Typography className={classes.optionLabel} variant="h3">
+								{t('payment.right.payTransaction')}
+							</Typography>
+							<div className={classes.optionBrandWrapper}>
+								<img src={interbank} title="Interbank" className={classes.banksImage} alt="Brand Interbank" />
+								<img src={bcp} title="Bcp" className={classes.banksImage} alt="Brand BCP" />
+								<img src={scotia} title="Scotiabank" className={classes.banksImage} alt="Brand Scotia" />
+								<img src={bbva} title="Bbva" className={classes.banksImage} alt="Brand BBVA" />
+							</div>
+						</div>
+					</Button>
 				</div>
+				{errorMessage ? (
+					<div className={classes.errorWrapper}>
+						<FormHelperText error>{errorMessage}</FormHelperText>
+					</div>
+				) : null}
 			</div>
 		</RightLayout>
 	);

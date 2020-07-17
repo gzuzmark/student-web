@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent } from 'react';
+import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -6,11 +6,15 @@ import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
 import { useAppointmentStepValidation, getIntCurrency } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
-import { CONFIRMATION_STEP } from 'AppContext';
+import AppContext, { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import { createPayment, createAppointment, applyDiscount, Discount } from 'pages/api';
+import { createPayment, createAppointment, applyDiscount, Discount, CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
+
+const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
+	return `https://chats.landbot.io/v2/H-642423-BHD55YOVGNEOHTH0/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
+};
 
 const Payment = () => {
 	const {
@@ -26,14 +30,87 @@ const Payment = () => {
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
 	const { t } = useTranslation('payment');
+	const { user: userCtx } = useContext(AppContext);
 	const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
-	const openPaymentModal = useCallback((e: MouseEvent) => {
-		e.preventDefault();
-		window.Culqi.open();
-	}, []);
+
+	const performTransactionPayment = useCallback(
+		async (method: number) => {
+			if (schedule && updateContextState && reservationAccountID && useCase && triage && user && doctor) {
+				try {
+					setIsPaymentLoading(true);
+					const userName = user.name || userCtx?.name;
+					const userPhone = user.phoneNumber || userCtx?.phoneNumber;
+					const response: any = await createPayment({
+						cost: useCase?.totalCost,
+						appointmentTypeID: 'ugito',
+						scheduleID: schedule.id,
+						discountID: discount.id,
+						email: user.email || userCtx?.email || '',
+						token: 'SnzVSB3cSA',
+						dni: user.identification || '',
+						name: userName || '',
+						lastName: user.lastName,
+						phone: userPhone || '',
+						paymentType: method,
+					});
+					await createAppointment(
+						{
+							reservationAccountID: reservationAccountID,
+							appointmentTypeID: 'ugito',
+							useCaseID: useCase.id,
+							scheduleID: schedule.id,
+							triage,
+						},
+						userToken,
+					);
+					updateContextState({
+						useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+					});
+					setIsPaymentLoading(false);
+					if (method === PE_PAYMENT_ID) {
+						if (response?.data) {
+							const link = response?.data?.data?.reference_link as string;
+							window.location.href = link;
+						}
+					} else {
+						const link = buildTransactionURL(doctor.name, doctor.lastName, userName || '', userPhone || '');
+						window.location.href = link;
+					}
+				} catch (e) {
+					setErrorMessage(t('payment.error.pe'));
+					setIsPaymentLoading(false);
+				}
+			}
+		},
+		[
+			discount,
+			schedule,
+			updateContextState,
+			reservationAccountID,
+			useCase,
+			triage,
+			user,
+			t,
+			userCtx,
+			userToken,
+			doctor,
+		],
+	);
+
+	const makePayment = useCallback(
+		(paymentMethod: number) => (e: MouseEvent) => {
+			if (paymentMethod === CULQI_PAYMENT_ID) {
+				e.preventDefault();
+				window.Culqi.open();
+			} else {
+				performTransactionPayment(paymentMethod);
+			}
+		},
+		[performTransactionPayment],
+	);
 	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target) {
 			setDiscountCode(e.target.value);
@@ -79,6 +156,10 @@ const Payment = () => {
 								email,
 								token,
 								dni: user.identification || '',
+								name: '',
+								lastName: '',
+								phone: '',
+								paymentType: CULQI_PAYMENT_ID,
 							});
 							await createAppointment(
 								{
@@ -118,7 +199,7 @@ const Payment = () => {
 				sendDiscount={sendDiscount}
 				discountCode={discountCode}
 				onChangeDiscount={onChangeDiscount}
-				openPaymentModal={openPaymentModal}
+				executePayment={makePayment}
 				errorMessage={errorMessage}
 			/>
 		</Container>
