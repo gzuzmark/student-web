@@ -11,7 +11,6 @@ import { TextField } from 'formik-material-ui';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
-import { parseUTCDate, dateToUTCUnixTimestamp } from 'utils';
 import { stylesWithTheme } from 'utils/createStyles';
 import { OptionsGroup, Option, DatePickerField } from 'pages/common';
 import { User } from 'AppContext';
@@ -109,7 +108,7 @@ const EditFamilyMemberForm = ({ user, cancelAction }: EditFamilyMemberFormProps)
 		async (values: UpdateUser, { setSubmitting }: FormikHelpers<UpdateUser>) => {
 			try {
 				if (values.birthDate) {
-					await updateProfile({ ...values, birthDate: dateToUTCUnixTimestamp(values.birthDate) });
+					await updateProfile({ ...values, birthDate: values.birthDate });
 					setSubmitting(false);
 					cancelAction();
 				}
@@ -119,7 +118,7 @@ const EditFamilyMemberForm = ({ user, cancelAction }: EditFamilyMemberFormProps)
 		},
 		[cancelAction],
 	);
-	const initialValues: UpdateUser = { ...user, birthDate: parseUTCDate(user.birthDate || 1594789593) };
+	const initialValues: UpdateUser = { ...user, birthDate: user.birthDate };
 
 	return (
 		<Formik initialValues={initialValues} onSubmit={onSubmitCallback} validationSchema={validationSchema}>

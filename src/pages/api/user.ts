@@ -1,6 +1,8 @@
-import aliviaAxios from 'utils/customAxios';
+import format from 'date-fns/format';
+
 import { User } from 'AppContext';
 import { getLocalValue } from 'utils';
+import aliviaAxios from 'utils/customAxios';
 
 interface UserAPI {
 	id: string;
@@ -9,7 +11,7 @@ interface UserAPI {
 	second_last_name: string;
 	dni: string;
 	is_main: boolean;
-	birth_date: number;
+	birth_date: string;
 	gender: string;
 	meds: string;
 	allergies: string;
@@ -37,7 +39,7 @@ const parseUser = (apiUser: UserAPI): User => ({
 	secondSurname: apiUser.second_last_name,
 	identification: apiUser.dni,
 	isMain: apiUser.is_main,
-	birthDate: apiUser.birth_date,
+	birthDate: new Date(apiUser.birth_date),
 	gender: apiUser.gender,
 	medicines: apiUser.meds || '',
 	takeMedicines: !!apiUser.meds,
@@ -54,7 +56,7 @@ const parseAPIUser = (user: User): Omit<UserAPI, 'contact_phone' | 'contact_emai
 	last_name: user.lastName,
 	second_last_name: user.secondSurname,
 	dni: user.identification,
-	birth_date: user.birthDate,
+	birth_date: format(new Date(user.birthDate), 'dd/MM/yyyy'),
 	gender: user.gender,
 	meds: user.medicines || '',
 	allergies: user.allergies || '',
@@ -80,7 +82,7 @@ export const getCurrentUser = async (token?: string): Promise<[string, User]> =>
 				secondSurname: '',
 				identification: '',
 				isMain: false,
-				birthDate: -1,
+				birthDate: new Date(),
 				gender: '',
 				medicines: '',
 				takeMedicines: false,

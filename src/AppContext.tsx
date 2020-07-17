@@ -42,7 +42,7 @@ export interface User {
 	lastName: string;
 	secondSurname: string;
 	identification: string;
-	birthDate: number;
+	birthDate: Date;
 	gender: string;
 	takeMedicines: boolean;
 	medicines?: string;
