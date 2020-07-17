@@ -2,6 +2,7 @@ import aliviaAxios from 'utils/customAxios';
 
 export const CULQI_PAYMENT_ID = 1;
 export const PE_PAYMENT_ID = 2;
+export const TRANSACTION_PAYMENT_ID = 3;
 
 interface PaymentRequestBody {
 	cost: string;

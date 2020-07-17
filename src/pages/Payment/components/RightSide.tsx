@@ -15,7 +15,7 @@ import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
 import pagoefectivo from 'icons/pagoefectivo.png';
-import { CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
+import { CULQI_PAYMENT_ID, TRANSACTION_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	container: {
@@ -278,7 +278,7 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
+					<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
 						<div className={classes.optionBody}>
 							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
 								<CashierIcon />
