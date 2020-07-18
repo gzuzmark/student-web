@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
 import { stylesWithTheme } from 'utils';
-import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
+import { ReactComponent as BankIcon } from 'icons/bank.svg';
 import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
@@ -161,6 +161,10 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		alignItems: 'center',
 		display: 'block',
 		textAlign: 'center',
+		width: '100%',
+		[breakpoints.up('lg')]: {
+			width: 'auto',
+		},
 	},
 	optionIconWrapper: {
 		alignItems: 'center',
@@ -174,15 +178,21 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	optionLabel: {
 		color: palette.primary.main,
-		fontSize: '15px',
+		fontSize: '10px',
 		fontWeight: '500',
 		letterSpacing: '1px',
+		[breakpoints.up('lg')]: {
+			fontSize: '15px',
+		},
 	},
 	optionBrandWrapper: {
-		display: 'flex',
+		display: 'block',
 		marginTop: '10px',
 		justifyContent: 'center',
 		minHeight: '40px',
+		[breakpoints.up('lg')]: {
+			display: 'flex',
+		},
 	},
 	masterCardImage: {
 		width: '28px',
@@ -289,7 +299,7 @@ const RightSide = ({
 					<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
 						<div className={classes.optionBody}>
 							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<CashierIcon />
+								<BankIcon />
 							</div>
 							<Typography className={classes.optionLabel} variant="h3">
 								{t('payment.right.payTransaction')}
