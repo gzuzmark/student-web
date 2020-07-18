@@ -110,7 +110,7 @@ export const updateProfile = async (newProfile: User) => {
 		const token = getLocalValue('userToken');
 		const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-		await aliviaAxios.patch(`/patients/profiles/${newProfile.id}`, parseAPIUser(newProfile), { headers });
+		await aliviaAxios.patch(`/accounts/profiles/${newProfile.id}`, parseAPIUser(newProfile), { headers });
 	} catch (e) {
 		console.log(e);
 
