@@ -13,10 +13,10 @@ import EditFamilyMemberForm from './EditFamilyMemberForm';
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		textAlign: 'center',
-		paddingTop: '28px',
+		padding: '28px 0',
 		[breakpoints.up('lg')]: {
 			textAlign: 'left',
-			paddingTop: '87px',
+			padding: '87px 0 0 0',
 		},
 	},
 	title: {
