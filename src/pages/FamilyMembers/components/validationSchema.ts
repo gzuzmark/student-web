@@ -58,7 +58,7 @@ const validationSchema = object().shape({
 	medicineList: string().when('takeMedicines', { is: true, then: string().required(messages.medicineList.required) }),
 	haveAllergies: boolean().required(messages.haveAllergies.required).nullable(),
 	allergies: string().when('haveAllergies', { is: true, then: string().required(messages.allergy.required) }),
-	moreInfo: string(),
+	moreMedicalInformation: string(),
 });
 
 export default validationSchema;

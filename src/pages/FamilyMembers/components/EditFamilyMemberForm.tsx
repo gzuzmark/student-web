@@ -236,7 +236,7 @@ const EditFamilyMemberForm = ({ user, cancelAction }: EditFamilyMemberFormProps)
 							<Field
 								component={TextField}
 								className={classes.moreInformationLabel}
-								name="moreInfo"
+								name="moreMedicalInformation"
 								variant="outlined"
 								helperText={t('medicalData.fields.moreInfo.helperText')}
 								fullWidth
