@@ -1,4 +1,5 @@
 import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 
 import { User } from 'AppContext';
 import { getLocalValue } from 'utils';
@@ -32,6 +33,9 @@ interface CurrentUserResponse {
 	data: CurrentUserDataResponse;
 }
 
+const parseBirthDate = (birthDate: string) =>
+	parse(birthDate.slice(0, birthDate.indexOf('T')), 'yyyy-MM-dd', new Date());
+
 const parseUser = (apiUser: UserAPI): User => ({
 	id: apiUser.id,
 	name: apiUser.name,
@@ -39,7 +43,7 @@ const parseUser = (apiUser: UserAPI): User => ({
 	secondSurname: apiUser.second_last_name,
 	identification: apiUser.dni,
 	isMain: apiUser.is_main,
-	birthDate: new Date(apiUser.birth_date),
+	birthDate: parseBirthDate(apiUser.birth_date),
 	gender: apiUser.gender,
 	medicines: apiUser.meds || '',
 	takeMedicines: !!apiUser.meds,
