@@ -1,5 +1,9 @@
 import aliviaAxios from 'utils/customAxios';
 
+export const CULQI_PAYMENT_ID = 1;
+export const PE_PAYMENT_ID = 2;
+export const TRANSACTION_PAYMENT_ID = 3;
+
 interface PaymentRequestBody {
 	cost: string;
 	appointmentTypeID: string;
@@ -8,6 +12,10 @@ interface PaymentRequestBody {
 	scheduleID: string;
 	discountID: string;
 	dni: string;
+	name: string;
+	lastName: string;
+	phone: string;
+	paymentType: number;
 }
 
 interface DiscountRequestBody {
@@ -40,11 +48,15 @@ const formatParams = (params: PaymentRequestBody) => ({
 	schedule_id: params.scheduleID,
 	discount_id: params.discountID || '',
 	patient_dni: params.dni || '',
+	patient_name: params.name || '',
+	patient_last_name: params.lastName || '',
+	patient_phone: params.phone || '',
+	payment_type: params.paymentType,
 });
 
 export const createPayment = async (params: PaymentRequestBody): Promise<void> => {
 	try {
-		await aliviaAxios.post('/payments', { ...formatParams(params) });
+		return await aliviaAxios.post('/payments', { ...formatParams(params) });
 	} catch (e) {
 		throw Error(e);
 	}

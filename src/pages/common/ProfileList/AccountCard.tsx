@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 
-import { SimpleUser } from 'AppContext';
+import { User } from 'AppContext';
 import { ReactComponent as UserSmile } from 'icons/user_smile.svg';
 import { stylesWithTheme } from 'utils';
 
@@ -55,17 +55,26 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 }));
 
 interface AccountCardProps {
-	account: SimpleUser;
+	account: User;
 	isCurrentAccount: boolean;
-	onChangeProfile: (user: SimpleUser) => () => void;
+	onChangeProfile: (user: User) => () => void;
+	editEnable?: boolean;
+	editOverlay?: FC<any>;
 }
 
-const AccountCard = ({ account, isCurrentAccount, onChangeProfile }: AccountCardProps) => {
+const AccountCard = ({ account, isCurrentAccount, onChangeProfile, editEnable, editOverlay }: AccountCardProps) => {
 	const classes = useStyles({ isCurrentAccount });
 
 	return (
 		<div className={classes.wrapper}>
-			<UserCard onClick={onChangeProfile(account)} className={classes.card} isCurrentAccount={isCurrentAccount}>
+			<UserCard
+				account={account}
+				onClick={onChangeProfile(account)}
+				className={classes.card}
+				isCurrentAccount={isCurrentAccount}
+				overlayActive={editEnable}
+				overlay={editOverlay}
+			>
 				<UserSmile className={classes.userSmileIcon} />
 			</UserCard>
 			<Typography className={classes.name} variant="button">

@@ -4,7 +4,7 @@ import { Theme } from '@material-ui/core/styles';
 
 import { Doctor, Schedule } from 'pages/api/selectDoctor';
 import { LeftLayout } from 'pages/common';
-import { SimpleUser } from 'AppContext';
+import { User } from 'AppContext';
 import { useTranslation } from 'react-i18next';
 import { formatUTCDate, stylesWithTheme } from 'utils';
 
@@ -85,7 +85,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 interface LeftSideProps {
-	user: SimpleUser | null | undefined;
+	user: User | null | undefined;
 	doctor: Doctor | null | undefined;
 	schedule: Schedule | null | undefined;
 }
