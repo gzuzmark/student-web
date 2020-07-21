@@ -19,6 +19,18 @@ const selectDoctor = {
 	'steps.mobile.firstStep.label': 'SOBRE TI',
 	'steps.mobile.secondStep.label': 'DATOS MÉDICOS',
 	'steps.mobile.thirdStep.label': 'CONTACTO',
+	'warning.modal.title': 'Confirmo que el paciente',
+	'warning.modal.dont': 'NO:',
+	'warning.modal.firstCondition': '- Es un niño menor de 8 años.',
+	'warning.modal.secondCondition': '- Está atravesando un tratamiento oncológico.',
+	'warning.modal.thirdCondition': '- Tiene una enfermedad crónica avanzada (ej. Insuficiencia Renal).',
+	'warning.modal.fourthCondition': '- Tiene transtornos alimenticios (anorexia o bulimia).',
+	'warning.modal.fifthCondition': '- Es un deportista de Alto Rendimiento.',
+	'warning.modal.termsFirst': 'Si el paciente presenta algunas de estas condiciones,',
+	'warning.modal.termsBold': 'no podremos atenderlo',
+	'warning.modal.termsSecond': 'debido a que se requiere un acompañamiento distinto durante el tratamiento.',
+	'warning.modal.cancel': 'Cancelar',
+	'warning.modal.accept': 'Continuar a agendar cita',
 };
 
 export default selectDoctor;
