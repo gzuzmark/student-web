@@ -1,5 +1,6 @@
 import { AboutMeValues, MedicalDataValues, ContactValues } from './components';
 import { Location } from 'history';
+import { TriagePair } from 'AppContext';
 
 export const SUB_ROUTES = ['sobre_ti', 'datos_medicos', 'contacto'];
 
@@ -29,4 +30,23 @@ export const formatNewUser = (user: AboutMeValues & MedicalDataValues & ContactV
 	delete newUser.repeatPassword;
 
 	return newUser;
+};
+
+export const updateTriageQuestion = (
+	triageQuestion: string,
+	answer: string,
+	triage: TriagePair[] = [],
+): TriagePair[] => {
+	if (!!triage.length) {
+		const ind = triage.findIndex((t) => t.question.includes(triageQuestion));
+		const newTriage = [...triage];
+		newTriage[ind].answer = answer;
+		return newTriage;
+	}
+	return [
+		{
+			question: triageQuestion,
+			answer,
+		},
+	];
 };

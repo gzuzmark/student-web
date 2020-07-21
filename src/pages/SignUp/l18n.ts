@@ -47,6 +47,7 @@ const signUp = {
 	'medicalData.title.fourthSection.minor': 'menor para que el doctor te pueda atender mejor.',
 	'medicalData.subTitle': '2. DATOS MÉDICOS',
 	'medicalData.subTitle.minor': '2. DATOS MÉDICOS DEL MENOR',
+	'medicalData.fields.consultReason.label': '¿Cuál es el motivo de su consulta?',
 	'medicalData.fields.takeMedicines.label': '¿El paciente toma algún medicamento?',
 	'medicalData.fields.medicineList.label': '¿Qué medicamentos?',
 	'medicalData.fields.haveAllergies.label': '¿El paciente tiene alguna alergia?',
