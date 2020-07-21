@@ -19,9 +19,12 @@ const DEFAULT_TRIAGE_VALUES = [
 	{ question: '¿Hace cuánto tiempo se viene presentando este malestar?', answer: '-' },
 ];
 
-const requestUseCaseID = async (useCaseID: string, updateState: Function | undefined) => {
+const requestUseCaseID = async (useCaseID: string, updateState: Function | undefined, toggleWarningModal: Function) => {
 	if (updateState) {
 		const useCase = await getUseCase(useCaseID);
+		if (useCase && window.nutritionistUseCaseId === useCase.id) {
+			toggleWarningModal(true);
+		}
 		updateState({
 			useCase,
 			appointmentCreationStep: SELECT_DOCTOR_STEP,
@@ -36,7 +39,7 @@ const useHookBasedOnURLAccess = (comeFromTriage: boolean, f1: Function, f2: Func
 };
 
 const SelectDoctor = () => {
-	const [showWarningModal, toggleWarningModal] = useState(true);
+	const [showWarningModal, toggleWarningModal] = useState(false);
 	const location = useLocation();
 	const params = parse(location.search);
 	const comeFromTriage = !params.malestar;
@@ -65,7 +68,12 @@ const SelectDoctor = () => {
 			}
 
 			if (!useCase && useCaseParam && updateState) {
-				requestUseCaseID(useCaseParam, updateState);
+				requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
+			}
+		}
+		if (useCase && useCase.id) {
+			if (window.nutritionistUseCaseId === useCase.id) {
+				toggleWarningModal(true);
 			}
 		}
 	}, [location.search, updateState, useCase, comeFromTriage, params.malestar]);
