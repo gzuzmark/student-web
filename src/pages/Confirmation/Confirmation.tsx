@@ -9,14 +9,21 @@ import LeftSide from './components/LeftSide';
 import { GUEST } from 'AppContext';
 
 const Confirmation = () => {
-	const { appointmentOwner, user, doctor, schedule, useCase } = useAppointmentStepValidation(CONFIRMATION_ROUTE);
+	const { appointmentOwner, user, doctor, schedule, useCase, paymentURL } = useAppointmentStepValidation(
+		CONFIRMATION_ROUTE,
+	);
 	const isGuest = appointmentOwner === GUEST;
 
 	useEffect(() => {
 		if (process.env.NODE_ENV === 'production') {
 			window.fbq('track', 'Purchase', { currency: 'PEN', value: useCase?.totalCost });
-			window.gtag('event', 'conversion', {'send_to': 'AW-620358090/NHAXCLHh29YBEMrT56cC'});
+			window.gtag('event', 'conversion', { send_to: 'AW-620358090/NHAXCLHh29YBEMrT56cC' });
 			window.gtag('event', 'Pagar', 'Botón', 'click');
+		}
+		if (paymentURL) {
+			setTimeout(() => {
+				window.location.href = paymentURL;
+			}, 5000);
 		}
 		// eslint-disable-next-line
 	}, []);

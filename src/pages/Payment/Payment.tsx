@@ -66,19 +66,21 @@ const Payment = () => {
 						},
 						userToken,
 					);
-					updateContextState({
-						useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-					});
 					setIsPaymentLoading(false);
+					let link = null;
 					if (method === PE_PAYMENT_ID) {
 						if (response?.data) {
-							const link = response?.data?.data?.reference_link as string;
-							window.location.href = link;
+							link = response?.data?.data?.reference_link as string;
 						}
 					} else {
-						const link = buildTransactionURL(doctor.name, doctor.lastName, userName || '', userPhone || '');
-						window.location.href = link;
+						link = buildTransactionURL(doctor.name, doctor.lastName, userName || '', userPhone || '');
 					}
+					updateContextState({
+						useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+						paymentURL: link,
+						appointmentCreationStep: CONFIRMATION_STEP,
+					});
+					history.push('/confirmacion');
 				} catch (e) {
 					setErrorMessage(t('payment.error.pe'));
 					setIsPaymentLoading(false);
@@ -97,6 +99,7 @@ const Payment = () => {
 			userCtx,
 			userToken,
 			doctor,
+			history,
 		],
 	);
 

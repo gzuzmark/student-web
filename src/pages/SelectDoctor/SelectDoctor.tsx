@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 
 import { useLocation } from 'react-router-dom';
 import { parse } from 'query-string';
@@ -10,6 +10,7 @@ import { LeftSide } from './components/LeftSide';
 import { RightSide } from './components/RightSide';
 import { getUseCase } from 'pages/api';
 import AppContext, { SELECT_DOCTOR_STEP, GUEST } from 'AppContext';
+import WarningModal from './components/WarningModal/WarningModal';
 
 const DEFAULT_TRIAGE_VALUES = [
 	{ question: '¿Para quién es la consulta?', answer: 'relative' },
@@ -35,6 +36,7 @@ const useHookBasedOnURLAccess = (comeFromTriage: boolean, f1: Function, f2: Func
 };
 
 const SelectDoctor = () => {
+	const [showWarningModal, toggleWarningModal] = useState(true);
 	const location = useLocation();
 	const params = parse(location.search);
 	const comeFromTriage = !params.malestar;
@@ -46,6 +48,13 @@ const SelectDoctor = () => {
 		useContext,
 	);
 	usePageTitle('Seleccion doctor');
+
+	const onRejectWarning = () => {
+		toggleWarningModal(false);
+		redirectToBaseAlivia();
+	};
+
+	const onAcceptWarning = () => toggleWarningModal(false);
 
 	useEffect(() => {
 		if (!comeFromTriage) {
@@ -72,6 +81,7 @@ const SelectDoctor = () => {
 				minutes={minutes}
 				numSessions={numSessions}
 			/>
+			<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
 		</Container>
 	);
 };
