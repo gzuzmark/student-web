@@ -23,20 +23,25 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 		padding: '1rem',
 		width: '100%',
 		height: '100%',
-		[breakpoints.up('lg')]: {
+		[breakpoints.up('md')]: {
 			width: '889px',
 			height: '478px',
 		},
 	},
 	modalContent: {
-		display: 'flex',
 		height: '100%',
-		alignItems: 'center',
+		textAlign: 'center',
+		[breakpoints.up('md')]: {
+			display: 'flex',
+			alignItems: 'center',
+			textAlign: 'left',
+		},
 	},
 	imageContainer: {
 		width: '40%',
 		textAlign: 'center',
 		alignSelf: 'center',
+		margin: 'auto',
 	},
 	textContainer: {
 		alignSelf: 'center',
@@ -51,6 +56,7 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 		fontWeight: 900,
 	},
 	conditions: {
+		textAlign: 'left',
 		listStyleType: 'none',
 		paddingLeft: '20px',
 		'& > li': {
@@ -63,19 +69,27 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 		fontSize: '12px',
 		lineHeight: '15px',
 		color: palette.text.primary,
-		paddingRight: '120px',
+		paddingRight: '0',
+		[breakpoints.up('md')]: {
+			paddingRight: '120px',
+		},
 	},
 	buttonsContainer: {
 		marginTop: '37px',
 	},
 	button: {
-		fontSize: '18px',
-		padding: '15px 25px',
-		marginRight: '34px',
+		fontSize: '12px',
+		padding: '12px 22px',
+		marginRight: '10px',
 		textTransform: 'none',
 		textDecoration: 'none',
 		'&:hover': {
 			textDecoration: 'none',
+		},
+		[breakpoints.up('md')]: {
+			fontSize: '18px',
+			padding: '15px 25px',
+			marginRight: '34px',
 		},
 	},
 }));
