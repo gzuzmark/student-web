@@ -73,6 +73,7 @@ interface ContextProps {
 	triage: TriagePair[];
 	updateState: Function;
 	appointmentCreationStep: AppointmentCreationStep;
+	paymentURL: string | null;
 }
 
 const defaultState: ContextProps = {
@@ -89,6 +90,7 @@ const defaultState: ContextProps = {
 	appointmentOwner: MYSELF,
 	updateState: Function.prototype,
 	appointmentCreationStep: '',
+	paymentURL: null,
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 
