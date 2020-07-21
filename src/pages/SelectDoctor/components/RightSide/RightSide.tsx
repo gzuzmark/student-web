@@ -17,6 +17,17 @@ const limitSchedules = (numSessions: string) => (_: any, i: number) => {
 	return limit ? i < limit : true;
 };
 
+const DAYS_TO_THURSDAY = [4, 3, 2, 1, 0, 6, 5, 4];
+
+const setCurrentDateToThursday = (): Date => {
+	const thursday = new Date();
+	thursday.setDate(thursday.getDate() + DAYS_TO_THURSDAY[thursday.getDay()]);
+	thursday.setHours(5);
+	thursday.setMinutes(0);
+	thursday.setMilliseconds(0);
+	return thursday;
+};
+
 const getDoctors = async (
 	selectedDate: Date | null,
 	useCase: UseCase | null | undefined,
@@ -66,7 +77,13 @@ const RightSide = ({
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	useEffect(() => {
-		getDoctors(selectedDate, useCase, setDoctors, minutes, numSessions);
+		if (useCase?.id === window.nutritionistUseCaseId) {
+			var thursday = setCurrentDateToThursday();
+			setSelectedDate(thursday);
+			getDoctors(thursday, useCase, setDoctors, minutes, numSessions);
+		} else {
+			getDoctors(selectedDate, useCase, setDoctors, minutes, numSessions);
+		}
 	}, [selectedDate, useCase, minutes, numSessions]);
 
 	return (
