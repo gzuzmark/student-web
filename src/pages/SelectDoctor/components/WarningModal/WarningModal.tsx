@@ -14,6 +14,8 @@ interface PropsWarningModal {
 
 const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	modalContainer: {
+		display: 'flex',
+		alignItems: 'center',
 		borderRadius: '10px',
 		position: 'relative',
 		top: '50%',
@@ -24,14 +26,16 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 		width: '100%',
 		height: '100%',
 		[breakpoints.up('md')]: {
+			display: 'block',
 			width: '889px',
 			height: '478px',
 		},
 	},
 	modalContent: {
-		height: '100%',
+		height: 'auto',
 		textAlign: 'center',
 		[breakpoints.up('md')]: {
+			height: '100%',
 			display: 'flex',
 			alignItems: 'center',
 			textAlign: 'left',
