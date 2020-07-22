@@ -23,7 +23,7 @@ const Confirmation = () => {
 		if (paymentURL) {
 			setTimeout(() => {
 				window.location.href = paymentURL;
-			}, 5000);
+			}, 2000);
 		}
 		// eslint-disable-next-line
 	}, []);
