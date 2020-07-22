@@ -8,20 +8,25 @@ import { usePageTitle, useCurrentUserRediction, setLocalValue } from 'utils';
 import AppContext, { PAYMENT_STEP, GUEST } from 'AppContext';
 
 import { LeftSide, AboutMe, AboutMeValues, MedicalData, MedicalDataValues, Contact, ContactValues } from './components';
-import { SUB_ROUTES, checkStep, findStep, formatNewUser } from './utils';
+import { SUB_ROUTES, checkStep, findStep, formatNewUser, updateTriageQuestion } from './utils';
 
 const SignUp = () => {
 	const { push, listen, location } = useHistory();
 	const [step, setStep] = useState<number>(0);
 	const [aboutMeData, setAboutMeData] = useState<AboutMeValues>();
 	const [medicalData, setMedicalData] = useState<MedicalDataValues>();
-	const { userToken, updateState, appointmentOwner, useCase } = useContext(AppContext);
+	const { userToken, updateState, appointmentOwner, useCase, triage } = useContext(AppContext);
 	const isGuest = appointmentOwner === GUEST;
 	const onChangeStep = (values: AboutMeValues | MedicalDataValues) => {
 		if (step === 0) {
 			setAboutMeData(values as AboutMeValues);
 		} else if (step === 1) {
-			setMedicalData(values as MedicalDataValues);
+			const dataValues = { ...values } as MedicalDataValues;
+			setMedicalData(dataValues);
+			if (updateState) {
+				const newTriage = updateTriageQuestion('De acuerdo, describe el malestar:', dataValues.consultReason, triage);
+				updateState({ triage: newTriage });
+			}
 		}
 
 		push(`/registro/${SUB_ROUTES[step + 1]}`);

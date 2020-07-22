@@ -20,6 +20,7 @@ export interface MedicalDataValues {
 	haveAllergies: boolean | null;
 	allergies: string;
 	moreInfo: string;
+	consultReason: string;
 }
 
 interface MedicalDataFormProps {
@@ -34,6 +35,7 @@ const initialValues = {
 	haveAllergies: null,
 	allergies: '',
 	moreInfo: '',
+	consultReason: '',
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -119,6 +121,18 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 			{({ submitForm, isSubmitting, values }) => (
 				<Form className={classes.form}>
 					<div>
+						<div className={classes.fieldWrapper}>
+							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
+								<FormLabel>{t('medicalData.fields.consultReason.label')}</FormLabel>
+							</div>
+							<Field
+								component={TextField}
+								className={classes.moreInformationLabel}
+								name="consultReason"
+								variant="outlined"
+								fullWidth
+							/>
+						</div>
 						<div className={classes.fieldWrapper}>
 							<div className={classes.fieldLabelWrapper}>
 								<FormLabel>{t('medicalData.fields.takeMedicines.label')}</FormLabel>
