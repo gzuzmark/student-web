@@ -77,14 +77,15 @@ const RightSide = ({
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	useEffect(() => {
+		getDoctors(selectedDate, useCase, setDoctors, minutes, numSessions);
+	}, [selectedDate, useCase, minutes, numSessions]);
+
+	useEffect(() => {
 		if (useCase?.id === window.nutritionistUseCaseId) {
 			var thursday = setCurrentDateToThursday();
 			setSelectedDate(thursday);
-			getDoctors(thursday, useCase, setDoctors, minutes, numSessions);
-		} else {
-			getDoctors(selectedDate, useCase, setDoctors, minutes, numSessions);
 		}
-	}, [selectedDate, useCase, minutes, numSessions]);
+	}, [useCase]);
 
 	return (
 		<RightLayout>
