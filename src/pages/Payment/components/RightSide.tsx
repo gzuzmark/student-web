@@ -12,13 +12,15 @@ import { RightLayout } from 'pages/common';
 import { stylesWithTheme } from 'utils';
 import { ReactComponent as BankIcon } from 'icons/bank.svg';
 import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
+import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
 import interbank from 'icons/interbank.png';
 import bcp from 'icons/bcp.png';
 import scotia from 'icons/scotia.png';
 import bbva from 'icons/bbva.png';
-import { CULQI_PAYMENT_ID, TRANSACTION_PAYMENT_ID } from 'pages/api';
+import pagoEfectivo from 'icons/pagoefectivo.png';
+import { CULQI_PAYMENT_ID, TRANSACTION_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	container: {
@@ -113,7 +115,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		display: 'flex',
 		marginTop: '10px',
 		[breakpoints.up('lg')]: {
-			maxWidth: '601px',
+			maxWidth: '901px',
 		},
 	},
 	errorWrapper: {
@@ -155,6 +157,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			marginBottom: 0,
 			padding: '28px 13px 28px 22px',
 			boxShadow: 'none',
+			width: '33%',
 		},
 	},
 	optionBody: {
@@ -209,6 +212,11 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	banksImage: {
 		width: '35px',
+		height: '30px',
+		paddingRight: '10px',
+	},
+	peImage: {
+		width: '80px',
 		height: '30px',
 		paddingRight: '10px',
 	},
@@ -309,6 +317,19 @@ const RightSide = ({
 								<img src={bcp} title="Bcp" className={classes.banksImage} alt="Brand BCP" />
 								<img src={scotia} title="Scotiabank" className={classes.banksImage} alt="Brand Scotia" />
 								<img src={bbva} title="Bbva" className={classes.banksImage} alt="Brand BBVA" />
+							</div>
+						</div>
+					</Button>
+					<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
+						<div className={classes.optionBody}>
+							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+								<CashierIcon />
+							</div>
+							<Typography className={classes.optionLabel} variant="h3">
+								{t('payment.right.pagoEfectivo')}
+							</Typography>
+							<div className={classes.optionBrandWrapper}>
+								<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
 							</div>
 						</div>
 					</Button>
