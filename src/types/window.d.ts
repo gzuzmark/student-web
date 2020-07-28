@@ -7,5 +7,6 @@ declare global {
 		gtag: Function;
 		fbq: (event: string, info: string, extraInfo: Record<string, any>) => void;
 		nutritionistUseCaseId: string;
+		gastroUseCaseId: string;
 	}
 }
