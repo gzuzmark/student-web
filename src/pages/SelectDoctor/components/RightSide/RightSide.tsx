@@ -28,6 +28,11 @@ const setCurrentDateToThursday = (): Date => {
 	return thursday;
 };
 
+const setCurrentDateToAugust = (): Date => {
+	const august = new Date('2020-08-04 00:00:00');
+	return august;
+}
+
 const getDoctors = async (
 	selectedDate: Date | null,
 	useCase: UseCase | null | undefined,
@@ -84,6 +89,9 @@ const RightSide = ({
 		if (useCase?.id === window.nutritionistUseCaseId) {
 			var thursday = setCurrentDateToThursday();
 			setSelectedDate(thursday);
+		} else if (useCase?.id === window.gastroUseCaseId) {
+			var august = setCurrentDateToAugust();
+			setSelectedDate(august);
 		}
 	}, [useCase]);
 
