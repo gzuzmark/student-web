@@ -216,7 +216,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		paddingRight: '10px',
 	},
 	peImage: {
-		width: '80px',
+		width: '100px',
 		height: '30px',
 		paddingRight: '10px',
 	},
