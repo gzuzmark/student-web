@@ -225,6 +225,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 interface RightSideProps {
 	totalCost: string | undefined;
 	isCounponDisabled: boolean;
+	isPagoEfectivoEnabled: boolean;
 	sendDiscount: () => Promise<void>;
 	discountCode: string;
 	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -235,6 +236,7 @@ interface RightSideProps {
 const RightSide = ({
 	totalCost,
 	isCounponDisabled,
+	isPagoEfectivoEnabled,
 	sendDiscount,
 	discountCode,
 	onChangeDiscount,
@@ -320,19 +322,21 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
-						<div className={classes.optionBody}>
-							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<CashierIcon />
+					{isPagoEfectivoEnabled && (
+						<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
+							<div className={classes.optionBody}>
+								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+									<CashierIcon />
+								</div>
+								<Typography className={classes.optionLabel} variant="h3">
+									{t('payment.right.pagoEfectivo')}
+								</Typography>
+								<div className={classes.optionBrandWrapper}>
+									<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
+								</div>
 							</div>
-							<Typography className={classes.optionLabel} variant="h3">
-								{t('payment.right.pagoEfectivo')}
-							</Typography>
-							<div className={classes.optionBrandWrapper}>
-								<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
-							</div>
-						</div>
-					</Button>
+						</Button>
+					)}
 				</div>
 				{errorMessage ? (
 					<div className={classes.errorWrapper}>

@@ -74,6 +74,7 @@ interface ContextProps {
 	updateState: Function;
 	appointmentCreationStep: AppointmentCreationStep;
 	paymentURL: string | null;
+	isPagoEfectivoEnabled: boolean;
 }
 
 const defaultState: ContextProps = {
@@ -91,6 +92,7 @@ const defaultState: ContextProps = {
 	updateState: Function.prototype,
 	appointmentCreationStep: '',
 	paymentURL: null,
+	isPagoEfectivoEnabled: false,
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

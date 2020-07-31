@@ -27,6 +27,7 @@ const Payment = () => {
 		userToken,
 		reservationAccountID,
 		updateState: updateContextState,
+		isPagoEfectivoEnabled = false,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
 	const { t } = useTranslation('payment');
@@ -204,6 +205,7 @@ const Payment = () => {
 				onChangeDiscount={onChangeDiscount}
 				executePayment={makePayment}
 				errorMessage={errorMessage}
+				isPagoEfectivoEnabled={isPagoEfectivoEnabled}
 			/>
 		</Container>
 	) : (
