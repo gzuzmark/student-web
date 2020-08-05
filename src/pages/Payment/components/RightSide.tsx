@@ -225,7 +225,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 interface RightSideProps {
 	totalCost: string | undefined;
 	isCounponDisabled: boolean;
-	isPagoEfectivoEnabled: boolean;
+	isTransactionEnabled: boolean;
 	sendDiscount: () => Promise<void>;
 	discountCode: string;
 	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -236,7 +236,7 @@ interface RightSideProps {
 const RightSide = ({
 	totalCost,
 	isCounponDisabled,
-	isPagoEfectivoEnabled,
+	isTransactionEnabled,
 	sendDiscount,
 	discountCode,
 	onChangeDiscount,
@@ -306,37 +306,37 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
-						<div className={classes.optionBody}>
-							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<BankIcon />
-							</div>
-							<Typography className={classes.optionLabel} variant="h3">
-								{t('payment.right.payTransaction')}
-							</Typography>
-							<div className={classes.optionBrandWrapper}>
-								<img src={interbank} title="Interbank" className={classes.banksImage} alt="Brand Interbank" />
-								<img src={bcp} title="Bcp" className={classes.banksImage} alt="Brand BCP" />
-								<img src={scotia} title="Scotiabank" className={classes.banksImage} alt="Brand Scotia" />
-								<img src={bbva} title="Bbva" className={classes.banksImage} alt="Brand BBVA" />
-							</div>
-						</div>
-					</Button>
-					{isPagoEfectivoEnabled && (
-						<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
+					{isTransactionEnabled && (
+						<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
 							<div className={classes.optionBody}>
 								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-									<CashierIcon />
+									<BankIcon />
 								</div>
 								<Typography className={classes.optionLabel} variant="h3">
-									{t('payment.right.pagoEfectivo')}
+									{t('payment.right.payTransaction')}
 								</Typography>
 								<div className={classes.optionBrandWrapper}>
-									<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
+									<img src={interbank} title="Interbank" className={classes.banksImage} alt="Brand Interbank" />
+									<img src={bcp} title="Bcp" className={classes.banksImage} alt="Brand BCP" />
+									<img src={scotia} title="Scotiabank" className={classes.banksImage} alt="Brand Scotia" />
+									<img src={bbva} title="Bbva" className={classes.banksImage} alt="Brand BBVA" />
 								</div>
 							</div>
 						</Button>
 					)}
+					<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
+						<div className={classes.optionBody}>
+							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+								<CashierIcon />
+							</div>
+							<Typography className={classes.optionLabel} variant="h3">
+								{t('payment.right.pagoEfectivo')}
+							</Typography>
+							<div className={classes.optionBrandWrapper}>
+								<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
+							</div>
+						</div>
+					</Button>
 				</div>
 				{errorMessage ? (
 					<div className={classes.errorWrapper}>

@@ -45,7 +45,7 @@ const SelectDoctor = () => {
 	const comeFromTriage = !params.malestar;
 	const minutes = (params.minutes as string) || '';
 	const numSessions = (params.num_sessions as string) || '';
-	const pagoEfectivoFlag = (params.pe as string) || '';
+	const transactionFlag = (params.transferencia as string) || '';
 	const { useCase, userToken, updateState } = useHookBasedOnURLAccess(
 		comeFromTriage,
 		useAppointmentStepValidation,
@@ -61,12 +61,12 @@ const SelectDoctor = () => {
 	const onAcceptWarning = () => toggleWarningModal(false);
 
 	useEffect(() => {
-		if (pagoEfectivoFlag) {
+		if (transactionFlag) {
 			updateState({
-				isPagoEfectivoEnabled: pagoEfectivoFlag === '1',
+				isTransactionEnabled: transactionFlag === '1',
 			});
 		}
-	}, [pagoEfectivoFlag, updateState]);
+	}, [transactionFlag, updateState]);
 
 	useEffect(() => {
 		if (!comeFromTriage) {
