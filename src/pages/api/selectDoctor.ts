@@ -34,6 +34,13 @@ interface DoctorResponseAPI {
 	pagination: Record<string, any>;
 }
 
+interface NextAvailableSchedulesAPI {
+	data: {
+		next_available_date: number;
+		doctors: DoctorAvailabilityAPI[];
+	};
+}
+
 // UI Types
 
 export interface Schedule {
@@ -61,6 +68,11 @@ interface RequestProps {
 	from: number;
 	to: number;
 	window?: number;
+}
+
+interface NextAvailableSchedules {
+	nextAvailableDate: Date;
+	doctors: DoctorAvailability[];
 }
 
 // const mockResponse: DoctorAvailabilityAPI[] = [
@@ -127,4 +139,17 @@ export const getMedicalSpecialities = async (data: RequestProps): Promise<Doctor
 	const parsedData = parseResponseData(response.data.data);
 
 	return parsedData;
+};
+
+export const getNextAvailableSchedules = async (useCaseID: string): Promise<NextAvailableSchedules> => {
+	const response = await aliviaAxios.get<NextAvailableSchedulesAPI>('/doctors/next-available-schedule', {
+		params: { use_case: useCaseID },
+	});
+	const { data } = response;
+	const parsedDoctorsData = parseResponseData(data.data.doctors);
+
+	return {
+		nextAvailableDate: parseUTCDate(data.data.next_available_date),
+		doctors: parsedDoctorsData,
+	};
 };

@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +9,7 @@ import useStyles from './styles';
 
 interface DoctorsHeaderProps {
 	date: Date | null;
-	updateDate: Dispatch<SetStateAction<Date | null>>;
+	updateDate: (newDate: Date | null) => void;
 	useCase: UseCase | null | undefined;
 }
 
