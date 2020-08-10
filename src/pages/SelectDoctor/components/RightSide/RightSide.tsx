@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { useTranslation } from 'react-i18next';
@@ -10,27 +10,11 @@ import isToday from 'date-fns/isToday';
 import { DoctorList } from '../DoctorList';
 import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
-import { UseCase, getMedicalSpecialities, DoctorAvailability } from 'pages/api';
+import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSchedules } from 'pages/api';
 
 const limitSchedules = (numSessions: string) => (_: any, i: number) => {
 	const limit = numSessions && !isNaN(+numSessions) && +numSessions;
 	return limit ? i < limit : true;
-};
-
-const DAYS_TO_THURSDAY = [4, 3, 2, 1, 0, 6, 5, 4];
-
-const setCurrentDateToThursday = (): Date => {
-	const thursday = new Date();
-	thursday.setDate(thursday.getDate() + DAYS_TO_THURSDAY[thursday.getDay()]);
-	thursday.setHours(5);
-	thursday.setMinutes(0);
-	thursday.setMilliseconds(0);
-	return thursday;
-};
-
-const setCurrentDateToAugust = (): Date => {
-	const august = new Date('06 August 2020 05:00 UTC');
-	return august;
 };
 
 const getDoctors = async (
@@ -60,6 +44,13 @@ const getDoctors = async (
 	}
 };
 
+const getClosestSchedules = async (useCase: string, setSelectedDate: Function, setDoctors: Function) => {
+	const { nextAvailableDate, doctors } = await getNextAvailableSchedules(useCase);
+
+	setDoctors(doctors);
+	setSelectedDate(nextAvailableDate);
+};
+
 interface RightSideProps {
 	useCase: UseCase | null | undefined;
 	updateContextState: Function | undefined;
@@ -81,17 +72,17 @@ const RightSide = ({
 	const classes = useStyles();
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
-	useEffect(() => {
-		getDoctors(selectedDate, useCase, setDoctors, minutes, numSessions);
-	}, [selectedDate, useCase, minutes, numSessions]);
+	const updateDate = useCallback(
+		(newDate: Date | null) => {
+			setSelectedDate(newDate);
+			getDoctors(newDate, useCase, setDoctors, minutes, numSessions);
+		},
+		[minutes, numSessions, useCase],
+	);
 
 	useEffect(() => {
-		if (useCase?.id === window.nutritionistUseCaseId) {
-			var thursday = setCurrentDateToThursday();
-			setSelectedDate(thursday);
-		} else if (useCase?.id === window.gastroUseCaseId) {
-			var august = setCurrentDateToAugust();
-			setSelectedDate(august);
+		if (useCase) {
+			getClosestSchedules(useCase.id, setSelectedDate, setDoctors);
 		}
 	}, [useCase]);
 
@@ -103,7 +94,7 @@ const RightSide = ({
 						{t('right.title')}
 					</Typography>
 				</div>
-				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={setSelectedDate} />
+				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} />
 				<Divider className={classes.divider} />
 				{doctors.length > 0 ? (
 					<DoctorList
