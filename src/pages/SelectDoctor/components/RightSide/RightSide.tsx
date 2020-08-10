@@ -19,20 +19,6 @@ const limitSchedules = (numSessions: string) => (_: any, i: number) => {
 
 const DAYS_TO_THURSDAY = [4, 3, 2, 1, 0, 6, 5, 4];
 
-const setCurrentDateToThursday = (): Date => {
-	const thursday = new Date();
-	thursday.setDate(thursday.getDate() + DAYS_TO_THURSDAY[thursday.getDay()]);
-	thursday.setHours(5);
-	thursday.setMinutes(0);
-	thursday.setMilliseconds(0);
-	return thursday;
-};
-
-const setCurrentDateToAugust = (): Date => {
-	const august = new Date('06 August 2020 05:00 UTC');
-	return august;
-};
-
 const getDoctors = async (
 	selectedDate: Date | null,
 	useCase: UseCase | null | undefined,
@@ -99,18 +85,6 @@ const RightSide = ({
 	useEffect(() => {
 		if (useCase) {
 			getClosestSchedules(useCase.id, setSelectedDate, setDoctors);
-		}
-	}, [useCase]);
-
-	useEffect(() => {
-		if (useCase?.id === window.nutritionistUseCaseId) {
-			const thursday = setCurrentDateToThursday();
-
-			setSelectedDate(thursday);
-		} else if (useCase?.id === window.gastroUseCaseId) {
-			const august = setCurrentDateToAugust();
-
-			setSelectedDate(august);
 		}
 	}, [useCase]);
 
