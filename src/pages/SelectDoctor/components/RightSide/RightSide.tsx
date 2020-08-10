@@ -17,8 +17,6 @@ const limitSchedules = (numSessions: string) => (_: any, i: number) => {
 	return limit ? i < limit : true;
 };
 
-const DAYS_TO_THURSDAY = [4, 3, 2, 1, 0, 6, 5, 4];
-
 const getDoctors = async (
 	selectedDate: Date | null,
 	useCase: UseCase | null | undefined,
