@@ -11,9 +11,10 @@ interface DoctorsHeaderProps {
 	date: Date | null;
 	updateDate: (newDate: Date | null) => void;
 	useCase: UseCase | null | undefined;
+	minDate: Date | null;
 }
 
-const DoctorsHeader = ({ date, updateDate, useCase }: DoctorsHeaderProps) => {
+const DoctorsHeader = ({ date, updateDate, useCase, minDate }: DoctorsHeaderProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [openDatePicker, setOpenDatePicker] = useState<boolean>(false);
@@ -26,6 +27,7 @@ const DoctorsHeader = ({ date, updateDate, useCase }: DoctorsHeaderProps) => {
 				</Typography>
 				<div className={classes.datePickerContainer}>
 					<DatePickerInput
+						minDate={minDate}
 						views={['date']}
 						open={openDatePicker}
 						onOpen={() => {

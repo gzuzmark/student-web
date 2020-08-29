@@ -39,12 +39,13 @@ interface DatePickerInputProps {
 	mask?: string;
 	inputFormat?: string;
 	value: ParsableDate;
+	minDate: Date | null;
 	onChange: (date: MaterialUiPickersDate, keyboardInputValue: string | undefined) => void;
 	format?: string;
 	InputProps?: { onClick?: () => void };
 }
 
-const DatePickerInput = ({ InputProps, value, format, ...props }: DatePickerInputProps) => {
+const DatePickerInput = ({ InputProps, value, format, minDate, ...props }: DatePickerInputProps) => {
 	const classes = useStyles();
 	const today = value && isToday(value as number | Date);
 	const defaultFormat = `${today ? "'Hoy '" : ''}EEEE dd 'de' MMMM`;
@@ -54,6 +55,7 @@ const DatePickerInput = ({ InputProps, value, format, ...props }: DatePickerInpu
 			autoOk
 			disablePast
 			readOnly
+			minDate={minDate}
 			displayStaticWrapperAs="desktop"
 			renderInput={(props) => (
 				<TextField

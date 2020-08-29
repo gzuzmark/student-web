@@ -44,11 +44,17 @@ const getDoctors = async (
 	}
 };
 
-const getClosestSchedules = async (useCase: string, setSelectedDate: Function, setDoctors: Function) => {
+const getClosestSchedules = async (
+	useCase: string,
+	setSelectedDate: Function,
+	setDoctors: Function,
+	setMinDate: Function,
+) => {
 	const { nextAvailableDate, doctors } = await getNextAvailableSchedules(useCase);
 
 	setDoctors(doctors);
 	setSelectedDate(nextAvailableDate);
+	setMinDate(nextAvailableDate);
 };
 
 interface RightSideProps {
@@ -71,6 +77,7 @@ const RightSide = ({
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+	const [minDate, setMinDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const updateDate = useCallback(
 		(newDate: Date | null) => {
@@ -82,7 +89,7 @@ const RightSide = ({
 
 	useEffect(() => {
 		if (useCase) {
-			getClosestSchedules(useCase.id, setSelectedDate, setDoctors);
+			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate);
 		}
 	}, [useCase]);
 
@@ -94,7 +101,7 @@ const RightSide = ({
 						{t('right.title')}
 					</Typography>
 				</div>
-				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} />
+				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
 				<Divider className={classes.divider} />
 				{doctors.length > 0 ? (
 					<DoctorList
