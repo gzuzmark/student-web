@@ -75,6 +75,7 @@ interface ContextProps {
 	appointmentCreationStep: AppointmentCreationStep;
 	paymentURL: string | null;
 	isTransactionEnabled: boolean;
+	isUbigeoEnabled: boolean;
 }
 
 const defaultState: ContextProps = {
@@ -93,6 +94,7 @@ const defaultState: ContextProps = {
 	appointmentCreationStep: '',
 	paymentURL: null,
 	isTransactionEnabled: false,
+	isUbigeoEnabled: false,
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 
