@@ -18,6 +18,8 @@ interface NewUser {
 	moreInfo?: string; // extra_info
 	phoneNumber: string;
 	email?: string;
+	address?: string;
+	ubigeo?: string;
 }
 
 interface NewProfile extends Omit<NewUser, 'phoneNumber' | 'email'> {
@@ -35,6 +37,14 @@ interface CreatePatientResponse {
 
 type ContactValuesRequest = Omit<ContactValues, 'repeatPassword'>;
 
+export interface Ubigeo {
+	description: string;
+}
+
+interface UbigeoResponse {
+	data: Ubigeo[];
+}
+
 export const createGuestPatient = async (user: NewUser): Promise<string> => {
 	const resp = await aliviaAxios.post<CreatePatientResponse>('/patients-guest', {
 		name: user.name,
@@ -48,6 +58,8 @@ export const createGuestPatient = async (user: NewUser): Promise<string> => {
 		extra_info: user.moreInfo || '',
 		contact_email: user.email || '',
 		contact_phone: user.phoneNumber,
+		address: user.address,
+		ubigeo: user.ubigeo,
 	});
 	const data = resp.data.data;
 
@@ -116,14 +128,23 @@ export const createAccount = async ({
 	phoneNumber,
 	password = '',
 	identification,
+	address = '',
+	ubigeo = '',
 }: ContactValuesRequest): Promise<string> => {
 	const resp = await aliviaAxios.post<TokenResponse>('/users', {
 		username: email,
 		phone: phoneNumber,
 		password,
 		document_number: identification,
+		address,
+		ubigeo,
 	});
 	const data = resp.data;
 
 	return data.token;
+};
+
+export const getLocations = async (query: string): Promise<UbigeoResponse> => {
+	const response = await aliviaAxios.get<UbigeoResponse>(`/ubigeo?keywords=${query}`);
+	return response.data;
 };

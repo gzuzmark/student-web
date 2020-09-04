@@ -1,8 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
+import { TextField as MaterialTextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
+import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +12,8 @@ import { stylesWithTheme } from 'utils/createStyles';
 import { PasswordField } from 'pages/common';
 
 import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
+import AppContext from 'AppContext';
+import { getLocations, Ubigeo } from 'pages/api';
 
 export interface ContactValues {
 	identification: string;
@@ -17,6 +21,8 @@ export interface ContactValues {
 	email?: string;
 	password?: string;
 	repeatPassword?: string;
+	address?: string;
+	ubigeo?: string;
 }
 
 interface FormikContactValues {
@@ -25,6 +31,8 @@ interface FormikContactValues {
 	email: string;
 	password: string;
 	repeatPassword: string;
+	address: string;
+	ubigeo: string;
 }
 
 interface ContactFormProps {
@@ -40,6 +48,8 @@ const initialValues = {
 	email: '',
 	password: '',
 	repeatPassword: '',
+	address: '',
+	ubigeo: '',
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -88,6 +98,8 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 
 const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, isGuest }: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
+	const { isUbigeoEnabled } = useContext(AppContext);
+	const [ubigeos, setUbigeos] = useState<string[]>([]);
 	const classes = useStyles();
 	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
 	const onSubmit = useCallback(
@@ -107,6 +119,17 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 		},
 		[submitSignUp, t],
 	);
+
+	const handleTypeUbigeo = async (e: any) => {
+		const value = e.target.value;
+		if (value) {
+			const response = await getLocations(value);
+			const locations = response.data.map((r: Ubigeo) => r.description);
+			setUbigeos(locations);
+		} else {
+			setUbigeos([]);
+		}
+	};
 
 	return (
 		<Formik
@@ -151,6 +174,42 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 								fullWidth
 							/>
 						</div>
+						{isGuest && isUbigeoEnabled && (
+							<React.Fragment>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={TextField}
+										className={classes.fieldWithHelperText}
+										name="address"
+										label={t('contact.fields.address.label')}
+										variant="outlined"
+										helperText={t('contact.fields.address.helperText')}
+										fullWidth
+									/>
+								</div>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={Autocomplete}
+										options={ubigeos}
+										getOptionLabel={(option: string) => option}
+										className={classes.fieldWithHelperText}
+										name="ubigeo"
+										variant="outlined"
+										fullWidth
+										renderInput={(params: AutocompleteRenderInputParams) => (
+											<MaterialTextField
+												{...params}
+												error={false}
+												helperText={t('contact.fields.address.helperText')}
+												label={t('contact.fields.ubigeo.label')}
+												variant="outlined"
+												onChange={handleTypeUbigeo}
+											/>
+										)}
+									/>
+								</div>
+							</React.Fragment>
+						)}
 						{!isGuest ? (
 							<>
 								<div className={classes.fieldWrapper}>
