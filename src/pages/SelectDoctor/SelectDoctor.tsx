@@ -43,6 +43,7 @@ const SelectDoctor = () => {
 	const location = useLocation();
 	const params = parse(location.search);
 	const comeFromTriage = !params.malestar;
+	const isUbigeoEnabled = (params.ubigeo as string || '') === '1';
 	const minutes = (params.minutes as string) || '';
 	const numSessions = (params.num_sessions as string) || '';
 	const transactionFlag = (params.transferencia as string) || '';
@@ -79,13 +80,17 @@ const SelectDoctor = () => {
 			if (!useCase && useCaseParam && updateState) {
 				requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
 			}
+
+			if (isUbigeoEnabled && updateState) {
+				updateState({ isUbigeoEnabled });
+			}
 		}
 		if (useCase && useCase.id) {
 			if (window.nutritionistUseCaseId === useCase.id) {
 				toggleWarningModal(true);
 			}
 		}
-	}, [location.search, updateState, useCase, comeFromTriage, params.malestar]);
+	}, [location.search, updateState, useCase, comeFromTriage, isUbigeoEnabled, params.malestar]);
 
 	return (
 		<Container>
