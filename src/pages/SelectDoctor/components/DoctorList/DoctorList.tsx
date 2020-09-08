@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
-import { PRE_SIGNUP_STEP, PAYMENT_STEP } from 'AppContext';
-import { DoctorAvailability, Doctor, Schedule } from 'pages/api';
+import { DoctorAvailability } from 'pages/api';
 import { addGAEvent } from 'utils';
 
 import AvailableTimes from '../AvailableTimes';
@@ -15,8 +13,9 @@ import useStyles from './styles';
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
 	updateContextState: Function | undefined;
-	isUserLoggedIn: boolean;
-	comeFromTriage: boolean;
+	openSelectOwnerModal: () => void;
+	setDoctor: Function;
+	setSchedule: Function;
 }
 
 export interface ActiveDoctorTime {
@@ -24,24 +23,9 @@ export interface ActiveDoctorTime {
 	scheduleID: string;
 }
 
-const formatDoctor = (doctor: DoctorAvailability | null): Doctor | null =>
-	doctor
-		? {
-				id: doctor.id,
-				name: doctor.name,
-				lastName: doctor.lastName,
-				cmp: doctor.cmp,
-				profilePicture: doctor.profilePicture,
-				speciality: doctor.speciality,
-		  }
-		: null;
-
-const DoctorList = ({ doctors, updateContextState, isUserLoggedIn, comeFromTriage }: DoctorListProps) => {
+const DoctorList = ({ doctors, updateContextState, openSelectOwnerModal, setDoctor, setSchedule }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
-	const history = useHistory();
-	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
-	const [schedule, setSchedule] = useState<Schedule | null>(null);
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorCmp: '', scheduleID: '' });
 	const selectDoctor = (doctorCmp: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => {
 		if (scheduleID !== '') {
@@ -57,22 +41,7 @@ const DoctorList = ({ doctors, updateContextState, isUserLoggedIn, comeFromTriag
 	const continueToPreRegister = () => {
 		if (updateContextState) {
 			addGAEvent('event', 'Cita seleccionada', 'click');
-
-			updateContextState({
-				appointmentCreationStep: isUserLoggedIn ? PAYMENT_STEP : PRE_SIGNUP_STEP,
-				schedule,
-				doctor: formatDoctor(doctor),
-			});
-
-			if (isUserLoggedIn) {
-				history.push('/pago');
-			} else {
-				if (!comeFromTriage) {
-					history.push('/registro/sobre_ti');
-				} else {
-					history.push('/pre_registro');
-				}
-			}
+			openSelectOwnerModal();
 		}
 	};
 
