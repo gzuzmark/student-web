@@ -1,7 +1,7 @@
 import aliviaAxios from 'utils/customAxios';
 import format from 'date-fns/format';
 
-import { ContactValues } from 'pages/SignUp/components';
+import { ContactValues, MedicalDataValues } from 'pages/SignUp/components';
 
 import { TokenResponse } from './types';
 import { getLocalValue } from 'utils';
@@ -147,4 +147,12 @@ export const createAccount = async ({
 export const getLocations = async (query: string): Promise<UbigeoResponse> => {
 	const response = await aliviaAxios.get<UbigeoResponse>(`/ubigeo?keywords=${query}`);
 	return response.data;
+};
+
+export const postMedicalInformation = async (medicalData: MedicalDataValues): Promise<void> => {
+	try {
+		await aliviaAxios.post('/medical-information', medicalData);
+	} catch (e) {
+		throw Error(e);
+	}
 };
