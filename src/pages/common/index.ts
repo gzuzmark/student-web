@@ -13,3 +13,4 @@ export { default as Circle } from './Circle';
 export * from './ProfileList';
 export { default as FloatCard } from './FloatCard';
 export * from './DashboardSideBar';
+export * from './CreatePasswordForm';

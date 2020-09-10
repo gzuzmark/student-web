@@ -125,13 +125,7 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
 								<FormLabel>{t('medicalData.fields.consultReason.label')}</FormLabel>
 							</div>
-							<Field
-								component={TextField}
-								className={classes.moreInformationLabel}
-								name="consultReason"
-								variant="outlined"
-								fullWidth
-							/>
+							<Field component={TextField} name="consultReason" variant="outlined" fullWidth />
 						</div>
 						<div className={classes.fieldWrapper}>
 							<div className={classes.fieldLabelWrapper}>

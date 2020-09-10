@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils/createStyles';
 import { PasswordField } from 'pages/common';
 
-import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
+import { newUservalidationSchema, guestValidationSchema, defaultNewUserValidationSchema } from './validationSchema';
 import AppContext from 'AppContext';
 import { getLocations, Ubigeo } from 'pages/api';
 
@@ -105,6 +105,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 	const onSubmit = useCallback(
 		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
 			try {
+				console.log('eh?');
 				await submitSignUp(values);
 
 				setSubmitting(false);
@@ -174,8 +175,8 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 								fullWidth
 							/>
 						</div>
-						{isGuest && isUbigeoEnabled && (
-							<React.Fragment>
+						{isUbigeoEnabled && (
+							<>
 								<div className={classes.fieldWrapper}>
 									<Field
 										component={TextField}
@@ -208,9 +209,9 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 										)}
 									/>
 								</div>
-							</React.Fragment>
+							</>
 						)}
-						{!isGuest ? (
+						{!isUbigeoEnabled ? (
 							<>
 								<div className={classes.fieldWrapper}>
 									<Field

@@ -57,6 +57,7 @@ const signUp = {
 	'medicalData.fields.optional.label': '(opcional)',
 	'medicalData.fields.yesOption': 'Sí',
 	'medicalData.fields.noOption': 'No',
+	'medicalData.validation.consultReason.required': 'Debes completar este campo para continuar',
 	'medicalData.validation.takeMedicines.required': 'Responde esta pregunta para continuar',
 	'medicalData.validation.medicineList.required': 'Indícale al doctor qué medicamento está tomando',
 	'medicalData.validation.haveAllergy.required': 'Responde esta pregunta para continuar',
@@ -100,6 +101,9 @@ const signUp = {
 	'contact.phoneNumber.error': 'El número que ingresaste es inválido',
 	'contact.email.error': 'El email que ingresaste es inválido',
 	'contact.fields.identification.error': 'Ya existe una cuenta asociada a este DNI o CE',
+	// Get Medical information
+	'getMedicalInformation.title': 'Estás a unos pasos de agendar una cita',
+	'getMedicalInformation.title.mobile': 'Estás agendando una cita',
 };
 
 export default signUp;

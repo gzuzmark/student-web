@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { Container, RightLayout, LeftLayout } from 'pages/common';
 import { postMedicalInformation } from 'pages/api';
@@ -49,6 +50,7 @@ const GetMedicalInformation = ({ updateState }: GetMedicalInformationProps) => {
 		},
 		[push, updateState],
 	);
+	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 
 	usePageTitle('Información Médica');
 
@@ -57,7 +59,7 @@ const GetMedicalInformation = ({ updateState }: GetMedicalInformationProps) => {
 			<LeftLayout>
 				<div className={classes.wrapper}>
 					<Typography className={classes.title} variant="h1">
-						{t('getMedicalInformation.title')}
+						{t(matches ? 'getMedicalInformation.title' : 'getMedicalInformation.title.mobile')}
 					</Typography>
 				</div>
 			</LeftLayout>

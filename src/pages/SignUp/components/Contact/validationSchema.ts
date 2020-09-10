@@ -44,6 +44,23 @@ export const newUservalidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
+});
+
+export const defaultNewUserValidationSchema = object().shape({
+	identification: string()
+		.min(8, messages.identification.digits)
+		.max(12, messages.identification.digits)
+		.required(messages.identification.required),
+	phoneNumber: string()
+		.min(9, messages.phoneNumber.required)
+		.max(9, messages.phoneNumber.required)
+		// eslint-disable-next-line
+		// @ts-ignore
+		.digits(messages.phoneNumber.required)
+		.required(messages.phoneNumber.required),
+	// eslint-disable-next-line
+	// @ts-ignore
+	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
 	password: string().required(messages.password.required).min(6, messages.password.minLength),
 	repeatPassword: string()
 		.required(messages.repeatPassword.required)
