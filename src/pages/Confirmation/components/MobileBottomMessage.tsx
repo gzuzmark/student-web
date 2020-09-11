@@ -35,17 +35,19 @@ const useStyles = stylesWithTheme(() => ({
 }));
 
 interface MobileBottomMessageProps {
+	showBottomMessage?: boolean;
+	hideBottomMessage?: () => void;
 	closeMessage: () => void;
 }
 
-const MobileBottomMessage = ({ closeMessage }: MobileBottomMessageProps) => {
+const MobileBottomMessage = ({ closeMessage, showBottomMessage, hideBottomMessage }: MobileBottomMessageProps) => {
 	const { t } = useTranslation('confirmation');
 	const classes = useStyles();
 
-	return (
+	return showBottomMessage ? (
 		<div className={classes.container}>
 			<div className={classes.wrapper}>
-				<div className={classes.closeButton} onClick={closeMessage}>
+				<div className={classes.closeButton} onClick={hideBottomMessage}>
 					<CloseIcon />
 				</div>
 				<div className={classes.title}>{t('confirmation.bottomMessage.title')}</div>
@@ -57,7 +59,7 @@ const MobileBottomMessage = ({ closeMessage }: MobileBottomMessageProps) => {
 				</div>
 			</div>
 		</div>
-	);
+	) : null;
 };
 
 export default MobileBottomMessage;

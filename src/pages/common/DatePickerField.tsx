@@ -24,10 +24,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 
 interface DatePickerFieldProps extends FieldProps, BaseDatePickerProps {
 	TextFieldProps: TextFieldProps;
+	validationOnChange?: (date: Date | null) => void;
 }
 
 const DatePickerField = ({
 	field,
+	validationOnChange,
 	form: { errors, touched, setFieldValue, setFieldTouched },
 	maxDate = new Date('2100-01-01'),
 	minDate = new Date('1900-01-01'),
@@ -40,8 +42,11 @@ const DatePickerField = ({
 	const onChange = useCallback(
 		(date: Date | null) => {
 			setFieldValue(field.name, date, true);
+			if (validationOnChange) {
+				validationOnChange(date);
+			}
 		},
-		[field.name, setFieldValue],
+		[field.name, setFieldValue, validationOnChange],
 	);
 	const openDialog = useCallback(() => {
 		setIsOpen(true);

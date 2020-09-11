@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, MouseEvent } from 'react';
 import { Typography, List, ListItem, ListItemIcon, ListItemText, Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +34,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	benefitText: {
 		margin: '0',
 	},
-	form: {
+	fields: {
 		[breakpoints.up('lg')]: {
 			maxWidth: '367px',
 		},
@@ -51,9 +51,25 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			},
 		},
 	},
-	submitWrapper: {
+	actionsWrapper: {
 		[breakpoints.up('lg')]: {
-			paddingRight: '104px',
+			display: 'flex',
+		},
+	},
+	action: {
+		marginBottom: '16px',
+		padding: '12.5px 0',
+		fontSize: '15px',
+		[breakpoints.up('lg')]: {
+			width: '263px',
+			marginBottom: '0px',
+			marginRight: '10px',
+		},
+		'&:last-child': {
+			marginBottom: '0',
+			[breakpoints.up('lg')]: {
+				marginRight: '0px',
+			},
 		},
 	},
 }));
@@ -68,18 +84,23 @@ interface FormikCreatePasswordValues {
 	repeatPassword: string;
 }
 
-const CreatePasswordForm = () => {
+interface CreatePasswordFormProps {
+	userId?: string;
+	omitStepCallback?: (e: MouseEvent) => void;
+}
+
+const CreatePasswordForm = ({ userId, omitStepCallback }: CreatePasswordFormProps) => {
 	const { t } = useTranslation('global');
 	const classes = useStyles();
 	const onSubmit = useCallback(
 		async (values: CreatePasswordValues, { setSubmitting }: FormikHelpers<FormikCreatePasswordValues>) => {
 			try {
-				await sendPassword(values);
+				await sendPassword({ userId, password: values.password });
 
 				setSubmitting(false);
 			} catch (e) {}
 		},
-		[],
+		[userId],
 	);
 	const initialValues = {
 		password: '',
@@ -113,29 +134,48 @@ const CreatePasswordForm = () => {
 			</List>
 			<Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
 				{({ submitForm, isSubmitting }) => (
-					<Form className={classes.form}>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={PasswordField}
-								name="password"
-								label={t('createPassword.fields.password.label')}
-								variant="outlined"
-								fullWidth
-							/>
+					<Form>
+						<div className={classes.fields}>
+							<div className={classes.fieldWrapper}>
+								<Field
+									component={PasswordField}
+									name="password"
+									label={t('createPassword.fields.password.label')}
+									variant="outlined"
+									fullWidth
+								/>
+							</div>
+							<div className={classes.fieldWrapper}>
+								<Field
+									component={PasswordField}
+									name="repeatPassword"
+									label={t('createPassword.fields.repeatPassword.label')}
+									variant="outlined"
+									fullWidth
+								/>
+							</div>
 						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={PasswordField}
-								name="repeatPassword"
-								label={t('createPassword.fields.repeatPassword.label')}
-								variant="outlined"
+						<div className={classes.actionsWrapper}>
+							<Button
+								className={classes.action}
+								variant="contained"
 								fullWidth
-							/>
-						</div>
-						<div className={classes.submitWrapper}>
-							<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
+								onClick={submitForm}
+								disabled={isSubmitting}
+							>
 								{t('createPassword.fields.submitLabel')}
 							</Button>
+							{omitStepCallback ? (
+								<Button
+									className={classes.action}
+									variant="contained"
+									fullWidth
+									onClick={omitStepCallback}
+									disabled={isSubmitting}
+								>
+									{t('createPassword.fields.omitLabel')}
+								</Button>
+							) : null}
 						</div>
 					</Form>
 				)}

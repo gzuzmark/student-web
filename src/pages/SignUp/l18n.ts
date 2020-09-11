@@ -104,6 +104,10 @@ const signUp = {
 	// Get Medical information
 	'getMedicalInformation.title': 'Estás a unos pasos de agendar una cita',
 	'getMedicalInformation.title.mobile': 'Estás agendando una cita',
+	// Create Pediatrics Appointment
+	'preferPediatrics.title': 'Dado que el paciente tiene menos de 15 años, recomendamos que se atienda con un pediatra.',
+	'preferPediatrics.omitLabel': 'Omitir',
+	'preferPediatrics.createPediatricsAppointment': 'Agendar con pediatría',
 };
 
 export default signUp;

@@ -34,8 +34,8 @@ interface CurrentUserResponse {
 }
 
 interface PasswordFields {
+	userId?: string;
 	password?: string;
-	repeatPassword?: string;
 }
 
 const parseBirthDate = (birthDate: string) =>
@@ -130,6 +130,16 @@ export const updateProfile = async (newProfile: User) => {
 export const sendPassword = async (values: PasswordFields): Promise<void> => {
 	try {
 		await aliviaAxios.post('/users/update', values);
+	} catch (e) {
+		throw Error(e);
+	}
+};
+
+export const getUserId = async (queryId: string): Promise<string> => {
+	try {
+		const result = await aliviaAxios.get<string>('/users', { data: { queryId } });
+
+		return result.data;
 	} catch (e) {
 		throw Error(e);
 	}

@@ -12,6 +12,7 @@ import {
 	SelectProfile,
 	CreateProfile,
 	FamilyMembers,
+	CreateAccount,
 } from 'pages';
 
 export const TRIAGE_ROUTE = 'triaje';
@@ -52,7 +53,7 @@ interface Route {
 type RoutesType = Route[];
 
 export const routes: RoutesType = [
-	// { id: 'Triage', path: '/triaje', component: Triage }, // Dev note: Not in use for now at least
+	// { id: 'Triage', path: '/triaje', component: Triage }, // Dev note: Not in use, for now at least
 	{ id: 'SelectDoctor', path: '/seleccionar_doctor', component: SelectDoctor },
 	{ id: 'PreSignUp', path: '/pre_registro', component: PreSignUp },
 	{ id: 'SignUp', path: '/registro/*', component: SignUp },
@@ -66,4 +67,7 @@ export const routes: RoutesType = [
 	{ id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile, guard: true },
 ];
 
-export const routeWithoutNav: RoutesType = [{ id: 'Login', path: '/iniciar_sesion', component: Login }];
+export const routeWithoutNav: RoutesType = [
+	{ id: 'Login', path: '/iniciar_sesion', component: Login },
+	{ id: 'CreateAccount', path: '/crear_cuenta', component: CreateAccount },
+];

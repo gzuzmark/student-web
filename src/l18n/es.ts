@@ -14,6 +14,7 @@ import selectProfileL18n from 'pages/SelectProfile/l18n';
 import createProfileL18n from 'pages/CreateProfile/l18n';
 import familyMembersL18n from 'pages/FamilyMembers/l18n';
 import createPasswordL18n from 'pages/common/CreatePasswordForm/l18n';
+import createAccountL18n from 'pages/CreateAccount/l18n';
 
 export default {
 	nav: {
@@ -53,4 +54,5 @@ export default {
 	selectProfile: { ...selectProfileL18n },
 	createProfile: { ...createProfileL18n },
 	familyMembers: { ...familyMembersL18n },
+	createAccount: { ...createAccountL18n },
 };

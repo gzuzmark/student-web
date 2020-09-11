@@ -10,4 +10,5 @@ export default {
 	'createPassword.validation.password.incorrectFormat': 'Usa 6 caracteres o más para tu contraseña',
 	'createPassword.validation.repeatPassword.required': 'La contraseña es obligatoria',
 	'createPassword.validation.repeatPassword.notEqual': 'Las contraseñas no coinciden. Intenta de nuevo',
+	'createPassword.fields.omitLabel': 'OMITIR PASO',
 };

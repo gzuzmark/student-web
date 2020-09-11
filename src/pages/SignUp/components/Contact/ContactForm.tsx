@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils/createStyles';
 import { PasswordField } from 'pages/common';
 
-import { newUservalidationSchema, guestValidationSchema, defaultNewUserValidationSchema } from './validationSchema';
+import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
 import AppContext from 'AppContext';
 import { getLocations, Ubigeo } from 'pages/api';
 

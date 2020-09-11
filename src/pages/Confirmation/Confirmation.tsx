@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 
@@ -9,19 +9,22 @@ import { CONFIRMATION_ROUTE } from 'routes';
 import RightSide from './components/RightSide';
 import LeftSide from './components/LeftSide';
 import MobileBottomMessage from './components/MobileBottomMessage';
-import AppContext, { GUEST } from 'AppContext';
+import { GUEST } from 'AppContext';
 
 const Confirmation = () => {
-	// const { appointmentOwner, user, doctor, schedule, useCase, paymentURL, userToken } = useAppointmentStepValidation(
-	// 	CONFIRMATION_ROUTE,
-	// );
-	const { appointmentOwner, user, doctor, schedule, useCase, paymentURL, userToken } = useContext(AppContext);
+	const { appointmentOwner, user, doctor, schedule, useCase, paymentURL, userToken } = useAppointmentStepValidation(
+		CONFIRMATION_ROUTE,
+	);
 	const [showMobileRightSide, setShowMobileRightSide] = useState<boolean>(false);
+	const [isBottomMessageShowing, setIsBottomMessageShowing] = useState<boolean>(true);
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const isGuest = appointmentOwner === GUEST;
 	const isUserLoggedIn = !!userToken;
 	const closeMessage = () => {
 		setShowMobileRightSide(true);
+	};
+	const hideBottomMessage = () => {
+		setIsBottomMessageShowing(false);
 	};
 
 	useEffect(() => {
@@ -54,7 +57,11 @@ const Confirmation = () => {
 			) : showMobileRightSide ? (
 				<RightSide isGuest={isGuest} email={user?.email || ''} showPasswordForm={!isGuest && !isUserLoggedIn} />
 			) : (
-				<MobileBottomMessage closeMessage={closeMessage} />
+				<MobileBottomMessage
+					showBottomMessage={isBottomMessageShowing}
+					hideBottomMessage={hideBottomMessage}
+					closeMessage={closeMessage}
+				/>
 			)}
 		</Container>
 	);

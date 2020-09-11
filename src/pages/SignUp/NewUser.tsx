@@ -4,10 +4,19 @@ import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
 import { createPatient, createAccount, createGuestPatient, UseCase } from 'pages/api';
-import { usePageTitle, useCurrentUserRediction, setLocalValue } from 'utils';
+import { usePageTitle, useCurrentUserRediction, setLocalValue, isYoungerThanFifthteen } from 'utils';
 import { PAYMENT_STEP, GUEST, TriagePair, AppointmentOwner, User } from 'AppContext';
 
-import { LeftSide, AboutMe, AboutMeValues, MedicalData, MedicalDataValues, Contact, ContactValues } from './components';
+import {
+	LeftSide,
+	AboutMe,
+	AboutMeValues,
+	MedicalData,
+	MedicalDataValues,
+	Contact,
+	ContactValues,
+	PreferPediatrics,
+} from './components';
 import { SUB_ROUTES, checkStep, findStep, formatNewUser, updateTriageQuestion } from './utils';
 
 interface NewUserProps {
@@ -19,6 +28,7 @@ interface NewUserProps {
 	commingFromAppointmentCreation: boolean;
 	currentUser: User | null | undefined;
 }
+const GENERAL_MEDICINE = 'Quiero una orientación médica';
 
 const NewUser = ({
 	isUserLoggedIn,
@@ -33,7 +43,16 @@ const NewUser = ({
 	const [step, setStep] = useState<number>(0);
 	const [aboutMeData, setAboutMeData] = useState<AboutMeValues>();
 	const [medicalData, setMedicalData] = useState<MedicalDataValues>();
+	const [isAgeRestrictioModalOpen, setIsAgeRestrictioModalOpen] = useState<boolean>(false);
 	const isGuest = appointmentOwner === GUEST;
+	const validateIfIsYoungerThanFifthteen = (date: Date | null) => {
+		if (useCase && useCase.name === GENERAL_MEDICINE && date && isYoungerThanFifthteen(date)) {
+			setIsAgeRestrictioModalOpen(true);
+		}
+	};
+	const closeAgeRestrictionModal = () => {
+		setIsAgeRestrictioModalOpen(false);
+	};
 	const onChangeStep = (values: AboutMeValues | MedicalDataValues) => {
 		if (step === 0) {
 			setAboutMeData(values as AboutMeValues);
@@ -123,7 +142,12 @@ const NewUser = ({
 			<RightLayout>
 				<Switch>
 					<Route path="/registro/sobre_ti">
-						<AboutMe aboutMeData={aboutMeData} appointmentOwner={appointmentOwner} onChangeStep={onChangeStep} />
+						<AboutMe
+							aboutMeData={aboutMeData}
+							appointmentOwner={appointmentOwner}
+							onChangeStep={onChangeStep}
+							validationOnChange={validateIfIsYoungerThanFifthteen}
+						/>
 					</Route>
 					<Route exact path="/registro/datos_medicos">
 						<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
@@ -135,6 +159,7 @@ const NewUser = ({
 						<Redirect to="/registro/sobre_ti" />
 					</Route>
 				</Switch>
+				<PreferPediatrics isModalOpen={isAgeRestrictioModalOpen} closeModal={closeAgeRestrictionModal} />
 			</RightLayout>
 		</Container>
 	);
