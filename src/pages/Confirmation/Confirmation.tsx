@@ -12,9 +12,16 @@ import MobileBottomMessage from './components/MobileBottomMessage';
 import { GUEST } from 'AppContext';
 
 const Confirmation = () => {
-	const { appointmentOwner, user, doctor, schedule, useCase, paymentURL, userToken } = useAppointmentStepValidation(
-		CONFIRMATION_ROUTE,
-	);
+	const {
+		appointmentOwner,
+		user,
+		doctor,
+		schedule,
+		useCase,
+		paymentURL,
+		userToken,
+		updateState,
+	} = useAppointmentStepValidation(CONFIRMATION_ROUTE);
 	const [showMobileRightSide, setShowMobileRightSide] = useState<boolean>(false);
 	const [isBottomMessageShowing, setIsBottomMessageShowing] = useState<boolean>(true);
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
@@ -51,11 +58,26 @@ const Confirmation = () => {
 				isGuest={isGuest}
 			/>
 			{isGuest || isUserLoggedIn ? (
-				<RightSide isGuest={isGuest} email={user?.email || ''} showPasswordForm={!isGuest && !isUserLoggedIn} />
+				<RightSide
+					isGuest={isGuest}
+					email={user?.email || ''}
+					showPasswordForm={!isGuest && !isUserLoggedIn}
+					updateContextState={updateState}
+				/>
 			) : matches ? (
-				<RightSide isGuest={isGuest} email={user?.email || ''} showPasswordForm={!isGuest && !isUserLoggedIn} />
+				<RightSide
+					isGuest={isGuest}
+					email={user?.email || ''}
+					showPasswordForm={!isGuest && !isUserLoggedIn}
+					updateContextState={updateState}
+				/>
 			) : showMobileRightSide ? (
-				<RightSide isGuest={isGuest} email={user?.email || ''} showPasswordForm={!isGuest && !isUserLoggedIn} />
+				<RightSide
+					isGuest={isGuest}
+					email={user?.email || ''}
+					showPasswordForm={!isGuest && !isUserLoggedIn}
+					updateContextState={updateState}
+				/>
 			) : (
 				<MobileBottomMessage
 					showBottomMessage={isBottomMessageShowing}

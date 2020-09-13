@@ -2,8 +2,9 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import { User } from 'AppContext';
-import { getLocalValue } from 'utils';
+import { getLocalValue, setLocalValue } from 'utils';
 import aliviaAxios from 'utils/customAxios';
+import { TokenResponse } from './types';
 
 interface UserAPI {
 	id: string;
@@ -127,9 +128,19 @@ export const updateProfile = async (newProfile: User) => {
 	}
 };
 
-export const sendPassword = async (values: PasswordFields): Promise<void> => {
+export const upgradeUser = async (values: PasswordFields): Promise<string> => {
 	try {
-		await aliviaAxios.post('/users/update', values);
+		const resp = await aliviaAxios.post<TokenResponse>('/account/upgrade', {
+			patient_id: values.userId,
+			password: values.password,
+		});
+
+		const data = resp.data;
+
+		setLocalValue('userToken', data.token);
+		setLocalValue('refreshToken', data.refresh_token);
+
+		return data.token;
 	} catch (e) {
 		throw Error(e);
 	}
@@ -137,7 +148,7 @@ export const sendPassword = async (values: PasswordFields): Promise<void> => {
 
 export const getUserId = async (queryId: string): Promise<string> => {
 	try {
-		const result = await aliviaAxios.get<string>('/users', { data: { queryId } });
+		const result = await aliviaAxios.post<string>('/account/check', { patient_id: queryId });
 
 		return result.data;
 	} catch (e) {

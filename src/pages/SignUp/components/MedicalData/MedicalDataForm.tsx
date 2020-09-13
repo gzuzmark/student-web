@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { OptionsGroup, Option } from 'pages/common';
+import { OptionsGroup, Option, FilesGroupField } from 'pages/common';
 
 import validationSchema from './validationSchema';
 
@@ -21,6 +21,7 @@ export interface MedicalDataValues {
 	allergies: string;
 	moreInfo: string;
 	consultReason: string;
+	files?: string[];
 }
 
 interface MedicalDataFormProps {
@@ -36,6 +37,7 @@ const initialValues = {
 	allergies: '',
 	moreInfo: '',
 	consultReason: '',
+	files: [],
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -78,9 +80,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	fieldLabelWrapper: {
 		paddingBottom: '8px',
 	},
+	fieldClickable: {
+		cursor: 'pointer',
+	},
 	optionalFieldLabel: {
 		[breakpoints.up('lg')]: {
-			marginRight: '-2px',
+			marginRight: '-5px',
 		},
 	},
 	moreInformationLabel: {
@@ -192,6 +197,23 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 								helperText={t('medicalData.fields.moreInfo.helperText')}
 								fullWidth
 							/>
+						</div>
+						<div className={classes.fieldWrapper}>
+							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
+								<Typography component="span">{t('medicalData.fields.files.label.firstPart')}</Typography>{' '}
+								<FormLabel className={classes.fieldClickable} htmlFor="files-input">
+									<Typography component="span" color="primary">
+										{t('medicalData.fields.files.label.secondPart')}
+									</Typography>{' '}
+								</FormLabel>
+								{matches ? (
+									<Typography component="span" className={classes.italicLabel}>
+										{t('medicalData.fields.optional.label')}
+									</Typography>
+								) : null}
+							</div>
+
+							<Field component={FilesGroupField} inputId="files-input" name="files" />
 						</div>
 					</div>
 					<div className={classes.privacyPolicyWrapper}>

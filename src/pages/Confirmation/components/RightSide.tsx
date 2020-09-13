@@ -78,9 +78,10 @@ interface RightSideProps {
 	isGuest: boolean;
 	email: string;
 	showPasswordForm: boolean;
+	updateContextState?: Function;
 }
 
-const RightSide = ({ isGuest, email, showPasswordForm }: RightSideProps) => {
+const RightSide = ({ isGuest, email, showPasswordForm, updateContextState }: RightSideProps) => {
 	const classes = useStyles();
 	const { push } = useHistory();
 	const { t } = useTranslation('confirmation');
@@ -102,7 +103,7 @@ const RightSide = ({ isGuest, email, showPasswordForm }: RightSideProps) => {
 						</div>
 						<div className={classes.separator}></div>
 					</div>
-					<CreatePasswordForm />
+					<CreatePasswordForm updateContextState={updateContextState} />
 				</div>
 			) : (
 				<div className={classes.tipsWrapper}>

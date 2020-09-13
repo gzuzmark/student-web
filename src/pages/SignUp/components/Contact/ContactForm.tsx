@@ -105,7 +105,6 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 	const onSubmit = useCallback(
 		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
 			try {
-				console.log('eh?');
 				await submitSignUp(values);
 
 				setSubmitting(false);

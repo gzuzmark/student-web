@@ -1,13 +1,14 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect, useContext } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
 
-import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
+import { stylesWithTheme } from 'utils';
 import { CreatePasswordForm } from 'pages/common';
 import { getUserId } from 'pages/api';
+import AppContext from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	container: {
@@ -39,22 +40,23 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	},
 }));
 
-const authenticateUser = async ({ id, setUserId }: { id: string; setUserId: Function }) => {
+const authenticateUser = async ({ id, setUserId }: { id: string; setUserId: Function }, push: Function) => {
 	try {
 		const userId = await getUserId(id);
 
 		if (userId) {
 			setUserId(userId);
 		} else {
-			redirectToBaseAlivia();
+			push('/iniciar_sesion');
 		}
 	} catch (e) {
-		redirectToBaseAlivia();
+		push('/iniciar_sesion');
 	}
 };
 
 const CreateAccount = () => {
 	const classes = useStyles();
+	const { updateState: updateContextState } = useContext(AppContext);
 	const [userId, setUserId] = useState<string>();
 	const { t } = useTranslation('createAccount');
 	const history = useHistory();
@@ -64,8 +66,8 @@ const CreateAccount = () => {
 	};
 
 	useLayoutEffect(() => {
-		authenticateUser({ id: params.id as string, setUserId });
-	}, [params, setUserId]);
+		authenticateUser({ id: params.patient as string, setUserId }, history.push);
+	}, [history.push, params, setUserId]);
 
 	return (
 		<div className={classes.container}>
@@ -76,7 +78,7 @@ const CreateAccount = () => {
 					</Typography>
 					<div className={classes.separator}></div>
 				</div>
-				<CreatePasswordForm userId={userId} omitStepCallback={omitThisStep} />
+				<CreatePasswordForm updateContextState={updateContextState} userId={userId} omitStepCallback={omitThisStep} />
 			</div>
 		</div>
 	);

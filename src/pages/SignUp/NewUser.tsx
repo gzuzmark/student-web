@@ -4,7 +4,7 @@ import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
 import { createPatient, createAccount, createGuestPatient, UseCase } from 'pages/api';
-import { usePageTitle, useCurrentUserRediction, setLocalValue, isYoungerThanFifthteen } from 'utils';
+import { usePageTitle, setLocalValue, isYoungerThanFifthteen } from 'utils';
 import { PAYMENT_STEP, GUEST, TriagePair, AppointmentOwner, User } from 'AppContext';
 
 import {
@@ -60,6 +60,7 @@ const NewUser = ({
 			const dataValues = { ...values } as MedicalDataValues;
 			setMedicalData(dataValues);
 			if (updateState) {
+				// Send after the payment screen to create an appointment
 				const newTriage = updateTriageQuestion('De acuerdo, describe el malestar:', dataValues.consultReason, triage);
 				updateState({ triage: newTriage });
 			}
@@ -85,7 +86,7 @@ const NewUser = ({
 				// If the user is not a Guest, but is creating an appointment, then we need to create him an account token and with that token create an appoinment
 				// If the user is not a guest and is not creating an appointment, then we should only create him an account token and redirect him to /citas
 
-				if (isGuest) {
+				if (isGuest || (!isGuest && !isUserLoggedIn)) {
 					reservationAccountID = await createGuestPatient(newUser);
 					user = isUserLoggedIn ? currentUser : { id: '', ...formatNewUser(newUser) };
 				} else if (!isGuest && useCase) {
@@ -109,6 +110,7 @@ const NewUser = ({
 					userToken: localUserToken,
 					user,
 					appointmentCreationStep,
+					userFiles: medicalData?.files || [],
 				});
 				push(redirectPath);
 			}
@@ -117,7 +119,13 @@ const NewUser = ({
 	);
 
 	usePageTitle('Registro');
-	useCurrentUserRediction({ isUserLoggedIn, commingFromAppointmentCreation, redirectPath: '/dashboard/citas' });
+
+	useLayoutEffect(() => {
+		if (!commingFromAppointmentCreation) {
+			push('/iniciar_sesion');
+		}
+		// eslint-disable-next-line
+	}, []);
 	useLayoutEffect(() => {
 		checkStep(location, aboutMeData, push, medicalData);
 	}, [aboutMeData, location, medicalData, push]);

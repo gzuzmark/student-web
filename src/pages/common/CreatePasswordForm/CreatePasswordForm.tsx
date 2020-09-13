@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 
 import { PasswordField } from 'pages/common';
-import { sendPassword } from 'pages/api';
+import { upgradeUser, getCurrentUser } from 'pages/api';
 import { stylesWithTheme } from 'utils/createStyles';
 import { ReactComponent as Ellipse } from 'icons/ellipse.svg';
 
@@ -87,20 +87,30 @@ interface FormikCreatePasswordValues {
 interface CreatePasswordFormProps {
 	userId?: string;
 	omitStepCallback?: (e: MouseEvent) => void;
+	updateContextState?: Function;
 }
 
-const CreatePasswordForm = ({ userId, omitStepCallback }: CreatePasswordFormProps) => {
+const CreatePasswordForm = ({ userId, omitStepCallback, updateContextState }: CreatePasswordFormProps) => {
 	const { t } = useTranslation('global');
 	const classes = useStyles();
 	const onSubmit = useCallback(
 		async (values: CreatePasswordValues, { setSubmitting }: FormikHelpers<FormikCreatePasswordValues>) => {
 			try {
-				await sendPassword({ userId, password: values.password });
+				const token = await upgradeUser({ userId, password: values.password });
+				const [reservationToken, currentUser] = await getCurrentUser(token);
+
+				if (updateContextState) {
+					updateContextState({
+						userToken: token,
+						reservationAccountID: reservationToken,
+						user: currentUser,
+					});
+				}
 
 				setSubmitting(false);
 			} catch (e) {}
 		},
-		[userId],
+		[updateContextState, userId],
 	);
 	const initialValues = {
 		password: '',

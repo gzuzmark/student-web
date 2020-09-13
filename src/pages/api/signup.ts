@@ -1,7 +1,7 @@
 import aliviaAxios from 'utils/customAxios';
 import format from 'date-fns/format';
 
-import { ContactValues, MedicalDataValues } from 'pages/SignUp/components';
+import { ContactValues } from 'pages/SignUp/components';
 
 import { TokenResponse } from './types';
 import { getLocalValue } from 'utils';
@@ -43,6 +43,12 @@ export interface Ubigeo {
 
 interface UbigeoResponse {
 	data: Ubigeo[];
+}
+
+interface FileResponse {
+	data: {
+		id: string;
+	};
 }
 
 export const createGuestPatient = async (user: NewUser): Promise<string> => {
@@ -149,9 +155,14 @@ export const getLocations = async (query: string): Promise<UbigeoResponse> => {
 	return response.data;
 };
 
-export const postMedicalInformation = async (medicalData: MedicalDataValues): Promise<void> => {
+export const uploadFile = async (file: File) => {
 	try {
-		await aliviaAxios.post('/medical-information', medicalData);
+		const data = new FormData();
+
+		data.append('image', file);
+		const response = await aliviaAxios.post<FileResponse>('/media', data);
+
+		return response.data.data.id;
 	} catch (e) {
 		throw Error(e);
 	}

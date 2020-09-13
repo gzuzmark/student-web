@@ -52,11 +52,6 @@ const LeftSide = ({ step }: LeftSideProps) => {
 	return (
 		<LeftLayout>
 			<div className={classes.wrapper}>
-				{step <= 0 ? (
-					<Typography className={classes.titlePrefix} variant="h3">
-						{t('left.titlePrefix')}
-					</Typography>
-				) : null}
 				<Typography className={classes.title} variant="h1">
 					{t(`left.title.${l18nSelector}`)}
 				</Typography>

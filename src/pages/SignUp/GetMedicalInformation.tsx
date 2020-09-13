@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { Container, RightLayout, LeftLayout } from 'pages/common';
-import { postMedicalInformation } from 'pages/api';
 import { usePageTitle, stylesWithTheme } from 'utils';
 
 import { MedicalData, MedicalDataValues } from './components';
@@ -27,12 +26,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const registerMedicalInformation = async (push: Function, medicalData: MedicalDataValues) => {
-	try {
-		await postMedicalInformation(medicalData);
-		push('/pago');
-	} catch (e) {}
-};
+const createTriage = (t: Function, medicalData: MedicalDataValues) => [
+	[t('medicalData.fields.consultReason.label'), medicalData.consultReason],
+	[t('medicalData.fields.medicineList.label'), medicalData.medicineList],
+	[t('medicalData.fields.allergies.label'), medicalData.allergies],
+	[t('medicalData.fields.moreInfo.label'), medicalData.moreInfo],
+];
 
 interface GetMedicalInformationProps {
 	updateState: Function | undefined;
@@ -45,10 +44,13 @@ const GetMedicalInformation = ({ updateState }: GetMedicalInformationProps) => {
 	const submitMedicalInformation = useCallback(
 		async (medicalData: MedicalDataValues) => {
 			if (updateState) {
-				registerMedicalInformation(push, medicalData);
+				const triage = createTriage(t, medicalData);
+
+				updateState({ triage, userFiles: medicalData.files || [] });
+				push('/pago');
 			}
 		},
-		[push, updateState],
+		[push, t, updateState],
 	);
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 
