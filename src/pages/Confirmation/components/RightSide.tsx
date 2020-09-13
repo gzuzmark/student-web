@@ -86,7 +86,9 @@ const RightSide = ({ isGuest, email, showPasswordForm, updateContextState }: Rig
 	const { push } = useHistory();
 	const { t } = useTranslation('confirmation');
 
-	const goToAppointments = () => push('/dashboard/citas');
+	const goToAppointments = () => {
+		push('/dashboard/citas');
+	};
 
 	return (
 		<RightLayout className={classes.rightLayout}>
@@ -103,7 +105,7 @@ const RightSide = ({ isGuest, email, showPasswordForm, updateContextState }: Rig
 						</div>
 						<div className={classes.separator}></div>
 					</div>
-					<CreatePasswordForm updateContextState={updateContextState} />
+					<CreatePasswordForm redirectAfterSubmit={goToAppointments} updateContextState={updateContextState} />
 				</div>
 			) : (
 				<div className={classes.tipsWrapper}>

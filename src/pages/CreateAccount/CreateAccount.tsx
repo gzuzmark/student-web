@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useContext } from 'react';
+import React, { useLayoutEffect, useContext } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
@@ -40,15 +40,9 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	},
 }));
 
-const authenticateUser = async ({ id, setUserId }: { id: string; setUserId: Function }, push: Function) => {
+const authenticateUser = async (id: string, push: Function) => {
 	try {
-		const userId = await getUserId(id);
-
-		if (userId) {
-			setUserId(userId);
-		} else {
-			push('/iniciar_sesion');
-		}
+		await getUserId(id);
 	} catch (e) {
 		push('/iniciar_sesion');
 	}
@@ -56,18 +50,25 @@ const authenticateUser = async ({ id, setUserId }: { id: string; setUserId: Func
 
 const CreateAccount = () => {
 	const classes = useStyles();
-	const { updateState: updateContextState } = useContext(AppContext);
-	const [userId, setUserId] = useState<string>();
-	const { t } = useTranslation('createAccount');
+	const { updateState: updateContextState, userToken } = useContext(AppContext);
 	const history = useHistory();
 	const params = parse(history.location.search);
+	const userId = params.patient as string;
+	const { t } = useTranslation('createAccount');
 	const omitThisStep = () => {
 		history.push('/iniciar_sesion');
 	};
+	const redirectAfterSubmit = () => {
+		history.push('/dashboard/citas');
+	};
+
+	if (!!userToken || !userId) {
+		history.push('/iniciar_sesion');
+	}
 
 	useLayoutEffect(() => {
-		authenticateUser({ id: params.patient as string, setUserId }, history.push);
-	}, [history.push, params, setUserId]);
+		authenticateUser(userId, history.push);
+	}, [history.push, params, userId]);
 
 	return (
 		<div className={classes.container}>
@@ -78,7 +79,12 @@ const CreateAccount = () => {
 					</Typography>
 					<div className={classes.separator}></div>
 				</div>
-				<CreatePasswordForm updateContextState={updateContextState} userId={userId} omitStepCallback={omitThisStep} />
+				<CreatePasswordForm
+					redirectAfterSubmit={redirectAfterSubmit}
+					updateContextState={updateContextState}
+					userId={userId}
+					omitStepCallback={omitThisStep}
+				/>
 			</div>
 		</div>
 	);

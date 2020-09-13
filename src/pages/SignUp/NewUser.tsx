@@ -122,7 +122,7 @@ const NewUser = ({
 
 	useLayoutEffect(() => {
 		if (!commingFromAppointmentCreation) {
-			push('/iniciar_sesion');
+			push(isUserLoggedIn ? '/dashboard/citas' : '/iniciar_sesion');
 		}
 		// eslint-disable-next-line
 	}, []);

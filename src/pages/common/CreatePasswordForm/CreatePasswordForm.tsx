@@ -88,9 +88,15 @@ interface CreatePasswordFormProps {
 	userId?: string;
 	omitStepCallback?: (e: MouseEvent) => void;
 	updateContextState?: Function;
+	redirectAfterSubmit?: () => void;
 }
 
-const CreatePasswordForm = ({ userId, omitStepCallback, updateContextState }: CreatePasswordFormProps) => {
+const CreatePasswordForm = ({
+	userId,
+	omitStepCallback,
+	updateContextState,
+	redirectAfterSubmit,
+}: CreatePasswordFormProps) => {
 	const { t } = useTranslation('global');
 	const classes = useStyles();
 	const onSubmit = useCallback(
@@ -105,12 +111,16 @@ const CreatePasswordForm = ({ userId, omitStepCallback, updateContextState }: Cr
 						reservationAccountID: reservationToken,
 						user: currentUser,
 					});
+
+					if (redirectAfterSubmit) {
+						redirectAfterSubmit();
+					}
 				}
 
 				setSubmitting(false);
 			} catch (e) {}
 		},
-		[updateContextState, userId],
+		[redirectAfterSubmit, updateContextState, userId],
 	);
 	const initialValues = {
 		password: '',

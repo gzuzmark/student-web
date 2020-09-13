@@ -146,11 +146,9 @@ export const upgradeUser = async (values: PasswordFields): Promise<string> => {
 	}
 };
 
-export const getUserId = async (queryId: string): Promise<string> => {
+export const getUserId = async (queryId: string): Promise<void> => {
 	try {
-		const result = await aliviaAxios.post<string>('/account/check', { patient_id: queryId });
-
-		return result.data;
+		await aliviaAxios.post('/account/check', { patient_id: queryId });
 	} catch (e) {
 		throw Error(e);
 	}
