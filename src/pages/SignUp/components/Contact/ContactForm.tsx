@@ -174,8 +174,8 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 								fullWidth
 							/>
 						</div>
-						{isGuest && isUbigeoEnabled && (
-							<React.Fragment>
+						{isUbigeoEnabled && (
+							<>
 								<div className={classes.fieldWrapper}>
 									<Field
 										component={TextField}
@@ -208,9 +208,9 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 										)}
 									/>
 								</div>
-							</React.Fragment>
+							</>
 						)}
-						{!isGuest ? (
+						{!isUbigeoEnabled ? (
 							<>
 								<div className={classes.fieldWrapper}>
 									<Field

@@ -76,6 +76,7 @@ interface ContextProps {
 	paymentURL: string | null;
 	isTransactionEnabled: boolean;
 	isUbigeoEnabled: boolean;
+	userFiles: string[];
 }
 
 const defaultState: ContextProps = {
@@ -95,6 +96,7 @@ const defaultState: ContextProps = {
 	paymentURL: null,
 	isTransactionEnabled: false,
 	isUbigeoEnabled: false,
+	userFiles: [],
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

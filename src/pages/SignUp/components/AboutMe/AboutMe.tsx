@@ -14,6 +14,7 @@ interface AboutMeProps {
 	onChangeStep: (values: AboutMeValues, onError?: Function) => void;
 	appointmentOwner?: AppointmentOwner;
 	defaultLabelType?: string;
+	validationOnChange?: (date: Date | null) => void;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -47,7 +48,13 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMe = ({ aboutMeData, onChangeStep, appointmentOwner, defaultLabelType }: AboutMeProps) => {
+const AboutMe = ({
+	aboutMeData,
+	onChangeStep,
+	appointmentOwner,
+	defaultLabelType,
+	validationOnChange,
+}: AboutMeProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const userLabel = defaultLabelType || (appointmentOwner === MYSELF ? 'forMe' : 'forSomeoneElse');
@@ -79,6 +86,7 @@ const AboutMe = ({ aboutMeData, onChangeStep, appointmentOwner, defaultLabelType
 				aboutMeData={aboutMeData}
 				onChangeStep={onChangeStep}
 				openPrivacyPolicy={openDialog}
+				validationOnChange={validationOnChange}
 			/>
 		</div>
 	);

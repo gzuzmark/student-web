@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Theme } from '@material-ui/core/styles';
 
 import { Container } from 'pages/common';
 import { useAppointmentStepValidation } from 'utils';
@@ -6,13 +8,31 @@ import { CONFIRMATION_ROUTE } from 'routes';
 
 import RightSide from './components/RightSide';
 import LeftSide from './components/LeftSide';
+import MobileBottomMessage from './components/MobileBottomMessage';
 import { GUEST } from 'AppContext';
 
 const Confirmation = () => {
-	const { appointmentOwner, user, doctor, schedule, useCase, paymentURL } = useAppointmentStepValidation(
-		CONFIRMATION_ROUTE,
-	);
+	const {
+		appointmentOwner,
+		user,
+		doctor,
+		schedule,
+		useCase,
+		paymentURL,
+		userToken,
+		updateState,
+	} = useAppointmentStepValidation(CONFIRMATION_ROUTE);
+	const [showMobileRightSide, setShowMobileRightSide] = useState<boolean>(false);
+	const [isBottomMessageShowing, setIsBottomMessageShowing] = useState<boolean>(true);
+	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const isGuest = appointmentOwner === GUEST;
+	const isUserLoggedIn = !!userToken;
+	const closeMessage = () => {
+		setShowMobileRightSide(true);
+	};
+	const hideBottomMessage = () => {
+		setIsBottomMessageShowing(false);
+	};
 
 	useEffect(() => {
 		if (process.env.NODE_ENV === 'production') {
@@ -30,8 +50,41 @@ const Confirmation = () => {
 
 	return (
 		<Container>
-			<LeftSide user={user} doctor={doctor} schedule={schedule} />
-			<RightSide isGuest={isGuest} email={user?.email || ''} />
+			<LeftSide
+				user={user}
+				doctor={doctor}
+				schedule={schedule}
+				showExtraInfo={!isGuest && !isUserLoggedIn}
+				isGuest={isGuest}
+			/>
+			{isGuest || isUserLoggedIn ? (
+				<RightSide
+					isGuest={isGuest}
+					email={user?.email || ''}
+					showPasswordForm={!isGuest && !isUserLoggedIn}
+					updateContextState={updateState}
+				/>
+			) : matches ? (
+				<RightSide
+					isGuest={isGuest}
+					email={user?.email || ''}
+					showPasswordForm={!isGuest && !isUserLoggedIn}
+					updateContextState={updateState}
+				/>
+			) : showMobileRightSide ? (
+				<RightSide
+					isGuest={isGuest}
+					email={user?.email || ''}
+					showPasswordForm={!isGuest && !isUserLoggedIn}
+					updateContextState={updateState}
+				/>
+			) : (
+				<MobileBottomMessage
+					showBottomMessage={isBottomMessageShowing}
+					hideBottomMessage={hideBottomMessage}
+					closeMessage={closeMessage}
+				/>
+			)}
 		</Container>
 	);
 };

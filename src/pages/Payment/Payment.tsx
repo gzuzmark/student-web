@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent, useContext } from 'react';
+import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -6,7 +6,7 @@ import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
 import { useAppointmentStepValidation, getIntCurrency } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
-import AppContext, { CONFIRMATION_STEP } from 'AppContext';
+import { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
@@ -24,6 +24,7 @@ const Payment = () => {
 		channel,
 		useCase,
 		triage,
+		userFiles,
 		userToken,
 		reservationAccountID,
 		updateState: updateContextState,
@@ -31,7 +32,6 @@ const Payment = () => {
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
 	const { t } = useTranslation('payment');
-	const { user: userCtx } = useContext(AppContext);
 	const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
@@ -42,14 +42,14 @@ const Payment = () => {
 			if (schedule && updateContextState && reservationAccountID && useCase && triage && user && doctor) {
 				try {
 					setIsPaymentLoading(true);
-					const userName = user.name || userCtx?.name;
-					const userPhone = user.phoneNumber || userCtx?.phoneNumber;
+					const userName = user.name;
+					const userPhone = user.phoneNumber;
 					const response: any = await createPayment({
 						cost: useCase?.totalCost,
 						appointmentTypeID: 'ugito',
 						scheduleID: schedule.id,
 						discountID: discount.id,
-						email: user.email || userCtx?.email || '',
+						email: user.email || '',
 						token: 'SnzVSB3cSA',
 						dni: user.identification || '',
 						name: userName || '',
@@ -64,6 +64,7 @@ const Payment = () => {
 							useCaseID: useCase.id,
 							scheduleID: schedule.id,
 							triage,
+							media: userFiles || [],
 						},
 						userToken,
 					);
@@ -89,18 +90,19 @@ const Payment = () => {
 			}
 		},
 		[
-			discount,
 			schedule,
 			updateContextState,
 			reservationAccountID,
 			useCase,
 			triage,
 			user,
-			t,
-			userCtx,
-			userToken,
 			doctor,
+			discount.id,
+			discount.totalCost,
+			userFiles,
+			userToken,
 			history,
+			t,
 		],
 	);
 
@@ -172,6 +174,7 @@ const Payment = () => {
 									useCaseID: useCase.id,
 									scheduleID: schedule.id,
 									triage,
+									media: userFiles || [],
 								},
 								userToken,
 							);

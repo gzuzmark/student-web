@@ -28,6 +28,7 @@ interface AboutMeFormProps {
 	onChangeStep: (values: AboutMeValues) => void;
 	openPrivacyPolicy: () => void;
 	userLabel?: string;
+	validationOnChange?: (date: Date | null) => void;
 }
 
 const initialValues = {
@@ -71,7 +72,13 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy, userLabel }: AboutMeFormProps) => {
+const AboutMeForm = ({
+	aboutMeData,
+	onChangeStep,
+	openPrivacyPolicy,
+	userLabel,
+	validationOnChange,
+}: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const onSubmit = useCallback(
@@ -123,6 +130,7 @@ const AboutMeForm = ({ aboutMeData, onChangeStep, openPrivacyPolicy, userLabel }
 							<Field
 								component={DatePickerField}
 								name="birthDate"
+								validationOnChange={validationOnChange}
 								TextFieldProps={{
 									label: t('aboutme.fields.birthDate.label'),
 									variant: 'outlined',
