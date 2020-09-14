@@ -130,7 +130,7 @@ export const updateProfile = async (newProfile: User) => {
 
 export const upgradeUser = async (values: PasswordFields): Promise<string> => {
 	try {
-		const resp = await aliviaAxios.post<TokenResponse>('/account/upgrade', {
+		const resp = await aliviaAxios.post<TokenResponse>('/accounts/upgrade', {
 			patient_id: values.userId,
 			password: values.password,
 		});
@@ -148,7 +148,7 @@ export const upgradeUser = async (values: PasswordFields): Promise<string> => {
 
 export const getUserId = async (queryId: string): Promise<void> => {
 	try {
-		await aliviaAxios.post('/account/check', { patient_id: queryId });
+		await aliviaAxios.post('/accounts/check', { patient_id: queryId });
 	} catch (e) {
 		throw Error(e);
 	}
