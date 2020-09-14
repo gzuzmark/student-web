@@ -27,10 +27,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 const createTriage = (t: Function, medicalData: MedicalDataValues) => [
-	[t('medicalData.fields.consultReason.label'), medicalData.consultReason],
-	[t('medicalData.fields.medicineList.label'), medicalData.medicineList],
-	[t('medicalData.fields.allergies.label'), medicalData.allergies],
-	[t('medicalData.fields.moreInfo.label'), medicalData.moreInfo],
+	{ question: t('medicalData.fields.consultReason.label'), answer: medicalData.consultReason },
+	{ question: t('medicalData.fields.medicineList.label'), answer: medicalData.medicineList },
+	{ question: t('medicalData.fields.allergies.label'), answer: medicalData.allergies },
+	{ question: t('medicalData.fields.moreInfo.label'), answer: medicalData.moreInfo },
 ];
 
 interface GetMedicalInformationProps {
