@@ -9,7 +9,6 @@ import { Formik, Form, Field, FormikHelpers } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { PasswordField } from 'pages/common';
 
 import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
 import AppContext from 'AppContext';
@@ -210,28 +209,6 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 								</div>
 							</>
 						)}
-						{!isUbigeoEnabled ? (
-							<>
-								<div className={classes.fieldWrapper}>
-									<Field
-										component={PasswordField}
-										name="password"
-										label={t('contact.fields.password.label')}
-										variant="outlined"
-										fullWidth
-									/>
-								</div>
-								<div className={classes.fieldWrapper}>
-									<Field
-										component={PasswordField}
-										name="repeatPassword"
-										label={t('contact.fields.repeatPassword.label')}
-										variant="outlined"
-										fullWidth
-									/>
-								</div>
-							</>
-						) : null}
 					</div>
 					<div className={classes.privacyPolicyWrapper}>
 						<Typography className={classes.legalInformation} component="span">
