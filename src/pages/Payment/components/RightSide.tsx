@@ -122,6 +122,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		marginBottom: 'auto',
 		[breakpoints.up('lg')]: {
 			marginBottom: '30px',
+			maxWidth: '594px',
 		},
 	},
 	payButton: {

@@ -61,6 +61,7 @@ export interface TriagePair {
 
 interface ContextProps {
 	user: User | null;
+	guestUser: User | null;
 	userToken: string | null;
 	accountUsers: User[];
 	guestToken: string | null;
@@ -81,6 +82,7 @@ interface ContextProps {
 
 const defaultState: ContextProps = {
 	user: null,
+	guestUser: null,
 	userToken: getLocalValue('userToken'),
 	accountUsers: [],
 	guestToken: null,

@@ -20,6 +20,7 @@ const Payment = () => {
 	const {
 		doctor,
 		user,
+		guestUser,
 		schedule,
 		channel,
 		useCase,
@@ -31,6 +32,7 @@ const Payment = () => {
 		isTransactionEnabled = false,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
+	const activeUser = guestUser || user;
 	const { t } = useTranslation('payment');
 	const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
@@ -39,21 +41,21 @@ const Payment = () => {
 
 	const performTransactionPayment = useCallback(
 		async (method: number) => {
-			if (schedule && updateContextState && reservationAccountID && useCase && triage && user && doctor) {
+			if (schedule && updateContextState && reservationAccountID && useCase && triage && activeUser && doctor) {
 				try {
 					setIsPaymentLoading(true);
-					const userName = user.name;
-					const userPhone = user.phoneNumber;
+					const userName = activeUser.name;
+					const userPhone = activeUser.phoneNumber;
 					const response: any = await createPayment({
 						cost: useCase?.totalCost,
 						appointmentTypeID: 'ugito',
 						scheduleID: schedule.id,
 						discountID: discount.id,
-						email: user.email || '',
+						email: activeUser.email || '',
 						token: 'SnzVSB3cSA',
-						dni: user.identification || '',
+						dni: activeUser.identification || '',
 						name: userName || '',
-						lastName: user.lastName,
+						lastName: activeUser.lastName,
 						phone: userPhone || '',
 						paymentType: method,
 					});
@@ -95,7 +97,7 @@ const Payment = () => {
 			reservationAccountID,
 			useCase,
 			triage,
-			user,
+			activeUser,
 			doctor,
 			discount.id,
 			discount.totalCost,
@@ -124,10 +126,10 @@ const Payment = () => {
 	};
 	const sendDiscount = useCallback(async () => {
 		try {
-			if (user && schedule) {
+			if (activeUser && schedule) {
 				const reviewedDiscount = await applyDiscount({
 					couponCode: discountCode,
-					dni: user.identification,
+					dni: activeUser.identification,
 					scheduleID: schedule.id,
 				});
 
@@ -135,7 +137,7 @@ const Payment = () => {
 				setDiscount(reviewedDiscount);
 			}
 		} catch (e) {}
-	}, [discountCode, schedule, user]);
+	}, [discountCode, schedule, activeUser]);
 
 	useEffect(() => {
 		if (useCase?.totalCost) {
@@ -149,7 +151,7 @@ const Payment = () => {
 			window.culqi = async () => {
 				try {
 					setIsPaymentLoading(true);
-					if (schedule && updateContextState && reservationAccountID && useCase && triage && user) {
+					if (schedule && updateContextState && reservationAccountID && useCase && triage && activeUser) {
 						if (!!window.Culqi.token) {
 							const token = window.Culqi.token.id;
 							const email = window.Culqi.token.email;
@@ -161,7 +163,7 @@ const Payment = () => {
 								discountID: discount.id,
 								email,
 								token,
-								dni: user.identification || '',
+								dni: activeUser.identification || '',
 								name: '',
 								lastName: '',
 								phone: '',
@@ -199,7 +201,7 @@ const Payment = () => {
 
 	return !isPaymentLoading ? (
 		<Container>
-			<LeftSide doctor={doctor} user={user} schedule={schedule} channel={channel} />
+			<LeftSide doctor={doctor} user={activeUser} schedule={schedule} channel={channel} />
 			<RightSide
 				totalCost={discount.totalCost || useCase?.totalCost}
 				isCounponDisabled={!!discount.totalCost}

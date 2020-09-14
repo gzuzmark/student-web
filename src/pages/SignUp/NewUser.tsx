@@ -37,7 +37,6 @@ const NewUser = ({
 	appointmentOwner,
 	useCase,
 	triage,
-	currentUser,
 }: NewUserProps) => {
 	const { push, listen, location } = useHistory();
 	const [step, setStep] = useState<number>(0);
@@ -78,6 +77,7 @@ const NewUser = ({
 				};
 				let localUserToken = null;
 				let user = null;
+				let guestUser = null;
 				let reservationAccountID = '';
 				let redirectPath = '/pago';
 				let appointmentCreationStep = PAYMENT_STEP;
@@ -88,7 +88,7 @@ const NewUser = ({
 
 				if (isGuest || (!isGuest && !isUserLoggedIn)) {
 					reservationAccountID = await createGuestPatient(newUser);
-					user = isUserLoggedIn ? currentUser : { id: '', ...formatNewUser(newUser) };
+					guestUser = { id: reservationAccountID, ...formatNewUser(newUser) };
 				} else if (!isGuest && useCase) {
 					localUserToken = await createAccount(contactInfo);
 					reservationAccountID = await createPatient(newUser, localUserToken);
@@ -109,13 +109,14 @@ const NewUser = ({
 					reservationAccountID,
 					userToken: localUserToken,
 					user,
+					guestUser,
 					appointmentCreationStep,
 					userFiles: medicalData?.files || [],
 				});
 				push(redirectPath);
 			}
 		},
-		[aboutMeData, currentUser, isGuest, isUserLoggedIn, medicalData, push, updateState, useCase],
+		[aboutMeData, isGuest, isUserLoggedIn, medicalData, push, updateState, useCase],
 	);
 
 	usePageTitle('Registro');

@@ -15,6 +15,7 @@ const Confirmation = () => {
 	const {
 		appointmentOwner,
 		user,
+		guestUser,
 		doctor,
 		schedule,
 		useCase,
@@ -51,7 +52,7 @@ const Confirmation = () => {
 	return (
 		<Container>
 			<LeftSide
-				user={user}
+				user={guestUser || user}
 				doctor={doctor}
 				schedule={schedule}
 				showExtraInfo={!isGuest && !isUserLoggedIn}
