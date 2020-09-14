@@ -27,7 +27,6 @@ const Payment = () => {
 		triage,
 		userFiles,
 		userToken,
-		reservationAccountID,
 		updateState: updateContextState,
 		isTransactionEnabled = false,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
@@ -41,7 +40,7 @@ const Payment = () => {
 
 	const performTransactionPayment = useCallback(
 		async (method: number) => {
-			if (schedule && updateContextState && reservationAccountID && useCase && triage && activeUser && doctor) {
+			if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
 				try {
 					setIsPaymentLoading(true);
 					const userName = activeUser.name;
@@ -61,7 +60,7 @@ const Payment = () => {
 					});
 					await createAppointment(
 						{
-							reservationAccountID: reservationAccountID,
+							reservationAccountID: activeUser.id,
 							appointmentTypeID: 'ugito',
 							useCaseID: useCase.id,
 							scheduleID: schedule.id,
@@ -94,7 +93,6 @@ const Payment = () => {
 		[
 			schedule,
 			updateContextState,
-			reservationAccountID,
 			useCase,
 			triage,
 			activeUser,
@@ -151,7 +149,7 @@ const Payment = () => {
 			window.culqi = async () => {
 				try {
 					setIsPaymentLoading(true);
-					if (schedule && updateContextState && reservationAccountID && useCase && triage && activeUser) {
+					if (schedule && updateContextState && useCase && triage && activeUser) {
 						if (!!window.Culqi.token) {
 							const token = window.Culqi.token.id;
 							const email = window.Culqi.token.email;
@@ -171,7 +169,7 @@ const Payment = () => {
 							});
 							await createAppointment(
 								{
-									reservationAccountID: reservationAccountID,
+									reservationAccountID: activeUser.id,
 									appointmentTypeID: 'ugito',
 									useCaseID: useCase.id,
 									scheduleID: schedule.id,
