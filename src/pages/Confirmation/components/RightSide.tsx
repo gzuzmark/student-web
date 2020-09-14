@@ -79,9 +79,10 @@ interface RightSideProps {
 	email: string;
 	showPasswordForm: boolean;
 	updateContextState?: Function;
+	userId: string;
 }
 
-const RightSide = ({ isGuest, email, showPasswordForm, updateContextState }: RightSideProps) => {
+const RightSide = ({ isGuest, email, showPasswordForm, updateContextState, userId }: RightSideProps) => {
 	const classes = useStyles();
 	const { push } = useHistory();
 	const { t } = useTranslation('confirmation');
@@ -105,7 +106,11 @@ const RightSide = ({ isGuest, email, showPasswordForm, updateContextState }: Rig
 						</div>
 						<div className={classes.separator}></div>
 					</div>
-					<CreatePasswordForm redirectAfterSubmit={goToAppointments} updateContextState={updateContextState} />
+					<CreatePasswordForm
+						userId={userId}
+						redirectAfterSubmit={goToAppointments}
+						updateContextState={updateContextState}
+					/>
 				</div>
 			) : (
 				<div className={classes.tipsWrapper}>

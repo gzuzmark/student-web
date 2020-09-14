@@ -23,6 +23,7 @@ const Confirmation = () => {
 		userToken,
 		updateState,
 	} = useAppointmentStepValidation(CONFIRMATION_ROUTE);
+	const activeUser = guestUser || user;
 	const [showMobileRightSide, setShowMobileRightSide] = useState<boolean>(false);
 	const [isBottomMessageShowing, setIsBottomMessageShowing] = useState<boolean>(true);
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
@@ -64,6 +65,7 @@ const Confirmation = () => {
 					email={user?.email || ''}
 					showPasswordForm={!isGuest && !isUserLoggedIn}
 					updateContextState={updateState}
+					userId={activeUser ? activeUser.id : ''}
 				/>
 			) : matches ? (
 				<RightSide
@@ -71,6 +73,7 @@ const Confirmation = () => {
 					email={user?.email || ''}
 					showPasswordForm={!isGuest && !isUserLoggedIn}
 					updateContextState={updateState}
+					userId={activeUser ? activeUser.id : ''}
 				/>
 			) : showMobileRightSide ? (
 				<RightSide
@@ -78,6 +81,7 @@ const Confirmation = () => {
 					email={user?.email || ''}
 					showPasswordForm={!isGuest && !isUserLoggedIn}
 					updateContextState={updateState}
+					userId={activeUser ? activeUser.id : ''}
 				/>
 			) : (
 				<MobileBottomMessage
