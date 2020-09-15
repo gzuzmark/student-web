@@ -98,6 +98,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			display: 'block',
 			paddingBottom: '22px',
+			textAlign: 'center',
 		},
 	},
 	privacyPolicyLink: {
@@ -216,6 +217,11 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 							<Field component={FilesGroupField} inputId="files-input" name="files" />
 						</div>
 					</div>
+					<div className={classes.fieldWrapper}>
+						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
+							{t('medicalData.submit.text')}
+						</Button>
+					</div>
 					<div className={classes.privacyPolicyWrapper}>
 						<Typography component="span">{t('medicalData.privacyPolicy.firstSection')} </Typography>
 						<Typography
@@ -226,11 +232,6 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 						>
 							{t('medicalData.privacyPolicy.secondSection')}
 						</Typography>
-					</div>
-					<div className={classes.fieldWrapper}>
-						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
-							{t('medicalData.submit.text')}
-						</Button>
 					</div>
 				</Form>
 			)}

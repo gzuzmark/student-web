@@ -6,7 +6,7 @@ import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
 import { useAppointmentStepValidation, getIntCurrency } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
-import { CONFIRMATION_STEP } from 'AppContext';
+import { CONFIRMATION_STEP, GUEST } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
@@ -29,6 +29,7 @@ const Payment = () => {
 		userToken,
 		updateState: updateContextState,
 		isTransactionEnabled = false,
+		appointmentOwner,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
 	const activeUser = guestUser || user;
@@ -66,6 +67,7 @@ const Payment = () => {
 							scheduleID: schedule.id,
 							triage,
 							media: userFiles || [],
+							isGuest: appointmentOwner === GUEST,
 						},
 						userToken,
 					);
@@ -100,6 +102,7 @@ const Payment = () => {
 			discount.id,
 			discount.totalCost,
 			userFiles,
+			appointmentOwner,
 			userToken,
 			history,
 			t,
@@ -175,6 +178,7 @@ const Payment = () => {
 									scheduleID: schedule.id,
 									triage,
 									media: userFiles || [],
+									isGuest: appointmentOwner === GUEST,
 								},
 								userToken,
 							);
