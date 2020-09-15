@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent, useContext } from 'react';
+import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -6,7 +6,7 @@ import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
 import { useAppointmentStepValidation, getIntCurrency } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
-import AppContext, { CONFIRMATION_STEP } from 'AppContext';
+import { CONFIRMATION_STEP, GUEST } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
@@ -20,18 +20,20 @@ const Payment = () => {
 	const {
 		doctor,
 		user,
+		guestUser,
 		schedule,
 		channel,
 		useCase,
 		triage,
+		userFiles,
 		userToken,
-		reservationAccountID,
 		updateState: updateContextState,
 		isTransactionEnabled = false,
+		appointmentOwner,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
+	const activeUser = guestUser || user;
 	const { t } = useTranslation('payment');
-	const { user: userCtx } = useContext(AppContext);
 	const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
@@ -39,31 +41,33 @@ const Payment = () => {
 
 	const performTransactionPayment = useCallback(
 		async (method: number) => {
-			if (schedule && updateContextState && reservationAccountID && useCase && triage && user && doctor) {
+			if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
 				try {
 					setIsPaymentLoading(true);
-					const userName = user.name || userCtx?.name;
-					const userPhone = user.phoneNumber || userCtx?.phoneNumber;
+					const userName = activeUser.name;
+					const userPhone = activeUser.phoneNumber;
 					const response: any = await createPayment({
 						cost: useCase?.totalCost,
 						appointmentTypeID: 'ugito',
 						scheduleID: schedule.id,
 						discountID: discount.id,
-						email: user.email || userCtx?.email || '',
+						email: activeUser.email || '',
 						token: 'SnzVSB3cSA',
-						dni: user.identification || '',
+						dni: activeUser.identification || '',
 						name: userName || '',
-						lastName: user.lastName,
+						lastName: activeUser.lastName,
 						phone: userPhone || '',
 						paymentType: method,
 					});
 					await createAppointment(
 						{
-							reservationAccountID: reservationAccountID,
+							reservationAccountID: activeUser.id,
 							appointmentTypeID: 'ugito',
 							useCaseID: useCase.id,
 							scheduleID: schedule.id,
 							triage,
+							media: userFiles || [],
+							isGuest: appointmentOwner === GUEST,
 						},
 						userToken,
 					);
@@ -89,18 +93,19 @@ const Payment = () => {
 			}
 		},
 		[
-			discount,
 			schedule,
 			updateContextState,
-			reservationAccountID,
 			useCase,
 			triage,
-			user,
-			t,
-			userCtx,
-			userToken,
+			activeUser,
 			doctor,
+			discount.id,
+			discount.totalCost,
+			userFiles,
+			appointmentOwner,
+			userToken,
 			history,
+			t,
 		],
 	);
 
@@ -122,10 +127,10 @@ const Payment = () => {
 	};
 	const sendDiscount = useCallback(async () => {
 		try {
-			if (user && schedule) {
+			if (activeUser && schedule) {
 				const reviewedDiscount = await applyDiscount({
 					couponCode: discountCode,
-					dni: user.identification,
+					dni: activeUser.identification,
 					scheduleID: schedule.id,
 				});
 
@@ -133,7 +138,7 @@ const Payment = () => {
 				setDiscount(reviewedDiscount);
 			}
 		} catch (e) {}
-	}, [discountCode, schedule, user]);
+	}, [discountCode, schedule, activeUser]);
 
 	useEffect(() => {
 		if (useCase?.totalCost) {
@@ -147,7 +152,7 @@ const Payment = () => {
 			window.culqi = async () => {
 				try {
 					setIsPaymentLoading(true);
-					if (schedule && updateContextState && reservationAccountID && useCase && triage && user) {
+					if (schedule && updateContextState && useCase && triage && activeUser) {
 						if (!!window.Culqi.token) {
 							const token = window.Culqi.token.id;
 							const email = window.Culqi.token.email;
@@ -159,7 +164,7 @@ const Payment = () => {
 								discountID: discount.id,
 								email,
 								token,
-								dni: user.identification || '',
+								dni: activeUser.identification || '',
 								name: '',
 								lastName: '',
 								phone: '',
@@ -167,11 +172,13 @@ const Payment = () => {
 							});
 							await createAppointment(
 								{
-									reservationAccountID: reservationAccountID,
+									reservationAccountID: activeUser.id,
 									appointmentTypeID: 'ugito',
 									useCaseID: useCase.id,
 									scheduleID: schedule.id,
 									triage,
+									media: userFiles || [],
+									isGuest: appointmentOwner === GUEST,
 								},
 								userToken,
 							);
@@ -196,7 +203,7 @@ const Payment = () => {
 
 	return !isPaymentLoading ? (
 		<Container>
-			<LeftSide doctor={doctor} user={user} schedule={schedule} channel={channel} />
+			<LeftSide doctor={doctor} user={activeUser} schedule={schedule} channel={channel} />
 			<RightSide
 				totalCost={discount.totalCost || useCase?.totalCost}
 				isCounponDisabled={!!discount.totalCost}

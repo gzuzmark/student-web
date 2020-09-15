@@ -8,6 +8,7 @@ interface LayoutProps {
 	children: ReactNode;
 	className?: string;
 	width?: number | string;
+	hideCircle?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -54,13 +55,13 @@ export const Container = ({ children, className }: LayoutProps) => {
 	return <section className={clsx(classes.container, className)}>{children}</section>;
 };
 
-export const LeftLayout = ({ children, className }: LayoutProps) => {
+export const LeftLayout = ({ children, className, hideCircle }: LayoutProps) => {
 	const classes = useStyles();
 
 	return (
 		<div className={clsx(classes.leftLayout, className)}>
 			{children}
-			<img src={circleImg} className={classes.circle} alt="Brand circle" />
+			{hideCircle ? null : <img src={circleImg} className={classes.circle} alt="Brand circle" />}
 		</div>
 	);
 };

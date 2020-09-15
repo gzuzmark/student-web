@@ -159,14 +159,6 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 							{t('login.submit.text')}
 						</Button>
 					</div>
-					<div className={classes.signUpWrapper}>
-						<Typography component="span">{t('login.signUp.text')} </Typography>
-						<Link to="/registro/sobre_ti" className={classes.signUpLink}>
-							<Typography component="span" color="primary">
-								{t('login.signUp.link')}
-							</Typography>
-						</Link>
-					</div>
 				</Form>
 			)}
 		</Formik>

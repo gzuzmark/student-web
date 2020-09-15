@@ -61,6 +61,7 @@ export interface TriagePair {
 
 interface ContextProps {
 	user: User | null;
+	guestUser: User | null;
 	userToken: string | null;
 	accountUsers: User[];
 	guestToken: string | null;
@@ -76,10 +77,12 @@ interface ContextProps {
 	paymentURL: string | null;
 	isTransactionEnabled: boolean;
 	isUbigeoEnabled: boolean;
+	userFiles: string[];
 }
 
 const defaultState: ContextProps = {
 	user: null,
+	guestUser: null,
 	userToken: getLocalValue('userToken'),
 	accountUsers: [],
 	guestToken: null,
@@ -95,6 +98,7 @@ const defaultState: ContextProps = {
 	paymentURL: null,
 	isTransactionEnabled: false,
 	isUbigeoEnabled: false,
+	userFiles: [],
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

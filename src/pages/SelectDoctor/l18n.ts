@@ -31,6 +31,10 @@ const selectDoctor = {
 	'warning.modal.termsSecond': 'debido a que se requiere un acompañamiento distinto durante el tratamiento.',
 	'warning.modal.cancel': 'Cancelar',
 	'warning.modal.accept': 'Continuar a agendar cita',
+	'selectAppointmentOwner.title': '¿La cita es para ti o para alguien más?',
+	'selectAppointmentOwner.for': 'Para',
+	'selectAppointmentOwner.me': 'mi',
+	'selectAppointmentOwner.someoneElse': 'alguien más',
 };
 
 export default selectDoctor;

@@ -61,18 +61,21 @@ interface RightSideProps {
 	useCase: UseCase | null | undefined;
 	updateContextState: Function | undefined;
 	isUserLoggedIn: boolean;
-	comeFromTriage: boolean;
 	minutes: string;
 	numSessions: string;
+	openSelectOwnerModal: () => void;
+	setDoctor: Function;
+	setSchedule: Function;
 }
 
 const RightSide = ({
 	useCase,
 	updateContextState,
-	isUserLoggedIn,
-	comeFromTriage,
 	minutes,
 	numSessions,
+	openSelectOwnerModal,
+	setDoctor,
+	setSchedule,
 }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
@@ -105,10 +108,11 @@ const RightSide = ({
 				<Divider className={classes.divider} />
 				{doctors.length > 0 ? (
 					<DoctorList
-						isUserLoggedIn={isUserLoggedIn}
 						updateContextState={updateContextState}
 						doctors={doctors}
-						comeFromTriage={comeFromTriage}
+						openSelectOwnerModal={openSelectOwnerModal}
+						setDoctor={setDoctor}
+						setSchedule={setSchedule}
 					/>
 				) : (
 					<div className={classes.emptyMessageWrapper}>

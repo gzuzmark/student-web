@@ -45,6 +45,12 @@ interface UbigeoResponse {
 	data: Ubigeo[];
 }
 
+interface FileResponse {
+	data: {
+		id: string;
+	};
+}
+
 export const createGuestPatient = async (user: NewUser): Promise<string> => {
 	const resp = await aliviaAxios.post<CreatePatientResponse>('/patients-guest', {
 		name: user.name,
@@ -147,4 +153,17 @@ export const createAccount = async ({
 export const getLocations = async (query: string): Promise<UbigeoResponse> => {
 	const response = await aliviaAxios.get<UbigeoResponse>(`/ubigeo?keywords=${query}`);
 	return response.data;
+};
+
+export const uploadFile = async (file: File) => {
+	try {
+		const data = new FormData();
+
+		data.append('image', file);
+		const response = await aliviaAxios.post<FileResponse>('/media', data);
+
+		return response.data.data.id;
+	} catch (e) {
+		throw Error(e);
+	}
 };

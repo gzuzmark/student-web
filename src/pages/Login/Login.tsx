@@ -19,7 +19,7 @@ const Login = () => {
 	const { userToken, appointmentCreationStep, updateState } = useContext(AppContext);
 
 	usePageTitle('Iniciar sesion');
-	useCurrentUserRediction(userToken, '/dashboard/citas');
+	useCurrentUserRediction({ isUserLoggedIn: !!userToken, redirectPath: '/dashboard/citas' });
 
 	return (
 		<Container className={classes.container}>

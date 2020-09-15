@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { OptionsGroup, Option } from 'pages/common';
+import { OptionsGroup, Option, FilesGroupField } from 'pages/common';
 
 import validationSchema from './validationSchema';
 
@@ -21,6 +21,7 @@ export interface MedicalDataValues {
 	allergies: string;
 	moreInfo: string;
 	consultReason: string;
+	files?: string[];
 }
 
 interface MedicalDataFormProps {
@@ -36,6 +37,7 @@ const initialValues = {
 	allergies: '',
 	moreInfo: '',
 	consultReason: '',
+	files: [],
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -78,9 +80,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	fieldLabelWrapper: {
 		paddingBottom: '8px',
 	},
+	fieldClickable: {
+		cursor: 'pointer',
+	},
 	optionalFieldLabel: {
 		[breakpoints.up('lg')]: {
-			marginRight: '-2px',
+			marginRight: '-5px',
 		},
 	},
 	moreInformationLabel: {
@@ -93,6 +98,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			display: 'block',
 			paddingBottom: '22px',
+			textAlign: 'center',
 		},
 	},
 	privacyPolicyLink: {
@@ -125,13 +131,7 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
 								<FormLabel>{t('medicalData.fields.consultReason.label')}</FormLabel>
 							</div>
-							<Field
-								component={TextField}
-								className={classes.moreInformationLabel}
-								name="consultReason"
-								variant="outlined"
-								fullWidth
-							/>
+							<Field component={TextField} name="consultReason" variant="outlined" fullWidth />
 						</div>
 						<div className={classes.fieldWrapper}>
 							<div className={classes.fieldLabelWrapper}>
@@ -199,6 +199,28 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 								fullWidth
 							/>
 						</div>
+						<div className={classes.fieldWrapper}>
+							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
+								<Typography component="span">{t('medicalData.fields.files.label.firstPart')}</Typography>{' '}
+								<FormLabel className={classes.fieldClickable} htmlFor="files-input">
+									<Typography component="span" color="primary">
+										{t('medicalData.fields.files.label.secondPart')}
+									</Typography>{' '}
+								</FormLabel>
+								{matches ? (
+									<Typography component="span" className={classes.italicLabel}>
+										{t('medicalData.fields.optional.label')}
+									</Typography>
+								) : null}
+							</div>
+
+							<Field component={FilesGroupField} inputId="files-input" name="files" />
+						</div>
+					</div>
+					<div className={classes.fieldWrapper}>
+						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
+							{t('medicalData.submit.text')}
+						</Button>
 					</div>
 					<div className={classes.privacyPolicyWrapper}>
 						<Typography component="span">{t('medicalData.privacyPolicy.firstSection')} </Typography>
@@ -210,11 +232,6 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 						>
 							{t('medicalData.privacyPolicy.secondSection')}
 						</Typography>
-					</div>
-					<div className={classes.fieldWrapper}>
-						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
-							{t('medicalData.submit.text')}
-						</Button>
 					</div>
 				</Form>
 			)}

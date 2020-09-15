@@ -1,16 +1,17 @@
 import React, { useEffect, useContext, useState } from 'react';
-
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
-import { SELECT_DOCTOR_ROUTE } from 'routes';
-import { useAppointmentStepValidation, usePageTitle, redirectToBaseAlivia } from 'utils';
+
+import { usePageTitle, redirectToBaseAlivia } from 'utils';
+import { getUseCase, DoctorAvailability, Schedule } from 'pages/api';
+import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
 
 import { Container } from '../common';
 import { LeftSide } from './components/LeftSide';
 import { RightSide } from './components/RightSide';
-import { getUseCase } from 'pages/api';
-import AppContext, { SELECT_DOCTOR_STEP, GUEST } from 'AppContext';
 import WarningModal from './components/WarningModal/WarningModal';
+import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
+import { formatDoctor } from './utils';
 
 const DEFAULT_TRIAGE_VALUES = [
 	{ question: '¿Para quién es la consulta?', answer: 'relative' },
@@ -34,35 +35,54 @@ const requestUseCaseID = async (useCaseID: string, updateState: Function | undef
 	}
 };
 
-const useHookBasedOnURLAccess = (comeFromTriage: boolean, f1: Function, f2: Function) => {
-	return comeFromTriage ? f1(SELECT_DOCTOR_ROUTE) : f2(AppContext);
-};
-
 const SelectDoctor = () => {
-	const [showWarningModal, toggleWarningModal] = useState(false);
+	const [showWarningModal, toggleWarningModal] = useState<boolean>(false);
+	const [isSelectOwnerOpen, setSelectOwnerOpen] = useState<boolean>(false);
+	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
+	const [schedule, setSchedule] = useState<Schedule | null>(null);
 	const location = useLocation();
+	const history = useHistory();
 	const params = parse(location.search);
-	const comeFromTriage = !params.malestar;
-	const isUbigeoEnabled = (params.ubigeo as string || '') === '1';
+	const isUbigeoEnabled = ((params.ubigeo as string) || '') === '1';
 	const minutes = (params.minutes as string) || '';
 	const numSessions = (params.num_sessions as string) || '';
 	const transactionFlag = (params.transferencia as string) || '';
-	const { useCase, userToken, updateState } = useHookBasedOnURLAccess(
-		comeFromTriage,
-		useAppointmentStepValidation,
-		useContext,
-	);
-	usePageTitle('Seleccion doctor');
+	const { useCase, userToken, updateState } = useContext(AppContext);
+	const isUserLoggedIn = !!userToken;
+	const selectAppointmentOwner = (owner: string) => () => {
+		const isForSomeoneElse = owner === GUEST;
 
+		if (updateState) {
+			updateState({
+				appointmentOwner: owner,
+				appointmentCreationStep: PAYMENT_STEP,
+				schedule,
+				doctor: formatDoctor(doctor),
+			});
+			setSelectOwnerOpen(false);
+
+			if (isForSomeoneElse || !isUserLoggedIn) {
+				history.push('/registro/sobre_ti');
+			} else if (!isForSomeoneElse && isUserLoggedIn) {
+				history.push('/registro/datos_medicos');
+			}
+		}
+	};
+	const openSelectOwnerModal = () => {
+		setSelectOwnerOpen(true);
+	};
+	const closeSelectOwnerModal = () => {
+		setSelectOwnerOpen(false);
+	};
 	const onRejectWarning = () => {
 		toggleWarningModal(false);
 		redirectToBaseAlivia();
 	};
-
 	const onAcceptWarning = () => toggleWarningModal(false);
+	usePageTitle('Seleccion doctor');
 
 	useEffect(() => {
-		if (transactionFlag) {
+		if (transactionFlag && updateState) {
 			updateState({
 				isTransactionEnabled: transactionFlag === '1',
 			});
@@ -70,27 +90,25 @@ const SelectDoctor = () => {
 	}, [transactionFlag, updateState]);
 
 	useEffect(() => {
-		if (!comeFromTriage) {
-			const useCaseParam = params.malestar as string;
+		const useCaseParam = params.malestar as string;
 
-			if (!useCaseParam) {
-				redirectToBaseAlivia();
-			}
+		if (!useCaseParam) {
+			redirectToBaseAlivia();
+		}
 
-			if (!useCase && useCaseParam && updateState) {
-				requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
-			}
+		if (!useCase && useCaseParam && updateState) {
+			requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
+		}
 
-			if (isUbigeoEnabled && updateState) {
-				updateState({ isUbigeoEnabled });
-			}
+		if (isUbigeoEnabled && updateState) {
+			updateState({ isUbigeoEnabled });
 		}
 		if (useCase && useCase.id) {
 			if (window.nutritionistUseCaseId === useCase.id) {
 				toggleWarningModal(true);
 			}
 		}
-	}, [location.search, updateState, useCase, comeFromTriage, isUbigeoEnabled, params.malestar]);
+	}, [location.search, updateState, useCase, isUbigeoEnabled, params.malestar]);
 
 	return (
 		<Container>
@@ -99,11 +117,19 @@ const SelectDoctor = () => {
 				isUserLoggedIn={!!userToken}
 				useCase={useCase}
 				updateContextState={updateState}
-				comeFromTriage={comeFromTriage}
 				minutes={minutes}
 				numSessions={numSessions}
+				openSelectOwnerModal={openSelectOwnerModal}
+				setDoctor={setDoctor}
+				setSchedule={setSchedule}
 			/>
 			<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
+			<SelectAppointmentOwner
+				isOpen={isSelectOwnerOpen}
+				selectAppointmentForMe={selectAppointmentOwner(MYSELF)}
+				selectAppointmentForSomeoneElse={selectAppointmentOwner(GUEST)}
+				onClose={closeSelectOwnerModal}
+			/>
 		</Container>
 	);
 };

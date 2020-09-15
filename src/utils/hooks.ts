@@ -12,18 +12,28 @@ import {
 
 import { redirectToBaseAlivia } from './redirects';
 
+interface CurrentUserRedirectionParams {
+	isUserLoggedIn: boolean;
+	commingFromAppointmentCreation?: boolean;
+	redirectPath: string;
+}
+
 export const usePageTitle = (title: string) => {
 	useLayoutEffect(() => {
 		document.title = `Alivia - ${title}`;
 	}, [title]);
 };
 
-export const useCurrentUserRediction = (currentUser: string | null | undefined, redictedPath: string) => {
+export const useCurrentUserRediction = ({
+	isUserLoggedIn,
+	commingFromAppointmentCreation,
+	redirectPath,
+}: CurrentUserRedirectionParams) => {
 	const history = useHistory();
 
 	useLayoutEffect(() => {
-		if (currentUser) {
-			history.push(redictedPath);
+		if (!commingFromAppointmentCreation && isUserLoggedIn) {
+			history.push(redirectPath);
 		}
 		// eslint-disable-next-line
 	}, []);

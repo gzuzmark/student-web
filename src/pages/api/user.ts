@@ -2,8 +2,9 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import { User } from 'AppContext';
-import { getLocalValue } from 'utils';
+import { getLocalValue, setLocalValue } from 'utils';
 import aliviaAxios from 'utils/customAxios';
+import { TokenResponse } from './types';
 
 interface UserAPI {
 	id: string;
@@ -31,6 +32,11 @@ interface CurrentUserDataResponse {
 
 interface CurrentUserResponse {
 	data: CurrentUserDataResponse;
+}
+
+interface PasswordFields {
+	userId?: string;
+	password?: string;
 }
 
 const parseBirthDate = (birthDate: string) =>
@@ -118,6 +124,32 @@ export const updateProfile = async (newProfile: User) => {
 	} catch (e) {
 		console.log(e);
 
+		throw Error(e);
+	}
+};
+
+export const upgradeUser = async (values: PasswordFields): Promise<string> => {
+	try {
+		const resp = await aliviaAxios.post<TokenResponse>('/accounts/upgrade', {
+			patient_id: values.userId,
+			password: values.password,
+		});
+
+		const data = resp.data;
+
+		setLocalValue('userToken', data.token);
+		setLocalValue('refreshToken', data.refresh_token);
+
+		return data.token;
+	} catch (e) {
+		throw Error(e);
+	}
+};
+
+export const getUserId = async (queryId: string): Promise<void> => {
+	try {
+		await aliviaAxios.post('/accounts/check', { patient_id: queryId });
+	} catch (e) {
 		throw Error(e);
 	}
 };

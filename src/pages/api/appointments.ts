@@ -97,6 +97,8 @@ interface NewAppointmentBody {
 	scheduleID: string;
 	appointmentTypeID: string;
 	triage: TriagePair[];
+	media: string[];
+	isGuest: boolean;
 }
 
 const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType: AppointmentType): AppointDetail[] =>
@@ -147,6 +149,8 @@ const formatCreateParams = (params: NewAppointmentBody) => ({
 	schedule_id: params.scheduleID,
 	appointment_type_id: params.appointmentTypeID || '',
 	questions: params.triage,
+	media: params.media || [],
+	is_guest: !!params.isGuest,
 });
 
 // TODO Update how we get the appointments

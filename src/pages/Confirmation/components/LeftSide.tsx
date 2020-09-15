@@ -7,19 +7,21 @@ import { LeftLayout } from 'pages/common';
 import { User } from 'AppContext';
 import { useTranslation } from 'react-i18next';
 import { formatUTCDate, stylesWithTheme } from 'utils';
+import AppointmentTips from './AppointmentTips';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
 		'&&': {
 			[breakpoints.up('lg')]: {
-				paddingLeft: '198px',
+				paddingLeft: '97px',
+				width: '512px',
 			},
 		},
 	},
 	wrapper: {
 		padding: '31px 0 40px 26px',
 		[breakpoints.up('lg')]: {
-			padding: '68px 40px 0 0',
+			padding: '114px 40px 0 0',
 		},
 	},
 	prefix: {
@@ -82,20 +84,28 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		width: '71px',
 		height: '66px',
 	},
+	tipsWrapper: {
+		padding: '20px 15px 35px 25px',
+		[breakpoints.up('lg')]: {
+			padding: '72px 50px 0 0',
+		},
+	},
 }));
 
 interface LeftSideProps {
 	user: User | null | undefined;
 	doctor: Doctor | null | undefined;
 	schedule: Schedule | null | undefined;
+	showExtraInfo: boolean;
+	isGuest: boolean;
 }
 
-const LeftSide = ({ user, doctor, schedule }: LeftSideProps) => {
+const LeftSide = ({ user, doctor, schedule, showExtraInfo, isGuest }: LeftSideProps) => {
 	const { t } = useTranslation('confirmation');
 	const classes = useStyles();
 
 	return (
-		<LeftLayout className={classes.container}>
+		<LeftLayout className={classes.container} hideCircle>
 			<div className={classes.wrapper}>
 				<Typography className={classes.prefix} variant="h3">
 					{t('confirmation.left.prefix')}
@@ -142,6 +152,11 @@ const LeftSide = ({ user, doctor, schedule }: LeftSideProps) => {
 					</div>
 				</div>
 			</div>
+			{showExtraInfo ? (
+				<div className={classes.tipsWrapper}>
+					<AppointmentTips isGuest={isGuest} email={user?.email || ''} />
+				</div>
+			) : null}
 		</LeftLayout>
 	);
 };
