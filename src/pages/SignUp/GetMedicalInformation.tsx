@@ -27,7 +27,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 const createTriage = (t: Function, medicalData: MedicalDataValues) => [
-	{ question: t('medicalData.fields.consultReason.label'), answer: medicalData.consultReason },
+	{ question: 'De acuerdo, describe el malestar:', answer: medicalData.consultReason },
+	{ question: '¿Qué tan fuerte es el malestar?', answer: 'moderate' },
+	{ question: 'De acuerdo, describe el malestar:', answer: '-' },
+	{ question: '¿Hace cuánto tiempo se viene presentando este malestar?', answer: '-' },
 	{ question: t('medicalData.fields.medicineList.label'), answer: medicalData.medicineList },
 	{ question: t('medicalData.fields.allergies.label'), answer: medicalData.allergies },
 	{ question: t('medicalData.fields.moreInfo.label'), answer: medicalData.moreInfo },
