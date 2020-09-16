@@ -9,6 +9,7 @@ import { usePageTitle, stylesWithTheme } from 'utils';
 
 import { MedicalData, MedicalDataValues } from './components';
 import { Typography } from '@material-ui/core';
+import { AppointmentOwner } from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -26,10 +27,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const createTriage = (t: Function, medicalData: MedicalDataValues) => [
-	{ question: 'De acuerdo, describe el malestar:', answer: medicalData.consultReason },
+const createTriage = (t: Function, medicalData: MedicalDataValues, appointmentOwner: AppointmentOwner) => [
+	{ question: '¿Para quién es la consulta?', answer: appointmentOwner },
 	{ question: '¿Qué tan fuerte es el malestar?', answer: 'moderate' },
-	{ question: 'De acuerdo, describe el malestar:', answer: '-' },
+	{ question: 'De acuerdo, describe el malestar:', answer: medicalData.consultReason },
 	{ question: '¿Hace cuánto tiempo se viene presentando este malestar?', answer: '-' },
 	{ question: t('medicalData.fields.medicineList.label'), answer: medicalData.medicineList },
 	{ question: t('medicalData.fields.allergies.label'), answer: medicalData.allergies },
@@ -38,22 +39,23 @@ const createTriage = (t: Function, medicalData: MedicalDataValues) => [
 
 interface GetMedicalInformationProps {
 	updateState: Function | undefined;
+	appointmentOwner: AppointmentOwner | undefined;
 }
 
-const GetMedicalInformation = ({ updateState }: GetMedicalInformationProps) => {
+const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInformationProps) => {
 	const { push } = useHistory();
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const submitMedicalInformation = useCallback(
 		async (medicalData: MedicalDataValues) => {
-			if (updateState) {
-				const triage = createTriage(t, medicalData);
+			if (updateState && appointmentOwner) {
+				const triage = createTriage(t, medicalData, appointmentOwner);
 
 				updateState({ triage, userFiles: medicalData.files || [] });
 				push('/pago');
 			}
 		},
-		[push, t, updateState],
+		[appointmentOwner, push, t, updateState],
 	);
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 
