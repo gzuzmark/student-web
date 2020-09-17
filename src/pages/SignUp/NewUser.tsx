@@ -60,8 +60,17 @@ const NewUser = ({
 			setMedicalData(dataValues);
 			if (updateState) {
 				// Send after the payment screen to create an appointment
-				const newTriage = updateTriageQuestion('De acuerdo, describe el malestar:', dataValues.consultReason, triage);
-				updateState({ triage: newTriage });
+				const withNewDiscomfort = updateTriageQuestion(
+					'De acuerdo, describe el malestar:',
+					dataValues.consultReason,
+					triage,
+				);
+				const withNewOwner = updateTriageQuestion(
+					'¿Para quién es la consulta?',
+					isGuest ? 'relative' : appointmentOwner || '',
+					withNewDiscomfort,
+				);
+				updateState({ triage: withNewOwner });
 			}
 		}
 
