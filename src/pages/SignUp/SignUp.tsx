@@ -14,7 +14,7 @@ const SignUp = () => {
 	const isUserLoggedIn = !!userToken;
 
 	return commingFromAppointmentCreation && isForMyself && isUserLoggedIn ? (
-		<GetMedicalInformation updateState={updateState} />
+		<GetMedicalInformation updateState={updateState} appointmentOwner={appointmentOwner} />
 	) : (
 		<NewUser
 			useCase={useCase}
