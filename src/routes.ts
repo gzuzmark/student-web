@@ -13,6 +13,7 @@ import {
 	CreateProfile,
 	FamilyMembers,
 	CreateAccount,
+	LaboratoryExams,
 } from 'pages';
 
 export const TRIAGE_ROUTE = 'triaje';
@@ -62,6 +63,8 @@ export const routes: RoutesType = [
 	{ id: 'AppointmentList', path: '/dashboard/citas', component: AppointmentList, guard: true, exact: true },
 	{ id: 'Appointments', path: '/dashboard/citas/:id', component: Appointment, guard: true, exact: true },
 	{ id: 'FamilyMembers', path: '/dashboard/parientes', component: FamilyMembers, guard: true, exact: true },
+	{ id: 'LaboratoryExamsRoot', path: '/dashboard/laboratorios', component: LaboratoryExams, guard: true, exact: true },
+	{ id: 'LaboratoryExams', path: '/dashboard/laboratorios/*', component: LaboratoryExams, guard: true },
 	{ id: 'ForgotPassword', path: '/reestablecer_contrasena', component: ForgotPassword },
 	{ id: 'SelectProfile', path: '/seleccionar_perfil', component: SelectProfile, guard: true },
 	{ id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile, guard: true },
