@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { ReactComponent as Location } from 'icons/location.svg';
 import { ReactComponent as ExamsList } from 'icons/exams_list.svg';
 import { ReactComponent as Right } from 'icons/right_arrow.svg';
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, usePageTitle } from 'utils';
 import { RightLayout } from 'pages/common';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -35,6 +35,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	card: {
 		boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.05)',
 		display: 'flex',
+		cursor: 'pointer',
 		alignItems: 'center',
 		height: '74px',
 		marginBottom: '21px',
@@ -79,6 +80,8 @@ const Home = () => {
 	const redirectToMap = () => {
 		history.push('/dashboard/laboratorios/cercanos');
 	};
+
+	usePageTitle('Laboratorios');
 
 	return (
 		<RightLayout>
