@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import { ReactComponent as Location } from 'icons/location.svg';
-import { ReactComponent as ExamsList } from 'icons/exams_list.svg';
+// import { ReactComponent as ExamsList } from 'icons/exams_list.svg';
 import { ReactComponent as Right } from 'icons/right_arrow.svg';
 import { stylesWithTheme, usePageTitle } from 'utils';
 import { RightLayout } from 'pages/common';
@@ -74,9 +74,9 @@ const Home = () => {
 	const { t } = useTranslation('laboratoriesExams');
 	const classes = useStyles();
 	const history = useHistory();
-	const redirectToExams = () => {
-		history.push('/dashboard/laboratorios/examenes');
-	};
+	// const redirectToExams = () => {
+	// 	history.push('/dashboard/laboratorios/examenes');
+	// };
 	const redirectToMap = () => {
 		history.push('/dashboard/laboratorios/cercanos');
 	};
@@ -102,7 +102,7 @@ const Home = () => {
 						</div>
 					</div>
 				</Card>
-				<Card className={classes.card} onClick={redirectToExams}>
+				{/*<Card className={classes.card} onClick={redirectToExams}>
 					<div className={classes.cardContent}>
 						<div className={classes.iconWrapper}>
 							<ExamsList />
@@ -116,7 +116,7 @@ const Home = () => {
 							<Right />
 						</div>
 					</div>
-				</Card>
+			</Card>*/}
 			</div>
 		</RightLayout>
 	);

@@ -5,7 +5,7 @@ import { Container } from 'pages/common';
 
 import Home from './components/Home';
 import LaboratoriesMap from './components/LaboratoriesMap';
-import Exams from './components/Exams';
+// import Exams from './components/Exams';
 import LeftSide from './components/LeftSide';
 
 const LaboratoryExams = () => {
@@ -19,9 +19,11 @@ const LaboratoryExams = () => {
 				<Route path="/dashboard/laboratorios/cercanos" exact>
 					<LaboratoriesMap />
 				</Route>
+				{/*
 				<Route path="/dashboard/laboratorios/examenes" exact>
 					<Exams />
 				</Route>
+				*/}
 				<Route path="/dashboard/laboratorios/*">
 					<Redirect to="/dashboard/laboratorios" />
 				</Route>

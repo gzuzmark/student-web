@@ -12,6 +12,8 @@ import { ReactComponent as SmallMarkerIcon } from 'icons/small_marker.svg';
 
 import Marker from './Marker';
 import LaboratoryCard from './LaboratoryCard';
+import { MapsApi, Place } from './types';
+import SearchAddressInput from './SearchAddress';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	layout: {
@@ -70,15 +72,50 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	currentPositionWrapper: {
-		position: 'absolute',
-		zIndex: 2,
+		backgroundColor: 'white',
+		boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.12)',
 		top: 0,
 		left: 0,
 		right: 0,
-		backgroundColor: 'white',
+		padding: '15px 24px 21px 16px',
+		position: 'absolute',
+		zIndex: 2,
+		[breakpoints.up('lg')]: {
+			display: 'none',
+		},
+	},
+	currentPositionLabel: {
+		fontFamily: 'Montserrat',
+		fontStyle: 'normal',
+		fontWeight: 'normal',
+		fontSize: '15px',
+		lineHeight: '18px',
+		paddingBottom: '16px',
 	},
 	currentPosition: {
 		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	humanAddressWrapper: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+	humanAddress: {
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		maxWidth: 'calc(100vw - 136px)',
+	},
+	smallMarkerWrapper: {
+		height: '18px',
+		paddingRight: '2px',
+	},
+	changePositionBtn: {
+		padding: '0px 8px',
+		textTransform: 'none',
+		textDecoration: 'none',
+		fontSize: '13px',
 	},
 }));
 
@@ -120,15 +157,14 @@ const requestLaboratories = async (setLaboratories: Function) => {
 	setLaboratories(laboratories);
 };
 
-type MapsApi = typeof google.maps;
-
 const LaboratoriesMap = (): ReactElement | null => {
 	const [geoCenter, setGeoCenter] = useState<Position | null>(null);
 	const [laboratories, setLaboratories] = useState<Laboratory[]>([]);
 	const [activeMarker, setActiveMarker] = useState<number>(0);
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
 	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
-	const [mapApi, setMapApi] = useState<MapsApi>();
+	const [mapsApi, setMapApi] = useState<MapsApi>();
+	const [showingSearchAddress, setShowingSearchAddress] = useState<boolean>(false);
 	const history = useHistory();
 	const { t } = useTranslation('laboratoriesExams');
 	const selectLaboratory = (index: number) => () => {
@@ -136,9 +172,19 @@ const LaboratoriesMap = (): ReactElement | null => {
 			setActiveMarker(index);
 		}
 	};
+	const showSeachAddress = () => {
+		setShowingSearchAddress(true);
+	};
 	const classes = useStyles({ laboratories: laboratories.length });
 	const closeMap = () => {
 		history.push('dashboard/laboratorios');
+	};
+	const updatePosition = (place: Place | null) => {
+		if (place) {
+			setHumanActivePosition(place.address);
+			setActivePosition(place.position);
+			setShowingSearchAddress(false);
+		}
 	};
 
 	usePageTitle('Laboratorios Cercanos');
@@ -147,9 +193,10 @@ const LaboratoriesMap = (): ReactElement | null => {
 		getCurrentPosition(setGeoCenter, setActivePosition);
 		requestLaboratories(setLaboratories);
 	}, []);
+
 	useEffect(() => {
-		if (activePosition && mapApi) {
-			const geocoder = new mapApi.Geocoder();
+		if (activePosition && mapsApi) {
+			const geocoder = new mapsApi.Geocoder();
 			geocoder.geocode(
 				{ location: activePosition },
 				(results: google.maps.GeocoderResult[], responseStatus: google.maps.GeocoderStatus) => {
@@ -161,7 +208,7 @@ const LaboratoriesMap = (): ReactElement | null => {
 				},
 			);
 		}
-	}, [activePosition, mapApi]);
+	}, [activePosition, mapsApi]);
 
 	if (laboratories.length < 1) {
 		return null;
@@ -174,15 +221,34 @@ const LaboratoriesMap = (): ReactElement | null => {
 	return (
 		<RightLayout className={classes.layout}>
 			<div className={classes.currentPositionWrapper}>
-				<Typography>{t('laboratories.map.closest.title')}</Typography>
+				<Typography className={classes.currentPositionLabel}>{t('laboratories.map.closest.title')}</Typography>
 				<div className={classes.currentPosition}>
-					<SmallMarkerIcon />
-					<Typography>{humanActivePosition || 'Av. Schell 325, Miraflores, Lima'}</Typography>
-					<Button variant="text">{t('laboratories.map.closest.changePosition')}</Button>
+					{showingSearchAddress ? (
+						<SearchAddressInput
+							defaultValue={humanActivePosition}
+							defaultPosition={activePosition}
+							mapsApi={mapsApi}
+							updatePosition={updatePosition}
+						/>
+					) : (
+						<>
+							<div className={classes.humanAddressWrapper}>
+								<div className={classes.smallMarkerWrapper}>
+									<SmallMarkerIcon />
+								</div>
+								<Typography className={classes.humanAddress}>
+									{humanActivePosition || t('laboratories.map.position.notFound')}
+								</Typography>
+							</div>
+							<Button onClick={showSeachAddress} className={classes.changePositionBtn} variant="text">
+								{t('laboratories.map.closest.changePosition')}
+							</Button>
+						</>
+					)}
 				</div>
 			</div>
 			<GoogleMapReact
-				bootstrapURLKeys={{ key: '' }}
+				bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY || '' }}
 				defaultCenter={geoCenter || defaultCenter}
 				defaultZoom={15}
 				options={mapOptionsCreator}
@@ -192,7 +258,7 @@ const LaboratoriesMap = (): ReactElement | null => {
 				{laboratories.map(({ name, pos }, index) => (
 					<Marker key={name} {...pos} isActive={activeMarker === index} />
 				))}
-				{geoCenter ? <Marker {...geoCenter} isUser /> : null}
+				{activePosition ? <Marker {...activePosition} isUser /> : null}
 			</GoogleMapReact>
 			<div className={classes.laboratoriesWrapper}>
 				<div className={classes.laboratories}>
