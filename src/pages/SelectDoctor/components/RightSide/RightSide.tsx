@@ -29,14 +29,29 @@ const limitSchedules = (numSessions: string) => (_: any, i: number) => {
 	return limit ? i < limit : true;
 };
 
+const buildFirstDate = (): Date => {
+	const now = new Date();
+	const hour = now.getHours();
+	const min = now.getMinutes();
+	if (min > 0 && min <= 20) {
+		now.setMinutes(20);
+	} else if (min > 20 && min <= 40) {
+		now.setMinutes(40);
+	} else if (min > 40 && min < 60) {
+		now.setHours(hour + 1);
+		now.setMinutes(0);
+	}
+	now.setSeconds(0);
+	return now;
+};
+
 const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 	if (schedules.length > 0) {
 		const lastIndex = schedules.length - 1;
-		const firtSchedule = schedules[0];
 		const lastSchedule = schedules[lastIndex];
 		const newSchedules = [] as Schedule[];
-		let currentStartTime = firtSchedule.startTime;
-		for (let i = 0; i < 1000; i++) {
+		let currentStartTime = buildFirstDate();
+		for (let i = 0; i < 100; i++) {
 			// Set the end time by adding 15min to the firt start time. i.e: 8:00 + 15min => endTime = 8:15
 			const endTime = new Date(currentStartTime);
 			endTime.setSeconds(endTime.getSeconds() + SESSION_STEP);
