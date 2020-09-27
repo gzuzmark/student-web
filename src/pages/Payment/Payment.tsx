@@ -4,22 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
-import { useAppointmentStepValidation, getIntCurrency, dateToUTCUnixTimestamp } from 'utils';
+import { useAppointmentStepValidation, getIntCurrency } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
 import { CONFIRMATION_STEP, GUEST } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import {
-	createPayment,
-	createAppointment,
-	applyDiscount,
-	Discount,
-	CULQI_PAYMENT_ID,
-	PE_PAYMENT_ID,
-	sendFakeSession,
-} from 'pages/api';
-import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
+import { createPayment, createAppointment, applyDiscount, Discount, CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-642423-BHD55YOVGNEOHTH0/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -47,24 +38,6 @@ const Payment = () => {
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
-
-	React.useEffect(() => {
-		const { id = '', startTime, endTime } = schedule || {};
-		const { id: useCaseId = '' } = useCase || {};
-		if (id.includes(FAKE_SESSION_ID)) {
-			sendFakeSession({
-				reservation_account_id: reservationAccountID || '',
-				use_case_id: useCaseId,
-				doctor_id: (doctor && doctor.id) || '',
-				start_time: dateToUTCUnixTimestamp(startTime!),
-				end_time: dateToUTCUnixTimestamp(endTime!),
-			}).catch((err) => {
-				const { message = '' } = err || {};
-				setErrorMessage(message);
-			});
-		}
-		// eslint-disable-next-line
-	}, []);
 
 	const performTransactionPayment = useCallback(
 		async (method: number) => {
@@ -138,18 +111,14 @@ const Payment = () => {
 
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
-			const { id: scheduleId = '' } = schedule || {};
-			const isFakeSession = scheduleId.includes(FAKE_SESSION_ID);
-			if (!isFakeSession) {
-				if (paymentMethod === CULQI_PAYMENT_ID) {
-					e.preventDefault();
-					window.Culqi.open();
-				} else {
-					performTransactionPayment(paymentMethod);
-				}
+			if (paymentMethod === CULQI_PAYMENT_ID) {
+				e.preventDefault();
+				window.Culqi.open();
+			} else {
+				performTransactionPayment(paymentMethod);
 			}
 		},
-		[schedule, performTransactionPayment],
+		[performTransactionPayment],
 	);
 	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target) {

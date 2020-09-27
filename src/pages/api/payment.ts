@@ -18,14 +18,6 @@ interface PaymentRequestBody {
 	paymentType: number;
 }
 
-interface FakeSessionBody {
-	reservation_account_id: string;
-	use_case_id: string;
-	doctor_id: string;
-	start_time: number;
-	end_time: number;
-}
-
 interface DiscountRequestBody {
 	couponCode: string;
 	dni: string;
@@ -65,14 +57,6 @@ const formatParams = (params: PaymentRequestBody) => ({
 export const createPayment = async (params: PaymentRequestBody): Promise<void> => {
 	try {
 		return await aliviaAxios.post('/payments', { ...formatParams(params) });
-	} catch (e) {
-		throw Error(e);
-	}
-};
-
-export const sendFakeSession = async (params: FakeSessionBody): Promise<void> => {
-	try {
-		return await aliviaAxios.post('/appointments/fake', { ...params });
 	} catch (e) {
 		throw Error(e);
 	}
