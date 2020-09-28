@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
@@ -7,12 +7,14 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
+import animateScrollTo from 'animated-scroll-to';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { OptionsGroup, Option, FilesGroupField } from 'pages/common';
 
 import validationSchema from './validationSchema';
+import ActionAfterError from './ActionAfterError';
 
 export interface MedicalDataValues {
 	takeMedicines: boolean | null;
@@ -114,6 +116,7 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	const consultReasonRef = useRef<Element | null>(null);
 	const onSubmit = useCallback(
 		(values: MedicalDataValues, { setSubmitting }: { setSubmitting: Function }) => {
 			onChangeStep(values);
@@ -121,13 +124,28 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 		},
 		[onChangeStep],
 	);
+	const onError = () => {
+		if (consultReasonRef.current) {
+			animateScrollTo(consultReasonRef.current, { verticalOffset: -50, speed: 750 });
+		}
+	};
+
+	useLayoutEffect(() => {
+		consultReasonRef.current = document.querySelector('.consult-reason-field');
+	}, []);
 
 	return (
 		<Formik initialValues={medicalData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-			{({ submitForm, isSubmitting, values }) => (
+			{({ submitForm, isSubmitting, values, submitCount, isValid }) => (
 				<Form className={classes.form}>
+					<ActionAfterError
+						isSubmitting={isSubmitting}
+						submitCount={submitCount}
+						isValid={isValid}
+						onSubmitError={onError}
+					/>
 					<div>
-						<div className={classes.fieldWrapper}>
+						<div className={clsx(classes.fieldWrapper, 'consult-reason-field')}>
 							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
 								<FormLabel>{t('medicalData.fields.consultReason.label')}</FormLabel>
 							</div>
