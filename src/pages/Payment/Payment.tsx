@@ -165,7 +165,7 @@ const Payment = () => {
 				}
 			}
 		},
-		[schedule, doctor, useCase, performTransactionPayment],
+		[schedule, reservationAccountID, doctor, useCase, performTransactionPayment],
 	);
 	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target) {
