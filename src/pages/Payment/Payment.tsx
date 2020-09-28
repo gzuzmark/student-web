@@ -148,9 +148,24 @@ const Payment = () => {
 				} else {
 					performTransactionPayment(paymentMethod);
 				}
+			} else {
+				const { id = '', startTime, endTime } = schedule || {};
+				const { id: useCaseId = '' } = useCase || {};
+				if (id.includes(FAKE_SESSION_ID)) {
+					sendFakeSession({
+						reservation_account_id: reservationAccountID || '',
+						use_case_id: useCaseId,
+						doctor_id: (doctor && doctor.id) || '',
+						start_time: dateToUTCUnixTimestamp(startTime!),
+						end_time: dateToUTCUnixTimestamp(endTime!),
+					}).catch((err) => {
+						const { message = '' } = err || {};
+						setErrorMessage(message);
+					});
+				}
 			}
 		},
-		[schedule, performTransactionPayment],
+		[schedule, doctor, useCase, performTransactionPayment],
 	);
 	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target) {
