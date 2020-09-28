@@ -24,8 +24,26 @@ const confirmationL18n = {
 	'confirmation.createPassword.title.firstPart': 'Guarda tus datos',
 	'confirmation.createPassword.title.secondPart': 'para tu siguiente visita.',
 	'confirmation.bottomMessage.title': 'GUARDA TU INFORMACIÓN Y...',
+	'confirmation.bottomMessage.title.forSomeone': 'VINCULA A {{name}} A TU CUENTA',
 	'confirmation.bottomMessage.body': 'Accede a tus recetas, historias médicas y mantén el control de tus citas.',
+	'confirmation.bottomMessage.body.forSomeone': 'Y podrás ver y gestionar su información, además de otros beneficios.',
 	'confirmation.bottomMessage.link': 'MÁS INFO.',
+	'confirmation.linkAccount.title.firstPart': '{{loggedUserName}}, ¿deseas',
+	'confirmation.linkAccount.title.secondPart': 'vincular a {{name}} a tu cuenta?',
+	'confirmation.linkAccount.underAge.disclaimer':
+		'Para hacerlo, debes tener una relación de pareteneso directo con {{name}}. Es decir, debe ser tu hijo/a.',
+	'confirmation.linkAccount.subTitle': 'Beneficios de vincularlo a tu cuenta',
+	'confirmation.linkAccount.benefits.medicHistory': 'Accede a su historia médica, incluyendo sus tratamientos.',
+	'confirmation.linkAccount.benefits.appointments': 'Podrás ver las citas que ha agendado.',
+	'confirmation.linkAccount.benefits.easierNewAppointments': 'Agéndale citas sin ingresar todos sus datos nuevamente.',
+	'confirmation.linkAccount.privacyPolicies.firstPart':
+		'Al hacer click en “Vincular a mi cuenta,” confirmas que tú eres el padre o tutor legal del niño y aceptas nuestra',
+	'confirmation.linkAccount.privacyPolicies.secondPart': 'política de privacidad',
+	'confirmation.linkAccount.privacyPolicies.thirdPart': 'y nuestros',
+	'confirmation.linkAccount.privacyPolicies.fourthPart': 'términos y condiciones',
+	'confirmation.linkAccount.linkAccountLabel': 'VINCULAR A MI CUENTA',
+	'confirmation.linkedAccount.title': '{{name}} se ha vinculado exítosamente a tu cuenta',
+	'confirmation.linkedAccount.redirect': 'Continuar a mi cuenta',
 };
 
 export default confirmationL18n;

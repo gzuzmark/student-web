@@ -34,7 +34,7 @@ export default {
 		'dashboard.newAppointment': 'Agendar cita',
 	},
 	global: {
-		'selectAccount.new.account': 'Nuevo perfil',
+		'selectAccount.new.account': 'Para alguien más',
 		'privacyPolicy.title.firstLine': 'POLÍTICA DE PRIVACIDAD',
 		'privacyPolicy.title.secondLine': 'Las cosas claras ',
 		'privacyPolicy.body':

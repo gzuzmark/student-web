@@ -4,7 +4,7 @@ import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
 import { createPatient, createAccount, createGuestPatient, UseCase } from 'pages/api';
-import { usePageTitle, setLocalValue, isYoungerThanFifthteen } from 'utils';
+import { usePageTitle, setLocalValue, isYoungerThanFifthteen, isUnderAge } from 'utils';
 import { PAYMENT_STEP, GUEST, TriagePair, AppointmentOwner, User } from 'AppContext';
 
 import {
@@ -37,16 +37,21 @@ const NewUser = ({
 	appointmentOwner,
 	useCase,
 	triage,
+	currentUser,
 }: NewUserProps) => {
 	const { push, listen, location } = useHistory();
 	const [step, setStep] = useState<number>(0);
 	const [aboutMeData, setAboutMeData] = useState<AboutMeValues>();
 	const [medicalData, setMedicalData] = useState<MedicalDataValues>();
 	const [isAgeRestrictioModalOpen, setIsAgeRestrictioModalOpen] = useState<boolean>(false);
+	const [isAChild, setIsAChild] = useState<boolean>(false);
 	const isGuest = appointmentOwner === GUEST;
-	const validateIfIsYoungerThanFifthteen = (date: Date | null) => {
+	const validateAgeAfterSelecting = (date: Date | null) => {
 		if (useCase && useCase.name === GENERAL_MEDICINE && date && isYoungerThanFifthteen(date)) {
 			setIsAgeRestrictioModalOpen(true);
+		}
+		if (date && isUnderAge(date)) {
+			setIsAChild(true);
 		}
 	};
 	const closeAgeRestrictionModal = () => {
@@ -86,7 +91,7 @@ const NewUser = ({
 				};
 				let localUserToken = null;
 				let user = null;
-				let guestUser = null;
+				let patientUser = null;
 				let reservationAccountID = '';
 				let redirectPath = '/pago';
 				let appointmentCreationStep = PAYMENT_STEP;
@@ -97,17 +102,18 @@ const NewUser = ({
 
 				if (isGuest || (!isGuest && !isUserLoggedIn)) {
 					reservationAccountID = await createGuestPatient(newUser);
-					guestUser = { id: reservationAccountID, ...formatNewUser(newUser) };
+					patientUser = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
+					localUserToken = currentUser?.id;
 				} else if (!isGuest && useCase) {
 					localUserToken = await createAccount(contactInfo);
 					reservationAccountID = await createPatient(newUser, localUserToken);
-					user = { id: reservationAccountID, ...formatNewUser(newUser) };
+					user = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
 
 					setLocalValue('userToken', localUserToken);
 				} else {
 					localUserToken = await createAccount(contactInfo);
 					reservationAccountID = await createPatient(newUser, localUserToken);
-					user = { id: reservationAccountID, ...formatNewUser(newUser) };
+					user = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
 					redirectPath = '/dashboard/citas';
 					appointmentCreationStep = '';
 
@@ -118,14 +124,14 @@ const NewUser = ({
 					reservationAccountID,
 					userToken: localUserToken,
 					user,
-					guestUser,
+					patientUser,
 					appointmentCreationStep,
 					userFiles: medicalData?.files || [],
 				});
 				push(redirectPath);
 			}
 		},
-		[aboutMeData, isGuest, isUserLoggedIn, medicalData, push, updateState, useCase],
+		[aboutMeData, currentUser, isAChild, isGuest, isUserLoggedIn, medicalData, push, updateState, useCase],
 	);
 
 	usePageTitle('Registro');
@@ -164,7 +170,7 @@ const NewUser = ({
 							aboutMeData={aboutMeData}
 							appointmentOwner={appointmentOwner}
 							onChangeStep={onChangeStep}
-							validationOnChange={validateIfIsYoungerThanFifthteen}
+							validationOnChange={validateAgeAfterSelecting}
 						/>
 					</Route>
 					<Route exact path="/registro/datos_medicos">

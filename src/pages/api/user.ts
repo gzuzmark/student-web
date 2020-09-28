@@ -153,3 +153,13 @@ export const getUserId = async (queryId: string): Promise<void> => {
 		throw Error(e);
 	}
 };
+
+export const linkAccount = async (otherAccountId: string): Promise<void> => {
+	try {
+		const token = getLocalValue('userToken');
+		const headers = token ? { Authorization: `Bearer ${token}` } : {};
+		await aliviaAxios.post('/accounts/me/link', { reservation_account_id: otherAccountId }, { headers });
+	} catch (e) {
+		throw Error(e);
+	}
+};

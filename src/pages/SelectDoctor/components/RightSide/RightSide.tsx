@@ -63,7 +63,7 @@ interface RightSideProps {
 	isUserLoggedIn: boolean;
 	minutes: string;
 	numSessions: string;
-	openSelectOwnerModal: () => void;
+	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
 }
@@ -73,7 +73,7 @@ const RightSide = ({
 	updateContextState,
 	minutes,
 	numSessions,
-	openSelectOwnerModal,
+	selectDoctorCallback,
 	setDoctor,
 	setSchedule,
 }: RightSideProps) => {
@@ -110,7 +110,7 @@ const RightSide = ({
 					<DoctorList
 						updateContextState={updateContextState}
 						doctors={doctors}
-						openSelectOwnerModal={openSelectOwnerModal}
+						selectDoctorCallback={selectDoctorCallback}
 						setDoctor={setDoctor}
 						setSchedule={setSchedule}
 					/>

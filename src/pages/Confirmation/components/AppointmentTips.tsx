@@ -14,6 +14,13 @@ const ALIVIA_CONTACT_EMAIL = 'alivia@lavictoria.pe';
 // const ALIVIA_CONTACT_WHATSAPP_URL = 'https://api.whatsapp.com/send?phone=51947907184&text=Hola%20Alivia';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+	tipsWrapper: {
+		padding: '40px 26px 27px',
+		[breakpoints.up('lg')]: {
+			padding: '96px 0 49px 0',
+			width: '475px',
+		},
+	},
 	titleWrapper: {
 		paddingBottom: '27px',
 		[breakpoints.up('lg')]: {
@@ -92,7 +99,7 @@ const AppointmentTips = ({ isGuest, goToAppointments, email }: AppointmentTipsPr
 	const { t } = useTranslation('confirmation');
 
 	return (
-		<>
+		<div className={classes.tipsWrapper}>
 			<div className={classes.titleWrapper}>
 				<Typography className={classes.title} variant="h3">
 					{t('confirmation.right.title')}
@@ -150,7 +157,7 @@ const AppointmentTips = ({ isGuest, goToAppointments, email }: AppointmentTipsPr
 					</Button>
 				</div>
 			)}
-		</>
+		</div>
 	);
 };
 

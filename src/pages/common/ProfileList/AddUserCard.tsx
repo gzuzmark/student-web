@@ -2,7 +2,6 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
 
 import { ReactComponent as PlusIcon } from 'icons/plus.svg';
 import { stylesWithTheme } from 'utils';
@@ -10,6 +9,13 @@ import { stylesWithTheme } from 'utils';
 import UserCard from './UserCard';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+	wrapper: {
+		width: '124px',
+		textAlign: 'center',
+		[breakpoints.up('lg')]: {
+			width: '194px',
+		},
+	},
 	card: {
 		marginBottom: '14px',
 	},
@@ -39,17 +45,17 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const AddUserCard = () => {
+interface AddUserCardProps {
+	redirectNewAccountCallback: () => void;
+}
+
+const AddUserCard = ({ redirectNewAccountCallback }: AddUserCardProps) => {
 	const { t } = useTranslation('global');
-	const history = useHistory();
 	const classes = useStyles();
-	const goToCreateProfile = () => {
-		history.push('/crear_perfil');
-	};
 
 	return (
-		<div>
-			<UserCard className={classes.card} onClick={goToCreateProfile}>
+		<div className={classes.wrapper}>
+			<UserCard className={classes.card} onClick={redirectNewAccountCallback}>
 				<PlusIcon className={classes.plusIcon} />
 			</UserCard>
 			<div>

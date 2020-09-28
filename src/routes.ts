@@ -10,7 +10,6 @@ import {
 	Confirmation,
 	ForgotPassword,
 	SelectProfile,
-	CreateProfile,
 	FamilyMembers,
 	CreateAccount,
 } from 'pages';
@@ -24,7 +23,7 @@ export const LOGIN_ROUTE = 'iniciar_sesion';
 export const SIGN_UP_ROUTE = 'registro';
 export const FORGORT_PASSWORD_ROUTE = 'reestablecer_contrasena';
 export const APPOINTMENT_LIST_ROUTE = 'citas';
-export const SELECT_PROFILE_ROUTE = 'seleccionar_perfil';
+export const SELECT_PATIENT_ROUTE = 'seleccionar_paciente';
 
 export const routToTitle: Record<string, string> = {
 	[TRIAGE_ROUTE]: 'Triaje',
@@ -36,7 +35,7 @@ export const routToTitle: Record<string, string> = {
 	[SIGN_UP_ROUTE]: 'Registro',
 	[APPOINTMENT_LIST_ROUTE]: 'Citas',
 	[FORGORT_PASSWORD_ROUTE]: 'Reestrablecer contraseña',
-	[SELECT_PROFILE_ROUTE]: 'Seleccionar perfil',
+	[SELECT_PATIENT_ROUTE]: 'Seleccionar paciente',
 	'detalle-cita': 'Detalle Cita',
 };
 
@@ -63,8 +62,8 @@ export const routes: RoutesType = [
 	{ id: 'Appointments', path: '/dashboard/citas/:id', component: Appointment, guard: true, exact: true },
 	{ id: 'FamilyMembers', path: '/dashboard/parientes', component: FamilyMembers, guard: true, exact: true },
 	{ id: 'ForgotPassword', path: '/reestablecer_contrasena', component: ForgotPassword },
-	{ id: 'SelectProfile', path: '/seleccionar_perfil', component: SelectProfile, guard: true },
-	{ id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile, guard: true },
+	{ id: 'SelectProfile', path: '/seleccionar_paciente', component: SelectProfile, guard: true },
+	// { id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile, guard: true },
 ];
 
 export const routeWithoutNav: RoutesType = [

@@ -52,6 +52,7 @@ export interface User {
 	phoneNumber: string;
 	email?: string;
 	isMain: boolean;
+	isUnderAge?: boolean;
 }
 
 export interface TriagePair {
@@ -61,7 +62,7 @@ export interface TriagePair {
 
 interface ContextProps {
 	user: User | null;
-	guestUser: User | null;
+	patientUser: User | null;
 	userToken: string | null;
 	accountUsers: User[];
 	guestToken: string | null;
@@ -82,7 +83,7 @@ interface ContextProps {
 
 const defaultState: ContextProps = {
 	user: null,
-	guestUser: null,
+	patientUser: null,
 	userToken: getLocalValue('userToken'),
 	accountUsers: [],
 	guestToken: null,

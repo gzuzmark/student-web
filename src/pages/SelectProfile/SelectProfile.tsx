@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import { ProfileList, Container, Circle } from 'pages/common';
 import { stylesWithTheme, usePageTitle, getAppointmentRedirectPath } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
-import { AppointmentCreationStep } from 'AppContext';
+import AppContext, { AppointmentCreationStep, MYSELF, GUEST } from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -46,16 +46,33 @@ const SelectProfile = () => {
 	const { t } = useTranslation('selectProfile');
 	const classes = useStyles();
 	const history = useHistory();
+	const { updateState: updateContextState } = useContext(AppContext);
 	const redirectCallback = (appointmentCreationStep: AppointmentCreationStep | undefined) => {
 		const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, '/dashboard/citas');
+		if (updateContextState) {
+			updateContextState({
+				appointmentOwner: MYSELF,
+			});
+		}
+
 		if (redirectPath === 'back') {
 			history.goBack();
 		} else {
 			history.push(redirectPath);
 		}
 	};
+	const redirectNewAccountCallback = () => {
+		if (updateContextState) {
+			updateContextState({
+				appointmentOwner: GUEST,
+			});
 
-	usePageTitle('Seleccionar Perfil');
+			history.push('/registro');
+		}
+	};
+
+	usePageTitle('Seleccionar Paciente');
+
 	return (
 		<Container className={classes.container}>
 			<div className={classes.wrapper}>
@@ -65,7 +82,7 @@ const SelectProfile = () => {
 				<Typography className={classes.title} variant="h1">
 					<b>{t('selectProfile.title')}</b>
 				</Typography>
-				<ProfileList redirectCallback={redirectCallback} />
+				<ProfileList redirectCallback={redirectCallback} redirectNewAccountCallback={redirectNewAccountCallback} />
 			</div>
 			<Circle className={classes.desktopCircle} radius="80" right="-104" bottom="-122" />
 		</Container>
