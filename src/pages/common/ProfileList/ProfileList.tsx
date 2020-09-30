@@ -34,14 +34,21 @@ interface PropfileListProps {
 	redirectCallback?: (appointmentCreationStep: AppointmentCreationStep | undefined) => void;
 	editEnable?: boolean;
 	editOverlay?: FC<any>;
+	redirectNewAccountCallback: () => void;
 }
 
-const ProfileList = ({ className, redirectCallback, editEnable = false, editOverlay }: PropfileListProps) => {
+const ProfileList = ({
+	className,
+	redirectCallback,
+	editEnable = false,
+	editOverlay,
+	redirectNewAccountCallback,
+}: PropfileListProps) => {
 	const { accountUsers, user: currentUser, updateState, appointmentCreationStep } = useContext(AppContext);
 	const classes = useStyles();
 	const onChangeProfile = (user: User) => () => {
 		if (updateState) {
-			updateState({ user, reservationAccountID: user.id });
+			updateState({ patientUser: user, reservationAccountID: user.id });
 		}
 		if (redirectCallback) {
 			redirectCallback(appointmentCreationStep);
@@ -66,7 +73,7 @@ const ProfileList = ({ className, redirectCallback, editEnable = false, editOver
 					editOverlay={editOverlay}
 				/>
 			))}
-			<AddUserCard />
+			<AddUserCard redirectNewAccountCallback={redirectNewAccountCallback} />
 		</div>
 	);
 };

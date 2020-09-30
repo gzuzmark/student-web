@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import React, { useState, FC, useContext } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -6,9 +6,10 @@ import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils';
 import { RightLayout, ProfileList, EditOverlay } from 'pages/common';
-import { User } from 'AppContext';
+import AppContext, { User } from 'AppContext';
 
 import EditFamilyMemberForm from './EditFamilyMemberForm';
+import { NewProfile } from './NewProfile';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -87,8 +88,13 @@ const RightSide = () => {
 	const [editEnable, setEditEnable] = useState<boolean>(false);
 	const [showEditForm, setShowEditForm] = useState<boolean>(false);
 	const [editableUser, setEditableUser] = useState<User>();
+	const [isShowingNewProfile, setIsShowingNewProfile] = useState<boolean>(false);
+	const { user } = useContext(AppContext);
 	const toggleEditEnable = () => {
 		setEditEnable(!editEnable);
+	};
+	const closeNewProfileForm = () => {
+		setIsShowingNewProfile(false);
 	};
 	const onClickOverlay = (user: User) => () => {
 		setShowEditForm(true);
@@ -98,6 +104,9 @@ const RightSide = () => {
 		setEditEnable(false);
 		setShowEditForm(false);
 		setEditableUser(undefined);
+	};
+	const redirectNewAccountCallback = () => {
+		setIsShowingNewProfile(true);
 	};
 
 	return (
@@ -115,7 +124,9 @@ const RightSide = () => {
 						</div>
 						<EditFamilyMemberForm user={editableUser} cancelAction={cancelAction} />
 					</div>
-				) : (
+				) : null}
+				{isShowingNewProfile ? <NewProfile currentUser={user} closeForm={closeNewProfileForm} /> : null}
+				{!(showEditForm && editableUser) && !isShowingNewProfile ? (
 					<>
 						<Typography className={classes.title} variant="h1">
 							<b>{t('familyMembers.title')}</b>
@@ -124,6 +135,7 @@ const RightSide = () => {
 							className={classes.profileList}
 							editEnable={editEnable}
 							editOverlay={EditOverlayWrapper(onClickOverlay)}
+							redirectNewAccountCallback={redirectNewAccountCallback}
 						/>
 						<div className={classes.editButtonWrapper}>
 							<Button onClick={toggleEditEnable} className={classes.editButton} variant="outlined">
@@ -131,7 +143,7 @@ const RightSide = () => {
 							</Button>
 						</div>
 					</>
-				)}
+				) : null}
 			</div>
 		</RightLayout>
 	);

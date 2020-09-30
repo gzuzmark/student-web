@@ -29,7 +29,7 @@ const Payment = () => {
 	const {
 		doctor,
 		user,
-		guestUser,
+		patientUser,
 		schedule,
 		channel,
 		useCase,
@@ -42,7 +42,7 @@ const Payment = () => {
 		appointmentOwner,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
-	const activeUser = guestUser || user;
+	const activeUser = patientUser || user;
 	const { t } = useTranslation('payment');
 	const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);

@@ -90,7 +90,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 				const token = await sendLogin({ username: phoneNumber, password });
 				if (token && updateContextState) {
 					const [reservationToken, currentUser] = await getCurrentUser(token);
-					const redirectPath = getAppointmentRedirectPath(appointmentCreationStep);
+					const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, '/dashboard/citas');
 
 					updateContextState({
 						userToken: token,

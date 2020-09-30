@@ -1,4 +1,4 @@
-import { AppointmentCreationStep, TRIAGE_STEP, SELECT_DOCTOR_STEP, PRE_SIGNUP_STEP, PAYMENT_STEP } from 'AppContext';
+import { AppointmentCreationStep, TRIAGE_STEP, SELECT_DOCTOR_STEP, PAYMENT_STEP } from 'AppContext';
 
 export const redirectToURL = (url: string, openInNewTab = false) => {
 	if (openInNewTab) {
@@ -20,11 +20,9 @@ export const getAppointmentRedirectPath = (
 		case TRIAGE_STEP:
 		case SELECT_DOCTOR_STEP:
 			return 'back';
-		case PRE_SIGNUP_STEP:
-			return '/seleccionar_perfil';
 		case PAYMENT_STEP:
-			return '/pago';
+			return '/registro/datos_medicos';
 		default:
-			return defaultRedirectPath || '/seleccionar_perfil';
+			return defaultRedirectPath || '/seleccionar_paciente';
 	}
 };

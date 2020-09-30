@@ -68,8 +68,20 @@ const SelectDoctor = () => {
 			}
 		}
 	};
-	const openSelectOwnerModal = () => {
-		setSelectOwnerOpen(true);
+	const selectDoctorCallback = () => {
+		if (updateState) {
+			updateState({
+				appointmentCreationStep: PAYMENT_STEP,
+				schedule,
+				doctor: formatDoctor(doctor),
+			});
+		}
+
+		if (!isUserLoggedIn) {
+			setSelectOwnerOpen(true);
+		} else {
+			history.push('/seleccionar_paciente');
+		}
 	};
 	const closeSelectOwnerModal = () => {
 		setSelectOwnerOpen(false);
@@ -119,7 +131,7 @@ const SelectDoctor = () => {
 				updateContextState={updateState}
 				minutes={minutes}
 				numSessions={numSessions}
-				openSelectOwnerModal={openSelectOwnerModal}
+				selectDoctorCallback={selectDoctorCallback}
 				setDoctor={setDoctor}
 				setSchedule={setSchedule}
 			/>
