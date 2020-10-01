@@ -12,9 +12,9 @@ import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
 import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSchedules, Schedule } from 'pages/api';
 
-export const FAKE_SESSION_ID = 'fake-session';
-const DERMA_ID = 'fake';
-const GINE_ID = 'fake';
+export const FAKE_SESSION_ID = 'fake';
+const DERMA_ID = '0ceb81db-ccfe-4198-b72e-1789fe113494';
+const GINE_ID = 'e6d9a4aa-4307-4ca2-b4e4-d10208fdf87d';
 const SESSION_STEP = 900;
 const SESSION_EXTRA_TIME = 300;
 const FAKE_SESSION_BODY = {
@@ -45,20 +45,24 @@ const buildFirstDate = (): Date => {
 	return now;
 };
 
-const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
+const buildFakeSessions = (schedules: Schedule[], isToday: boolean = true): Schedule[] => {
 	if (schedules.length > 0) {
 		const lastIndex = schedules.length - 1;
+		const firstSchedule = schedules[0].startTime;
+		firstSchedule.setHours(6);
+		firstSchedule.setMinutes(0);
+		firstSchedule.setSeconds(0);
 		const lastSchedule = schedules[lastIndex];
 		const newSchedules = [] as Schedule[];
-		let currentStartTime = buildFirstDate();
-		for (let i = 0; i < 100; i++) {
+		let currentStartTime = isToday ? buildFirstDate() : firstSchedule;
+		for (let i = 0; i < 1000; i++) {
 			// Set the end time by adding 15min to the firt start time. i.e: 8:00 + 15min => endTime = 8:15
 			const endTime = new Date(currentStartTime);
 			endTime.setSeconds(endTime.getSeconds() + SESSION_STEP);
 			// Preparing the fake schedule body
 			const schedule = {
 				...FAKE_SESSION_BODY,
-				id: `${FAKE_SESSION_BODY}-${i}`,
+				id: `${FAKE_SESSION_ID}-${i}`,
 				startTime: currentStartTime,
 				endTime: endTime,
 			} as Schedule;
@@ -100,7 +104,29 @@ const getDoctors = async (
 			...doc,
 			schedules: doc.schedules.filter(limitSchedules(numSessions)),
 		}));
-		setDoctors(filteredDoctors);
+		const isTargetUseCase = useCase.id === DERMA_ID || useCase.id === GINE_ID;
+		const newDoctors = isTargetUseCase
+			? filteredDoctors.map((doc: DoctorAvailability) => {
+					const realSchedules = doc.schedules;
+					const fakeSchedules = buildFakeSessions(realSchedules, false);
+					const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
+						const searchSession = realSchedules.find(
+							(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
+						);
+						return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
+					});
+					if (newSchedules.length > 0) {
+						const lastInd = newSchedules.length - 1;
+						newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
+						newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
+					}
+					return {
+						...doc,
+						schedules: newSchedules,
+					};
+			  })
+			: filteredDoctors;
+		setDoctors(newDoctors);
 	}
 };
 
