@@ -54,7 +54,6 @@ const buildFakeSessions = (schedules: Schedule[], isToday: boolean = true): Sche
 		firstSchedule.setSeconds(0);
 		const lastSchedule = schedules[lastIndex];
 		const newSchedules = [] as Schedule[];
-		console.log({ isToday });
 		let currentStartTime = isToday ? buildFirstDate() : firstSchedule;
 		for (let i = 0; i < 1000; i++) {
 			// Set the end time by adding 15min to the firt start time. i.e: 8:00 + 15min => endTime = 8:15
