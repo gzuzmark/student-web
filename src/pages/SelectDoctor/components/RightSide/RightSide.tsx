@@ -45,12 +45,17 @@ const buildFirstDate = (): Date => {
 	return now;
 };
 
-const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
+const buildFakeSessions = (schedules: Schedule[], isToday: boolean = true): Schedule[] => {
 	if (schedules.length > 0) {
 		const lastIndex = schedules.length - 1;
+		const firstSchedule = schedules[0].startTime;
+		firstSchedule.setHours(6);
+		firstSchedule.setMinutes(0);
+		firstSchedule.setSeconds(0);
 		const lastSchedule = schedules[lastIndex];
 		const newSchedules = [] as Schedule[];
-		let currentStartTime = buildFirstDate();
+		console.log({ isToday });
+		let currentStartTime = isToday ? buildFirstDate() : firstSchedule;
 		for (let i = 0; i < 1000; i++) {
 			// Set the end time by adding 15min to the firt start time. i.e: 8:00 + 15min => endTime = 8:15
 			const endTime = new Date(currentStartTime);
@@ -100,11 +105,12 @@ const getDoctors = async (
 			...doc,
 			schedules: doc.schedules.filter(limitSchedules(numSessions)),
 		}));
-		const isTargetUseCase = useCase.id === DERMA_ID || useCase.id === GINE_ID;
+		const isTargetUseCase =
+			useCase.id === DERMA_ID || useCase.id === GINE_ID || useCase.id === 'b919c69a-c4fd-4def-bb3d-69786de10e0a';
 		const newDoctors = isTargetUseCase
 			? filteredDoctors.map((doc: DoctorAvailability) => {
 					const realSchedules = doc.schedules;
-					const fakeSchedules = buildFakeSessions(realSchedules);
+					const fakeSchedules = buildFakeSessions(realSchedules, false);
 					const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
 						const searchSession = realSchedules.find(
 							(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
@@ -133,7 +139,8 @@ const getClosestSchedules = async (
 	setMinDate: Function,
 ) => {
 	const { nextAvailableDate, doctors } = await getNextAvailableSchedules(useCase);
-	const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
+	const isTargetUseCase =
+		useCase === DERMA_ID || useCase === GINE_ID || useCase === 'b919c69a-c4fd-4def-bb3d-69786de10e0a';
 	const newDoctors = isTargetUseCase
 		? doctors.map((doc: DoctorAvailability) => {
 				const realSchedules = doc.schedules;
