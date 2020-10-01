@@ -12,7 +12,7 @@ import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
 import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSchedules, Schedule } from 'pages/api';
 
-export const FAKE_SESSION_ID = 'fake-session';
+export const FAKE_SESSION_ID = 'fake';
 const DERMA_ID = '0ceb81db-ccfe-4198-b72e-1789fe113494';
 const GINE_ID = 'e6d9a4aa-4307-4ca2-b4e4-d10208fdf87d';
 const SESSION_STEP = 900;
@@ -63,7 +63,7 @@ const buildFakeSessions = (schedules: Schedule[], isToday: boolean = true): Sche
 			// Preparing the fake schedule body
 			const schedule = {
 				...FAKE_SESSION_BODY,
-				id: `${FAKE_SESSION_BODY}-${i}`,
+				id: `${FAKE_SESSION_ID}-${i}`,
 				startTime: currentStartTime,
 				endTime: endTime,
 			} as Schedule;
@@ -105,8 +105,7 @@ const getDoctors = async (
 			...doc,
 			schedules: doc.schedules.filter(limitSchedules(numSessions)),
 		}));
-		const isTargetUseCase =
-			useCase.id === DERMA_ID || useCase.id === GINE_ID || useCase.id === 'b919c69a-c4fd-4def-bb3d-69786de10e0a';
+		const isTargetUseCase = useCase.id === DERMA_ID || useCase.id === GINE_ID;
 		const newDoctors = isTargetUseCase
 			? filteredDoctors.map((doc: DoctorAvailability) => {
 					const realSchedules = doc.schedules;
@@ -139,8 +138,7 @@ const getClosestSchedules = async (
 	setMinDate: Function,
 ) => {
 	const { nextAvailableDate, doctors } = await getNextAvailableSchedules(useCase);
-	const isTargetUseCase =
-		useCase === DERMA_ID || useCase === GINE_ID || useCase === 'b919c69a-c4fd-4def-bb3d-69786de10e0a';
+	const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
 	const newDoctors = isTargetUseCase
 		? doctors.map((doc: DoctorAvailability) => {
 				const realSchedules = doc.schedules;
