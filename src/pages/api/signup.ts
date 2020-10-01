@@ -103,7 +103,7 @@ export const createNewProfile = async (newProfile: User): Promise<string> => {
 		{
 			name: newProfile.name,
 			last_name: newProfile.lastName,
-			second_last_name: '',
+			second_last_name: newProfile.secondSurname,
 			gender: parseInt(newProfile.gender, 10),
 			document_number: newProfile.identification,
 			document_validation_date: '',

@@ -16,7 +16,8 @@ import { redirectToURL } from 'utils';
 
 export interface AboutNewProfileData {
 	name: string;
-	surnames: string;
+	lastName: string;
+	secondSurname: string;
 	identification: string;
 	birthDate: Date | null;
 	gender: number | undefined;
@@ -29,7 +30,8 @@ export interface AboutNewProfileProps {
 
 const initialValues = {
 	name: '',
-	surnames: '',
+	lastName: '',
+	secondSurname: '',
 	birthDate: null,
 	gender: undefined,
 	identification: '',
@@ -133,8 +135,17 @@ const AboutNewProfile = ({ submitCallback, validateAfterDateSelected }: AboutNew
 							<div className={classes.fieldWrapper}>
 								<Field
 									component={TextField}
-									name="surnames"
+									name="lastName"
 									label={t('aboutNewProfile.fields.lastName.label')}
+									variant="outlined"
+									fullWidth
+								/>
+							</div>
+							<div className={classes.fieldWrapper}>
+								<Field
+									component={TextField}
+									name="secondSurname"
+									label={t('aboutNewProfile.fields.secondSurname.label')}
 									variant="outlined"
 									fullWidth
 								/>

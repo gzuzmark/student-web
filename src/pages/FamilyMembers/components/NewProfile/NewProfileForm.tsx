@@ -29,8 +29,8 @@ const NewProfileForm = ({ onSubmitForm, currentUser }: NewProfileFormProps): Rea
 	const onSubmitLastStep = (data: ContactInfoData) => {
 		const newProfile: User = {
 			id: '',
-			lastName: aboutPatient?.surnames || '',
-			secondSurname: '',
+			lastName: aboutPatient?.lastName || '',
+			secondSurname: aboutPatient?.secondSurname || '',
 			takeMedicines: false,
 			haveAllergies: false,
 			isMain: false,
