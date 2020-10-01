@@ -51,7 +51,7 @@ const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 		const lastSchedule = schedules[lastIndex];
 		const newSchedules = [] as Schedule[];
 		let currentStartTime = buildFirstDate();
-		for (let i = 0; i < 100; i++) {
+		for (let i = 0; i < 1000; i++) {
 			// Set the end time by adding 15min to the firt start time. i.e: 8:00 + 15min => endTime = 8:15
 			const endTime = new Date(currentStartTime);
 			endTime.setSeconds(endTime.getSeconds() + SESSION_STEP);
@@ -100,7 +100,29 @@ const getDoctors = async (
 			...doc,
 			schedules: doc.schedules.filter(limitSchedules(numSessions)),
 		}));
-		setDoctors(filteredDoctors);
+		const isTargetUseCase = useCase.id === DERMA_ID || useCase.id === GINE_ID;
+		const newDoctors = isTargetUseCase
+			? filteredDoctors.map((doc: DoctorAvailability) => {
+					const realSchedules = doc.schedules;
+					const fakeSchedules = buildFakeSessions(realSchedules);
+					const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
+						const searchSession = realSchedules.find(
+							(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
+						);
+						return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
+					});
+					if (newSchedules.length > 0) {
+						const lastInd = newSchedules.length - 1;
+						newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
+						newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
+					}
+					return {
+						...doc,
+						schedules: newSchedules,
+					};
+			  })
+			: filteredDoctors;
+		setDoctors(newDoctors);
 	}
 };
 
