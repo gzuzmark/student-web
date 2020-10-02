@@ -25,6 +25,9 @@ const buildTransactionURL = (doctorName: string, doctorLastname: string, patient
 	return `https://chats.landbot.io/v2/H-642423-BHD55YOVGNEOHTH0/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
 };
 
+const FAKE_SESSION_ERROR_MESSAGE =
+	'Lo sentimos. El horario que has elegido ya no se encuentra disponible. Un miembro de nuestro equipo se pondrá en contacto contigo para ayudarte';
+
 const Payment = () => {
 	const {
 		doctor,
@@ -152,6 +155,7 @@ const Payment = () => {
 				const { id = '', startTime, endTime } = schedule || {};
 				const { id: useCaseId = '' } = useCase || {};
 				if (id.includes(FAKE_SESSION_ID)) {
+					window.alert(FAKE_SESSION_ERROR_MESSAGE);
 					sendFakeSession({
 						reservation_account_id: reservationAccountID || '',
 						use_case_id: useCaseId,
