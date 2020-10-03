@@ -23,6 +23,12 @@ export const routeMapping = {
 	[SELECT_DOCTOR_STEP]: '/seleccionar_doctor',
 };
 
+export interface TrackParams {
+	utmSource?: string;
+	utmMedium?: string;
+	utmCampaign?: string;
+}
+
 export type AppointmentCreationStep =
 	| ''
 	| 'triage'
@@ -79,6 +85,7 @@ interface ContextProps {
 	isTransactionEnabled: boolean;
 	isUbigeoEnabled: boolean;
 	userFiles: string[];
+	trackParams: TrackParams;
 }
 
 const defaultState: ContextProps = {
@@ -100,6 +107,7 @@ const defaultState: ContextProps = {
 	isTransactionEnabled: false,
 	isUbigeoEnabled: false,
 	userFiles: [],
+	trackParams: {},
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

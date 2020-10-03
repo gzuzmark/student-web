@@ -2,7 +2,7 @@ import React, { useEffect, useContext, FC } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import clsx from 'clsx';
 
-import AppContext, { User, AppointmentCreationStep } from 'AppContext';
+import AppContext, { User } from 'AppContext';
 import { stylesWithTheme } from 'utils';
 import { getProfiles } from 'pages/api';
 
@@ -31,29 +31,23 @@ const requestAccounts = async (updateState: Function) => {
 
 interface PropfileListProps {
 	className?: string;
-	redirectCallback?: (appointmentCreationStep: AppointmentCreationStep | undefined) => void;
 	editEnable?: boolean;
 	editOverlay?: FC<any>;
 	redirectNewAccountCallback: () => void;
+	onUserCardClick: (user: User) => void;
+	addUserLabel?: string;
 }
 
 const ProfileList = ({
 	className,
-	redirectCallback,
 	editEnable = false,
 	editOverlay,
 	redirectNewAccountCallback,
+	onUserCardClick,
+	addUserLabel,
 }: PropfileListProps) => {
-	const { accountUsers, user: currentUser, updateState, appointmentCreationStep } = useContext(AppContext);
+	const { accountUsers, user: currentUser, updateState } = useContext(AppContext);
 	const classes = useStyles();
-	const onChangeProfile = (user: User) => () => {
-		if (updateState) {
-			updateState({ patientUser: user, reservationAccountID: user.id });
-		}
-		if (redirectCallback) {
-			redirectCallback(appointmentCreationStep);
-		}
-	};
 
 	useEffect(() => {
 		if (updateState) {
@@ -68,12 +62,12 @@ const ProfileList = ({
 					key={`user-${account.id}`}
 					account={account}
 					isCurrentAccount={!!currentUser && account.id === currentUser.id}
-					onChangeProfile={onChangeProfile}
+					onChangeProfile={onUserCardClick}
 					editEnable={editEnable}
 					editOverlay={editOverlay}
 				/>
 			))}
-			<AddUserCard redirectNewAccountCallback={redirectNewAccountCallback} />
+			<AddUserCard label={addUserLabel} redirectNewAccountCallback={redirectNewAccountCallback} />
 		</div>
 	);
 };

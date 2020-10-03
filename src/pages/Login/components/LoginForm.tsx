@@ -108,8 +108,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 				}
 				setSubmitting(false);
 			} catch (e) {
-				setFieldError('phoneNumber', t('login.phoneNumber.error'));
-				setFieldError('password', t('login.password.error'));
+				setFieldError('password', t('login.request.error'));
 				setSubmitting(false);
 			}
 		},

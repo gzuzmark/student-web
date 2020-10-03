@@ -57,7 +57,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 interface AccountCardProps {
 	account: User;
 	isCurrentAccount: boolean;
-	onChangeProfile: (user: User) => () => void;
+	onChangeProfile: (user: User) => void;
 	editEnable?: boolean;
 	editOverlay?: FC<any>;
 }
@@ -69,7 +69,9 @@ const AccountCard = ({ account, isCurrentAccount, onChangeProfile, editEnable, e
 		<div className={classes.wrapper}>
 			<UserCard
 				account={account}
-				onClick={onChangeProfile(account)}
+				onClick={() => {
+					onChangeProfile(account);
+				}}
 				className={classes.card}
 				isCurrentAccount={isCurrentAccount}
 				overlayActive={editEnable}
