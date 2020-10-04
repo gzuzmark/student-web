@@ -13,3 +13,4 @@ export * from './SelectProfile';
 export * from './CreateProfile';
 export * from './FamilyMembers';
 export * from './CreateAccount';
+export * from './LaboratoryExams';
