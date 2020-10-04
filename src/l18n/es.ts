@@ -31,7 +31,7 @@ export default {
 		'dashboard.treatments': 'Tratamientos',
 		'dashboard.medialHistory': 'Historial de comporas',
 		'dashboard.familyMembers': 'Parientes',
-		'dashboard.newAppointment': 'Agendar cita',
+		'dashboard.newAppointment': 'Agendar una cita nueva',
 	},
 	global: {
 		'selectAccount.new.account': 'Para alguien más',

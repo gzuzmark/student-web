@@ -47,9 +47,10 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 
 interface AddUserCardProps {
 	redirectNewAccountCallback: () => void;
+	label?: string;
 }
 
-const AddUserCard = ({ redirectNewAccountCallback }: AddUserCardProps) => {
+const AddUserCard = ({ redirectNewAccountCallback, label = '' }: AddUserCardProps) => {
 	const { t } = useTranslation('global');
 	const classes = useStyles();
 
@@ -64,7 +65,7 @@ const AddUserCard = ({ redirectNewAccountCallback }: AddUserCardProps) => {
 				</Typography>
 				<Typography className={classes.label} component="span" variant="button">
 					{' '}
-					{t('selectAccount.new.account')}
+					{label ? label : t('selectAccount.new.account')}
 				</Typography>
 			</div>
 		</div>

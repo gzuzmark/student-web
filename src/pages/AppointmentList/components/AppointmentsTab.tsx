@@ -8,7 +8,7 @@ import AppointmentCard from './AppointmentCard';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	tabWrapper: {
-		padding: '26px',
+		padding: '26px 26px 20px',
 		[breakpoints.up('lg')]: {
 			padding: '26px 0',
 		},
@@ -18,15 +18,16 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 interface AppointmentsTabProps {
 	appointments: AppointDetail[];
 	isActive: boolean;
+	oldAppointments?: boolean;
 }
 
-const AppointmentsTab = ({ appointments, isActive }: AppointmentsTabProps) => {
+const AppointmentsTab = ({ appointments, isActive, oldAppointments = false }: AppointmentsTabProps) => {
 	const classes = useStyles();
 
 	return isActive ? (
 		<div className={classes.tabWrapper}>
 			{appointments.map((appointment: AppointDetail) => (
-				<AppointmentCard key={appointment.id} appointment={appointment} />
+				<AppointmentCard key={appointment.id} appointment={appointment} isOldAppointment={oldAppointments} />
 			))}
 		</div>
 	) : null;

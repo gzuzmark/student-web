@@ -3,6 +3,12 @@ import { getLocalValue } from 'utils';
 import { UseCase } from 'pages/api/useCase';
 import { Doctor, Schedule } from 'pages/api/selectDoctor';
 
+export const EMPTY_TRACK_PARAMS = {
+	utmSource: '',
+	utmMedium: '',
+	utmCampaign: '',
+};
+
 // Appointment Owner
 export const MYSELF = 'myself';
 export const RELATIVE = 'relative';
@@ -22,6 +28,12 @@ export const routeMapping = {
 	[ATTENTION_METHOD_STEP]: 'metodo_atencion',
 	[SELECT_DOCTOR_STEP]: '/seleccionar_doctor',
 };
+
+export interface TrackParams {
+	utmSource?: string;
+	utmMedium?: string;
+	utmCampaign?: string;
+}
 
 export type AppointmentCreationStep =
 	| ''
@@ -79,6 +91,7 @@ interface ContextProps {
 	isTransactionEnabled: boolean;
 	isUbigeoEnabled: boolean;
 	userFiles: string[];
+	trackParams: TrackParams;
 }
 
 const defaultState: ContextProps = {
@@ -100,6 +113,7 @@ const defaultState: ContextProps = {
 	isTransactionEnabled: false,
 	isUbigeoEnabled: false,
 	userFiles: [],
+	trackParams: {},
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 
