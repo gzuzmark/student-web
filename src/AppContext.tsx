@@ -3,6 +3,12 @@ import { getLocalValue } from 'utils';
 import { UseCase } from 'pages/api/useCase';
 import { Doctor, Schedule } from 'pages/api/selectDoctor';
 
+export const EMPTY_TRACK_PARAMS = {
+	utmSource: '',
+	utmMedium: '',
+	utmCampaign: '',
+};
+
 // Appointment Owner
 export const MYSELF = 'myself';
 export const RELATIVE = 'relative';
