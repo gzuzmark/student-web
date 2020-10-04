@@ -100,6 +100,7 @@ const Confirmation = () => {
 						loggedUserName={user?.name}
 						activeUserName={activeUser?.name}
 						patientId={patientUser?.id}
+						scheduleID={schedule?.id}
 					/>
 				)
 			) : (
@@ -109,6 +110,7 @@ const Confirmation = () => {
 					updateContextState={updateState}
 					userId={activeUser ? activeUser.id : ''}
 					patientId={patientUser?.id}
+					scheduleID={schedule?.id}
 				/>
 			)}
 		</Container>
