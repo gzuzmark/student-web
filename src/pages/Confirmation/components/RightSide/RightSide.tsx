@@ -18,6 +18,7 @@ interface RightSideProps {
 	loggedUserName?: string;
 	activeUserName?: string;
 	patientId?: string;
+	scheduleID?: string;
 }
 
 interface InformationDisplayedOptions extends RightSideProps {
@@ -35,6 +36,7 @@ const renderInformationDisplayed = ({
 	loggedUserName,
 	activeUserName,
 	patientId,
+	scheduleID,
 	linkNewAccount,
 }: InformationDisplayedOptions) => {
 	switch (userType) {
@@ -48,13 +50,27 @@ const renderInformationDisplayed = ({
 				/>
 			);
 		case 'adultRelative':
-			return <AppointmentTips isGuest={isGuest} goToAppointments={goToAppointments} email={email} />;
+			return (
+				<AppointmentTips
+					scheduleID={scheduleID || ''}
+					isGuest={isGuest}
+					goToAppointments={goToAppointments}
+					email={email}
+				/>
+			);
 		case 'myself':
 			return (
 				<CreatePassword userId={userId} goToAppointments={goToAppointments} updateContextState={updateContextState} />
 			);
 		default:
-			return <AppointmentTips isGuest={isGuest} goToAppointments={goToAppointments} email={email} />;
+			return (
+				<AppointmentTips
+					scheduleID={scheduleID || ''}
+					isGuest={isGuest}
+					goToAppointments={goToAppointments}
+					email={email}
+				/>
+			);
 	}
 };
 

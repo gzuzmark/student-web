@@ -154,7 +154,12 @@ const LeftSide = ({ user, doctor, schedule, showExtraInfo, isGuest }: LeftSidePr
 			</div>
 			{showExtraInfo ? (
 				<div className={classes.tipsWrapper}>
-					<AppointmentTips isGuest={isGuest} email={user?.email || ''} />
+					<AppointmentTips
+						scheduleID={schedule?.id || ''}
+						isGuest={isGuest}
+						email={user?.email || ''}
+						useDefaultBackground
+					/>
 				</div>
 			) : null}
 		</LeftLayout>
