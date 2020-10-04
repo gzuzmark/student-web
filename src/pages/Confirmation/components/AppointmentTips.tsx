@@ -5,15 +5,23 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils';
+import { BACKGROUND_DEFAULT } from 'theme';
 import { ReactComponent as MailIcon } from 'icons/beforeSection.svg';
 import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
 import { ReactComponent as ChecklistIcon } from 'icons/afterSection.svg';
 
-const ALIVIA_CONTACT_EMAIL = 'alivia@lavictoria.pe';
+// const ALIVIA_CONTACT_EMAIL = 'alivia@lavictoria.pe';
 // const ALIVIA_CONTACT_WHATSAPP_NUMBER = '947907184';
 // const ALIVIA_CONTACT_WHATSAPP_URL = 'https://api.whatsapp.com/send?phone=51947907184&text=Hola%20Alivia';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+	tipsWrapper: {
+		padding: '40px 26px 27px',
+		[breakpoints.up('lg')]: {
+			padding: '96px 0 49px 0',
+			width: '475px',
+		},
+	},
 	titleWrapper: {
 		paddingBottom: '27px',
 		[breakpoints.up('lg')]: {
@@ -79,20 +87,90 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		cursor: 'pointer',
 		textDecoration: 'none',
 	},
+	copyWrapper: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		paddingTop: '20px',
+	},
+	callLinkWrapper: {
+		display: 'flex',
+		alignItems: 'center',
+		backgroundColor: ({ useDefaultBackground }: { useDefaultBackground: boolean }) =>
+			useDefaultBackground ? BACKGROUND_DEFAULT : 'white',
+		padding: '8px 0 7px 8px',
+		width: '100%',
+		marginRight: '10px',
+		maxWidth: 'calc(100vw - 157px)',
+		[breakpoints.up('lg')]: {
+			maxWidth: '355px',
+		},
+	},
+	callLink: {
+		textDecoration: 'none',
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		cursor: 'pointer',
+	},
+	copyButton: {
+		fontSize: '15px',
+		textTransform: 'none',
+		padding: '8px 19px',
+	},
 }));
 
 interface AppointmentTipsProps {
 	isGuest: boolean;
 	goToAppointments?: (e: MouseEvent) => void;
 	email: string;
+	scheduleID: string;
+	useDefaultBackground?: boolean;
 }
 
-const AppointmentTips = ({ isGuest, goToAppointments, email }: AppointmentTipsProps) => {
-	const classes = useStyles();
+const fallbackCopyTextToClipboard = (text: string) => {
+	const textArea = document.createElement('textarea');
+	textArea.value = text;
+
+	// Avoid scrolling to bottom
+	textArea.style.top = '0';
+	textArea.style.left = '0';
+	textArea.style.position = 'fixed';
+
+	document.body.appendChild(textArea);
+	textArea.focus();
+	textArea.select();
+
+	try {
+		const successful = document.execCommand('copy');
+		const msg = successful ? 'successful' : 'unsuccessful';
+		console.log('Fallback: Copying text command was ' + msg);
+	} catch (err) {
+		console.error('Fallback: Oops, unable to copy', err);
+	}
+
+	document.body.removeChild(textArea);
+};
+
+const AppointmentTips = ({
+	isGuest,
+	goToAppointments,
+	email,
+	scheduleID,
+	useDefaultBackground = false,
+}: AppointmentTipsProps) => {
+	const classes = useStyles({ useDefaultBackground });
 	const { t } = useTranslation('confirmation');
+	const conferenceLink = `${process.env.REACT_APP_CONFERENCE_URL}/${scheduleID}`;
+	const copyTextToClipboard = () => {
+		if (!navigator.clipboard) {
+			fallbackCopyTextToClipboard(conferenceLink);
+			return;
+		}
+		navigator.clipboard.writeText(conferenceLink);
+	};
 
 	return (
-		<>
+		<div className={classes.tipsWrapper}>
 			<div className={classes.titleWrapper}>
 				<Typography className={classes.title} variant="h3">
 					{t('confirmation.right.title')}
@@ -108,11 +186,18 @@ const AppointmentTips = ({ isGuest, goToAppointments, email }: AppointmentTipsPr
 						<MailIcon />
 					</div>
 					<div className={classes.textContainer}>
-						<Typography>
-							{t('confirmation.right.before.messageUnlogged')}{' '}
-							<span className={classes.profileLink}>{ALIVIA_CONTACT_EMAIL}</span>
+						<Typography>{t('confirmation.right.before.messageUnlogged')} </Typography>
+					</div>
+				</div>
+				<div className={classes.copyWrapper}>
+					<div className={classes.callLinkWrapper}>
+						<Typography className={classes.callLink} color="primary" onClick={copyTextToClipboard}>
+							{conferenceLink}
 						</Typography>
 					</div>
+					<Button className={classes.copyButton} variant="contained" onClick={copyTextToClipboard}>
+						{t('confirmation.right.before.copyLink')}
+					</Button>
 				</div>
 			</div>
 			<div className={classes.duringSection}>
@@ -150,7 +235,7 @@ const AppointmentTips = ({ isGuest, goToAppointments, email }: AppointmentTipsPr
 					</Button>
 				</div>
 			)}
-		</>
+		</div>
 	);
 };
 

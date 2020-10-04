@@ -32,10 +32,10 @@ export default {
 		'dashboard.treatments': 'Tratamientos',
 		'dashboard.laboratoryTest': 'Exámenes de laboratorio',
 		'dashboard.familyMembers': 'Parientes',
-		'dashboard.newAppointment': 'Agendar cita',
+		'dashboard.newAppointment': 'Agendar una cita nueva',
 	},
 	global: {
-		'selectAccount.new.account': 'Nuevo perfil',
+		'selectAccount.new.account': 'Para alguien más',
 		'privacyPolicy.title.firstLine': 'POLÍTICA DE PRIVACIDAD',
 		'privacyPolicy.title.secondLine': 'Las cosas claras ',
 		'privacyPolicy.body':

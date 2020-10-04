@@ -4,40 +4,72 @@ import { useTranslation } from 'react-i18next';
 
 import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
-import { useAppointmentStepValidation, getIntCurrency } from 'utils';
+import { useAppointmentStepValidation, getIntCurrency, dateToUTCUnixTimestamp } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
-import { CONFIRMATION_STEP, GUEST } from 'AppContext';
+import { CONFIRMATION_STEP, GUEST, EMPTY_TRACK_PARAMS } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import { createPayment, createAppointment, applyDiscount, Discount, CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
+import {
+	createPayment,
+	createAppointment,
+	applyDiscount,
+	Discount,
+	CULQI_PAYMENT_ID,
+	PE_PAYMENT_ID,
+	sendFakeSession,
+} from 'pages/api';
+import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-642423-BHD55YOVGNEOHTH0/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
 };
 
+const FAKE_SESSION_ERROR_MESSAGE =
+	'Lo sentimos. El horario que has elegido ya no se encuentra disponible. Un miembro de nuestro equipo se pondrá en contacto contigo para ayudarte';
+
 const Payment = () => {
 	const {
 		doctor,
 		user,
-		guestUser,
+		patientUser,
 		schedule,
 		channel,
 		useCase,
 		triage,
 		userFiles,
 		userToken,
+		reservationAccountID,
 		updateState: updateContextState,
 		isTransactionEnabled = false,
 		appointmentOwner,
+		trackParams,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
-	const activeUser = guestUser || user;
+	const activeUser = patientUser || user;
 	const { t } = useTranslation('payment');
 	const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
+
+	React.useEffect(() => {
+		const { id = '', startTime, endTime } = schedule || {};
+		const { id: useCaseId = '' } = useCase || {};
+		if (id.includes(FAKE_SESSION_ID)) {
+			sendFakeSession({
+				reservation_account_id: reservationAccountID || '',
+				use_case_id: useCaseId,
+				doctor_id: (doctor && doctor.id) || '',
+				start_time: dateToUTCUnixTimestamp(startTime!),
+				end_time: dateToUTCUnixTimestamp(endTime!),
+			}).catch((err) => {
+				const { message = '' } = err || {};
+				setErrorMessage(message);
+			});
+		}
+		// eslint-disable-next-line
+	}, []);
 
 	const performTransactionPayment = useCallback(
 		async (method: number) => {
@@ -58,6 +90,7 @@ const Payment = () => {
 						lastName: activeUser.lastName,
 						phone: userPhone || '',
 						paymentType: method,
+						trackParams: trackParams || EMPTY_TRACK_PARAMS,
 					});
 					await createAppointment(
 						{
@@ -101,6 +134,7 @@ const Payment = () => {
 			doctor,
 			discount.id,
 			discount.totalCost,
+			trackParams,
 			userFiles,
 			appointmentOwner,
 			userToken,
@@ -111,14 +145,34 @@ const Payment = () => {
 
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
-			if (paymentMethod === CULQI_PAYMENT_ID) {
-				e.preventDefault();
-				window.Culqi.open();
+			const { id: scheduleId = '' } = schedule || {};
+			const isFakeSession = scheduleId.includes(FAKE_SESSION_ID);
+			if (!isFakeSession) {
+				if (paymentMethod === CULQI_PAYMENT_ID) {
+					e.preventDefault();
+					window.Culqi.open();
+				} else {
+					performTransactionPayment(paymentMethod);
+				}
 			} else {
-				performTransactionPayment(paymentMethod);
+				const { id = '', startTime, endTime } = schedule || {};
+				const { id: useCaseId = '' } = useCase || {};
+				if (id.includes(FAKE_SESSION_ID)) {
+					window.alert(FAKE_SESSION_ERROR_MESSAGE);
+					sendFakeSession({
+						reservation_account_id: reservationAccountID || '',
+						use_case_id: useCaseId,
+						doctor_id: (doctor && doctor.id) || '',
+						start_time: dateToUTCUnixTimestamp(startTime!),
+						end_time: dateToUTCUnixTimestamp(endTime!),
+					}).catch((err) => {
+						const { message = '' } = err || {};
+						setErrorMessage(message);
+					});
+				}
 			}
 		},
-		[performTransactionPayment],
+		[schedule, reservationAccountID, doctor, useCase, performTransactionPayment],
 	);
 	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target) {
@@ -169,6 +223,7 @@ const Payment = () => {
 								lastName: '',
 								phone: '',
 								paymentType: CULQI_PAYMENT_ID,
+								trackParams: trackParams || EMPTY_TRACK_PARAMS,
 							});
 							await createAppointment(
 								{

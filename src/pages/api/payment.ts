@@ -1,4 +1,5 @@
 import aliviaAxios from 'utils/customAxios';
+import { TrackParams } from 'AppContext';
 
 export const CULQI_PAYMENT_ID = 1;
 export const PE_PAYMENT_ID = 2;
@@ -16,6 +17,15 @@ interface PaymentRequestBody {
 	lastName: string;
 	phone: string;
 	paymentType: number;
+	trackParams: TrackParams;
+}
+
+interface FakeSessionBody {
+	reservation_account_id: string;
+	use_case_id: string;
+	doctor_id: string;
+	start_time: number;
+	end_time: number;
 }
 
 interface DiscountRequestBody {
@@ -52,11 +62,22 @@ const formatParams = (params: PaymentRequestBody) => ({
 	patient_last_name: params.lastName || '',
 	patient_phone: params.phone || '',
 	payment_type: params.paymentType,
+	utm_source: params.trackParams.utmSource || '',
+	utm_campaign: params.trackParams.utmCampaign || '',
+	utm_medium: params.trackParams.utmMedium || '',
 });
 
 export const createPayment = async (params: PaymentRequestBody): Promise<void> => {
 	try {
 		return await aliviaAxios.post('/payments', { ...formatParams(params) });
+	} catch (e) {
+		throw Error(e);
+	}
+};
+
+export const sendFakeSession = async (params: FakeSessionBody): Promise<void> => {
+	try {
+		return await aliviaAxios.post('/appointments/fake', { ...params });
 	} catch (e) {
 		throw Error(e);
 	}

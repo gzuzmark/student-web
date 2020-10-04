@@ -90,7 +90,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 				const token = await sendLogin({ username: phoneNumber, password });
 				if (token && updateContextState) {
 					const [reservationToken, currentUser] = await getCurrentUser(token);
-					const redirectPath = getAppointmentRedirectPath(appointmentCreationStep);
+					const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, '/dashboard/citas');
 
 					updateContextState({
 						userToken: token,
@@ -108,8 +108,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 				}
 				setSubmitting(false);
 			} catch (e) {
-				setFieldError('phoneNumber', t('login.phoneNumber.error'));
-				setFieldError('password', t('login.password.error'));
+				setFieldError('password', t('login.request.error'));
 				setSubmitting(false);
 			}
 		},

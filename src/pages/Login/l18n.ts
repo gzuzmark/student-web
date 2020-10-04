@@ -13,6 +13,7 @@ const login = {
 	'login.password.required': 'Ingrese un contraseña',
 	'login.phoneNumber.error': 'Ingresa un número de celular válido.',
 	'login.password.error': 'La contraseña es incorrecta. Vuelve a intentarlo.',
+	'login.request.error': 'El número y/o contraseña son incorrectos. Vuelva a intentarlo',
 };
 
 export default login;

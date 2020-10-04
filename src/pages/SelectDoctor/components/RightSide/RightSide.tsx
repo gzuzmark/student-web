@@ -10,11 +10,76 @@ import isToday from 'date-fns/isToday';
 import { DoctorList } from '../DoctorList';
 import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
-import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSchedules } from 'pages/api';
+import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSchedules, Schedule } from 'pages/api';
+
+export const FAKE_SESSION_ID = 'fake';
+const DERMA_ID = '0ceb81db-ccfe-4198-b72e-1789fe113494';
+const GINE_ID = 'e6d9a4aa-4307-4ca2-b4e4-d10208fdf87d';
+const SESSION_STEP = 900;
+const SESSION_EXTRA_TIME = 300;
+const FAKE_SESSION_BODY = {
+	base_cost: '25.00',
+	id: FAKE_SESSION_ID,
+	specialty_cost: '10.00',
+	total_cost: '35.00',
+};
 
 const limitSchedules = (numSessions: string) => (_: any, i: number) => {
 	const limit = numSessions && !isNaN(+numSessions) && +numSessions;
 	return limit ? i < limit : true;
+};
+
+const buildFirstDate = (): Date => {
+	const now = new Date();
+	const hour = now.getHours();
+	const min = now.getMinutes();
+	if (min > 0 && min <= 20) {
+		now.setMinutes(20);
+	} else if (min > 20 && min <= 40) {
+		now.setMinutes(40);
+	} else if (min > 40 && min < 60) {
+		now.setHours(hour + 1);
+		now.setMinutes(0);
+	}
+	now.setSeconds(0);
+	return now;
+};
+
+const buildFakeSessions = (schedules: Schedule[], isToday: boolean = true): Schedule[] => {
+	if (schedules.length > 0) {
+		const lastIndex = schedules.length - 1;
+		const firstSchedule = schedules[0].startTime;
+		firstSchedule.setHours(6);
+		firstSchedule.setMinutes(0);
+		firstSchedule.setSeconds(0);
+		const lastSchedule = schedules[lastIndex];
+		const newSchedules = [] as Schedule[];
+		console.log({ isToday });
+		let currentStartTime = isToday ? buildFirstDate() : firstSchedule;
+		for (let i = 0; i < 1000; i++) {
+			// Set the end time by adding 15min to the firt start time. i.e: 8:00 + 15min => endTime = 8:15
+			const endTime = new Date(currentStartTime);
+			endTime.setSeconds(endTime.getSeconds() + SESSION_STEP);
+			// Preparing the fake schedule body
+			const schedule = {
+				...FAKE_SESSION_BODY,
+				id: `${FAKE_SESSION_ID}-${i}`,
+				startTime: currentStartTime,
+				endTime: endTime,
+			} as Schedule;
+			newSchedules.push(schedule);
+			// updating the next schedule startTime as the previous schedule endTime
+			currentStartTime = new Date(endTime);
+			currentStartTime.setSeconds(currentStartTime.getSeconds() + SESSION_EXTRA_TIME);
+
+			// Comparing if the currentEndTime is the same as the endTime of the last schedule to stop
+			if (dateToUTCUnixTimestamp(endTime) === dateToUTCUnixTimestamp(lastSchedule.endTime)) {
+				break;
+			}
+		}
+		return newSchedules;
+	}
+	return schedules;
 };
 
 const getDoctors = async (
@@ -40,7 +105,29 @@ const getDoctors = async (
 			...doc,
 			schedules: doc.schedules.filter(limitSchedules(numSessions)),
 		}));
-		setDoctors(filteredDoctors);
+		const isTargetUseCase = useCase.id === DERMA_ID || useCase.id === GINE_ID;
+		const newDoctors = isTargetUseCase
+			? filteredDoctors.map((doc: DoctorAvailability) => {
+					const realSchedules = doc.schedules;
+					const fakeSchedules = buildFakeSessions(realSchedules, false);
+					const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
+						const searchSession = realSchedules.find(
+							(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
+						);
+						return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
+					});
+					if (newSchedules.length > 0) {
+						const lastInd = newSchedules.length - 1;
+						newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
+						newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
+					}
+					return {
+						...doc,
+						schedules: newSchedules,
+					};
+			  })
+			: filteredDoctors;
+		setDoctors(newDoctors);
 	}
 };
 
@@ -51,8 +138,30 @@ const getClosestSchedules = async (
 	setMinDate: Function,
 ) => {
 	const { nextAvailableDate, doctors } = await getNextAvailableSchedules(useCase);
+	const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
+	const newDoctors = isTargetUseCase
+		? doctors.map((doc: DoctorAvailability) => {
+				const realSchedules = doc.schedules;
+				const fakeSchedules = buildFakeSessions(realSchedules);
+				const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
+					const searchSession = realSchedules.find(
+						(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
+					);
+					return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
+				});
+				if (newSchedules.length > 0) {
+					const lastInd = newSchedules.length - 1;
+					newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
+					newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
+				}
+				return {
+					...doc,
+					schedules: newSchedules,
+				};
+		  })
+		: doctors;
 
-	setDoctors(doctors);
+	setDoctors(newDoctors);
 	setSelectedDate(nextAvailableDate);
 	setMinDate(nextAvailableDate);
 };
@@ -63,7 +172,7 @@ interface RightSideProps {
 	isUserLoggedIn: boolean;
 	minutes: string;
 	numSessions: string;
-	openSelectOwnerModal: () => void;
+	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
 }
@@ -73,7 +182,7 @@ const RightSide = ({
 	updateContextState,
 	minutes,
 	numSessions,
-	openSelectOwnerModal,
+	selectDoctorCallback,
 	setDoctor,
 	setSchedule,
 }: RightSideProps) => {
@@ -110,7 +219,7 @@ const RightSide = ({
 					<DoctorList
 						updateContextState={updateContextState}
 						doctors={doctors}
-						openSelectOwnerModal={openSelectOwnerModal}
+						selectDoctorCallback={selectDoctorCallback}
 						setDoctor={setDoctor}
 						setSchedule={setSchedule}
 					/>

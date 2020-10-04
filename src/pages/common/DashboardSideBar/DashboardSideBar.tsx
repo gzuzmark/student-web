@@ -109,7 +109,7 @@ const DashboardSideBar = () => {
 				)}
 			</div>
 			<div className={classes.buttonWrapper}>
-				<Button variant="outlined" className={classes.newAppointmentButton} onClick={goToAlivia} fullWidth>
+				<Button variant="contained" className={classes.newAppointmentButton} onClick={goToAlivia} fullWidth>
 					{t('dashboard.newAppointment')}
 				</Button>
 			</div>
