@@ -12,7 +12,7 @@ import { ReactComponent as SmallMarkerIcon } from 'icons/small_marker.svg';
 
 import Marker from './Marker';
 import LaboratoryCard from './LaboratoryCard';
-import { MapsApi, Place } from './types';
+import { MapsApi, Place, MapInstance } from './types';
 import SearchAddressInput from './SearchAddress';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -164,12 +164,21 @@ const LaboratoriesMap = (): ReactElement | null => {
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
 	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
 	const [mapsApi, setMapApi] = useState<MapsApi>();
+	const [mapInstance, setMapInstance] = useState<MapInstance>();
 	const [showingSearchAddress, setShowingSearchAddress] = useState<boolean>(false);
 	const history = useHistory();
 	const { t } = useTranslation('laboratoriesExams');
+	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
+		setMapApi(maps);
+		setMapInstance(map);
+	};
 	const selectLaboratory = (index: number) => () => {
 		if (activeMarker !== index) {
 			setActiveMarker(index);
+		}
+
+		if (mapInstance) {
+			mapInstance.setCenter(laboratories[index].pos);
 		}
 	};
 	const showSeachAddress = () => {
@@ -253,7 +262,7 @@ const LaboratoriesMap = (): ReactElement | null => {
 				defaultZoom={15}
 				options={mapOptionsCreator}
 				yesIWantToUseGoogleMapApiInternals
-				onGoogleApiLoaded={({ maps }) => setMapApi(maps)}
+				onGoogleApiLoaded={onGoogleApiLoaded}
 			>
 				{laboratories.map(({ name, pos }, index) => (
 					<Marker key={name} {...pos} isActive={activeMarker === index} />

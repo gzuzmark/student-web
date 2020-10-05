@@ -93,6 +93,7 @@ interface LaboratoryCardProps {
 	address: string;
 	phoneNumber: string;
 	imgUrl: string;
+	openHours: string;
 }
 
 const LaboratoryCard = ({
@@ -102,6 +103,7 @@ const LaboratoryCard = ({
 	address,
 	phoneNumber,
 	imgUrl,
+	openHours,
 }: LaboratoryCardProps): ReactElement | null => {
 	const classes = useStyles({ isActive });
 
@@ -114,7 +116,7 @@ const LaboratoryCard = ({
 				<div className={classes.contentWrapper}>
 					<Typography className={classes.name}>{name}</Typography>
 					<Typography className={classes.address}>{address}</Typography>
-					<Typography className={classes.workingHours}>Horario: 9:00am - 7:00pm</Typography>
+					<Typography className={classes.workingHours}>Horario: {openHours}</Typography>
 					<div className={classes.phoneNumberWrapper}>
 						<div className={classes.phoneIconWrapper}>
 							<PhoneIcon />
