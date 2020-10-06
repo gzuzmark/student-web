@@ -45,19 +45,29 @@ const buildFirstDate = (): Date => {
 	return now;
 };
 
-const buildFakeSessions = (schedules: Schedule[], isToday: boolean = true): Schedule[] => {
+const dateIsToday = (time: Date) => {
+	const today = new Date();
+	return (
+		time.getDate() === today.getDate() &&
+		time.getMonth() === today.getMonth() &&
+		time.getFullYear() === today.getFullYear()
+	);
+};
+
+const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 	if (schedules.length > 0) {
+		const firstScheduleTime = schedules[0].startTime;
+		const isToday = dateIsToday(firstScheduleTime);
 		const lastIndex = schedules.length - 1;
-		const firstSchedule = schedules[0].startTime;
+		const firstSchedule = new Date(firstScheduleTime);
 		firstSchedule.setHours(6);
 		firstSchedule.setMinutes(0);
 		firstSchedule.setSeconds(0);
 		const lastSchedule = schedules[lastIndex];
 		const newSchedules = [] as Schedule[];
-		console.log({ isToday });
 		let currentStartTime = isToday ? buildFirstDate() : firstSchedule;
 		for (let i = 0; i < 1000; i++) {
-			// Set the end time by adding 15min to the firt start time. i.e: 8:00 + 15min => endTime = 8:15
+			// Set the end time by adding 15min to the first start time. i.e: 8:00 + 15min => endTime = 8:15
 			const endTime = new Date(currentStartTime);
 			endTime.setSeconds(endTime.getSeconds() + SESSION_STEP);
 			// Preparing the fake schedule body
@@ -71,7 +81,6 @@ const buildFakeSessions = (schedules: Schedule[], isToday: boolean = true): Sche
 			// updating the next schedule startTime as the previous schedule endTime
 			currentStartTime = new Date(endTime);
 			currentStartTime.setSeconds(currentStartTime.getSeconds() + SESSION_EXTRA_TIME);
-
 			// Comparing if the currentEndTime is the same as the endTime of the last schedule to stop
 			if (dateToUTCUnixTimestamp(endTime) === dateToUTCUnixTimestamp(lastSchedule.endTime)) {
 				break;
@@ -109,7 +118,7 @@ const getDoctors = async (
 		const newDoctors = isTargetUseCase
 			? filteredDoctors.map((doc: DoctorAvailability) => {
 					const realSchedules = doc.schedules;
-					const fakeSchedules = buildFakeSessions(realSchedules, false);
+					const fakeSchedules = buildFakeSessions(realSchedules);
 					const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
 						const searchSession = realSchedules.find(
 							(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
