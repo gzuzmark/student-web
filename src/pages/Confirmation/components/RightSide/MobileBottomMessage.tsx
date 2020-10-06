@@ -38,11 +38,23 @@ interface MobileBottomMessageProps {
 	showBottomMessage?: boolean;
 	hideBottomMessage?: () => void;
 	closeMessage: () => void;
+	isForNewAccount: boolean;
+	name: string | undefined;
 }
 
-const MobileBottomMessage = ({ closeMessage, showBottomMessage, hideBottomMessage }: MobileBottomMessageProps) => {
+const MobileBottomMessage = ({
+	closeMessage,
+	showBottomMessage,
+	hideBottomMessage,
+	isForNewAccount,
+	name,
+}: MobileBottomMessageProps) => {
 	const { t } = useTranslation('confirmation');
 	const classes = useStyles();
+	const title = isForNewAccount
+		? t('confirmation.bottomMessage.title')
+		: t('confirmation.bottomMessage.title.forSomeone', { name: name?.toUpperCase() });
+	const body = isForNewAccount ? t('confirmation.bottomMessage.body') : t('confirmation.bottomMessage.body.forSomeone');
 
 	return showBottomMessage ? (
 		<div className={classes.container}>
@@ -50,9 +62,9 @@ const MobileBottomMessage = ({ closeMessage, showBottomMessage, hideBottomMessag
 				<div className={classes.closeButton} onClick={hideBottomMessage}>
 					<CloseIcon />
 				</div>
-				<div className={classes.title}>{t('confirmation.bottomMessage.title')}</div>
+				<div className={classes.title}>{title}</div>
 				<div>
-					<Typography component="span">{t('confirmation.bottomMessage.body')}</Typography>{' '}
+					<Typography component="span">{body}</Typography>{' '}
 					<Typography className={classes.link} color="primary" component="span" onClick={closeMessage}>
 						{t('confirmation.bottomMessage.link')}
 					</Typography>

@@ -47,6 +47,9 @@ const SelectDoctor = () => {
 	const minutes = (params.minutes as string) || '';
 	const numSessions = (params.num_sessions as string) || '';
 	const transactionFlag = (params.transferencia as string) || '';
+	const utmSource = (params.utm_source as string) || '';
+	const utmMedium = (params.utm_medium as string) || '';
+	const utmCampaign = (params.utm_campaign as string) || '';
 	const { useCase, userToken, updateState } = useContext(AppContext);
 	const isUserLoggedIn = !!userToken;
 	const selectAppointmentOwner = (owner: string) => () => {
@@ -68,8 +71,20 @@ const SelectDoctor = () => {
 			}
 		}
 	};
-	const openSelectOwnerModal = () => {
-		setSelectOwnerOpen(true);
+	const selectDoctorCallback = () => {
+		if (updateState) {
+			updateState({
+				appointmentCreationStep: PAYMENT_STEP,
+				schedule,
+				doctor: formatDoctor(doctor),
+			});
+		}
+
+		if (!isUserLoggedIn) {
+			setSelectOwnerOpen(true);
+		} else {
+			history.push('/seleccionar_paciente');
+		}
 	};
 	const closeSelectOwnerModal = () => {
 		setSelectOwnerOpen(false);
@@ -100,15 +115,16 @@ const SelectDoctor = () => {
 			requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
 		}
 
-		if (isUbigeoEnabled && updateState) {
-			updateState({ isUbigeoEnabled });
+		if (updateState) {
+			updateState({ isUbigeoEnabled, trackParams: { utmSource, utmMedium, utmCampaign } });
 		}
+
 		if (useCase && useCase.id) {
 			if (window.nutritionistUseCaseId === useCase.id) {
 				toggleWarningModal(true);
 			}
 		}
-	}, [location.search, updateState, useCase, isUbigeoEnabled, params.malestar]);
+	}, [location.search, updateState, useCase, isUbigeoEnabled, params.malestar, utmSource, utmMedium, utmCampaign]);
 
 	return (
 		<Container>
@@ -119,7 +135,7 @@ const SelectDoctor = () => {
 				updateContextState={updateState}
 				minutes={minutes}
 				numSessions={numSessions}
-				openSelectOwnerModal={openSelectOwnerModal}
+				selectDoctorCallback={selectDoctorCallback}
 				setDoctor={setDoctor}
 				setSchedule={setSchedule}
 			/>

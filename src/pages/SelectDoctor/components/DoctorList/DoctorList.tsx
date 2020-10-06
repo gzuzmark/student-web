@@ -13,7 +13,7 @@ import useStyles from './styles';
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
 	updateContextState: Function | undefined;
-	openSelectOwnerModal: () => void;
+	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
 }
@@ -23,7 +23,7 @@ export interface ActiveDoctorTime {
 	scheduleID: string;
 }
 
-const DoctorList = ({ doctors, updateContextState, openSelectOwnerModal, setDoctor, setSchedule }: DoctorListProps) => {
+const DoctorList = ({ doctors, updateContextState, selectDoctorCallback, setDoctor, setSchedule }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorCmp: '', scheduleID: '' });
@@ -41,7 +41,7 @@ const DoctorList = ({ doctors, updateContextState, openSelectOwnerModal, setDoct
 	const continueToPreRegister = () => {
 		if (updateContextState) {
 			addGAEvent('event', 'Cita seleccionada', 'click');
-			openSelectOwnerModal();
+			selectDoctorCallback();
 		}
 	};
 

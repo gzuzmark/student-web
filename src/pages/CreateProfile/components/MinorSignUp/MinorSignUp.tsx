@@ -1,25 +1,25 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, FC } from 'react';
 import { useHistory } from 'react-router';
 
 import LeftSide from './LeftSide';
 import RightSide from './RightSide';
-import { AboutMeValues, MedicalDataValues } from 'pages/SignUp/components';
-import { createNewProfile } from 'pages/api';
+// import { AboutMeValues, MedicalDataValues } from 'pages/SignUp/components';
+// import { createNewProfile } from 'pages/api';
 
 interface MinorSignUpProps {
 	familyRelationship: string;
 }
 
-const MinorSignUp = ({ familyRelationship }: MinorSignUpProps) => {
+const MinorSignUp: FC<MinorSignUpProps> = () => {
 	const [step, setStep] = useState<number>(0);
 	const nextStep = () => {
 		setStep(step + 1);
 	};
 	const history = useHistory();
 	const onSubmit = useCallback(
-		async (newProfile: AboutMeValues & MedicalDataValues, onError: Function | undefined) => {
+		async (_, onError: Function | undefined) => {
 			try {
-				await createNewProfile({ ...newProfile, identification: newProfile.identification || '', familyRelationship });
+				// await createNewProfile({ ...newProfile, identification: newProfile.identification || '', familyRelationship });
 				history.push('/seleccionar_perfil');
 			} catch (e) {
 				if (onError) {
@@ -27,7 +27,7 @@ const MinorSignUp = ({ familyRelationship }: MinorSignUpProps) => {
 				}
 			}
 		},
-		[familyRelationship, history],
+		[history],
 	);
 
 	return (

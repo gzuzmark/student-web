@@ -15,6 +15,7 @@ import createProfileL18n from 'pages/CreateProfile/l18n';
 import familyMembersL18n from 'pages/FamilyMembers/l18n';
 import createPasswordL18n from 'pages/common/CreatePasswordForm/l18n';
 import createAccountL18n from 'pages/CreateAccount/l18n';
+import laboratoryExamsL18n from 'pages/LaboratoryExams/l18n';
 
 export default {
 	nav: {
@@ -29,12 +30,12 @@ export default {
 		'dashboard.title': '¿Cómo te podemos ayudar hoy?',
 		'dashboard.appointments': 'Citas',
 		'dashboard.treatments': 'Tratamientos',
-		'dashboard.medialHistory': 'Historial de comporas',
+		'dashboard.laboratoryTest': 'Exámenes de laboratorio',
 		'dashboard.familyMembers': 'Parientes',
-		'dashboard.newAppointment': 'Agendar cita',
+		'dashboard.newAppointment': 'Agendar una cita nueva',
 	},
 	global: {
-		'selectAccount.new.account': 'Nuevo perfil',
+		'selectAccount.new.account': 'Para alguien más',
 		'privacyPolicy.title.firstLine': 'POLÍTICA DE PRIVACIDAD',
 		'privacyPolicy.title.secondLine': 'Las cosas claras ',
 		'privacyPolicy.body':
@@ -55,4 +56,5 @@ export default {
 	createProfile: { ...createProfileL18n },
 	familyMembers: { ...familyMembersL18n },
 	createAccount: { ...createAccountL18n },
+	laboratoriesExams: { ...laboratoryExamsL18n },
 };

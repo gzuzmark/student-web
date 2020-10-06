@@ -6,16 +6,34 @@ import { Container } from 'pages/common';
 import { useAppointmentStepValidation } from 'utils';
 import { CONFIRMATION_ROUTE } from 'routes';
 
-import RightSide from './components/RightSide';
+import { RightSide } from './components/RightSide';
 import LeftSide from './components/LeftSide';
-import MobileBottomMessage from './components/MobileBottomMessage';
+import MobileBottomMessage from './components/RightSide/MobileBottomMessage';
 import { GUEST } from 'AppContext';
+
+export type UserType = 'underage' | 'adultRelative' | 'myself';
+
+const getUserType = (
+	isUnderAge: boolean,
+	isForNewAccount: boolean,
+	isForNewLinkedAccount: boolean,
+): UserType | undefined => {
+	if (isForNewAccount) {
+		return 'myself';
+	}
+
+	if (isForNewLinkedAccount && isUnderAge) {
+		return 'underage';
+	} else if (isForNewLinkedAccount && !isUnderAge) {
+		return 'adultRelative';
+	}
+};
 
 const Confirmation = () => {
 	const {
 		appointmentOwner,
 		user,
-		guestUser,
+		patientUser,
 		doctor,
 		schedule,
 		useCase,
@@ -23,10 +41,10 @@ const Confirmation = () => {
 		userToken,
 		updateState,
 	} = useAppointmentStepValidation(CONFIRMATION_ROUTE);
-	const activeUser = guestUser || user;
+	const activeUser = patientUser || user;
 	const [showMobileRightSide, setShowMobileRightSide] = useState<boolean>(false);
 	const [isBottomMessageShowing, setIsBottomMessageShowing] = useState<boolean>(true);
-	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const isGuest = appointmentOwner === GUEST;
 	const isUserLoggedIn = !!userToken;
 	const closeMessage = () => {
@@ -35,11 +53,15 @@ const Confirmation = () => {
 	const hideBottomMessage = () => {
 		setIsBottomMessageShowing(false);
 	};
+	const isForNewAccount = !isGuest && !isUserLoggedIn;
+	const isForNewLinkedAccount = isGuest && isUserLoggedIn;
+	const showMobileMessage = !isDesktop && !showMobileRightSide;
+	const userType = getUserType(activeUser?.isUnderAge || false, isForNewAccount, isForNewLinkedAccount);
 
 	useEffect(() => {
 		if (process.env.NODE_ENV === 'production') {
 			window.fbq('track', 'Purchase', { currency: 'PEN', value: useCase?.totalCost });
-			window.fbq('track', 'CompleteRegistration', {  currency: 'PEN', value: useCase?.totalCost });
+			window.fbq('track', 'CompleteRegistration', { currency: 'PEN', value: useCase?.totalCost });
 			window.gtag('event', 'conversion', { send_to: 'AW-620358090/NHAXCLHh29YBEMrT56cC' });
 			window.gtag('event', 'Pagar', 'Botón', 'click');
 		}
@@ -54,41 +76,42 @@ const Confirmation = () => {
 	return (
 		<Container>
 			<LeftSide
-				user={guestUser || user}
+				user={patientUser || user}
 				doctor={doctor}
 				schedule={schedule}
-				showExtraInfo={!isGuest && !isUserLoggedIn}
+				showExtraInfo={isForNewAccount || isForNewLinkedAccount}
 				isGuest={isGuest}
 			/>
-			{isGuest || isUserLoggedIn ? (
-				<RightSide
-					isGuest={isGuest}
-					email={user?.email || ''}
-					showPasswordForm={!isGuest && !isUserLoggedIn}
-					updateContextState={updateState}
-					userId={activeUser ? activeUser.id : ''}
-				/>
-			) : matches ? (
-				<RightSide
-					isGuest={isGuest}
-					email={user?.email || ''}
-					showPasswordForm={!isGuest && !isUserLoggedIn}
-					updateContextState={updateState}
-					userId={activeUser ? activeUser.id : ''}
-				/>
-			) : showMobileRightSide ? (
-				<RightSide
-					isGuest={isGuest}
-					email={user?.email || ''}
-					showPasswordForm={!isGuest && !isUserLoggedIn}
-					updateContextState={updateState}
-					userId={activeUser ? activeUser.id : ''}
-				/>
+			{isForNewAccount || isForNewLinkedAccount ? (
+				showMobileMessage ? (
+					<MobileBottomMessage
+						showBottomMessage={isBottomMessageShowing}
+						hideBottomMessage={hideBottomMessage}
+						closeMessage={closeMessage}
+						isForNewAccount={isForNewAccount}
+						name={activeUser?.name}
+					/>
+				) : (
+					<RightSide
+						isGuest={isGuest}
+						email={user?.email || ''}
+						updateContextState={updateState}
+						userId={activeUser ? activeUser.id : ''}
+						userType={userType}
+						loggedUserName={user?.name}
+						activeUserName={activeUser?.name}
+						patientId={patientUser?.id}
+						scheduleID={schedule?.id}
+					/>
+				)
 			) : (
-				<MobileBottomMessage
-					showBottomMessage={isBottomMessageShowing}
-					hideBottomMessage={hideBottomMessage}
-					closeMessage={closeMessage}
+				<RightSide
+					isGuest={isGuest}
+					email={user?.email || ''}
+					updateContextState={updateState}
+					userId={activeUser ? activeUser.id : ''}
+					patientId={patientUser?.id}
+					scheduleID={schedule?.id}
 				/>
 			)}
 		</Container>

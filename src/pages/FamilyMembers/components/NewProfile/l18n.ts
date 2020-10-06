@@ -1,0 +1,23 @@
+export default {
+	'aboutNewProfile.title.firstSection': 'Llena los datos de la persona que deseas',
+	'aboutNewProfile.title.secondSection': 'vincular.',
+	'aboutNewProfile.subTitle': '1. INFORMACIÓN DEL PACIENTE',
+	'aboutNewProfile.fields.name.label': 'Nombre',
+	'aboutNewProfile.fields.lastName.label': 'Apellido paterno',
+	'aboutNewProfile.fields.secondSurname.label': 'Apellido paterno',
+	'aboutNewProfile.fields.document.label.minor': 'Número de DNI o CE',
+	'aboutNewProfile.fields.birthDate.label': 'Fecha de nacimiento',
+	'aboutNewProfile.fields.gender.label': 'Sexo del paciente',
+	'aboutNewProfile.privacyPolicy.firstSection': 'Puedes revisar nuestra',
+	'aboutNewProfile.privacyPolicy.secondSection': 'política de privacidad aquí',
+	'aboutNewProfile.submit.text': 'Continuar',
+	//
+	'contactInfo.title.firstSection.minor': 'Datos de contacto del',
+	'contactInfo.title.firstSection.default': 'Llena los datos de la persona que deseas',
+	'contactInfo.title.secondSection.minor': 'padre o tutor del menor.',
+	'contactInfo.title.secondSection.default': 'vincular.',
+	'contactInfo.subTitle': '2. DATOS DE CONTACTO',
+	'contact.fields.phoneNumber.label': 'Celular',
+	'contact.fields.email.label': 'Correo electrónico',
+	'contact.submit.text': 'Continuar',
+};

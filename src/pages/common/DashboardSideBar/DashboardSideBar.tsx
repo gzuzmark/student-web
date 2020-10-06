@@ -8,7 +8,7 @@ import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
 import { ReactComponent as Pill } from 'icons/pill.svg';
 import { ReactComponent as Family } from 'icons/family.svg';
 import { ReactComponent as Planner } from 'icons/planner.svg';
-import { ReactComponent as ShoppingCart } from 'icons/shoppingCart.svg';
+import { ReactComponent as TestIcon } from 'icons/testIcon.svg';
 
 import DashboardCard from './DashboardCard';
 
@@ -54,28 +54,28 @@ const useStyles = stylesWithTheme(() => ({
 
 const createButtonsData = (t: Function) => [
 	{
-		Icon: Pill,
-		title: t('dashboard.treatments'),
-		disabled: true,
-		path: '/dashboard/tratamientos',
-	},
-	{
-		Icon: Family,
-		title: t('dashboard.familyMembers'),
-		disabled: false,
-		path: '/dashboard/parientes',
-	},
-	{
 		Icon: Planner,
 		title: t('dashboard.appointments'),
 		disabled: false,
 		path: '/dashboard/citas',
 	},
 	{
-		Icon: ShoppingCart,
-		title: t('dashboard.medialHistory'),
+		Icon: Pill,
+		title: t('dashboard.treatments'),
 		disabled: true,
-		path: '/dashboard/compras',
+		path: '/dashboard/tratamientos',
+	},
+	{
+		Icon: TestIcon,
+		title: t('dashboard.laboratoryTest'),
+		disabled: false,
+		path: '/dashboard/laboratorios',
+	},
+	{
+		Icon: Family,
+		title: t('dashboard.familyMembers'),
+		disabled: false,
+		path: '/dashboard/parientes',
 	},
 ];
 
@@ -109,7 +109,7 @@ const DashboardSideBar = () => {
 				)}
 			</div>
 			<div className={classes.buttonWrapper}>
-				<Button variant="outlined" className={classes.newAppointmentButton} onClick={goToAlivia} fullWidth>
+				<Button variant="contained" className={classes.newAppointmentButton} onClick={goToAlivia} fullWidth>
 					{t('dashboard.newAppointment')}
 				</Button>
 			</div>
