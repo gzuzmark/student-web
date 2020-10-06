@@ -61,6 +61,7 @@ const Confirmation = () => {
 	useEffect(() => {
 		if (process.env.NODE_ENV === 'production') {
 			window.fbq('track', 'Purchase', { currency: 'PEN', value: useCase?.totalCost });
+			window.fbq('track', 'CompleteRegistration', { currency: 'PEN', value: useCase?.totalCost });
 			window.gtag('event', 'conversion', { send_to: 'AW-620358090/NHAXCLHh29YBEMrT56cC' });
 			window.gtag('event', 'Pagar', 'Botón', 'click');
 		}

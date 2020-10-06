@@ -60,7 +60,7 @@ export const createGuestPatient = async (user: NewUser): Promise<string> => {
 		extra_info: user.moreInfo || '',
 		contact_email: user.email || '',
 		contact_phone: user.phoneNumber,
-		address: user.address,
+		address: user.address || 'Sin dirección',
 		ubigeo: user.ubigeo,
 	});
 	const data = resp.data.data;

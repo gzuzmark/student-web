@@ -14,7 +14,7 @@ import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSc
 
 export const FAKE_SESSION_ID = 'fake';
 const DERMA_ID = '0ceb81db-ccfe-4198-b72e-1789fe113494';
-const GINE_ID = 'e6d9a4aa-4307-4ca2-b4e4-d10208fdf87d';
+const GINE_ID = '12a9a5a0-61d9-4312-9e5d-b8708da8b592';
 const SESSION_STEP = 900;
 const SESSION_EXTRA_TIME = 300;
 const FAKE_SESSION_BODY = {
