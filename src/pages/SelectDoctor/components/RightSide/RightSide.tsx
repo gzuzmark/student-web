@@ -13,8 +13,8 @@ import useStyles from './styles';
 import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSchedules, Schedule } from 'pages/api';
 
 export const FAKE_SESSION_ID = 'fake';
-const DERMA_ID = '0ceb81db-ccfe-4198-b72e-1789fe113494';
-const GINE_ID = '12a9a5a0-61d9-4312-9e5d-b8708da8b592';
+const DERMA_ID = 'fake';
+const GINE_ID = 'fake';
 const SESSION_STEP = 900;
 const SESSION_EXTRA_TIME = 300;
 const FAKE_SESSION_BODY = {
