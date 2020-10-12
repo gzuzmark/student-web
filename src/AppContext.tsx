@@ -88,7 +88,6 @@ interface ContextProps {
 	updateState: Function;
 	appointmentCreationStep: AppointmentCreationStep;
 	paymentURL: string | null;
-	isTransactionEnabled: boolean;
 	isUbigeoEnabled: boolean;
 	userFiles: string[];
 	trackParams: TrackParams;
@@ -110,7 +109,6 @@ const defaultState: ContextProps = {
 	updateState: Function.prototype,
 	appointmentCreationStep: '',
 	paymentURL: null,
-	isTransactionEnabled: false,
 	isUbigeoEnabled: false,
 	userFiles: [],
 	trackParams: {},

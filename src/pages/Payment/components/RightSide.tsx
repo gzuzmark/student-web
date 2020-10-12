@@ -226,7 +226,6 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 interface RightSideProps {
 	totalCost: string | undefined;
 	isCounponDisabled: boolean;
-	isTransactionEnabled: boolean;
 	sendDiscount: () => Promise<void>;
 	discountCode: string;
 	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -237,7 +236,6 @@ interface RightSideProps {
 const RightSide = ({
 	totalCost,
 	isCounponDisabled,
-	isTransactionEnabled,
 	sendDiscount,
 	discountCode,
 	onChangeDiscount,
@@ -307,24 +305,22 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					{isTransactionEnabled && (
-						<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
-							<div className={classes.optionBody}>
-								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-									<BankIcon />
-								</div>
-								<Typography className={classes.optionLabel} variant="h3">
-									{t('payment.right.payTransaction')}
-								</Typography>
-								<div className={classes.optionBrandWrapper}>
-									<img src={interbank} title="Interbank" className={classes.banksImage} alt="Brand Interbank" />
-									<img src={bcp} title="Bcp" className={classes.banksImage} alt="Brand BCP" />
-									<img src={scotia} title="Scotiabank" className={classes.banksImage} alt="Brand Scotia" />
-									<img src={bbva} title="Bbva" className={classes.banksImage} alt="Brand BBVA" />
-								</div>
+					<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
+						<div className={classes.optionBody}>
+							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+								<BankIcon />
 							</div>
-						</Button>
-					)}
+							<Typography className={classes.optionLabel} variant="h3">
+								{t('payment.right.payTransaction')}
+							</Typography>
+							<div className={classes.optionBrandWrapper}>
+								<img src={interbank} title="Interbank" className={classes.banksImage} alt="Brand Interbank" />
+								<img src={bcp} title="Bcp" className={classes.banksImage} alt="Brand BCP" />
+								<img src={scotia} title="Scotiabank" className={classes.banksImage} alt="Brand Scotia" />
+								<img src={bbva} title="Bbva" className={classes.banksImage} alt="Brand BBVA" />
+							</div>
+						</div>
+					</Button>
 					<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
 						<div className={classes.optionBody}>
 							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
