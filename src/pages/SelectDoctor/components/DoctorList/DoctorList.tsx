@@ -104,22 +104,24 @@ const DoctorList = ({
 											<Typography className={classes.cmp}>CMP: {cmp}</Typography>
 										</div>
 									</div>
-									<div className={classes.ratingWrapper}>
-										<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
-										<Typography className={classes.ratingNumber}>({rating})</Typography>
-									</div>
 									{shouldShowMoreDoctorInfo ? (
-										<div className={classes.seeMoreInfoButton}>
-											<Button
-												className={classes.doctorMoreInfo}
-												onClick={() => {
-													selectDoctorForModal(doctorIndex);
-													openDetailedDoctorModal();
-												}}
-											>
-												{t('right.doctor.moreInformation')}
-											</Button>
-										</div>
+										<>
+											<div className={classes.ratingWrapper}>
+												<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
+												<Typography className={classes.ratingNumber}>({rating})</Typography>
+											</div>
+											<div className={classes.seeMoreInfoButton}>
+												<Button
+													className={classes.doctorMoreInfo}
+													onClick={() => {
+														selectDoctorForModal(doctorIndex);
+														openDetailedDoctorModal();
+													}}
+												>
+													{t('right.doctor.moreInformation')}
+												</Button>
+											</div>
+										</>
 									) : null}
 								</div>
 							</div>

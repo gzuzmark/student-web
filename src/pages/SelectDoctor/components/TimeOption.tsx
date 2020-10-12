@@ -12,14 +12,16 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		width: '98px',
 		marginRight: '7px',
 		marginBottom: '11px',
+
 		'&:nth-child(3n)': {
 			marginRight: '0',
 			[breakpoints.up('lg')]: {
 				marginRight: '7px',
 			},
 		},
+
 		[breakpoints.up('lg')]: {
-			'&:nth-last-child(-n + 6)': {
+			'&:nth-last-child(-n + 4)': {
 				marginBottom: '0',
 			},
 		},
