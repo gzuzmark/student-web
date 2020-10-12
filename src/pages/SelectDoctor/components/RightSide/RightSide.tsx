@@ -186,6 +186,7 @@ interface RightSideProps {
 	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
+	shouldShowMoreDoctorInfo: boolean;
 }
 
 const RightSide = ({
@@ -196,6 +197,7 @@ const RightSide = ({
 	selectDoctorCallback,
 	setDoctor,
 	setSchedule,
+	shouldShowMoreDoctorInfo,
 }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
@@ -233,6 +235,7 @@ const RightSide = ({
 						selectDoctorCallback={selectDoctorCallback}
 						setDoctor={setDoctor}
 						setSchedule={setSchedule}
+						shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
 					/>
 				) : (
 					<div className={classes.emptyMessageWrapper}>

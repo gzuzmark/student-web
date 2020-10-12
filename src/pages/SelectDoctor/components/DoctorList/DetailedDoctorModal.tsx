@@ -256,60 +256,8 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 		aboutMe,
 		education,
 		diseases,
-		// patientOpinions,
+		patientOpinions,
 	} = doctor;
-	const patientOpinions = [
-		{
-			score: 5.0,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1602309600,
-		},
-		{
-			score: 4.5,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1601200800,
-		},
-		{
-			score: 5.0,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1602309600,
-		},
-		{
-			score: 4.5,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1601200800,
-		},
-		{
-			score: 5.0,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1602309600,
-		},
-		{
-			score: 4.5,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1601200800,
-		},
-		{
-			score: 5.0,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1602309600,
-		},
-		{
-			score: 4.5,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1601200800,
-		},
-		{
-			score: 5.0,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1602309600,
-		},
-		{
-			score: 4.5,
-			comment: 'El doctor  se preocupa por entender bien lo que tengo. Me dejó explicarle mis síntomas con calma',
-			datePublished: 1601200800,
-		},
-	];
 	const isALongAboutMe = aboutMe.length > 165;
 	const isALongDiseaseList = diseases.length > 6;
 	const filterDiseases = isALongDiseaseList ? diseases.slice(0, 6) : diseases;

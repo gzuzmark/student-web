@@ -18,6 +18,7 @@ interface DoctorListProps {
 	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
+	shouldShowMoreDoctorInfo: boolean;
 }
 
 export interface ActiveDoctorTime {
@@ -25,7 +26,14 @@ export interface ActiveDoctorTime {
 	scheduleID: string;
 }
 
-const DoctorList = ({ doctors, updateContextState, selectDoctorCallback, setDoctor, setSchedule }: DoctorListProps) => {
+const DoctorList = ({
+	doctors,
+	updateContextState,
+	selectDoctorCallback,
+	setDoctor,
+	setSchedule,
+	shouldShowMoreDoctorInfo,
+}: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorCmp: '', scheduleID: '' });
@@ -100,17 +108,19 @@ const DoctorList = ({ doctors, updateContextState, selectDoctorCallback, setDoct
 										<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
 										<Typography className={classes.ratingNumber}>({rating})</Typography>
 									</div>
-									<div className={classes.seeMoreInfoButton}>
-										<Button
-											className={classes.doctorMoreInfo}
-											onClick={() => {
-												selectDoctorForModal(doctorIndex);
-												openDetailedDoctorModal();
-											}}
-										>
-											{t('right.doctor.moreInformation')}
-										</Button>
-									</div>
+									{shouldShowMoreDoctorInfo ? (
+										<div className={classes.seeMoreInfoButton}>
+											<Button
+												className={classes.doctorMoreInfo}
+												onClick={() => {
+													selectDoctorForModal(doctorIndex);
+													openDetailedDoctorModal();
+												}}
+											>
+												{t('right.doctor.moreInformation')}
+											</Button>
+										</div>
+									) : null}
 								</div>
 							</div>
 							<div className={classes.availableTitleWrapper}>
@@ -140,11 +150,13 @@ const DoctorList = ({ doctors, updateContextState, selectDoctorCallback, setDoct
 						</div>
 					),
 				)}
-				<DetailedDoctorModal
-					isOpen={isDetailDoctorModalOpen}
-					doctor={selectedDoctor}
-					closeModal={closeDetailDoctorModal}
-				/>
+				{shouldShowMoreDoctorInfo ? (
+					<DetailedDoctorModal
+						isOpen={isDetailDoctorModalOpen}
+						doctor={selectedDoctor}
+						closeModal={closeDetailDoctorModal}
+					/>
+				) : null}
 			</div>
 		</>
 	);
