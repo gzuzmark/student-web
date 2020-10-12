@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Rating from '@material-ui/lab/Rating';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
-import { DoctorAvailability } from 'pages/api';
+import { DoctorAvailability, Doctor } from 'pages/api';
 import { addGAEvent } from 'utils';
 
 import AvailableTimes from '../AvailableTimes';
 import useStyles from './styles';
+import DetailedDoctorModal from './DetailedDoctorModal';
 
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
@@ -27,6 +29,17 @@ const DoctorList = ({ doctors, updateContextState, selectDoctorCallback, setDoct
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorCmp: '', scheduleID: '' });
+	const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+	const [isDetailDoctorModalOpen, setIsDetailDoctorModalOpen] = useState<boolean>(false);
+	const selectDoctorForModal = (index: number) => {
+		setSelectedDoctor(doctors[index]);
+	};
+	const closeDetailDoctorModal = () => {
+		setIsDetailDoctorModalOpen(false);
+	};
+	const openDetailedDoctorModal = () => {
+		setIsDetailDoctorModalOpen(true);
+	};
 	const selectDoctor = (doctorCmp: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => {
 		if (scheduleID !== '') {
 			setActiveDoctorTime({ doctorCmp, scheduleID });
@@ -58,7 +71,7 @@ const DoctorList = ({ doctors, updateContextState, selectDoctorCallback, setDoct
 			<div className={classes.doctorList}>
 				{doctors.map(
 					(
-						{ name, lastName, cmp, comment, profilePicture, speciality, schedules }: DoctorAvailability,
+						{ name, lastName, cmp, profilePicture, speciality, rating, schedules }: DoctorAvailability,
 						doctorIndex: number,
 					) => (
 						<div className={classes.doctorWrapper} key={cmp}>
@@ -83,11 +96,21 @@ const DoctorList = ({ doctors, updateContextState, selectDoctorCallback, setDoct
 											<Typography className={classes.cmp}>CMP: {cmp}</Typography>
 										</div>
 									</div>
-									{null ? (
-										<div className={classes.commentWrapper}>
-											<Typography className={classes.comment}>&ldquo;{comment}&rdquo;</Typography>
-										</div>
-									) : null}
+									<div className={classes.ratingWrapper}>
+										<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
+										<Typography className={classes.ratingNumber}>({rating})</Typography>
+									</div>
+									<div className={classes.seeMoreInfoButton}>
+										<Button
+											className={classes.doctorMoreInfo}
+											onClick={() => {
+												selectDoctorForModal(doctorIndex);
+												openDetailedDoctorModal();
+											}}
+										>
+											{t('right.doctor.moreInformation')}
+										</Button>
+									</div>
 								</div>
 							</div>
 							<div className={classes.availableTitleWrapper}>
@@ -117,6 +140,11 @@ const DoctorList = ({ doctors, updateContextState, selectDoctorCallback, setDoct
 						</div>
 					),
 				)}
+				<DetailedDoctorModal
+					isOpen={isDetailDoctorModalOpen}
+					doctor={selectedDoctor}
+					closeModal={closeDetailDoctorModal}
+				/>
 			</div>
 		</>
 	);
