@@ -233,6 +233,10 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const [showMoreAboutMe, setShowMoreAboutMe] = useState<boolean>(false);
 	const [showMoreDiseases, setShowMoreDiseases] = useState<boolean>(false);
+	const [showMoreEducation, setShowMoreEducation] = useState<boolean>(false);
+	const toggleShowMoreEducation = () => {
+		setShowMoreEducation(!showMoreEducation);
+	};
 	const toggleShowMoreAboutMe = () => {
 		setShowMoreAboutMe(!showMoreAboutMe);
 	};
@@ -259,6 +263,7 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 		patientOpinions,
 	} = doctor;
 	const isALongAboutMe = aboutMe.length > 165;
+	const isALongEducation = education.length > 165;
 	const isALongDiseaseList = diseases.length > 6;
 	const filterDiseases = isALongDiseaseList ? diseases.slice(0, 6) : diseases;
 	const viewableDiseases = showMoreDiseases ? diseases : filterDiseases;
@@ -330,8 +335,17 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 							<Typography className={classes.titleText}>{t('doctorModal.educationSection.title')}</Typography>
 						</div>
 						<div>
-							<Typography>{education}</Typography>
+							<Typography>
+								{isALongEducation ? (showMoreEducation ? education : `${education.substring(0, 165)}...`) : education}
+							</Typography>
 						</div>
+						{isALongEducation ? (
+							<div>
+								<Button className={classes.viewMoreButton} onClick={toggleShowMoreEducation}>
+									{showMoreAboutMe ? t('doctorModal.seeLess') : t('doctorModal.seeMore')}
+								</Button>
+							</div>
+						) : null}
 					</div>
 					<div className={classes.diseasesSection}>
 						<div className={classes.diseasesTitle}>
