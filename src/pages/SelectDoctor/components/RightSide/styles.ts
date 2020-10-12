@@ -1,7 +1,7 @@
 import { Theme } from '@material-ui/core/styles';
 import { stylesWithTheme } from 'utils';
 
-const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		paddingTop: '26px',
 		[breakpoints.up('lg')]: {
@@ -27,9 +27,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		},
 	},
 	divider: {
-		display: 'none',
+		margin: '0 24px 32px',
 		[breakpoints.up('lg')]: {
-			display: 'block',
+			margin: '0',
 		},
 	},
 	emptyMessageWrapper: {
@@ -43,7 +43,6 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	emptyMessage: {
 		fontSize: '16px',
 		lineHeight: '25px',
-		color: palette.info.main,
 		padding: '0 30px 20px 26px',
 		[breakpoints.up('lg')]: {
 			fontSize: '20px',
