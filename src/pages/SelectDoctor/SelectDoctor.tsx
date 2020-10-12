@@ -50,6 +50,7 @@ const SelectDoctor = () => {
 	const utmSource = (params.utm_source as string) || '';
 	const utmMedium = (params.utm_medium as string) || '';
 	const utmCampaign = (params.utm_campaign as string) || '';
+	const shouldShowTheDoctorDetailedInfo = (params.show || '') === '1';
 	const { useCase, userToken, updateState } = useContext(AppContext);
 	const isUserLoggedIn = !!userToken;
 	const selectAppointmentOwner = (owner: string) => () => {
@@ -138,6 +139,7 @@ const SelectDoctor = () => {
 				selectDoctorCallback={selectDoctorCallback}
 				setDoctor={setDoctor}
 				setSchedule={setSchedule}
+				shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
 			/>
 			<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
 			<SelectAppointmentOwner

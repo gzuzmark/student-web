@@ -12,7 +12,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
 		position: 'relative',
 		[breakpoints.up('lg')]: {
-			width: '330px',
+			width: '456px',
 			marginRight: '10px', // 7px of margin right from buttons + 12px from container width space + 10px to all sum up 29px
 		},
 	},

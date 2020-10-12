@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { DatePickerInput } from 'pages/common';
 import { UseCase } from 'pages/api/useCase';
+import { ReactComponent as SpecialityIcon } from 'icons/assigment.svg';
+import { ReactComponent as MoneyIcon } from 'icons/circleMoney.svg';
 
 import useStyles from './styles';
 
@@ -47,20 +49,30 @@ const DoctorsHeader = ({ date, updateDate, useCase, minDate }: DoctorsHeaderProp
 				</div>
 			</div>
 			<div className={classes.useCaseField}>
-				<Typography component="div" className={classes.formLabel}>
-					{t('right.useCaseLabel')}
-				</Typography>
-				<Typography component="div" className={classes.useCaseInput}>
-					{useCase ? useCase.name : ''}
-				</Typography>
+				<div className={classes.iconWrapper}>
+					<SpecialityIcon />
+				</div>
+				<div>
+					<Typography component="div" className={classes.useCaseLabel}>
+						{t('right.useCaseLabel')}
+					</Typography>
+					<Typography component="div" className={classes.useCaseInput}>
+						<strong>{useCase ? useCase.name : ''}</strong>
+					</Typography>
+				</div>
 			</div>
-			<div>
-				<Typography component="div" className={classes.formLabel}>
-					{t('right.appointmentCostLabel')}
-				</Typography>
-				<Typography component="div" className={classes.useCaseInput}>
-					S/ {useCase ? useCase.totalCost : ''}
-				</Typography>
+			<div className={classes.appointmentCost}>
+				<div className={classes.iconWrapper}>
+					<MoneyIcon />
+				</div>
+				<div>
+					<Typography component="div" className={classes.appointmentCostLabel}>
+						{t('right.appointmentCostLabel')}
+					</Typography>
+					<Typography component="div" className={classes.useCaseInput}>
+						<strong>S/ {useCase ? useCase.totalCost : ''}</strong>
+					</Typography>
+				</div>
 			</div>
 		</div>
 	);

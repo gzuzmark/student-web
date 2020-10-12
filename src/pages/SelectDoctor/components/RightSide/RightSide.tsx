@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
@@ -24,8 +24,9 @@ const FAKE_SESSION_BODY = {
 	total_cost: '35.00',
 };
 
-const limitSchedules = (numSessions: string) => (_: any, i: number) => {
+const limitSchedules = (numSessions: string) => (_: Schedule, i: number) => {
 	const limit = numSessions && !isNaN(+numSessions) && +numSessions;
+
 	return limit ? i < limit : true;
 };
 
@@ -136,6 +137,7 @@ const getDoctors = async (
 					};
 			  })
 			: filteredDoctors;
+
 		setDoctors(newDoctors);
 	}
 };
@@ -184,6 +186,7 @@ interface RightSideProps {
 	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
+	shouldShowMoreDoctorInfo: boolean;
 }
 
 const RightSide = ({
@@ -194,6 +197,7 @@ const RightSide = ({
 	selectDoctorCallback,
 	setDoctor,
 	setSchedule,
+	shouldShowMoreDoctorInfo,
 }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
@@ -219,7 +223,7 @@ const RightSide = ({
 			<div className={classes.wrapper}>
 				<div className={classes.titleContainer}>
 					<Typography component="span" className={classes.title}>
-						{t('right.title')}
+						<Trans i18nKey="selectDoctor:right.title" />
 					</Typography>
 				</div>
 				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
@@ -231,6 +235,7 @@ const RightSide = ({
 						selectDoctorCallback={selectDoctorCallback}
 						setDoctor={setDoctor}
 						setSchedule={setSchedule}
+						shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
 					/>
 				) : (
 					<div className={classes.emptyMessageWrapper}>
