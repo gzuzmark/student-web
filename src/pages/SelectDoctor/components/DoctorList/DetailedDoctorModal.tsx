@@ -292,10 +292,10 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 								<Typography className={classes.cmp}>CMP: {cmp}</Typography>
 							</div>
 						</div>
-						{patientOpinions.length > 5 && (
+						{patientOpinions.length >= 5 && (
 							<div className={classes.ratingWrapper}>
 								<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
-								<Typography className={classes.ratingNumber}>({rating})</Typography>
+								<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
 							</div>
 						)}
 						{isDesktop ? (
