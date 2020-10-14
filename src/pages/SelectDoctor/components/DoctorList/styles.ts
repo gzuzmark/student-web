@@ -150,11 +150,6 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		fontSize: '13px',
 		lineHeight: '24px',
 	},
-	seeMoreInfoButton: {
-		[breakpoints.up('lg')]: {
-			paddingLeft: '116px',
-		},
-	},
 	doctorMoreInfo: {
 		textDecoration: 'none',
 		fontSize: '13px',

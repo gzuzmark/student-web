@@ -29,7 +29,7 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		position: 'relative',
 		padding: '40px 0 0 0',
 		[breakpoints.up('lg')]: {
-			padding: '60px 70px 0 76px',
+			padding: '60px 70px 40px 76px',
 		},
 	},
 	doctor: {
@@ -292,10 +292,12 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 								<Typography className={classes.cmp}>CMP: {cmp}</Typography>
 							</div>
 						</div>
-						<div className={classes.ratingWrapper}>
-							<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
-							<Typography className={classes.ratingNumber}>({rating})</Typography>
-						</div>
+						{patientOpinions.length > 5 && (
+							<div className={classes.ratingWrapper}>
+								<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
+								<Typography className={classes.ratingNumber}>({rating})</Typography>
+							</div>
+						)}
 						{isDesktop ? (
 							<div>
 								<Button className={classes.availabilityButtonDesktop} variant="contained" onClick={closeModal}>
