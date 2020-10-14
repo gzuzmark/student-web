@@ -79,7 +79,7 @@ const DoctorList = ({
 			<div className={classes.doctorList}>
 				{doctors.map(
 					(
-						{ name, lastName, cmp, profilePicture, speciality, rating, schedules }: DoctorAvailability,
+						{ name, lastName, cmp, profilePicture, speciality, rating, schedules, patientOpinions }: DoctorAvailability,
 						doctorIndex: number,
 					) => (
 						<div className={classes.doctorWrapper} key={cmp}>
@@ -106,11 +106,13 @@ const DoctorList = ({
 									</div>
 									{shouldShowMoreDoctorInfo ? (
 										<>
-											<div className={classes.ratingWrapper}>
-												<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
-												<Typography className={classes.ratingNumber}>({rating})</Typography>
-											</div>
-											<div className={classes.seeMoreInfoButton}>
+											{patientOpinions.length >= 5 ? (
+												<div className={classes.ratingWrapper}>
+													<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
+													<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
+												</div>
+											) : null}
+											<div>
 												<Button
 													className={classes.doctorMoreInfo}
 													onClick={() => {
