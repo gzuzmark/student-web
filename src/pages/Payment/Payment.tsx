@@ -6,7 +6,7 @@ import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
 import { useAppointmentStepValidation, getIntCurrency, dateToUTCUnixTimestamp } from 'utils';
 import initCulqi from 'utils/culquiIntegration';
-import { CONFIRMATION_STEP, GUEST } from 'AppContext';
+import { CONFIRMATION_STEP, GUEST, EMPTY_TRACK_PARAMS } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
@@ -25,6 +25,9 @@ const buildTransactionURL = (doctorName: string, doctorLastname: string, patient
 	return `https://chats.landbot.io/v2/H-642423-BHD55YOVGNEOHTH0/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
 };
 
+const FAKE_SESSION_ERROR_MESSAGE =
+	'Lo sentimos. El horario que has elegido ya no se encuentra disponible. Un miembro de nuestro equipo se pondrá en contacto contigo para ayudarte';
+
 const Payment = () => {
 	const {
 		doctor,
@@ -38,8 +41,8 @@ const Payment = () => {
 		userToken,
 		reservationAccountID,
 		updateState: updateContextState,
-		isTransactionEnabled = false,
 		appointmentOwner,
+		trackParams,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
 	const activeUser = patientUser || user;
@@ -86,6 +89,7 @@ const Payment = () => {
 						lastName: activeUser.lastName,
 						phone: userPhone || '',
 						paymentType: method,
+						trackParams: trackParams || EMPTY_TRACK_PARAMS,
 					});
 					await createAppointment(
 						{
@@ -129,6 +133,7 @@ const Payment = () => {
 			doctor,
 			discount.id,
 			discount.totalCost,
+			trackParams,
 			userFiles,
 			appointmentOwner,
 			userToken,
@@ -152,6 +157,7 @@ const Payment = () => {
 				const { id = '', startTime, endTime } = schedule || {};
 				const { id: useCaseId = '' } = useCase || {};
 				if (id.includes(FAKE_SESSION_ID)) {
+					window.alert(FAKE_SESSION_ERROR_MESSAGE);
 					sendFakeSession({
 						reservation_account_id: reservationAccountID || '',
 						use_case_id: useCaseId,
@@ -216,6 +222,7 @@ const Payment = () => {
 								lastName: '',
 								phone: '',
 								paymentType: CULQI_PAYMENT_ID,
+								trackParams: trackParams || EMPTY_TRACK_PARAMS,
 							});
 							await createAppointment(
 								{
@@ -259,7 +266,6 @@ const Payment = () => {
 				onChangeDiscount={onChangeDiscount}
 				executePayment={makePayment}
 				errorMessage={errorMessage}
-				isTransactionEnabled={isTransactionEnabled}
 			/>
 		</Container>
 	) : (

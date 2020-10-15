@@ -1,13 +1,15 @@
 import React, { ChangeEvent, useState, useContext, useEffect } from 'react';
 import { RightLayout } from 'pages/common';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import AppContext from 'AppContext';
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
 import { getAppointmentList, AppointDetail } from 'pages/api/appointments';
 
 import AppointmentsTab from './AppointmentsTab';
@@ -72,6 +74,28 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			},
 		},
 	},
+	divider: {
+		margin: '0 26px 20px 26px',
+	},
+	buttonWrapper: {
+		maxWidth: '323px',
+		margin: '0 auto',
+		[breakpoints.up('lg')]: {
+			display: 'none',
+		},
+	},
+	newAppointmentButton: {
+		boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.07)',
+		border: '1px solid white',
+		fontSize: '15px',
+		padding: '15px',
+		textTransform: 'none',
+
+		'&:hover': {
+			border: '1px solid white',
+			boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.07)',
+		},
+	},
 }));
 
 const requestSmallAppointments = async (
@@ -91,6 +115,7 @@ const requestSmallAppointments = async (
 
 const RightSide = () => {
 	const { t } = useTranslation('appointmentList');
+	const { t: tDashboard } = useTranslation('dashboard');
 	const { user: currentUser, userToken } = useContext(AppContext);
 	const [selectedTab, setSelectedTab] = useState<number>(0);
 	const [oldAppointments, setOldAppointments] = useState<AppointDetail[]>([]);
@@ -136,9 +161,15 @@ const RightSide = () => {
 				{appointments ? (
 					<>
 						<AppointmentsTab appointments={appointments} isActive={selectedTab === 0} />
-						<AppointmentsTab appointments={oldAppointments} isActive={selectedTab === 1} />
+						<AppointmentsTab appointments={oldAppointments} isActive={selectedTab === 1} oldAppointments />
 					</>
 				) : null}
+				<Divider className={classes.divider} variant="middle" />
+				<div className={classes.buttonWrapper}>
+					<Button variant="contained" className={classes.newAppointmentButton} onClick={redirectToBaseAlivia} fullWidth>
+						{tDashboard('dashboard.newAppointment')}
+					</Button>
+				</div>
 			</div>
 		</RightLayout>
 	);

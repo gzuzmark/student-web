@@ -61,6 +61,7 @@ const Confirmation = () => {
 	useEffect(() => {
 		if (process.env.NODE_ENV === 'production') {
 			window.fbq('track', 'Purchase', { currency: 'PEN', value: useCase?.totalCost });
+			window.fbq('track', 'CompleteRegistration', { currency: 'PEN', value: useCase?.totalCost });
 			window.gtag('event', 'conversion', { send_to: 'AW-620358090/NHAXCLHh29YBEMrT56cC' });
 			window.gtag('event', 'Pagar', 'Botón', 'click');
 		}
@@ -100,6 +101,7 @@ const Confirmation = () => {
 						loggedUserName={user?.name}
 						activeUserName={activeUser?.name}
 						patientId={patientUser?.id}
+						scheduleID={schedule?.id}
 					/>
 				)
 			) : (
@@ -109,6 +111,7 @@ const Confirmation = () => {
 					updateContextState={updateState}
 					userId={activeUser ? activeUser.id : ''}
 					patientId={patientUser?.id}
+					scheduleID={schedule?.id}
 				/>
 			)}
 		</Container>

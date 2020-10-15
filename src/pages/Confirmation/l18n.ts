@@ -9,7 +9,8 @@ const confirmationL18n = {
 	'confirmation.right.title': 'TIPS PARA UNA CITA EXITOSA:',
 	'confirmation.right.before.title': 'ANTES',
 	'confirmation.right.before.messageUnlogged':
-		'Accede al enlace de la videollamada que enviaremos a tu correo. Si este no llega luego de 10 mínutos, contáctanos a',
+		'Entra al enlace de la videollamada que enviaremos a tu correo. Si deseas, puedes copiar y guardar el enlace ahora:',
+	'confirmation.right.before.copyLink': 'Copiar',
 	'confirmation.right.before.messageWhatsapp': ' o al Whatsapp ',
 	'confirmation.right.before.messageLogged':
 		'Accede al enlace de la videollamada que enviaremos a tu correo. Si este no llega luego de 10 mínutos, contáctanos a',

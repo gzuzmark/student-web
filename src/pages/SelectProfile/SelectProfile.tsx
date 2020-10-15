@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import { ProfileList, Container, Circle } from 'pages/common';
 import { stylesWithTheme, usePageTitle, getAppointmentRedirectPath } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
-import AppContext, { AppointmentCreationStep, MYSELF, GUEST } from 'AppContext';
+import AppContext, { MYSELF, GUEST, User } from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -46,12 +46,15 @@ const SelectProfile = () => {
 	const { t } = useTranslation('selectProfile');
 	const classes = useStyles();
 	const history = useHistory();
-	const { updateState: updateContextState } = useContext(AppContext);
-	const redirectCallback = (appointmentCreationStep: AppointmentCreationStep | undefined) => {
+	const { updateState: updateContextState, appointmentCreationStep } = useContext(AppContext);
+	const onUserClick = (user: User) => {
 		const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, '/dashboard/citas');
+
 		if (updateContextState) {
 			updateContextState({
 				appointmentOwner: MYSELF,
+				patientUser: user,
+				reservationAccountID: user.id,
 			});
 		}
 
@@ -82,7 +85,7 @@ const SelectProfile = () => {
 				<Typography className={classes.title} variant="h1">
 					<b>{t('selectProfile.title')}</b>
 				</Typography>
-				<ProfileList redirectCallback={redirectCallback} redirectNewAccountCallback={redirectNewAccountCallback} />
+				<ProfileList onUserCardClick={onUserClick} redirectNewAccountCallback={redirectNewAccountCallback} />
 			</div>
 			<Circle className={classes.desktopCircle} radius="80" right="-104" bottom="-122" />
 		</Container>

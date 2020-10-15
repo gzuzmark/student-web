@@ -46,7 +46,10 @@ const SelectDoctor = () => {
 	const isUbigeoEnabled = ((params.ubigeo as string) || '') === '1';
 	const minutes = (params.minutes as string) || '';
 	const numSessions = (params.num_sessions as string) || '';
-	const transactionFlag = (params.transferencia as string) || '';
+	const utmSource = (params.utm_source as string) || '';
+	const utmMedium = (params.utm_medium as string) || '';
+	const utmCampaign = (params.utm_campaign as string) || '';
+	const shouldShowTheDoctorDetailedInfo = (params.show || '') === '1';
 	const { useCase, userToken, updateState } = useContext(AppContext);
 	const isUserLoggedIn = !!userToken;
 	const selectAppointmentOwner = (owner: string) => () => {
@@ -94,14 +97,6 @@ const SelectDoctor = () => {
 	usePageTitle('Seleccion doctor');
 
 	useEffect(() => {
-		if (transactionFlag && updateState) {
-			updateState({
-				isTransactionEnabled: transactionFlag === '1',
-			});
-		}
-	}, [transactionFlag, updateState]);
-
-	useEffect(() => {
 		const useCaseParam = params.malestar as string;
 
 		if (!useCaseParam) {
@@ -112,15 +107,16 @@ const SelectDoctor = () => {
 			requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
 		}
 
-		if (isUbigeoEnabled && updateState) {
-			updateState({ isUbigeoEnabled });
+		if (updateState) {
+			updateState({ isUbigeoEnabled, trackParams: { utmSource, utmMedium, utmCampaign } });
 		}
+
 		if (useCase && useCase.id) {
 			if (window.nutritionistUseCaseId === useCase.id) {
 				toggleWarningModal(true);
 			}
 		}
-	}, [location.search, updateState, useCase, isUbigeoEnabled, params.malestar]);
+	}, [location.search, updateState, useCase, isUbigeoEnabled, params.malestar, utmSource, utmMedium, utmCampaign]);
 
 	return (
 		<Container>
@@ -134,6 +130,7 @@ const SelectDoctor = () => {
 				selectDoctorCallback={selectDoctorCallback}
 				setDoctor={setDoctor}
 				setSchedule={setSchedule}
+				shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
 			/>
 			<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
 			<SelectAppointmentOwner

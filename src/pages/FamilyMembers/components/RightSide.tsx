@@ -89,7 +89,7 @@ const RightSide = () => {
 	const [showEditForm, setShowEditForm] = useState<boolean>(false);
 	const [editableUser, setEditableUser] = useState<User>();
 	const [isShowingNewProfile, setIsShowingNewProfile] = useState<boolean>(false);
-	const { user } = useContext(AppContext);
+	const { user, updateState: updateContextState } = useContext(AppContext);
 	const toggleEditEnable = () => {
 		setEditEnable(!editEnable);
 	};
@@ -107,6 +107,15 @@ const RightSide = () => {
 	};
 	const redirectNewAccountCallback = () => {
 		setIsShowingNewProfile(true);
+	};
+	const onUserCardClick = (user: User) => {
+		if (updateContextState) {
+			updateContextState({
+				user,
+				reservationAccountID: user.id,
+				patientUser: null,
+			});
+		}
 	};
 
 	return (
@@ -135,7 +144,9 @@ const RightSide = () => {
 							className={classes.profileList}
 							editEnable={editEnable}
 							editOverlay={EditOverlayWrapper(onClickOverlay)}
+							onUserCardClick={onUserCardClick}
 							redirectNewAccountCallback={redirectNewAccountCallback}
+							addUserLabel={t('familyMembers.linkAccount.label')}
 						/>
 						<div className={classes.editButtonWrapper}>
 							<Button onClick={toggleEditEnable} className={classes.editButton} variant="outlined">

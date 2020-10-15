@@ -15,12 +15,15 @@ import { ReactComponent as UserIcon } from 'icons/user.svg';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	card: {
-		borderRadius: '10px',
+		borderRadius: '5px',
 		marginBottom: '16px',
-		boxShadow: 'none',
+		boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.05)',
 		cursor: 'pointer',
 		'&:hover': {
 			boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
+		},
+		'&:last-child': {
+			marginBottom: '0',
 		},
 		[breakpoints.up('lg')]: {
 			marginBottom: '22px',
@@ -139,6 +142,11 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	conferenceLink: {
 		textDecoration: 'underline',
+
+		'&.normal-text': {
+			textDecoration: 'none',
+			color: palette.text.primary,
+		},
 	},
 	userIcon: {
 		width: '17px',
@@ -172,9 +180,10 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 
 interface AppointmentCardProps {
 	appointment: AppointDetail;
+	isOldAppointment?: boolean;
 }
 
-const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
+const AppointmentCard = ({ appointment, isOldAppointment = false }: AppointmentCardProps) => {
 	const { id, channel, disease, date, time, patient, scheduleID } = appointment;
 	const classes = useStyles();
 	const history = useHistory();
@@ -218,7 +227,11 @@ const AppointmentCard = ({ appointment }: AppointmentCardProps) => {
 								<div className={classes.iconWrapper}>
 									<ClockIcon className={classes.clockIcon} />
 								</div>
-								<Typography color="primary" className={classes.conferenceLink} onClick={openConference}>
+								<Typography
+									color="primary"
+									className={clsx(classes.conferenceLink, isOldAppointment ? 'normal-text' : '')}
+									onClick={isOldAppointment ? undefined : openConference}
+								>
 									{time}
 								</Typography>
 							</div>

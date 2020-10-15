@@ -18,6 +18,7 @@ const useStyles = stylesWithTheme(({ palette }: Theme) => ({
 		justifyContent: 'center',
 		margin: '0 16px 22px 0',
 		height: '125px',
+		textAlign: 'center',
 		width: '150px',
 		userSelect: 'none',
 

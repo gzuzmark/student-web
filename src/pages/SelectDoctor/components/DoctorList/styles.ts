@@ -4,35 +4,34 @@ import { stylesWithTheme } from 'utils';
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	doctorList: {
 		[breakpoints.up('lg')]: {
-			maxWidth: '606px',
+			maxWidth: '711px',
 		},
 	},
 	counter: {
-		display: 'none',
+		padding: '0 24px 24px',
 		[breakpoints.up('lg')]: {
-			display: 'block',
-			padding: '22px 0 38px 0',
+			padding: '22px 0 20px 0',
 		},
 	},
 	counterFirstPart: {
 		fontWeight: 'bold',
-		color: palette.info.main,
 		fontSize: '14px',
 		lineHeight: '15px',
 	},
 	counterSecondPart: {
-		color: palette.info.main,
 		fontSize: '14px',
 		lineHeight: '15px',
 	},
 	doctorWrapper: {
 		backgroundColor: 'white',
-		padding: '21px 26px 61px 26px',
-		marginBottom: '15px',
+		padding: '40px 24px',
+		marginBottom: '8px',
+		boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
 		[breakpoints.up('lg')]: {
 			borderRadius: '10px',
 			padding: '34px 0 23px 36px',
 			marginBottom: '25px',
+			boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
 		},
 	},
 	doctor: {
@@ -50,6 +49,10 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		borderRadius: '51%',
 		width: '94px',
 		height: '86px',
+		[breakpoints.up('lg')]: {
+			width: '111px',
+			height: '102px',
+		},
 	},
 	info: {},
 	nameWrapper: {
@@ -59,6 +62,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		fontSize: '15px',
 		lineHeight: '18px',
 		textTransform: 'capitalize',
+		fontWeight: 'bold',
 		'&.no-caps': {
 			textTransform: 'none',
 		},
@@ -83,21 +87,8 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		fontSize: '12px',
 		lineHeight: '17px',
 	},
-	commentWrapper: {
-		display: 'none',
-		[breakpoints.up('lg')]: {
-			display: 'block',
-			maxWidth: '356px',
-		},
-	},
-	comment: {
-		[breakpoints.up('lg')]: {
-			fontSize: '13px',
-			lineHeight: '15px',
-			fontStyle: 'italic',
-		},
-	},
 	flexWrapper: {
+		paddingBottom: '8px',
 		[breakpoints.up('lg')]: {
 			display: 'flex',
 		},
@@ -137,11 +128,35 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		paddingBottom: '10px',
 	},
 	availableTitle: {
-		fontSize: '14px',
-		color: palette.info.main,
+		fontSize: '12px',
 		[breakpoints.up('lg')]: {
 			fontSize: '12px',
 			lineHeight: '17px',
+		},
+	},
+	ratingWrapper: {
+		display: 'flex',
+		paddingBottom: '12px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '22px',
+		},
+	},
+	doctorRating: {
+		'&&': {
+			color: palette.primary.main,
+		},
+	},
+	ratingNumber: {
+		fontSize: '13px',
+		lineHeight: '24px',
+	},
+	doctorMoreInfo: {
+		textDecoration: 'none',
+		fontSize: '13px',
+		lineHeight: '18px',
+		padding: '6px 0',
+		'&:hover': {
+			textDecoration: 'none',
 		},
 	},
 }));

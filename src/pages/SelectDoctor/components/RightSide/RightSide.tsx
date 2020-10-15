@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
@@ -12,9 +12,9 @@ import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
 import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSchedules, Schedule } from 'pages/api';
 
-export const FAKE_SESSION_ID = 'fake-session';
+export const FAKE_SESSION_ID = 'fake';
 const DERMA_ID = '0ceb81db-ccfe-4198-b72e-1789fe113494';
-const GINE_ID = 'e6d9a4aa-4307-4ca2-b4e4-d10208fdf87d';
+const GINE_ID = '12a9a5a0-61d9-4312-9e5d-b8708da8b592';
 const SESSION_STEP = 900;
 const SESSION_EXTRA_TIME = 300;
 const FAKE_SESSION_BODY = {
@@ -24,8 +24,9 @@ const FAKE_SESSION_BODY = {
 	total_cost: '35.00',
 };
 
-const limitSchedules = (numSessions: string) => (_: any, i: number) => {
+const limitSchedules = (numSessions: string) => (_: Schedule, i: number) => {
 	const limit = numSessions && !isNaN(+numSessions) && +numSessions;
+
 	return limit ? i < limit : true;
 };
 
@@ -45,20 +46,35 @@ const buildFirstDate = (): Date => {
 	return now;
 };
 
+const dateIsToday = (time: Date) => {
+	const today = new Date();
+	return (
+		time.getDate() === today.getDate() &&
+		time.getMonth() === today.getMonth() &&
+		time.getFullYear() === today.getFullYear()
+	);
+};
+
 const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 	if (schedules.length > 0) {
+		const firstScheduleTime = schedules[0].startTime;
+		const isToday = dateIsToday(firstScheduleTime);
 		const lastIndex = schedules.length - 1;
+		const firstSchedule = new Date(firstScheduleTime);
+		firstSchedule.setHours(6);
+		firstSchedule.setMinutes(0);
+		firstSchedule.setSeconds(0);
 		const lastSchedule = schedules[lastIndex];
 		const newSchedules = [] as Schedule[];
-		let currentStartTime = buildFirstDate();
-		for (let i = 0; i < 100; i++) {
-			// Set the end time by adding 15min to the firt start time. i.e: 8:00 + 15min => endTime = 8:15
+		let currentStartTime = isToday ? buildFirstDate() : firstSchedule;
+		for (let i = 0; i < 1000; i++) {
+			// Set the end time by adding 15min to the first start time. i.e: 8:00 + 15min => endTime = 8:15
 			const endTime = new Date(currentStartTime);
 			endTime.setSeconds(endTime.getSeconds() + SESSION_STEP);
 			// Preparing the fake schedule body
 			const schedule = {
 				...FAKE_SESSION_BODY,
-				id: `${FAKE_SESSION_BODY}-${i}`,
+				id: `${FAKE_SESSION_ID}-${i}`,
 				startTime: currentStartTime,
 				endTime: endTime,
 			} as Schedule;
@@ -66,7 +82,6 @@ const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 			// updating the next schedule startTime as the previous schedule endTime
 			currentStartTime = new Date(endTime);
 			currentStartTime.setSeconds(currentStartTime.getSeconds() + SESSION_EXTRA_TIME);
-
 			// Comparing if the currentEndTime is the same as the endTime of the last schedule to stop
 			if (dateToUTCUnixTimestamp(endTime) === dateToUTCUnixTimestamp(lastSchedule.endTime)) {
 				break;
@@ -102,26 +117,27 @@ const getDoctors = async (
 		}));
 		const isTargetUseCase = useCase.id === DERMA_ID || useCase.id === GINE_ID;
 		const newDoctors = isTargetUseCase
-		? filteredDoctors.map((doc: DoctorAvailability) => {
-				const realSchedules = doc.schedules;
-				const fakeSchedules = buildFakeSessions(realSchedules);
-				const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
-					const searchSession = realSchedules.find(
-						(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
-					);
-					return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
-				});
-				if (newSchedules.length > 0) {
-					const lastInd = newSchedules.length - 1;
-					newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
-					newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
-				}
-				return {
-					...doc,
-					schedules: newSchedules,
-				};
-		  })
-		: filteredDoctors;
+			? filteredDoctors.map((doc: DoctorAvailability) => {
+					const realSchedules = doc.schedules;
+					const fakeSchedules = buildFakeSessions(realSchedules);
+					const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
+						const searchSession = realSchedules.find(
+							(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
+						);
+						return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
+					});
+					if (newSchedules.length > 0) {
+						const lastInd = newSchedules.length - 1;
+						newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
+						newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
+					}
+					return {
+						...doc,
+						schedules: newSchedules,
+					};
+			  })
+			: filteredDoctors;
+
 		setDoctors(newDoctors);
 	}
 };
@@ -170,6 +186,7 @@ interface RightSideProps {
 	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
+	shouldShowMoreDoctorInfo: boolean;
 }
 
 const RightSide = ({
@@ -180,6 +197,7 @@ const RightSide = ({
 	selectDoctorCallback,
 	setDoctor,
 	setSchedule,
+	shouldShowMoreDoctorInfo,
 }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
@@ -205,7 +223,7 @@ const RightSide = ({
 			<div className={classes.wrapper}>
 				<div className={classes.titleContainer}>
 					<Typography component="span" className={classes.title}>
-						{t('right.title')}
+						<Trans i18nKey="selectDoctor:right.title" />
 					</Typography>
 				</div>
 				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
@@ -217,6 +235,7 @@ const RightSide = ({
 						selectDoctorCallback={selectDoctorCallback}
 						setDoctor={setDoctor}
 						setSchedule={setSchedule}
+						shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
 					/>
 				) : (
 					<div className={classes.emptyMessageWrapper}>

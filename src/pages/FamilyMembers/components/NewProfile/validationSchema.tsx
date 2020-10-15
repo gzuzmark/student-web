@@ -40,7 +40,8 @@ const messages = {
 
 export const aboutNewProfileSchema = object().shape({
 	name: string().required(messages.name.required),
-	surnames: string().required(messages.lastName.required),
+	lastName: string().required(messages.lastName.required),
+	secondSurname: string().required(messages.secondSurname.required),
 	identification: string().required(messages.identification.required),
 	birthDate: date()
 		.required(messages.birthDate.required)

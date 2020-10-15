@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 			[theme.breakpoints.up('lg')]: {
 				width: 411,
 				paddingLeft: 104,
+				flexShrink: 0,
 			},
 		},
 		rightLayout: {

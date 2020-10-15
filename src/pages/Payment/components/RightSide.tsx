@@ -224,7 +224,6 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 interface RightSideProps {
 	totalCost: string | undefined;
 	isCounponDisabled: boolean;
-	isTransactionEnabled: boolean;
 	sendDiscount: () => Promise<void>;
 	discountCode: string;
 	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -235,7 +234,6 @@ interface RightSideProps {
 const RightSide = ({
 	totalCost,
 	isCounponDisabled,
-	isTransactionEnabled,
 	sendDiscount,
 	discountCode,
 	onChangeDiscount,
@@ -305,22 +303,20 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					{isTransactionEnabled && (
-						<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
-							<div className={classes.optionBody}>
-								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-									<BankIcon />
-								</div>
-								<Typography className={classes.optionLabel} variant="h3">
-									{t('payment.right.payTransaction')}
-								</Typography>
-								<div className={classes.optionBrandWrapper}>
+					<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
+						<div className={classes.optionBody}>
+							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+								<BankIcon />
+							</div>
+							<Typography className={classes.optionLabel} variant="h3">
+								{t('payment.right.payTransaction')}
+							</Typography>
+							<div className={classes.optionBrandWrapper}>
 									<img src={tunki} title="Tunki" className={classes.banksImage} alt="Tunki" />
 									<img src={yape} title="Yape" className={classes.banksImage} alt="Yape" />
-								</div>
 							</div>
-						</Button>
-					)}
+						</div>
+					</Button>
 					<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
 						<div className={classes.optionBody}>
 							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
