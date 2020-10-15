@@ -46,7 +46,6 @@ const SelectDoctor = () => {
 	const isUbigeoEnabled = ((params.ubigeo as string) || '') === '1';
 	const minutes = (params.minutes as string) || '';
 	const numSessions = (params.num_sessions as string) || '';
-	const transactionFlag = (params.transferencia as string) || '';
 	const utmSource = (params.utm_source as string) || '';
 	const utmMedium = (params.utm_medium as string) || '';
 	const utmCampaign = (params.utm_campaign as string) || '';
@@ -96,14 +95,6 @@ const SelectDoctor = () => {
 	};
 	const onAcceptWarning = () => toggleWarningModal(false);
 	usePageTitle('Seleccion doctor');
-
-	useEffect(() => {
-		if (transactionFlag && updateState) {
-			updateState({
-				isTransactionEnabled: transactionFlag === '1',
-			});
-		}
-	}, [transactionFlag, updateState]);
 
 	useEffect(() => {
 		const useCaseParam = params.malestar as string;

@@ -41,7 +41,6 @@ const Payment = () => {
 		userToken,
 		reservationAccountID,
 		updateState: updateContextState,
-		isTransactionEnabled = false,
 		appointmentOwner,
 		trackParams,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
@@ -267,7 +266,6 @@ const Payment = () => {
 				onChangeDiscount={onChangeDiscount}
 				executePayment={makePayment}
 				errorMessage={errorMessage}
-				isTransactionEnabled={isTransactionEnabled}
 			/>
 		</Container>
 	) : (
