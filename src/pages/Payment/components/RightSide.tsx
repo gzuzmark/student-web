@@ -15,10 +15,8 @@ import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
-import interbank from 'icons/interbank.png';
-import bcp from 'icons/bcp.png';
-import scotia from 'icons/scotia.png';
-import bbva from 'icons/bbva.png';
+import yape from 'icons/yape.png';
+import tunki from 'icons/tunki.jpg';
 import pagoEfectivo from 'icons/pagoefectivo.png';
 import { CULQI_PAYMENT_ID, TRANSACTION_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
@@ -317,10 +315,8 @@ const RightSide = ({
 									{t('payment.right.payTransaction')}
 								</Typography>
 								<div className={classes.optionBrandWrapper}>
-									<img src={interbank} title="Interbank" className={classes.banksImage} alt="Brand Interbank" />
-									<img src={bcp} title="Bcp" className={classes.banksImage} alt="Brand BCP" />
-									<img src={scotia} title="Scotiabank" className={classes.banksImage} alt="Brand Scotia" />
-									<img src={bbva} title="Bbva" className={classes.banksImage} alt="Brand BBVA" />
+									<img src={tunki} title="Tunki" className={classes.banksImage} alt="Tunki" />
+									<img src={yape} title="Yape" className={classes.banksImage} alt="Yape" />
 								</div>
 							</div>
 						</Button>
