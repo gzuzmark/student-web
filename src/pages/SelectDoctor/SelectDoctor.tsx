@@ -50,6 +50,7 @@ const SelectDoctor = () => {
 	const utmMedium = (params.utm_medium as string) || '';
 	const utmCampaign = (params.utm_campaign as string) || '';
 	const shouldShowTheDoctorDetailedInfo = (params.show || '') === '1';
+	const showSmallSignUp = ((params.bsignup as string) || '') === '1';
 	const { useCase, userToken, updateState } = useContext(AppContext);
 	const isUserLoggedIn = !!userToken;
 	const selectAppointmentOwner = (owner: string) => () => {
@@ -63,6 +64,10 @@ const SelectDoctor = () => {
 				doctor: formatDoctor(doctor),
 			});
 			setSelectOwnerOpen(false);
+
+			if (showSmallSignUp) {
+				history.push('/registro/sobre_ti');
+			}
 
 			if (isForSomeoneElse || !isUserLoggedIn) {
 				history.push('/registro/sobre_ti');
@@ -108,7 +113,7 @@ const SelectDoctor = () => {
 		}
 
 		if (updateState) {
-			updateState({ isUbigeoEnabled, trackParams: { utmSource, utmMedium, utmCampaign } });
+			updateState({ isUbigeoEnabled, trackParams: { utmSource, utmMedium, utmCampaign }, showSmallSignUp });
 		}
 
 		if (useCase && useCase.id) {
@@ -116,7 +121,17 @@ const SelectDoctor = () => {
 				toggleWarningModal(true);
 			}
 		}
-	}, [location.search, updateState, useCase, isUbigeoEnabled, params.malestar, utmSource, utmMedium, utmCampaign]);
+	}, [
+		location.search,
+		updateState,
+		useCase,
+		isUbigeoEnabled,
+		params.malestar,
+		utmSource,
+		utmMedium,
+		utmCampaign,
+		showSmallSignUp,
+	]);
 
 	return (
 		<Container>
