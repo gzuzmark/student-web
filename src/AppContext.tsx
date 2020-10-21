@@ -91,6 +91,7 @@ interface ContextProps {
 	isUbigeoEnabled: boolean;
 	userFiles: string[];
 	trackParams: TrackParams;
+	showSmallSignUp: boolean;
 }
 
 const defaultState: ContextProps = {
@@ -112,6 +113,7 @@ const defaultState: ContextProps = {
 	isUbigeoEnabled: false,
 	userFiles: [],
 	trackParams: {},
+	showSmallSignUp: false,
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 
