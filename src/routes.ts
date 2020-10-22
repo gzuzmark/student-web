@@ -14,6 +14,7 @@ import {
 	CreateAccount,
 	LaboratoryExams,
 } from 'pages';
+import SmallSignUp from 'pages/SignUp/SmallSignUp';
 
 export const TRIAGE_ROUTE = 'triaje';
 export const SELECT_DOCTOR_ROUTE = 'seleccionar_doctor';
@@ -57,6 +58,7 @@ export const routes: RoutesType = [
 	{ id: 'SelectDoctor', path: '/seleccionar_doctor', component: SelectDoctor },
 	{ id: 'PreSignUp', path: '/pre_registro', component: PreSignUp },
 	{ id: 'SignUp', path: '/registro/*', component: SignUp },
+	{ id: 'SmallSignUp', path: '/informacion_paciente', component: SmallSignUp },
 	{ id: 'Payment', path: '/pago', component: Payment },
 	{ id: 'Confirmation', path: '/confirmacion', component: Confirmation },
 	{ id: 'AppointmentList', path: '/dashboard/citas', component: AppointmentList, guard: true, exact: true },

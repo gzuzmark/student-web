@@ -12,15 +12,24 @@ export const redirectToBaseAlivia = () => {
 	redirectToURL('https://alivia.pe');
 };
 
+interface RedirectOptions {
+	defaultRedirectPath?: string;
+	showSmallSignUp?: boolean;
+}
+
 export const getAppointmentRedirectPath = (
 	appointmentCreationStep: AppointmentCreationStep | undefined,
-	defaultRedirectPath?: string,
+	{ defaultRedirectPath, showSmallSignUp = false }: RedirectOptions,
 ): string => {
 	switch (appointmentCreationStep) {
 		case TRIAGE_STEP:
 		case SELECT_DOCTOR_STEP:
 			return 'back';
 		case PAYMENT_STEP:
+			if (showSmallSignUp) {
+				return '/informacion_paciente';
+			}
+
 			return '/registro/datos_medicos';
 		default:
 			return defaultRedirectPath || '/seleccionar_paciente';

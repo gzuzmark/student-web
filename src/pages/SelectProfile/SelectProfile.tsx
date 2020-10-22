@@ -46,9 +46,11 @@ const SelectProfile = () => {
 	const { t } = useTranslation('selectProfile');
 	const classes = useStyles();
 	const history = useHistory();
-	const { updateState: updateContextState, appointmentCreationStep } = useContext(AppContext);
+	const { updateState: updateContextState, appointmentCreationStep, showSmallSignUp } = useContext(AppContext);
 	const onUserClick = (user: User) => {
-		const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, '/dashboard/citas');
+		const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, {
+			defaultRedirectPath: '/dashboard/citas',
+		});
 
 		if (updateContextState) {
 			updateContextState({
@@ -70,7 +72,11 @@ const SelectProfile = () => {
 				appointmentOwner: GUEST,
 			});
 
-			history.push('/registro');
+			if (showSmallSignUp) {
+				history.push('/informacion_paciente');
+			} else {
+				history.push('/registro');
+			}
 		}
 	};
 

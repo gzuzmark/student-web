@@ -1,5 +1,5 @@
-import React, { useCallback, ReactElement } from 'react';
-import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
+import React, { useCallback, useContext, useLayoutEffect, ReactElement } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -7,9 +7,10 @@ import { FormikHelpers } from 'formik';
 
 import { Container, RightLayout, LeftLayout } from 'pages/common';
 import { createGuestPatient } from 'pages/api';
-import { usePageTitle, stylesWithTheme, isUnderAge } from 'utils';
+import { usePageTitle, stylesWithTheme, isUnderAge, getLocalValue } from 'utils';
 
 import { SmallSignUpForm, SmallSignUpFormValues } from './components/SmallSignUpForm';
+import AppContext, { PAYMENT_STEP } from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -33,10 +34,13 @@ export interface SmallSignUpProps {
 	userToken: string | undefined;
 }
 
-const SmallSignUp = ({ updateContextState, userToken }: SmallSignUpProps): ReactElement | null => {
+const SmallSignUp = (): ReactElement => {
 	const history = useHistory();
 	const { t } = useTranslation('signUp');
+	const { updateState: updateContextState, appointmentCreationStep } = useContext(AppContext);
+	const userToken = getLocalValue('userToken');
 	const classes = useStyles();
+	const commingFromAppointmentCreation = appointmentCreationStep === PAYMENT_STEP;
 	const onSubmit = useCallback(
 		async (values: SmallSignUpFormValues, { setFieldError, setSubmitting }: FormikHelpers<SmallSignUpFormValues>) => {
 			try {
@@ -59,7 +63,13 @@ const SmallSignUp = ({ updateContextState, userToken }: SmallSignUpProps): React
 		[history, updateContextState, userToken],
 	);
 
-	usePageTitle('Sobre ti');
+	usePageTitle('Informacion del paciente');
+	useLayoutEffect(() => {
+		if (!commingFromAppointmentCreation) {
+			history.push(!!userToken ? '/dashboard/citas' : '/iniciar_sesion');
+		}
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<Container>
@@ -71,14 +81,7 @@ const SmallSignUp = ({ updateContextState, userToken }: SmallSignUpProps): React
 				</div>
 			</LeftLayout>
 			<RightLayout>
-				<Switch>
-					<Route exact path="/registro/sobre_ti">
-						<SmallSignUpForm onSubmit={onSubmit} />
-					</Route>
-					<Route path="/registro/*">
-						<Redirect to="/registro/datos_medicos" />
-					</Route>
-				</Switch>
+				<SmallSignUpForm onSubmit={onSubmit} />
 			</RightLayout>
 		</Container>
 	);

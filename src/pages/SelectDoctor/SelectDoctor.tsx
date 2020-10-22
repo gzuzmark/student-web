@@ -66,10 +66,8 @@ const SelectDoctor = () => {
 			setSelectOwnerOpen(false);
 
 			if (showSmallSignUp) {
-				history.push('/registro/sobre_ti');
-			}
-
-			if (isForSomeoneElse || !isUserLoggedIn) {
+				history.push('/informacion_paciente');
+			} else if (isForSomeoneElse || !isUserLoggedIn) {
 				history.push('/registro/sobre_ti');
 			} else if (!isForSomeoneElse && isUserLoggedIn) {
 				history.push('/registro/datos_medicos');
