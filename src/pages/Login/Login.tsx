@@ -16,7 +16,7 @@ import useStyles from './styles';
 const Login = () => {
 	const classes = useStyles();
 	const { t } = useTranslation('login');
-	const { userToken, appointmentCreationStep, updateState } = useContext(AppContext);
+	const { userToken, appointmentCreationStep, updateState, showSmallSignUp } = useContext(AppContext);
 
 	usePageTitle('Iniciar sesion');
 	useCurrentUserRediction({ isUserLoggedIn: !!userToken, redirectPath: '/dashboard/citas' });
@@ -33,7 +33,11 @@ const Login = () => {
 					<Typography className={classes.title} variant="h2">
 						{t('login.title')}
 					</Typography>
-					<LoginForm updateContextState={updateState} appointmentCreationStep={appointmentCreationStep} />
+					<LoginForm
+						updateContextState={updateState}
+						appointmentCreationStep={appointmentCreationStep}
+						showSmallSignUp={!!showSmallSignUp}
+					/>
 					<Circle className={classes.desktopCircle} radius="80" right="-80" bottom="-94" />
 				</div>
 			</div>

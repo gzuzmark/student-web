@@ -78,9 +78,10 @@ interface FormValues {
 interface LoginFormProps {
 	appointmentCreationStep: AppointmentCreationStep | undefined;
 	updateContextState: Function | undefined;
+	showSmallSignUp: boolean;
 }
 
-const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormProps) => {
+const LoginForm = ({ updateContextState, appointmentCreationStep, showSmallSignUp }: LoginFormProps) => {
 	const { t } = useTranslation('login');
 	const classes = useStyles();
 	const history = useHistory();
@@ -90,7 +91,10 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 				const token = await sendLogin({ username: phoneNumber, password });
 				if (token && updateContextState) {
 					const [reservationToken, currentUser] = await getCurrentUser(token);
-					const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, '/dashboard/citas');
+					const redirectPath = getAppointmentRedirectPath(appointmentCreationStep, {
+						defaultRedirectPath: '/dashboard/citas',
+						showSmallSignUp,
+					});
 
 					updateContextState({
 						userToken: token,
@@ -112,7 +116,7 @@ const LoginForm = ({ updateContextState, appointmentCreationStep }: LoginFormPro
 				setSubmitting(false);
 			}
 		},
-		[appointmentCreationStep, history, t, updateContextState],
+		[appointmentCreationStep, history, showSmallSignUp, t, updateContextState],
 	);
 
 	return (
