@@ -110,6 +110,10 @@ const signUp = {
 	'preferPediatrics.title': 'Dado que el paciente tiene menos de 15 años, recomendamos que se atienda con un pediatra.',
 	'preferPediatrics.omitLabel': 'Omitir',
 	'preferPediatrics.createPediatricsAppointment': 'Agendar con pediatría',
+	// Small SignUp form
+	'smallSignUp.title': 'Estás a un paso de agendar una cita',
+	'smallSignUp.submit.text': 'De acuerdo, deseo continuar',
+	'smallSignUp.lastName.label': 'Apellidos del paciente',
 };
 
 export default signUp;
