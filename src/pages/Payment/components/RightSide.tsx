@@ -303,20 +303,6 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					<Button className={classes.option} onClick={executePayment(TRANSACTION_PAYMENT_ID)} variant="outlined">
-						<div className={classes.optionBody}>
-							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<BankIcon />
-							</div>
-							<Typography className={classes.optionLabel} variant="h3">
-								{t('payment.right.payTransaction')}
-							</Typography>
-							<div className={classes.optionBrandWrapper}>
-									<img src={tunki} title="Tunki" className={classes.banksImage} alt="Tunki" />
-									<img src={yape} title="Yape" className={classes.banksImage} alt="Yape" />
-							</div>
-						</div>
-					</Button>
 					<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
 						<div className={classes.optionBody}>
 							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
