@@ -10,15 +10,12 @@ import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
 import { stylesWithTheme } from 'utils';
-import { ReactComponent as BankIcon } from 'icons/bank.svg';
 import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
-import yape from 'icons/yape.png';
-import tunki from 'icons/tunki.jpg';
 import pagoEfectivo from 'icons/pagoefectivo.png';
-import { CULQI_PAYMENT_ID, TRANSACTION_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
+import { CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	container: {
