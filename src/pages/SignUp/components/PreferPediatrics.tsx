@@ -66,7 +66,7 @@ const PreferPrediatrics = ({ isModalOpen, closeModal }: PreferPrediatricsProps) 
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const createNewAppointment = () => {
 		window.location.href =
-			'https://alivia-pacientes.web.app/seleccionar_doctor?malestar=8a0a27a5-8ff0-4534-b863-65a2955a4448&ubigeo=1';
+			'https://alivia-pacientes.web.app/seleccionar_doctor?malestar=8a0a27a5-8ff0-4534-b863-65a2955a4448&show=1';
 	};
 
 	return (

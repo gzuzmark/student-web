@@ -104,9 +104,10 @@ const initialValues: SmallSignUpFormValues = {
 
 interface SmallSignUpFormProps {
 	onSubmit: (values: SmallSignUpFormValues, formikHelpers: FormikHelpers<SmallSignUpFormValues>) => void;
+	validateAgeAfterSelecting: (date: Date | null) => void;
 }
 
-const SmallSignUpForm = ({ onSubmit }: SmallSignUpFormProps): ReactElement | null => {
+const SmallSignUpForm = ({ onSubmit, validateAgeAfterSelecting }: SmallSignUpFormProps): ReactElement | null => {
 	const classes = useStyles();
 	const { t } = useTranslation('signUp');
 	const openPrivacyPolicy = () => {
@@ -160,6 +161,7 @@ const SmallSignUpForm = ({ onSubmit }: SmallSignUpFormProps): ReactElement | nul
 							<div className={classes.fieldWrapper}>
 								<Field
 									component={DatePickerField}
+									validationOnChange={validateAgeAfterSelecting}
 									name="birthDate"
 									TextFieldProps={{
 										label: t('aboutme.fields.birthDate.label'),
