@@ -45,8 +45,9 @@ const NewUser = ({
 	const [isAgeRestrictioModalOpen, setIsAgeRestrictioModalOpen] = useState<boolean>(false);
 	const [isAChild, setIsAChild] = useState<boolean>(false);
 	const isGuest = appointmentOwner === GUEST;
+	const isPediatrics = useCase && useCase.id === '8a0a27a5-8ff0-4534-b863-65a2955a4448';
 	const validateAgeAfterSelecting = (date: Date | null) => {
-		if (useCase && date && isYoungerThanFifthteen(date)) {
+		if (!isPediatrics && date && isYoungerThanFifthteen(date)) {
 			setIsAgeRestrictioModalOpen(true);
 		}
 		if (date && isUnderAge(date)) {
