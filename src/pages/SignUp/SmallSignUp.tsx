@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useLayoutEffect, ReactElement } from 'react';
+import React, { useState, useCallback, useContext, useLayoutEffect, ReactElement } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
@@ -7,10 +7,11 @@ import { FormikHelpers } from 'formik';
 
 import { Container, RightLayout, LeftLayout } from 'pages/common';
 import { createGuestPatient } from 'pages/api';
-import { usePageTitle, stylesWithTheme, isUnderAge, getLocalValue } from 'utils';
+import { usePageTitle, stylesWithTheme, isUnderAge, getLocalValue, isYoungerThanFifthteen } from 'utils';
 
 import { SmallSignUpForm, SmallSignUpFormValues } from './components/SmallSignUpForm';
 import AppContext, { PAYMENT_STEP } from 'AppContext';
+import { PreferPediatrics } from './components';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -41,11 +42,26 @@ const SmallSignUp = (): ReactElement => {
 	const userToken = getLocalValue('userToken');
 	const classes = useStyles();
 	const commingFromAppointmentCreation = appointmentCreationStep === PAYMENT_STEP;
+	const [isAgeRestrictioModalOpen, setIsAgeRestrictioModalOpen] = useState<boolean>(false);
+	const validateAgeAfterSelecting = (date: Date | null) => {
+		if (date && isYoungerThanFifthteen(date)) {
+			setIsAgeRestrictioModalOpen(true);
+		}
+	};
+	const closeAgeRestrictionModal = () => {
+		setIsAgeRestrictioModalOpen(false);
+	};
 	const onSubmit = useCallback(
 		async (values: SmallSignUpFormValues, { setFieldError, setSubmitting }: FormikHelpers<SmallSignUpFormValues>) => {
 			try {
 				if (updateContextState) {
-					const newUser = { ...values, secondSurname: 'ugito', gender: 0 };
+					const newUser = {
+						...values,
+						email: values.email.trim(),
+						identification: values.identification.trim(),
+						secondSurname: 'ugito',
+						gender: 0,
+					};
 					const isAChild = newUser.birthDate && isUnderAge(newUser.birthDate);
 					const reservationAccountID = await createGuestPatient(newUser);
 					const patientUser = { id: reservationAccountID, ...newUser, isUnderAge: true };
@@ -81,8 +97,9 @@ const SmallSignUp = (): ReactElement => {
 				</div>
 			</LeftLayout>
 			<RightLayout>
-				<SmallSignUpForm onSubmit={onSubmit} />
+				<SmallSignUpForm onSubmit={onSubmit} validateAgeAfterSelecting={validateAgeAfterSelecting} />
 			</RightLayout>
+			<PreferPediatrics isModalOpen={isAgeRestrictioModalOpen} closeModal={closeAgeRestrictionModal} />
 		</Container>
 	);
 };

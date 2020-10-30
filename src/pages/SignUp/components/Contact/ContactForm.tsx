@@ -104,7 +104,12 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 	const onSubmit = useCallback(
 		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
 			try {
-				await submitSignUp(values);
+				const formatedValues = {
+					...values,
+					identification: values.identification.trim(),
+					email: values.email?.trim(),
+				};
+				await submitSignUp(formatedValues);
 
 				setSubmitting(false);
 			} catch (e) {

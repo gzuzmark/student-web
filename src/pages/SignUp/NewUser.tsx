@@ -28,7 +28,6 @@ interface NewUserProps {
 	commingFromAppointmentCreation: boolean;
 	currentUser: User | null | undefined;
 }
-const GENERAL_MEDICINE = 'Quiero una orientación médica';
 
 const NewUser = ({
 	isUserLoggedIn,
@@ -47,7 +46,7 @@ const NewUser = ({
 	const [isAChild, setIsAChild] = useState<boolean>(false);
 	const isGuest = appointmentOwner === GUEST;
 	const validateAgeAfterSelecting = (date: Date | null) => {
-		if (useCase && useCase.name === GENERAL_MEDICINE && date && isYoungerThanFifthteen(date)) {
+		if (useCase && date && isYoungerThanFifthteen(date)) {
 			setIsAgeRestrictioModalOpen(true);
 		}
 		if (date && isUnderAge(date)) {
