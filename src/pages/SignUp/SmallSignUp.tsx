@@ -55,7 +55,13 @@ const SmallSignUp = (): ReactElement => {
 		async (values: SmallSignUpFormValues, { setFieldError, setSubmitting }: FormikHelpers<SmallSignUpFormValues>) => {
 			try {
 				if (updateContextState) {
-					const newUser = { ...values, secondSurname: 'ugito', gender: 0 };
+					const newUser = {
+						...values,
+						email: values.email.trim(),
+						identification: values.identification.trim(),
+						secondSurname: 'ugito',
+						gender: 0,
+					};
 					const isAChild = newUser.birthDate && isUnderAge(newUser.birthDate);
 					const reservationAccountID = await createGuestPatient(newUser);
 					const patientUser = { id: reservationAccountID, ...newUser, isUnderAge: true };

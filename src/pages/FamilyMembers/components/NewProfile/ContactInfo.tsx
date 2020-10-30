@@ -68,7 +68,7 @@ const ContactInfo = ({ isMinor, callbackAction, defaultValues }: ContactInfoProp
 	const { t } = useTranslation('familyMembers');
 	const onSubmit = useCallback(
 		(data: ContactInfoData) => {
-			callbackAction(data);
+			callbackAction({ ...data, email: data.email.trim() });
 		},
 		[callbackAction],
 	);
