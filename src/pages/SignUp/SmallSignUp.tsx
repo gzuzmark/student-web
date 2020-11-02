@@ -38,13 +38,14 @@ export interface SmallSignUpProps {
 const SmallSignUp = (): ReactElement => {
 	const history = useHistory();
 	const { t } = useTranslation('signUp');
-	const { updateState: updateContextState, appointmentCreationStep } = useContext(AppContext);
+	const { updateState: updateContextState, appointmentCreationStep, useCase } = useContext(AppContext);
 	const userToken = getLocalValue('userToken');
 	const classes = useStyles();
 	const commingFromAppointmentCreation = appointmentCreationStep === PAYMENT_STEP;
 	const [isAgeRestrictioModalOpen, setIsAgeRestrictioModalOpen] = useState<boolean>(false);
+	const isPediatrics = useCase && useCase.id === '8a0a27a5-8ff0-4534-b863-65a2955a4448';
 	const validateAgeAfterSelecting = (date: Date | null) => {
-		if (date && isYoungerThanFifthteen(date)) {
+		if (!isPediatrics && date && isYoungerThanFifthteen(date)) {
 			setIsAgeRestrictioModalOpen(true);
 		}
 	};
