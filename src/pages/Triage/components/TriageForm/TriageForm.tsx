@@ -15,7 +15,7 @@ import { ReactComponent as CompanionIcon } from 'icons/companion.svg';
 import { ReactComponent as MehIcon } from 'icons/meh.svg';
 import { ReactComponent as SadIcon } from 'icons/sad.svg';
 import { TriagePair, MYSELF, RELATIVE, SELECT_DOCTOR_STEP } from 'AppContext';
-import { getKeyValue, addGAEvent } from 'utils';
+import { getKeyValue } from 'utils';
 
 import validationSchema from './validationSchema';
 import useStyles from './styles';
@@ -252,7 +252,6 @@ const TriageForm = ({ updateContextState }: TriageFormProps) => {
 						<Button
 							className={classes.submit}
 							onClick={() => {
-								addGAEvent('event', 'Triaje', 'click');
 								submitForm();
 							}}
 							disabled={isSubmitting}

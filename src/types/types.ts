@@ -31,3 +31,46 @@ export interface Culqui {
 	open: () => void;
 	error: CulqiError | undefined;
 }
+
+interface EcommerceProduct {
+	name: string;
+	id: string;
+	price: string;
+	brand: string;
+	category: string;
+	variant: string;
+	quantity: string;
+	dimension3: string;
+	dimension4: string;
+}
+
+interface EcommerceActionField {
+	id: string;
+	revenue: string;
+	tax: string;
+}
+
+interface EcommercePurchase {
+	actionField: EcommerceActionField;
+	products: EcommerceProduct[];
+}
+
+export interface GTagEvent {
+	event?: string;
+	pagePath?: string;
+	pageName?: string;
+	loginStatus?: string;
+	userID?: string;
+	category?: string;
+	action?: string;
+	label?: string;
+	dia?: string;
+	hora?: string;
+	especialidad?: string;
+	monto?: string;
+	tipoPago?: string;
+	ecommerce?: {
+		currencyCode: string;
+		purchase: EcommercePurchase;
+	};
+}

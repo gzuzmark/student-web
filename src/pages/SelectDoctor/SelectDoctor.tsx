@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { parse } from 'query-string';
 
-import { usePageTitle, redirectToBaseAlivia } from 'utils';
+import { usePageTitle, redirectToBaseAlivia, addGAEvent } from 'utils';
 import { getUseCase, DoctorAvailability, Schedule } from 'pages/api';
 import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
 
@@ -55,8 +55,19 @@ const SelectDoctor = () => {
 	const isUserLoggedIn = !!userToken;
 	const selectAppointmentOwner = (owner: string) => () => {
 		const isForSomeoneElse = owner === GUEST;
+		const ownerToLabel = {
+			[GUEST]: 'Para alguien más',
+			[MYSELF]: 'Para mi',
+		};
 
 		if (updateState) {
+			addGAEvent({
+				category: 'Agendar cita - Paso 1 - Popup',
+				// eslint-disable-next-line
+				// @ts-ignore
+				action: ownerToLabel[owner],
+				label: '(not available)',
+			});
 			updateState({
 				appointmentOwner: owner,
 				appointmentCreationStep: PAYMENT_STEP,
@@ -137,7 +148,6 @@ const SelectDoctor = () => {
 			<RightSide
 				isUserLoggedIn={!!userToken}
 				useCase={useCase}
-				updateContextState={updateState}
 				minutes={minutes}
 				numSessions={numSessions}
 				selectDoctorCallback={selectDoctorCallback}

@@ -37,6 +37,7 @@ export interface DoctorAPI {
 	formation: string;
 	diseases: DiseaseAPI[];
 	ratings: PatientOpinionsAPI[];
+	specialty_name: string;
 }
 
 interface DoctorAvailabilityAPI extends DoctorAPI {
@@ -80,6 +81,7 @@ export interface Doctor {
 	cmp: string;
 	profilePicture: string;
 	speciality: string;
+	specialityName: string;
 	// New fields
 	rating: number;
 	aboutMe: string;
@@ -119,12 +121,14 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 			photo,
 			title,
 			last_name,
+			specialty_name,
 		}: DoctorAvailabilityAPI) => ({
 			id,
 			name,
 			cmp,
 			lastName: last_name,
 			speciality: title,
+			specialityName: specialty_name,
 			profilePicture: photo,
 			schedules: schedules.map(({ id, start_time, end_time }: ScheduleAPI) => ({
 				id,

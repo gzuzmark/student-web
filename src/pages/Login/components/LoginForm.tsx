@@ -9,7 +9,7 @@ import { Link, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { getAppointmentRedirectPath } from 'utils';
+import { getAppointmentRedirectPath, addGAEvent } from 'utils';
 import { sendLogin, getCurrentUser } from 'pages/api';
 import { PasswordField } from 'pages/common';
 import { AppointmentCreationStep, PRE_SIGNUP_STEP, PAYMENT_STEP } from 'AppContext';
@@ -118,6 +118,20 @@ const LoginForm = ({ updateContextState, appointmentCreationStep, showSmallSignU
 		},
 		[appointmentCreationStep, history, showSmallSignUp, t, updateContextState],
 	);
+	const submitLoginGA = () => {
+		addGAEvent({
+			category: 'Iniciar sesion',
+			action: 'Ingresar a mi cuenta',
+			label: '(not available)',
+		});
+	};
+	const forgotPasswordGA = () => {
+		addGAEvent({
+			category: 'Iniciar sesion',
+			action: '¿Olvidaste tu contraseña?',
+			label: '(not available)',
+		});
+	};
 
 	return (
 		<Formik initialValues={{ phoneNumber: '', password: '' }} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -152,13 +166,21 @@ const LoginForm = ({ updateContextState, appointmentCreationStep, showSmallSignU
 					</div>
 					<div className={classes.linkWrapper}>
 						<Link to="/reestablecer_contrasena" className={classes.link}>
-							<Typography className={classes.linkLabel} component="span">
+							<Typography className={classes.linkLabel} component="span" onClick={forgotPasswordGA}>
 								{t('login.forgotPassword.link')}
 							</Typography>
 						</Link>
 					</div>
 					<div className={classes.buttonWrapper}>
-						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
+						<Button
+							variant="contained"
+							fullWidth
+							onClick={() => {
+								submitLoginGA();
+								submitForm();
+							}}
+							disabled={isSubmitting}
+						>
 							{t('login.submit.text')}
 						</Button>
 					</div>

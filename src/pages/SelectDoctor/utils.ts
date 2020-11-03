@@ -14,5 +14,6 @@ export const formatDoctor = (doctor: DoctorAvailability | null): Doctor | null =
 				education: doctor.education,
 				diseases: doctor.diseases,
 				patientOpinions: doctor.patientOpinions,
+				specialityName: doctor.specialityName,
 		  }
 		: null;

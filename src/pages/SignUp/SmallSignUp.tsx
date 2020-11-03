@@ -7,7 +7,7 @@ import { FormikHelpers } from 'formik';
 
 import { Container, RightLayout, LeftLayout } from 'pages/common';
 import { createGuestPatient } from 'pages/api';
-import { usePageTitle, stylesWithTheme, isUnderAge, getLocalValue, isYoungerThanFifthteen } from 'utils';
+import { usePageTitle, stylesWithTheme, isUnderAge, getLocalValue, isYoungerThanFifthteen, addGAEvent } from 'utils';
 
 import { SmallSignUpForm, SmallSignUpFormValues } from './components/SmallSignUpForm';
 import AppContext, { PAYMENT_STEP } from 'AppContext';
@@ -74,6 +74,7 @@ const SmallSignUp = (): ReactElement => {
 			} catch (e) {
 				setFieldError('identification', 'test');
 			} finally {
+				addGAEvent({ category: 'Agendar cita - Paso 2', action: 'Avance satisfactorio', label: '(not available) ' });
 				setSubmitting(false);
 			}
 		},
