@@ -179,7 +179,6 @@ const getClosestSchedules = async (
 
 interface RightSideProps {
 	useCase: UseCase | null | undefined;
-	updateContextState: Function | undefined;
 	isUserLoggedIn: boolean;
 	minutes: string;
 	numSessions: string;
@@ -191,7 +190,6 @@ interface RightSideProps {
 
 const RightSide = ({
 	useCase,
-	updateContextState,
 	minutes,
 	numSessions,
 	selectDoctorCallback,
@@ -230,7 +228,6 @@ const RightSide = ({
 				<Divider className={classes.divider} />
 				{doctors.length > 0 ? (
 					<DoctorList
-						updateContextState={updateContextState}
 						doctors={doctors}
 						selectDoctorCallback={selectDoctorCallback}
 						setDoctor={setDoctor}

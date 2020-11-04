@@ -31,6 +31,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			formation: '',
 			diseases: [],
 			ratings: [],
+			specialty_name: 'test',
 		},
 		date: 1590836400, // May 30th - previous date
 		prescribed_medicines: [],
@@ -66,6 +67,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			formation: '',
 			diseases: [],
 			ratings: [],
+			specialty_name: 'test',
 		},
 		date: 1590836400, // May 30th - previous date
 		prescribed_medicines: [],
@@ -101,6 +103,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			formation: '',
 			diseases: [],
 			ratings: [],
+			specialty_name: 'test',
 		},
 		date: 1590836400, // May 30th - previous date
 		prescribed_medicines: [],
@@ -136,6 +139,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			formation: '',
 			diseases: [],
 			ratings: [],
+			specialty_name: 'test',
 		},
 		date: 1590836400, // May 30th - previous date
 		prescribed_medicines: [],
@@ -173,6 +177,7 @@ export const mockAppointmentDetail: ApiAppointmentDetail = {
 		formation: '',
 		diseases: [],
 		ratings: [],
+		specialty_name: 'test',
 	},
 	date: 1590836400, // May 30th - previous date
 	prescribed_medicines: [],

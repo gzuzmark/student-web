@@ -1,8 +1,17 @@
 import { routToTitle } from 'routes';
+import { GTagEvent } from 'types';
 
-export const addGAEvent = (eventName: string, page: string, action: string) => {
+export const addGAEvent = (options: GTagEvent) => {
+	console.log({
+		event: 'virtualEvent',
+		...options,
+	});
+
 	if (process.env.NODE_ENV === 'production') {
-		window.gtag('send', eventName, page, action);
+		window.dataLayer.push({
+			event: 'virtualEvent',
+			...options,
+		});
 	}
 };
 
@@ -18,9 +27,10 @@ const processPath = (path: string): string => {
 
 export const sendGANavigation = (path: string) => {
 	if (process.env.NODE_ENV === 'production') {
-		window.gtag('config', 'UA-162231349-2', {
-			page_title: routToTitle[processPath(path)],
-			page_path: path,
+		window.dataLayer.push({
+			event: 'virtualPage',
+			pagePath: path,
+			pageName: `Alivia - ${routToTitle[processPath(path)]}`,
 		});
 	}
 };

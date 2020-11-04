@@ -4,7 +4,14 @@ import { useTranslation } from 'react-i18next';
 
 import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE } from 'routes';
-import { useAppointmentStepValidation, getIntCurrency, dateToUTCUnixTimestamp } from 'utils';
+import {
+	useAppointmentStepValidation,
+	getIntCurrency,
+	dateToUTCUnixTimestamp,
+	addGAEvent,
+	getHumanDay,
+	getHour,
+} from 'utils';
 import initCulqi from 'utils/culquiIntegration';
 import { CONFIRMATION_STEP, GUEST, EMPTY_TRACK_PARAMS } from 'AppContext';
 
@@ -187,6 +194,7 @@ const Payment = () => {
 					scheduleID: schedule.id,
 				});
 
+				addGAEvent({ category: 'Agendar cita - Paso 3', action: 'Aplicar descuento', label: reviewedDiscount.id });
 				window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedDiscount.totalCost) });
 				setDiscount(reviewedDiscount);
 			}
@@ -236,6 +244,43 @@ const Payment = () => {
 								},
 								userToken,
 							);
+							addGAEvent({
+								event: 'virtualEvent',
+								category: 'Agendar cita - Gracias',
+								action: 'Avance satisfactorio',
+								label: doctor?.cmp || '',
+								dia: getHumanDay(schedule.startTime),
+								hora: getHour(schedule.startTime),
+								especialidad: doctor?.specialityName || '',
+								monto: discount.totalCost || useCase?.totalCost,
+								tipoPago: 'Tarjeta',
+							});
+							addGAEvent({
+								event: 'Purchase',
+								ecommerce: {
+									currencyCode: 'PEN',
+									purchase: {
+										actionField: {
+											id: activeUser.id,
+											revenue: discount.totalCost || useCase?.totalCost,
+											tax: '0',
+										},
+										products: [
+											{
+												name: doctor?.cmp || '',
+												id: doctor?.cmp || '',
+												price: discount.totalCost || useCase?.totalCost,
+												brand: 'Alivia',
+												category: doctor?.specialityName || '',
+												variant: getHour(schedule.startTime),
+												quantity: '1',
+												dimension3: 'Tarjeta de crédito o débito',
+												dimension4: getHumanDay(schedule.startTime),
+											},
+										],
+									},
+								},
+							});
 							updateContextState({
 								useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
 								appointmentCreationStep: CONFIRMATION_STEP,

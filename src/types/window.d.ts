@@ -1,12 +1,12 @@
-import { Culqui as CulquiType } from './types';
+import { Culqui as CulquiType, GTagEvent } from './types';
 
 declare global {
 	interface Window {
 		Culqi: CulquiType;
 		culqi: () => void;
-		gtag: Function;
 		fbq: (event: string, info: string, extraInfo: Record<string, any>) => void;
 		nutritionistUseCaseId: string;
 		gastroUseCaseId: string;
+		dataLayer: GTagEvent[];
 	}
 }
