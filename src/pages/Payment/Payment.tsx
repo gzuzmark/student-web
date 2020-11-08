@@ -97,6 +97,7 @@ const Payment = () => {
 						phone: userPhone || '',
 						paymentType: method,
 						trackParams: trackParams || EMPTY_TRACK_PARAMS,
+						reservationAccountID: activeUser.id,
 					});
 					await createAppointment(
 						{
@@ -231,6 +232,7 @@ const Payment = () => {
 								phone: '',
 								paymentType: CULQI_PAYMENT_ID,
 								trackParams: trackParams || EMPTY_TRACK_PARAMS,
+								reservationAccountID: activeUser.id,
 							});
 							await createAppointment(
 								{

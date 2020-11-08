@@ -18,6 +18,7 @@ interface PaymentRequestBody {
 	phone: string;
 	paymentType: number;
 	trackParams: TrackParams;
+	reservationAccountID: string;
 }
 
 interface FakeSessionBody {
@@ -65,6 +66,7 @@ const formatParams = (params: PaymentRequestBody) => ({
 	utm_source: params.trackParams.utmSource || '',
 	utm_campaign: params.trackParams.utmCampaign || '',
 	utm_medium: params.trackParams.utmMedium || '',
+	user_id: params.reservationAccountID || '',
 });
 
 export const createPayment = async (params: PaymentRequestBody): Promise<void> => {
