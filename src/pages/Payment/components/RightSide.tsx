@@ -9,7 +9,7 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, isSundayAfter10PM } from 'utils';
 import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
@@ -245,6 +245,7 @@ const RightSide = ({
 			sendDiscount();
 		}
 	};
+	const isPagoEfectivoVisible = !isSundayAfter10PM();
 
 	return (
 		<RightLayout className={classes.container}>
@@ -300,19 +301,21 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
-						<div className={classes.optionBody}>
-							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<CashierIcon />
+					{isPagoEfectivoVisible && (
+						<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
+							<div className={classes.optionBody}>
+								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+									<CashierIcon />
+								</div>
+								<Typography className={classes.optionLabel} variant="h3">
+									{t('payment.right.pagoEfectivo')}
+								</Typography>
+								<div className={classes.optionBrandWrapper}>
+									<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
+								</div>
 							</div>
-							<Typography className={classes.optionLabel} variant="h3">
-								{t('payment.right.pagoEfectivo')}
-							</Typography>
-							<div className={classes.optionBrandWrapper}>
-								<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
-							</div>
-						</div>
-					</Button>
+						</Button>
+					)}
 				</div>
 				{errorMessage ? (
 					<div className={classes.errorWrapper}>
