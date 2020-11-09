@@ -2,11 +2,6 @@ import { routToTitle } from 'routes';
 import { GTagEvent } from 'types';
 
 export const addGAEvent = (options: GTagEvent) => {
-	console.log({
-		event: 'virtualEvent',
-		...options,
-	});
-
 	if (process.env.NODE_ENV === 'production') {
 		window.dataLayer.push({
 			event: 'virtualEvent',
