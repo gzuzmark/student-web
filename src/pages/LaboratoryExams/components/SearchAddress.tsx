@@ -8,6 +8,9 @@ import { Position } from 'pages/api';
 import { MapsApi, Place } from './types';
 
 interface SearchAddressProps {
+	id?: string;
+	className?: string;
+	hasError?: boolean;
 	defaultValue: string;
 	defaultPosition: Position | null;
 	updatePosition: (place: Place | null) => void;
@@ -15,6 +18,9 @@ interface SearchAddressProps {
 }
 
 const SearchAddress = ({
+	id,
+	className,
+	hasError,
 	defaultValue,
 	defaultPosition,
 	updatePosition,
@@ -79,6 +85,8 @@ const SearchAddress = ({
 
 	return (
 		<Autocomplete
+			id={id}
+			className={className}
 			options={options}
 			getOptionLabel={(option) => (typeof option === 'string' ? option : option.address)}
 			value={value}
@@ -92,7 +100,7 @@ const SearchAddress = ({
 			onInputChange={(_, newInputValue) => {
 				setInputValue(newInputValue);
 			}}
-			renderInput={(params) => <TextField {...params} variant="outlined" fullWidth />}
+			renderInput={(params) => <TextField {...params} variant="outlined" fullWidth error={hasError} />}
 		/>
 	);
 };

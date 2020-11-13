@@ -1,20 +1,35 @@
-import React, { useState, ReactElement, ChangeEvent } from 'react';
+import React, { useState, useEffect, ReactElement, ChangeEvent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { useTranslation } from 'react-i18next';
+import GoogleMapReact, { Maps } from 'google-map-react';
+import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils';
 
 import AddressBenefits from './AddressBenefits';
+import { Position } from 'pages/api';
+import { defaultCenter, getUserCurrentPosition } from 'utils';
+import SearchAddress from 'pages/LaboratoryExams/components/SearchAddress';
+
+import { MapInstance, MapsApi, Place, Marker } from '../types';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
 			paddingRight: '68px',
 		},
+	},
+	addressInput: {
+		display: 'none',
+		padding: '17px 12px 0 18px',
+		width: 'calc(100% - 30px)',
+	},
+	mapWrapper: {
+		height: '206px',
 	},
 	addressReferenceLabel: {
 		fontSize: '15px',
@@ -39,10 +54,55 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
+const mapOptionsCreator = (map: Maps) => ({
+	fullscreenControl: false,
+	zoomControlOptions: {
+		position: map.ControlPosition.RIGHT_TOP,
+	},
+});
+
+const getCurrentPosition = async ({
+	mapsApi,
+	mapInstance,
+	setCurrentPositionMarker,
+	setActivePosition,
+}: {
+	mapsApi: MapsApi | undefined;
+	mapInstance: MapInstance | undefined;
+	setCurrentPositionMarker: Function;
+	setActivePosition: Function;
+}) => {
+	try {
+		if (mapsApi && mapInstance) {
+			const userPosition = await getUserCurrentPosition();
+			const marker = new mapsApi.Marker({
+				position: {
+					...userPosition,
+				},
+				map: mapInstance,
+			});
+
+			setCurrentPositionMarker(marker);
+			setActivePosition(userPosition);
+			mapInstance.setCenter(userPosition);
+		}
+	} catch (e) {
+		if (mapInstance) {
+			mapInstance.setCenter(defaultCenter);
+		}
+	}
+};
+
 const AskAddressForm = (): ReactElement | null => {
 	const { t } = useTranslation('askAddress');
+	const [currentPositionMarker, setCurrentPositionMarker] = useState<Marker>();
 	const [directionReference, setDirectionReference] = useState<string>('');
 	const [referenceError, setReferenceError] = useState<string>('');
+	const [mapsApi, setMapApi] = useState<MapsApi>();
+	const [mapInstance, setMapInstance] = useState<MapInstance>();
+	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
+	const [hasAddressError, setHasAddressError] = useState<boolean>(false);
+	const [activePosition, setActivePosition] = useState<Position | null>(null);
 	const updateDirectionReference = (e: ChangeEvent<HTMLInputElement>) => {
 		setDirectionReference(e.target.value);
 	};
@@ -52,11 +112,65 @@ const AskAddressForm = (): ReactElement | null => {
 		if (!directionReference) {
 			setReferenceError(t('askAddress.addressReference.error'));
 		}
+
+		if (!humanActivePosition) {
+			setHasAddressError(true);
+		}
 	};
+	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
+		const addressInputWrapper = document.querySelector<HTMLElement>('.address-input-wrapper');
+
+		if (addressInputWrapper) {
+			map.controls[maps.ControlPosition.TOP_RIGHT].push(addressInputWrapper);
+			setTimeout(() => {
+				addressInputWrapper.style.display = 'block';
+			}, 900);
+		}
+
+		setMapApi(maps);
+		setMapInstance(map);
+	};
+	const updatePosition = (place: Place | null) => {
+		if (place && mapInstance && currentPositionMarker) {
+			currentPositionMarker.setVisible(false);
+			setHumanActivePosition(place.address);
+			setActivePosition(place.position);
+			currentPositionMarker.setPosition(place.position);
+			currentPositionMarker.setVisible(true);
+			mapInstance.setCenter(place.position);
+			mapInstance.setZoom(17);
+		}
+	};
+
+	useEffect(() => {
+		getCurrentPosition({
+			mapsApi,
+			mapInstance,
+			setCurrentPositionMarker,
+			setActivePosition,
+		});
+	}, [mapInstance, mapsApi]);
 
 	return (
 		<div className={classes.form}>
-			<div>Gmap</div>
+			<SearchAddress
+				className={clsx(classes.addressInput, 'address-input-wrapper')}
+				defaultValue={humanActivePosition}
+				defaultPosition={activePosition}
+				mapsApi={mapsApi}
+				updatePosition={updatePosition}
+				hasError={hasAddressError}
+			/>
+			<div className={classes.mapWrapper}>
+				<GoogleMapReact
+					bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY || '', libraries: 'places' }}
+					defaultCenter={defaultCenter}
+					defaultZoom={17}
+					options={mapOptionsCreator}
+					yesIWantToUseGoogleMapApiInternals
+					onGoogleApiLoaded={onGoogleApiLoaded}
+				></GoogleMapReact>
+			</div>
 			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressReference.label')}</Typography>
 			<TextField
 				className={classes.addressReferenceInput}

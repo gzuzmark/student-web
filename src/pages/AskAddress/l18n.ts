@@ -2,7 +2,7 @@ export default {
 	'askAddress.title': 'Necesitamos tu dirección para emitir tu receta médica.',
 	'askAddress.subTitle':
 		'Según lo dispuesto por el MINSA, toda receta médica debe tener registrada la dirección del paciente.',
-	'askAddress.address.label': 'Ingresa una dirección',
+	'askAddress.address.placeholder': 'Ingresa una dirección',
 	'askAddress.addressReference.label': 'Piso, puerta, oficina o referencia',
 	'askAddress.addressReference.placeholder': 'Ejemplo: puerta 4, oficina 501',
 	'askAddress.addressReference.error': 'Debes ingresar una referencia',
