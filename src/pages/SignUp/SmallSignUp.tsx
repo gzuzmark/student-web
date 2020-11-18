@@ -50,6 +50,11 @@ const SmallSignUp = (): ReactElement => {
 		}
 	};
 	const closeAgeRestrictionModal = () => {
+		addGAEvent({
+			category: 'Agendar cita - Paso 2.2 - Popup',
+			action: 'Recomendación pediatría',
+			label: 'Omitir',
+		});
 		setIsAgeRestrictioModalOpen(false);
 	};
 	const onSubmit = useCallback(
@@ -69,12 +74,12 @@ const SmallSignUp = (): ReactElement => {
 
 					updateContextState({ triage: [], userFiles: [], userToken, patientUser, isUnderAge: isAChild });
 
+					addGAEvent({ category: 'Agendar cita - Paso 2', action: 'Avance satisfactorio', label: '(not available) ' });
 					history.push('/pago');
 				}
 			} catch (e) {
 				setFieldError('identification', 'test');
 			} finally {
-				addGAEvent({ category: 'Agendar cita - Paso 2', action: 'Avance satisfactorio', label: '(not available) ' });
 				setSubmitting(false);
 			}
 		},

@@ -4,7 +4,7 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as Alert } from 'icons/mainAlert.svg';
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, addGAEvent } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -65,6 +65,11 @@ const PreferPrediatrics = ({ isModalOpen, closeModal }: PreferPrediatricsProps) 
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const createNewAppointment = () => {
+		addGAEvent({
+			category: 'Agendar cita - Paso 2.2 - Popup',
+			action: 'Recomendación pediatría',
+			label: 'Agendar con pediatria',
+		});
 		window.location.href =
 			'https://alivia-pacientes.web.app/seleccionar_doctor?malestar=8a0a27a5-8ff0-4534-b863-65a2955a4448&show=1';
 	};
