@@ -26,18 +26,22 @@ export const SIGN_UP_ROUTE = 'registro';
 export const FORGORT_PASSWORD_ROUTE = 'reestablecer_contrasena';
 export const APPOINTMENT_LIST_ROUTE = 'citas';
 export const SELECT_PATIENT_ROUTE = 'seleccionar_paciente';
+export const SMALL_SIGN_UP = 'informacion_paciente';
 
-export const routToTitle: Record<string, string> = {
+export const routeToTitle: Record<string, string> = {
 	[TRIAGE_ROUTE]: 'Triaje',
 	[SELECT_DOCTOR_ROUTE]: 'Seleccionar Doctor',
 	[PRE_SIGN_UP_ROUTE]: 'Pre Registro',
 	[PAYMENT_ROUTE]: 'Pago',
 	[CONFIRMATION_ROUTE]: 'Confirmacion',
 	[LOGIN_ROUTE]: 'Iniciar Sesion',
-	[SIGN_UP_ROUTE]: 'Registro',
+	[`${SIGN_UP_ROUTE}_sobre_ti`]: 'Detalle Cita - Sobre el paciente',
+	[`${SIGN_UP_ROUTE}_datos_medicos`]: 'Detalle Cita - Datos medicos',
+	[`${SIGN_UP_ROUTE}_contacto`]: 'Detalle Cita - Datos de contacto',
 	[APPOINTMENT_LIST_ROUTE]: 'Citas',
 	[FORGORT_PASSWORD_ROUTE]: 'Reestrablecer contraseña',
 	[SELECT_PATIENT_ROUTE]: 'Seleccionar paciente',
+	[SMALL_SIGN_UP]: 'Detalle Cita - Sobre el paciente reducido',
 	'detalle-cita': 'Detalle Cita',
 };
 

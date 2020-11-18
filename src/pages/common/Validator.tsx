@@ -25,7 +25,7 @@ const requestCurrentUser = async (
 const Validator = ({ isPrivate, children }: ValidatorProps) => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const { user, updateState } = useContext(AppContext);
-	const { push, listen } = useHistory();
+	const { push, listen, location: currentLocation } = useHistory();
 
 	useLayoutEffect(() => {
 		const userToken = getLocalValue('userToken');
@@ -50,9 +50,10 @@ const Validator = ({ isPrivate, children }: ValidatorProps) => {
 				sendGANavigation(location.pathname);
 			});
 
+			sendGANavigation(currentLocation.pathname);
 			setLocalValue('routeListeners', '1');
 		}
-	}, [listen]);
+	}, [currentLocation.pathname, listen]);
 
 	return loading ? <div /> : <>{children}</>;
 };

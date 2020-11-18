@@ -51,7 +51,7 @@ const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInfo
 			if (updateState && appointmentOwner) {
 				const triage = createTriage(t, medicalData, appointmentOwner);
 
-				addGAEvent({ category: 'Agendar cita - Paso 2.2', action: 'Avance satisfactorio', label: '(not available) ' });
+				addGAEvent({ category: 'Agendar cita - Paso 2', action: 'Avance satisfactorio', label: '(not available) ' });
 				updateState({ triage, userFiles: medicalData.files || [] });
 				push('/pago');
 			}

@@ -4,7 +4,7 @@ import { Location } from 'history';
 
 import { Container, RightLayout } from 'pages/common';
 import { createPatient, createAccount, createGuestPatient, UseCase } from 'pages/api';
-import { usePageTitle, setLocalValue, isYoungerThanFifthteen, isUnderAge } from 'utils';
+import { usePageTitle, setLocalValue, isYoungerThanFifthteen, isUnderAge, addGAEvent } from 'utils';
 import { PAYMENT_STEP, GUEST, TriagePair, AppointmentOwner, User } from 'AppContext';
 
 import {
@@ -55,11 +55,21 @@ const NewUser = ({
 		}
 	};
 	const closeAgeRestrictionModal = () => {
+		addGAEvent({
+			category: 'Agendar cita - Paso 2.2 - Popup',
+			action: 'Recomendación pediatría',
+			label: 'Omitir',
+		});
 		setIsAgeRestrictioModalOpen(false);
 	};
 	const onChangeStep = (values: AboutMeValues | MedicalDataValues) => {
 		if (step === 0) {
 			setAboutMeData(values as AboutMeValues);
+			addGAEvent({
+				category: 'Agendar cita - Paso 2',
+				action: 'Avance satisfactorio',
+				label: '(not available)',
+			});
 		} else if (step === 1) {
 			const dataValues = { ...values } as MedicalDataValues;
 			setMedicalData(dataValues);
@@ -77,6 +87,11 @@ const NewUser = ({
 				);
 				updateState({ triage: withNewOwner });
 			}
+			addGAEvent({
+				category: 'Agendar cita - Paso 2.2',
+				action: 'Avance satisfactorio',
+				label: '(not available)',
+			});
 		}
 
 		push(`/registro/${SUB_ROUTES[step + 1]}`);
@@ -120,6 +135,11 @@ const NewUser = ({
 					setLocalValue('userToken', localUserToken);
 				}
 
+				addGAEvent({
+					category: 'Agendar cita - Paso 2.3',
+					action: 'Avance satisfactorio',
+					label: '(not available)',
+				});
 				updateState({
 					reservationAccountID,
 					userToken: localUserToken,
