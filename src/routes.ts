@@ -13,6 +13,7 @@ import {
 	FamilyMembers,
 	CreateAccount,
 	LaboratoryExams,
+	BuyPrescription,
 	AskAddress,
 } from 'pages';
 import SmallSignUp from 'pages/SignUp/SmallSignUp';
@@ -79,5 +80,6 @@ export const routes: RoutesType = [
 export const routeWithoutNav: RoutesType = [
 	{ id: 'Login', path: '/iniciar_sesion', component: Login },
 	{ id: 'CreateAccount', path: '/crear_cuenta', component: CreateAccount },
+	{ id: 'BuyPrescription', path: '/comprar_receta', component: BuyPrescription },
 	{ id: 'AskAddress', path: '/direccion_receta', component: AskAddress },
 ];
