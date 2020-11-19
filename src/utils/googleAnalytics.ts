@@ -1,4 +1,4 @@
-import { routToTitle } from 'routes';
+import { routeToTitle } from 'routes';
 import { GTagEvent } from 'types';
 
 export const addGAEvent = (options: GTagEvent) => {
@@ -14,7 +14,7 @@ const processPath = (path: string): string => {
 	const matches = path.match(/\w+/g);
 
 	if (matches) {
-		return matches.length > 1 ? 'detalle-cita' : matches[0];
+		return matches.join('_');
 	}
 
 	return '';
@@ -25,7 +25,7 @@ export const sendGANavigation = (path: string) => {
 		window.dataLayer.push({
 			event: 'virtualPage',
 			pagePath: path,
-			pageName: `Alivia - ${routToTitle[processPath(path)]}`,
+			pageName: `Alivia - ${routeToTitle[processPath(path)]}`,
 		});
 	}
 };

@@ -17,6 +17,7 @@ import createPasswordL18n from 'pages/common/CreatePasswordForm/l18n';
 import createAccountL18n from 'pages/CreateAccount/l18n';
 import laboratoryExamsL18n from 'pages/LaboratoryExams/l18n';
 import buyPrescriptionL18n from 'pages/BuyPrescription/l18n';
+import askAddressL18n from 'pages/AskAddress/l18n';
 
 export default {
 	nav: {
@@ -59,4 +60,5 @@ export default {
 	createAccount: { ...createAccountL18n },
 	laboratoriesExams: { ...laboratoryExamsL18n },
 	buyPrescription: { ...buyPrescriptionL18n },
+	askAddress: { ...askAddressL18n },
 };
