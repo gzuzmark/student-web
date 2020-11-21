@@ -7,3 +7,4 @@ export * from './redirects';
 export * from './date';
 export * from './googleAnalytics';
 export * from './culquiIntegration';
+export * from './position';

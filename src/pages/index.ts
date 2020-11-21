@@ -14,3 +14,5 @@ export * from './CreateProfile';
 export * from './FamilyMembers';
 export * from './CreateAccount';
 export * from './LaboratoryExams';
+export * from './BuyPrescription';
+export * from './AskAddress';
