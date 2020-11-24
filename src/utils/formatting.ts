@@ -73,3 +73,6 @@ export const transformToCamelCase = <T extends object, R extends object>(obj: T)
 
 	return newObj as R;
 };
+
+export const getHumanDay = (date: Date) => capitalizeDate(format(date, 'EEEE', { locale: es }));
+export const getHour = (date: Date) => format(date, 'HH:mm', { locale: es });

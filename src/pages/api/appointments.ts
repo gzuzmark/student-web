@@ -127,6 +127,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 				education: '',
 				diseases: [],
 				patientOpinions: [],
+				specialityName: doctor.specialty_name,
 			},
 			appointmentType,
 			date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),

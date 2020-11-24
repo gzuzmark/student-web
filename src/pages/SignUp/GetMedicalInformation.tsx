@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import { Container, RightLayout, LeftLayout } from 'pages/common';
-import { usePageTitle, stylesWithTheme } from 'utils';
+import { usePageTitle, stylesWithTheme, addGAEvent } from 'utils';
 
 import { MedicalData, MedicalDataValues } from './components';
 import { Typography } from '@material-ui/core';
@@ -51,6 +51,7 @@ const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInfo
 			if (updateState && appointmentOwner) {
 				const triage = createTriage(t, medicalData, appointmentOwner);
 
+				addGAEvent({ category: 'Agendar cita - Paso 2', action: 'Avance satisfactorio', label: '(not available) ' });
 				updateState({ triage, userFiles: medicalData.files || [] });
 				push('/pago');
 			}

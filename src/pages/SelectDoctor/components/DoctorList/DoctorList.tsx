@@ -5,8 +5,8 @@ import Rating from '@material-ui/lab/Rating';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
-import { DoctorAvailability, Doctor } from 'pages/api';
-import { addGAEvent } from 'utils';
+import { DoctorAvailability } from 'pages/api';
+import { addGAEvent, getHumanDay, getHour } from 'utils';
 
 import AvailableTimes from '../AvailableTimes';
 import useStyles from './styles';
@@ -14,7 +14,6 @@ import DetailedDoctorModal from './DetailedDoctorModal';
 
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
-	updateContextState: Function | undefined;
 	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
@@ -24,11 +23,12 @@ interface DoctorListProps {
 export interface ActiveDoctorTime {
 	doctorCmp: string;
 	scheduleID: string;
+	doctorIndex: number;
+	scheduleIndex: number;
 }
 
 const DoctorList = ({
 	doctors,
-	updateContextState,
 	selectDoctorCallback,
 	setDoctor,
 	setSchedule,
@@ -36,8 +36,13 @@ const DoctorList = ({
 }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
-	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({ doctorCmp: '', scheduleID: '' });
-	const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({
+		doctorCmp: '',
+		scheduleID: '',
+		scheduleIndex: -1,
+		doctorIndex: -1,
+	});
+	const [selectedDoctor, setSelectedDoctor] = useState<DoctorAvailability | null>(null);
 	const [isDetailDoctorModalOpen, setIsDetailDoctorModalOpen] = useState<boolean>(false);
 	const selectDoctorForModal = (index: number) => {
 		setSelectedDoctor(doctors[index]);
@@ -50,20 +55,27 @@ const DoctorList = ({
 	};
 	const selectDoctor = (doctorCmp: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => {
 		if (scheduleID !== '') {
-			setActiveDoctorTime({ doctorCmp, scheduleID });
+			setActiveDoctorTime({ doctorCmp, scheduleID, scheduleIndex, doctorIndex });
 			setDoctor(doctors[doctorIndex]);
 			setSchedule(doctors[doctorIndex].schedules[scheduleIndex]);
 		} else {
-			setActiveDoctorTime({ doctorCmp: '', scheduleID });
+			setActiveDoctorTime({ doctorCmp: '', scheduleID, scheduleIndex: -1, doctorIndex: -1 });
 			setDoctor(null);
 			setSchedule(null);
 		}
 	};
 	const continueToPreRegister = () => {
-		if (updateContextState) {
-			addGAEvent('event', 'Cita seleccionada', 'click');
-			selectDoctorCallback();
-		}
+		const doctor = doctors[activeDoctorTime.doctorIndex];
+
+		addGAEvent({
+			category: 'Agendar cita - Paso 1',
+			action: 'Avance satisfactorio',
+			label: doctor.cmp,
+			dia: getHumanDay(doctor.schedules[activeDoctorTime.scheduleIndex].startTime),
+			hora: getHour(doctor.schedules[activeDoctorTime.scheduleIndex].startTime),
+			especialidad: doctor.specialityName,
+		});
+		selectDoctorCallback();
 	};
 
 	return (

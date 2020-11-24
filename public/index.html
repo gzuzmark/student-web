@@ -24,24 +24,19 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <!-- Google Optimize code -->
-    <script src="https://www.googleoptimize.com/optimize.js?id=OPT-KD3J8L3"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-162231349-2"></script>
+    <!-- Google Tag Manager -->
     <script>
-      if ("%NODE_ENV%" === "production") {
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'AW-620358090');
-        gtag('config', 'UA-162231349-2', {
-          'linker': {
-            'domains': ['alivia.pe', 'alivia-pacientes.web.app'],
-            'accept_incoming': true
-          }
-        });
-      }
+      const token = localStorage.getItem('userToken');
+
+      dataLayer =[token ? {
+        'loginStatus': 'Sesión iniciada',
+        'userID': token,
+      } : { 'loginStatus': 'Sesión no iniciada' }];
     </script>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KRPX9LQ');
+    </script>
+    <!-- End Google Tag Manager -->
     <title>Alivia</title>
   </head>
   <body>
@@ -136,5 +131,11 @@
       }
     </script>
     <!-- End  Handle Nutritionist Use Case Id -->
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe
+    src="https://www.googletagmanager.com/ns.html?id=GTM-KRPX9LQ"
+    height="0" width="0"
+    style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
   </body>
 </html>

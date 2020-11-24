@@ -9,7 +9,7 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
-import { stylesWithTheme, isWeekDayLateNightOrSunday } from 'utils';
+import { stylesWithTheme, addGAEvent, isWeekDayLateNightOrSunday } from 'utils';
 import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
@@ -287,7 +287,18 @@ const RightSide = ({
 					{t('payment.right.method')}:
 				</Typography>
 				<div className={classes.buttonWrapper}>
-					<Button className={classes.option} onClick={executePayment(CULQI_PAYMENT_ID)} variant="outlined">
+					<Button
+						className={classes.option}
+						onClick={(e) => {
+							addGAEvent({
+								category: 'Agendar cita - Paso 3',
+								action: 'Avance satisfactorio',
+								label: 'Tarjeta de crédito o débito',
+							});
+							executePayment(CULQI_PAYMENT_ID)(e);
+						}}
+						variant="outlined"
+					>
 						<div className={classes.optionBody}>
 							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
 								<CreditCardIcon />
@@ -302,7 +313,18 @@ const RightSide = ({
 						</div>
 					</Button>
 					{isPagoEfectivoVisible && (
-						<Button className={classes.option} onClick={executePayment(PE_PAYMENT_ID)} variant="outlined">
+						<Button
+							className={classes.option}
+							onClick={(e) => {
+								addGAEvent({
+									category: 'Agendar cita - Paso 3',
+									action: 'Avance satisfactorio',
+									label: 'Depósitos y transferencias',
+								});
+								executePayment(PE_PAYMENT_ID)(e);
+							}}
+							variant="outlined"
+						>
 							<div className={classes.optionBody}>
 								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
 									<CashierIcon />
