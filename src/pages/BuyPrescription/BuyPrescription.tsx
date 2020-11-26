@@ -11,6 +11,7 @@ import { stylesWithTheme } from 'utils';
 
 import Medicines from './components/Medicines';
 import CheckoutInformation from './components/CheckoutInformation';
+import SelectPrescriptionType from './components/SelectPrescriptionType';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -75,6 +76,7 @@ const BuyPrescription = (): ReactElement => {
 	const [selectedMedicines, setSelectedMedicines] = useState<number[]>([]);
 	const [medicines, setMedicines] = useState<PrescribedMedicine[]>([]);
 	const [userAddress, setUserAddress] = useState<string>('');
+	const [showingQuotedPrescription, setShowingQuotedPrescription] = useState<boolean>(false);
 	const classes = useStyles();
 	const outOfStock =
 		medicines.filter(({ hasStock, isAvailableForECommerce }) => hasStock && isAvailableForECommerce).length < 1;
@@ -97,10 +99,17 @@ const BuyPrescription = (): ReactElement => {
 		},
 		[selectedMedicines],
 	);
+	const showQuotedPrescription = () => {
+		setShowingQuotedPrescription(true);
+	};
 
 	useEffect(() => {
 		requestPrescription({ setMedicines, setUserAddress });
 	}, []);
+
+	if (!showingQuotedPrescription) {
+		return <SelectPrescriptionType showQuotedPrescription={showQuotedPrescription} />;
+	}
 
 	return (
 		<div className={classes.container}>

@@ -18,4 +18,7 @@ export default {
 	'buyPrescription.total.continueWithPayment': 'Continuar al pago',
 	'buyPrescription.seeEPrescription': 'Ver Receta Médica Electrónica',
 	'buyPrescription.sponsorLabel': 'Garantía de calidad avalada por',
+	'buyPrescription.selectPrescriptionType.title': 'Ya puedes acceder a tu receta y a la cotización de esta.',
+	'buyPrescription.selectPrescriptionType.quotedPrescription': 'Ver receta médica cotizada',
+	'buyPrescription.selectPrescriptionType.ePrescription': 'Ver receta médica electrónica',
 };
