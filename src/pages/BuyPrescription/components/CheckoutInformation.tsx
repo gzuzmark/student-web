@@ -124,6 +124,7 @@ const CheckoutInformation = ({ address, medicines, selectedMedicines }: Checkout
 	const { t } = useTranslation('buyPrescription');
 	const classes = useStyles();
 	const total = selectedMedicines.reduce((acc, index) => acc + parseFloat(medicines[index].totalCost), 0);
+	const totalCount = medicines.filter(({ isAvailableForECommerce }) => isAvailableForECommerce).length;
 
 	return (
 		<div className={classes.container}>
@@ -145,8 +146,8 @@ const CheckoutInformation = ({ address, medicines, selectedMedicines }: Checkout
 			</div>
 			<Typography className={classes.medicinesCounts} color="primary">
 				{t('buyPrescription.medicinesSelected', {
-					selectedCount: medicines.length,
-					totalCount: selectedMedicines.length,
+					selectedCount: selectedMedicines.length,
+					totalCount,
 				})}
 			</Typography>
 			<div className={classes.addressContainer}>

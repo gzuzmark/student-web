@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +44,8 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			fontSize: '20px',
 			lineHeight: '25px',
 			paddingBottom: '30px',
+			width: '575px',
+			fontWeight: 400,
 		},
 	},
 	body: {
@@ -61,10 +63,10 @@ const requestPrescription = async ({
 	setUserAddress: Function;
 }) => {
 	try {
-		const prescription = await getPrescription();
+		const { address, medicines } = await getPrescription();
 
-		setUserAddress(prescription.address);
-		setMedicines(prescription.medicines);
+		setUserAddress(address);
+		setMedicines(medicines);
 	} catch (e) {}
 };
 
@@ -74,22 +76,27 @@ const BuyPrescription = (): ReactElement => {
 	const [medicines, setMedicines] = useState<PrescribedMedicine[]>([]);
 	const [userAddress, setUserAddress] = useState<string>('');
 	const classes = useStyles();
-	const toggleMedicine = (index: number) => () => {
-		const positionIndex = selectedMedicines.indexOf(index);
-		const alreadySelected = positionIndex > -1;
+	const outOfStock =
+		medicines.filter(({ hasStock, isAvailableForECommerce }) => hasStock && isAvailableForECommerce).length < 1;
+	const toggleMedicine = useCallback(
+		(index: number) => () => {
+			const positionIndex = selectedMedicines.indexOf(index);
+			const alreadySelected = positionIndex > -1;
 
-		let newSelectedMedicines: number[] = [];
+			let newSelectedMedicines: number[] = [];
 
-		if (alreadySelected) {
-			newSelectedMedicines = [...selectedMedicines];
+			if (alreadySelected) {
+				newSelectedMedicines = [...selectedMedicines];
 
-			newSelectedMedicines.splice(positionIndex, 1);
-		} else {
-			newSelectedMedicines = [...selectedMedicines, index];
-		}
+				newSelectedMedicines.splice(positionIndex, 1);
+			} else {
+				newSelectedMedicines = [...selectedMedicines, index];
+			}
 
-		setSelectedMedicines(newSelectedMedicines);
-	};
+			setSelectedMedicines(newSelectedMedicines);
+		},
+		[selectedMedicines],
+	);
 
 	useEffect(() => {
 		requestPrescription({ setMedicines, setUserAddress });
@@ -103,7 +110,9 @@ const BuyPrescription = (): ReactElement => {
 			<Typography className={classes.title} variant="h1">
 				{t('buyPrescription.title')}
 			</Typography>
-			<Typography className={classes.subTitle}>{t('buyPrescription.subTitle')}</Typography>
+			<Typography className={classes.subTitle}>
+				{t(outOfStock ? 'buyPrescription.subTitle.outOfStock' : 'buyPrescription.subTitle')}
+			</Typography>
 			<div className={classes.body}>
 				<Medicines medicines={medicines} selectedMedicines={selectedMedicines} toggleMedicine={toggleMedicine} />
 				<Divider orientation="vertical" flexItem />
