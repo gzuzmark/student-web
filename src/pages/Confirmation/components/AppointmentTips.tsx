@@ -160,7 +160,7 @@ const AppointmentTips = ({
 }: AppointmentTipsProps) => {
 	const classes = useStyles({ useDefaultBackground });
 	const { t } = useTranslation('confirmation');
-	const conferenceLink = `${process.env.REACT_APP_CONFERENCE_URL}?room=${scheduleID}&passcode=97197237551703`;
+	const conferenceLink = `${process.env.REACT_APP_CONFERENCE_URL}?room=${scheduleID}&passcode=84381637551703`;
 	const copyTextToClipboard = () => {
 		if (!navigator.clipboard) {
 			fallbackCopyTextToClipboard(conferenceLink);
