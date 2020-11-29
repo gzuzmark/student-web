@@ -21,4 +21,9 @@ export default {
 	'buyPrescription.selectPrescriptionType.title': 'Ya puedes acceder a tu receta y a la cotización de esta.',
 	'buyPrescription.selectPrescriptionType.quotedPrescription': 'Ver receta médica cotizada',
 	'buyPrescription.selectPrescriptionType.ePrescription': 'Ver receta médica electrónica',
+	'buyPrescription.notAvailableNearYou.title':
+		'¡Lo sentimos! En este momento no hay cobertura para la dirección indicada:',
+	'buyPrescription.notAvailableNearYou.alternative':
+		'Te recomendamos modificar o ingresar otra dirección y probar nuevamente.',
+	'buyPrescription.notAvailableNearYou.updateAddress': 'Ingresar una dirección nueva',
 };

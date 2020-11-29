@@ -3,8 +3,10 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
+import { useLocation } from 'react-router';
+import { parse } from 'query-string';
 
-import { getPrescription } from 'pages/api';
+import { getPrescription, Position } from 'pages/api';
 import { PrescribedMedicine } from 'pages/api/userPrescription';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { stylesWithTheme } from 'utils';
@@ -12,6 +14,8 @@ import { stylesWithTheme } from 'utils';
 import Medicines from './components/Medicines';
 import CheckoutInformation from './components/CheckoutInformation';
 import SelectPrescriptionType from './components/SelectPrescriptionType';
+import NotAvailableNearYou from './components/NotAvailableNearYour';
+import AskAddress from '../AskAddress/AskAddress';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -59,27 +63,40 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 const requestPrescription = async ({
 	setMedicines,
 	setUserAddress,
+	setNotAvailableNearYou,
+	userId,
+	updatedPosition,
 }: {
 	setMedicines: Function;
 	setUserAddress: Function;
+	setNotAvailableNearYou: Function;
+	userId: string;
+	updatedPosition: Position | undefined;
 }) => {
 	try {
-		const { address, medicines } = await getPrescription();
+		const { address, medicines, notAvailableNearYou } = await getPrescription(userId, updatedPosition);
 
 		setUserAddress(address);
 		setMedicines(medicines);
+		setNotAvailableNearYou(notAvailableNearYou);
 	} catch (e) {}
 };
 
 const BuyPrescription = (): ReactElement => {
 	const { t } = useTranslation('buyPrescription');
+	const location = useLocation();
+	const params = parse(location.search);
 	const [selectedMedicines, setSelectedMedicines] = useState<number[]>([]);
 	const [medicines, setMedicines] = useState<PrescribedMedicine[]>([]);
 	const [userAddress, setUserAddress] = useState<string>('');
+	const [notAvailableNearYou, setNotAvailableNearYou] = useState<boolean>(false);
 	const [showingQuotedPrescription, setShowingQuotedPrescription] = useState<boolean>(false);
+	const [isShowingEditAddressScreen, setIsShowingEditAddressScreen] = useState<boolean>(false);
+	const [updatedPosition, setUpdatedPosition] = useState<Position>();
 	const classes = useStyles();
 	const outOfStock =
 		medicines.filter(({ hasStock, isAvailableForECommerce }) => hasStock && isAvailableForECommerce).length < 1;
+	const userId = (params.user_id as string) || '';
 	const toggleMedicine = useCallback(
 		(index: number) => () => {
 			const positionIndex = selectedMedicines.indexOf(index);
@@ -102,10 +119,32 @@ const BuyPrescription = (): ReactElement => {
 	const showQuotedPrescription = () => {
 		setShowingQuotedPrescription(true);
 	};
+	const showEditAddressScreen = () => {
+		setIsShowingEditAddressScreen(true);
+	};
+	const onAskAddressSubmit = (pos: Position, address: string) => {
+		setUpdatedPosition(pos);
+		setUserAddress(address);
+		setIsShowingEditAddressScreen(false);
+	};
 
 	useEffect(() => {
-		requestPrescription({ setMedicines, setUserAddress });
-	}, []);
+		requestPrescription({
+			setMedicines,
+			setUserAddress,
+			setNotAvailableNearYou,
+			userId,
+			updatedPosition,
+		});
+	}, [updatedPosition, userId]);
+
+	if (isShowingEditAddressScreen) {
+		return <AskAddress sessionId={userId} submitCallback={onAskAddressSubmit} />;
+	}
+
+	if (showingQuotedPrescription && notAvailableNearYou) {
+		return <NotAvailableNearYou address={userAddress} showEditAddressScreen={showEditAddressScreen} />;
+	}
 
 	if (!showingQuotedPrescription) {
 		return <SelectPrescriptionType showQuotedPrescription={showQuotedPrescription} />;

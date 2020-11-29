@@ -1,7 +1,10 @@
 // import axios from 'axios';
 
+import { Position } from './laboratories';
+
 const mockPrescription: PrescriptionAPI = {
 	address: 'Calle Los Castaños 200 SAN ISIDRO, LIMA',
+	not_available_near_you: true,
 	medicines: [
 		{
 			name: 'Esomeprazol 40mg comprimidos',
@@ -74,6 +77,7 @@ export interface PrescribedMedicine {
 export interface Prescription {
 	address: string;
 	medicines: PrescribedMedicine[];
+	notAvailableNearYou: boolean;
 }
 
 interface MedicineAPI {
@@ -91,6 +95,7 @@ interface MedicineAPI {
 interface PrescriptionAPI {
 	address: string;
 	medicines: MedicineAPI[];
+	not_available_near_you: boolean;
 }
 
 const formatAlternativeMedicine = (
@@ -107,8 +112,9 @@ const formatAlternativeMedicine = (
 		isAvailableForECommerce: true,
 	};
 
-const formatPrescription = ({ address, medicines }: PrescriptionAPI): Prescription => ({
+const formatPrescription = ({ address, medicines, not_available_near_you }: PrescriptionAPI): Prescription => ({
 	address,
+	notAvailableNearYou: not_available_near_you,
 	medicines: medicines.map(
 		({
 			name,
@@ -134,9 +140,10 @@ const formatPrescription = ({ address, medicines }: PrescriptionAPI): Prescripti
 	),
 });
 
-export const getPrescription = async (): Promise<Prescription> => {
+export const getPrescription = async (userId: string, updatedPosition: Position | undefined): Promise<Prescription> => {
 	try {
 		// const resp = await axios.get<PrescriptionAPI>('http://somewhere-over-the-rainbow/prescription');
+		console.log(userId, updatedPosition);
 		const resp = { data: mockPrescription };
 
 		return formatPrescription(resp.data);
