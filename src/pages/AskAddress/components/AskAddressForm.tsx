@@ -176,17 +176,20 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 		setMapApi(maps);
 		setMapInstance(map);
 	};
-	const updatePosition = (place: Place | null) => {
-		if (place && mapInstance && currentPositionMarker) {
-			currentPositionMarker.setVisible(false);
-			setHumanActivePosition(place.address);
-			setActivePosition(place.position);
-			currentPositionMarker.setPosition(place.position);
-			currentPositionMarker.setVisible(true);
-			mapInstance.setCenter(place.position);
-			mapInstance.setZoom(17);
-		}
-	};
+	const updatePosition = useCallback(
+		(place: Place | null) => {
+			if (place && mapInstance && currentPositionMarker) {
+				currentPositionMarker.setVisible(false);
+				setHumanActivePosition(place.address);
+				setActivePosition(place.position);
+				currentPositionMarker.setPosition(place.position);
+				currentPositionMarker.setVisible(true);
+				mapInstance.setCenter(place.position);
+				mapInstance.setZoom(17);
+			}
+		},
+		[currentPositionMarker, mapInstance],
+	);
 
 	useEffect(() => {
 		getCurrentPosition({

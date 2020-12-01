@@ -92,12 +92,13 @@ const SearchAddress = ({
 			id={id}
 			className={className}
 			options={options}
-			getOptionLabel={(option) => (typeof option === 'string' ? option : option.address)}
+			getOptionLabel={(option) => option.address}
 			value={value}
 			filterSelectedOptions
 			fullWidth
 			onChange={(_, newValue: Place | null) => {
-				// setOptions(newValue ? [newValue, ...options] : options);
+				console.log('is changing withouth selecting the option ?');
+				setOptions(newValue ? [newValue, ...options] : options);
 				setValue(newValue);
 				updatePosition(newValue);
 			}}
