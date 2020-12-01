@@ -54,6 +54,13 @@ const SearchAddress = ({
 			}, 500),
 		[mapsApi],
 	);
+	const onChangeInput = useMemo(
+		() =>
+			throttle((_: React.ChangeEvent<{}>, newInputValue: string) => {
+				setInputValue(newInputValue);
+			}, 500),
+		[],
+	);
 
 	useEffect(() => {
 		let active = true;
@@ -97,14 +104,11 @@ const SearchAddress = ({
 			filterSelectedOptions
 			fullWidth
 			onChange={(_, newValue: Place | null) => {
-				console.log('is changing withouth selecting the option ?');
 				setOptions(newValue ? [newValue, ...options] : options);
 				setValue(newValue);
 				updatePosition(newValue);
 			}}
-			onInputChange={(_, newInputValue) => {
-				setInputValue(newInputValue);
-			}}
+			onInputChange={onChangeInput}
 			renderInput={(params) => <TextField {...params} variant="outlined" fullWidth error={hasError} />}
 		/>
 	);

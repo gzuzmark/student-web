@@ -200,6 +200,8 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 		});
 	}, [mapInstance, mapsApi]);
 
+	console.log('is updating after doing something in the Search Adress ?');
+
 	return (
 		<div className={classes.form}>
 			<SearchAddress
