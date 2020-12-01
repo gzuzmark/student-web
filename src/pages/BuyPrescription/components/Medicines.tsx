@@ -1,6 +1,8 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useMemo } from 'react';
 import { PrescribedMedicine } from 'pages/api';
 import { Theme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils';
 
@@ -9,11 +11,21 @@ import ElectronicPrescription from './ElectronicPrescription';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	medicines: {
-		overflow: 'scroll',
 		[breakpoints.up('lg')]: {
 			width: '506px',
 			marginRight: '57px',
-			overflow: 'visible',
+		},
+	},
+	subTitle: {
+		textTransform: 'none',
+		padding: '12px 0',
+		fontSize: '13px',
+		lineHeight: '18px',
+		[breakpoints.up('lg')]: {
+			fontSize: '20px',
+			lineHeight: '25px',
+			padding: '19px 0 39px',
+			fontWeight: 400,
 		},
 	},
 	electronicPrescription: {
@@ -32,16 +44,52 @@ export interface MedicinesProps {
 
 const Medicines = ({ medicines, selectedMedicines, toggleMedicine }: MedicinesProps): ReactElement => {
 	const classes = useStyles();
+	const { t } = useTranslation('buyPrescription');
+	const availableMedicines = useMemo(
+		() => medicines.filter(({ hasStock, isAvailableForECommerce }) => isAvailableForECommerce && hasStock),
+		[medicines],
+	);
+	const outOfStockMedicines = useMemo(
+		() => medicines.filter(({ hasStock, isAvailableForECommerce }) => isAvailableForECommerce && !hasStock),
+		[medicines],
+	);
+	const notAvailableMedicines = useMemo(
+		() => medicines.filter(({ isAvailableForECommerce }) => !isAvailableForECommerce),
+		[medicines],
+	);
 
 	return (
 		<div className={classes.medicines}>
-			{medicines.map((medicine, index) => (
+			{availableMedicines.map((medicine, index) => (
 				<Medicine
-					key={`${medicine.name}-${index}`}
+					key={`available-${medicine.name}-${index}`}
 					medicine={medicine}
 					isActive={selectedMedicines.indexOf(index) > -1}
 					onClick={toggleMedicine(index)}
-					index={index}
+					titleIndex={index}
+				/>
+			))}
+			{availableMedicines.length > 0 && outOfStockMedicines.length > 0 && (
+				<Typography className={classes.subTitle}>{t('buyPrescription.subTitle.outOfStock')}</Typography>
+			)}
+			{outOfStockMedicines.map((medicine, index) => (
+				<Medicine
+					key={`out-of-stock-${medicine.name}-${index}`}
+					medicine={medicine}
+					isActive={selectedMedicines.indexOf(availableMedicines.length + index) > -1}
+					onClick={toggleMedicine(availableMedicines.length + index)}
+					titleIndex={availableMedicines.length + index}
+				/>
+			))}
+			{availableMedicines.length > 0 && outOfStockMedicines.length > 0 && notAvailableMedicines.length > 0 && (
+				<Typography className={classes.subTitle}>{t('buyPrescription.subTitle.notAvailable')}</Typography>
+			)}
+			{notAvailableMedicines.map((medicine, index) => (
+				<Medicine
+					key={`not-available-medicines-${medicine.name}-${index}`}
+					medicine={medicine}
+					isActive={selectedMedicines.indexOf(outOfStockMedicines.length + availableMedicines.length + index) > -1}
+					titleIndex={outOfStockMedicines.length + availableMedicines.length + index}
 				/>
 			))}
 			<div className={classes.electronicPrescription}>

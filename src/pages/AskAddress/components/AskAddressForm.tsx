@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ReactElement, ChangeEvent } from 'react';
+import React, { useCallback, useState, useEffect, ReactElement, ChangeEvent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import { stylesWithTheme } from 'utils';
 
 import AddressBenefits from './AddressBenefits';
-import { Position } from 'pages/api';
+import { Position, postAddress } from 'pages/api';
 import { defaultCenter, getUserCurrentPosition } from 'utils';
 import SearchAddress from 'pages/LaboratoryExams/components/SearchAddress';
 
@@ -93,30 +93,76 @@ const getCurrentPosition = async ({
 	}
 };
 
-const AskAddressForm = (): ReactElement | null => {
+interface AskAddressFormProps {
+	sessionId: string;
+	openSuccesModal: () => void;
+	submitCallback?: (pos: Position, address: string) => void;
+}
+
+const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddressFormProps): ReactElement | null => {
 	const { t } = useTranslation('askAddress');
 	const [currentPositionMarker, setCurrentPositionMarker] = useState<Marker>();
-	const [directionReference, setDirectionReference] = useState<string>('');
+	const [addressReference, setAddressReference] = useState<string>('');
 	const [referenceError, setReferenceError] = useState<string>('');
 	const [mapsApi, setMapApi] = useState<MapsApi>();
 	const [mapInstance, setMapInstance] = useState<MapInstance>();
 	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
 	const [hasAddressError, setHasAddressError] = useState<boolean>(false);
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
 	const updateDirectionReference = (e: ChangeEvent<HTMLInputElement>) => {
-		setDirectionReference(e.target.value);
+		setAddressReference(e.target.value);
 	};
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
-	const onSubmit = () => {
-		if (!directionReference) {
-			setReferenceError(t('askAddress.addressReference.error'));
-		}
+	const onSubmit = useCallback(async () => {
+		try {
+			if (!addressReference) {
+				setReferenceError(t('askAddress.addressReference.error'));
+				return;
+			} else {
+				setReferenceError('');
+			}
 
-		if (!humanActivePosition) {
-			setHasAddressError(true);
+			if (!humanActivePosition) {
+				setHasAddressError(true);
+				// return;
+			} else {
+				setHasAddressError(false);
+			}
+
+			setIsSubmitting(true);
+
+			if (submitCallback) {
+				if (activePosition && humanActivePosition) {
+					submitCallback(activePosition, humanActivePosition);
+				}
+				return;
+			}
+
+			if (currentPositionMarker) {
+				await postAddress(sessionId, {
+					latitude: String(activePosition?.lat) || '',
+					longitude: String(activePosition?.lng) || '',
+					address: humanActivePosition,
+					reference: addressReference,
+				});
+				openSuccesModal();
+			}
+		} catch (e) {
+			setReferenceError('Hubo un problema al enviar la cita, vuelva a intentarlo');
+			setIsSubmitting(false);
 		}
-	};
+	}, [
+		addressReference,
+		humanActivePosition,
+		submitCallback,
+		currentPositionMarker,
+		t,
+		sessionId,
+		activePosition,
+		openSuccesModal,
+	]);
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
 		const addressInputWrapper = document.querySelector<HTMLElement>('.address-input-wrapper');
 
@@ -174,9 +220,9 @@ const AskAddressForm = (): ReactElement | null => {
 			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressReference.label')}</Typography>
 			<TextField
 				className={classes.addressReferenceInput}
-				value={directionReference}
+				value={addressReference}
 				onChange={updateDirectionReference}
-				name="direction-reference"
+				name="address-reference"
 				placeholder={t('askAddress.addressReference.placeholder')}
 				variant="outlined"
 				error={!!referenceError}
@@ -184,7 +230,7 @@ const AskAddressForm = (): ReactElement | null => {
 				fullWidth
 			/>
 			{!isDesktop && <AddressBenefits />}
-			<Button className={classes.submitButton} onClick={onSubmit} variant="contained" fullWidth>
+			<Button className={classes.submitButton} onClick={onSubmit} variant="contained" disabled={isSubmitting} fullWidth>
 				{t('askAddress.submitAddress')}
 			</Button>
 		</div>

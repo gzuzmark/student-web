@@ -52,7 +52,7 @@ export type CreateAppointmentRoute = 'triaje' | 'seleccionar_doctor' | 'pre_regi
 interface Route {
 	id: string;
 	path: string;
-	component: () => ReactElement;
+	component: (props: Record<string, any>) => ReactElement;
 	guard?: boolean;
 	exact?: boolean;
 }
