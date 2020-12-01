@@ -63,7 +63,6 @@ const SearchAddress = ({
 		}
 
 		fetch({ input: inputValue }, (results?: Place[]) => {
-			console.log('Google response', inputValue, active, value, results);
 			if (active) {
 				let newOptions = [] as Place[];
 
@@ -84,6 +83,8 @@ const SearchAddress = ({
 		};
 	}, [fetch, inputValue, value]);
 
+	console.log(options);
+
 	return (
 		<Autocomplete
 			id={id}
@@ -94,7 +95,7 @@ const SearchAddress = ({
 			filterSelectedOptions
 			fullWidth
 			onChange={(_, newValue: Place | null) => {
-				setOptions(newValue ? [newValue, ...options] : options);
+				// setOptions(newValue ? [newValue, ...options] : options);
 				setValue(newValue);
 				updatePosition(newValue);
 			}}
