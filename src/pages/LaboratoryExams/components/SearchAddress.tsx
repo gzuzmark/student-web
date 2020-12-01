@@ -86,8 +86,6 @@ const SearchAddress = ({
 		};
 	}, [fetch, inputValue, value]);
 
-	console.log('In the component', options);
-
 	return (
 		<Autocomplete
 			id={id}
@@ -100,7 +98,6 @@ const SearchAddress = ({
 			filterSelectedOptions
 			includeInputInList
 			onChange={(_, newValue: Place | null) => {
-				console.log('changing');
 				setValue(newValue);
 				updatePosition(newValue);
 			}}
@@ -109,8 +106,6 @@ const SearchAddress = ({
 				setInputValue(newInputValue);
 			}}
 			renderOption={(option) => {
-				console.log(option);
-
 				return <Typography>{option.address}</Typography>;
 			}}
 		/>
