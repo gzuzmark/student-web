@@ -77,7 +77,6 @@ const SearchAddress = ({
 					newOptions = [...newOptions, ...results];
 				}
 
-				console.log('After the fetch', newOptions);
 				setOptions(newOptions);
 			}
 		});
@@ -88,15 +87,6 @@ const SearchAddress = ({
 	}, [fetch, inputValue, value]);
 
 	console.log('In the component', options);
-	console.table({
-		id,
-		className,
-		hasError,
-		defaultValue,
-		defaultPosition,
-		updatePosition,
-		mapsApi,
-	});
 
 	return (
 		<Autocomplete
@@ -108,6 +98,7 @@ const SearchAddress = ({
 			filterSelectedOptions
 			fullWidth
 			onChange={(_, newValue: Place | null) => {
+				console.log('changing');
 				setOptions(newValue ? [newValue, ...options] : options);
 				setValue(newValue);
 				updatePosition(newValue);
@@ -116,7 +107,11 @@ const SearchAddress = ({
 			onInputChange={(_: React.ChangeEvent<{}>, newInputValue: string) => {
 				setInputValue(newInputValue);
 			}}
-			renderOption={(option) => <Typography>{option.address}</Typography>}
+			renderOption={(option) => {
+				console.log(option);
+
+				return <Typography>{option.address}</Typography>;
+			}}
 		/>
 	);
 };
