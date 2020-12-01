@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useState, useMemo } from 'react';
-import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import throttle from 'lodash/throttle';
 
 import { Position } from 'pages/api';
@@ -54,19 +55,13 @@ const SearchAddress = ({
 			}, 500),
 		[mapsApi],
 	);
-	const onChangeInput = useMemo(
-		() =>
-			throttle((_: React.ChangeEvent<{}>, newInputValue: string) => {
-				setInputValue(newInputValue);
-			}, 500),
-		[],
-	);
 
 	useEffect(() => {
 		let active = true;
 
 		if (inputValue === '') {
 			setOptions(value ? [value] : []);
+
 			return undefined;
 		}
 
@@ -93,13 +88,22 @@ const SearchAddress = ({
 	}, [fetch, inputValue, value]);
 
 	console.log('In the component', options);
+	console.table({
+		id,
+		className,
+		hasError,
+		defaultValue,
+		defaultPosition,
+		updatePosition,
+		mapsApi,
+	});
 
 	return (
 		<Autocomplete
 			id={id}
 			className={className}
 			options={options}
-			getOptionLabel={(option) => option.address}
+			getOptionLabel={(option) => (typeof option === 'string' ? option : option.address)}
 			value={value}
 			filterSelectedOptions
 			fullWidth
@@ -108,8 +112,11 @@ const SearchAddress = ({
 				setValue(newValue);
 				updatePosition(newValue);
 			}}
-			onInputChange={onChangeInput}
-			renderInput={(params) => <TextField {...params} variant="outlined" fullWidth error={hasError} />}
+			renderInput={(params) => <TextField {...params} variant="outlined" fullWidth />}
+			onInputChange={(_: React.ChangeEvent<{}>, newInputValue: string) => {
+				setInputValue(newInputValue);
+			}}
+			renderOption={(option) => <Typography>{option.address}</Typography>}
 		/>
 	);
 };
