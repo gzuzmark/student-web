@@ -94,12 +94,13 @@ const SearchAddress = ({
 			className={className}
 			options={options}
 			getOptionLabel={(option) => (typeof option === 'string' ? option : option.address)}
+			filterOptions={(x) => x}
 			value={value}
+			autoComplete
 			filterSelectedOptions
-			fullWidth
+			includeInputInList
 			onChange={(_, newValue: Place | null) => {
 				console.log('changing');
-				setOptions(newValue ? [newValue, ...options] : options);
 				setValue(newValue);
 				updatePosition(newValue);
 			}}
