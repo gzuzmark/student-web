@@ -63,6 +63,7 @@ const SearchAddress = ({
 		}
 
 		fetch({ input: inputValue }, (results?: Place[]) => {
+			console.log('Google response', inputValue, active, value, results);
 			if (active) {
 				let newOptions = [] as Place[];
 
