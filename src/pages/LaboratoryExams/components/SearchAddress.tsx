@@ -36,6 +36,7 @@ const SearchAddress = ({
 			throttle((request: { input: string }, callback: (results?: Place[]) => void) => {
 				if (mapsApi) {
 					const geocoder = new mapsApi.Geocoder();
+
 					geocoder.geocode(
 						{ address: request.input },
 						(results: google.maps.GeocoderResult[], responseStatus: google.maps.GeocoderStatus) => {
@@ -74,6 +75,7 @@ const SearchAddress = ({
 					newOptions = [...newOptions, ...results];
 				}
 
+				console.log('After the fetch', newOptions);
 				setOptions(newOptions);
 			}
 		});
@@ -83,7 +85,7 @@ const SearchAddress = ({
 		};
 	}, [fetch, inputValue, value]);
 
-	console.log(options);
+	console.log('In the component', options);
 
 	return (
 		<Autocomplete
