@@ -1,53 +1,5 @@
-// import axios from 'axios';
-
+import { ugoConsoleAxios } from 'utils/customAxios';
 import { Position } from './laboratories';
-
-const mockPrescription: PrescriptionAPI = {
-	address: 'Calle Los Castaños 200 SAN ISIDRO, LIMA',
-	not_available_near_you: true,
-	medicines: [
-		{
-			name: 'Esomeprazol 40mg comprimidos',
-			measure: 'BLISTER 10 UN',
-			individual_cost: '5.50',
-			total_measure: '3 blister 10 UN',
-			total_cost: '15.50',
-			img_url: 'https://picsum.photos/500/700',
-			has_stock: true,
-			is_available_for_commerce: true,
-		},
-		{
-			name: 'Ibuprofeno 800mg comprimidos',
-			measure: '1 blister 10 UN',
-			individual_cost: '5.50',
-			total_measure: '2 blister de 10 UN',
-			total_cost: '11.00',
-			img_url: 'https://picsum.photos/500/700',
-			has_stock: false,
-			alternative_medicine: {
-				name: 'Gofen 400mg Cápsulas Blandas',
-				measure: 'BLISTER 10 UN',
-				individual_cost: '12.50',
-				total_measure: '2 blister de 10 UN',
-				total_cost: '25.00',
-				img_url: 'https://picsum.photos/500/700',
-				has_stock: true,
-				is_available_for_commerce: true,
-			},
-			is_available_for_commerce: true,
-		},
-		{
-			name: 'Gofen 400mg Cápsulas Blandas',
-			measure: 'BLISTER 10 UN',
-			individual_cost: '12.50',
-			total_measure: '2 blister de 10 UN',
-			total_cost: '25.00',
-			img_url: 'https://picsum.photos/500/700',
-			has_stock: false,
-			is_available_for_commerce: false,
-		},
-	],
-};
 
 export interface StoreMedicine {
 	totalPrice: number;
@@ -76,25 +28,37 @@ export interface PrescribedMedicine {
 
 export interface Prescription {
 	address: string;
+	folioNumber: string;
 	medicines: PrescribedMedicine[];
 	notAvailableNearYou: boolean;
 }
 
+interface ImagesApi {
+	type: string;
+	url: string;
+	thumbnails: string | null;
+}
+
 interface MedicineAPI {
-	name: string;
-	measure: string;
-	individual_cost: string;
-	total_measure: string;
-	total_cost: string;
-	img_url: string;
-	has_stock: boolean;
+	productName: string;
+	totalQuantity: number;
+	totalPrice: number;
+	images: ImagesApi[];
 	alternative_medicine?: Omit<MedicineAPI, 'alternative_medicine'>;
-	is_available_for_commerce: boolean;
+	statusCode: number;
+	pharmaceuticalFormPrice: number;
+	pharmaceuticalForm: string;
+	unitQuantity: number;
+	unit: string;
 }
 
 interface PrescriptionAPI {
 	address: string;
-	medicines: MedicineAPI[];
+	folioNumber: string;
+	latitude: string;
+	longitude: string;
+	prescriptionPath: string;
+	availableProducts: MedicineAPI[];
 	not_available_near_you: boolean;
 }
 
@@ -102,49 +66,64 @@ const formatAlternativeMedicine = (
 	medicineAPI: Omit<MedicineAPI, 'alternative_medicine'> | undefined,
 ): Omit<PrescribedMedicine, 'alternativeMedicine'> | undefined =>
 	medicineAPI && {
-		name: medicineAPI.name,
-		individualMeasure: medicineAPI.measure,
-		individualCost: medicineAPI.individual_cost,
-		totalMeasure: medicineAPI.total_measure,
-		totalCost: medicineAPI.total_cost,
-		imgUrl: medicineAPI.img_url,
+		name: medicineAPI.productName,
+		individualMeasure: `${medicineAPI.pharmaceuticalForm} ${medicineAPI.unitQuantity} ${medicineAPI.unit}`,
+		individualCost: medicineAPI.pharmaceuticalFormPrice.toFixed(2),
+		totalMeasure: `${medicineAPI.totalQuantity} ${medicineAPI.pharmaceuticalForm} ${medicineAPI.unitQuantity} ${medicineAPI.unit}`,
+		totalCost: medicineAPI.totalPrice.toFixed(2),
+		imgUrl: medicineAPI.images.find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
 		hasStock: true,
 		isAvailableForECommerce: true,
 	};
 
-const formatPrescription = ({ address, medicines, not_available_near_you }: PrescriptionAPI): Prescription => ({
+const formatPrescription = ({
 	address,
+	folioNumber,
+	availableProducts,
+	not_available_near_you,
+}: PrescriptionAPI): Prescription => ({
+	address,
+	folioNumber,
 	notAvailableNearYou: not_available_near_you,
-	medicines: medicines.map(
+	medicines: availableProducts.map(
 		({
-			name,
-			measure,
-			individual_cost,
-			total_measure,
-			total_cost,
-			img_url,
-			has_stock,
+			productName,
+			totalQuantity,
+			totalPrice,
+			images,
 			alternative_medicine,
-			is_available_for_commerce,
+			statusCode,
+			pharmaceuticalFormPrice,
+			pharmaceuticalForm,
+			unitQuantity,
+			unit,
 		}) => ({
-			name,
-			individualMeasure: measure,
-			individualCost: individual_cost,
-			totalMeasure: total_measure,
-			totalCost: total_cost,
-			imgUrl: img_url,
-			hasStock: has_stock,
+			name: productName,
+			individualMeasure: `${pharmaceuticalForm} ${unitQuantity} ${unit}`,
+			individualCost: pharmaceuticalFormPrice.toFixed(2),
+			totalMeasure: `${totalQuantity} ${pharmaceuticalForm.toLowerCase()}${
+				totalQuantity > 1 ? 's' : ''
+			} ${unitQuantity} ${unit}`,
+			totalCost: totalPrice.toFixed(2),
+			imgUrl: images.find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
+			hasStock: statusCode === 1,
 			alternativeMedicine: formatAlternativeMedicine(alternative_medicine),
-			isAvailableForECommerce: is_available_for_commerce,
+			isAvailableForECommerce: statusCode !== 3,
 		}),
 	),
 });
 
-export const getPrescription = async (userId: string, updatedPosition: Position | undefined): Promise<Prescription> => {
+export const getPrescription = async (
+	userId: string,
+	updatedPosition: Position | undefined,
+	folioNumber: string,
+): Promise<Prescription> => {
 	try {
-		// const resp = await axios.get<PrescriptionAPI>('http://somewhere-over-the-rainbow/prescription');
-		console.log(userId, updatedPosition);
-		const resp = { data: mockPrescription };
+		const resp = await ugoConsoleAxios.get<PrescriptionAPI>(
+			`/alivia/available_products?sessionId=${userId}&folioNumber=${folioNumber}&latitude=${
+				updatedPosition?.lat || ''
+			}&longitude=${updatedPosition?.lng || ''}`,
+		);
 
 		return formatPrescription(resp.data);
 	} catch (e) {

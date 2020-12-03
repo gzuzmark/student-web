@@ -12,6 +12,7 @@ export default {
 	'buyPrescription.prescribedMedication.alternativeLabel': 'Te recomendamos esta alternativa:',
 	'buyPrescription.address.label': 'DIRECCIÓN DE ENVÍO',
 	'buyPrescription.address.editLabel': 'EDITAR',
+	'buyPrescription.address.cancelEdit': 'CANCELAR',
 	'buyPrescription.medicinesSelected': '{{ selectedCount }} de {{ totalCount }} medicamentos recetados seleccionados',
 	'buyPrescription.total.label': 'Total',
 	'buyPrescription.total.helperText': '(sin incluir costos de envío)',
@@ -26,4 +27,8 @@ export default {
 	'buyPrescription.notAvailableNearYou.alternative':
 		'Te recomendamos modificar o ingresar otra dirección y probar nuevamente.',
 	'buyPrescription.notAvailableNearYou.updateAddress': 'Ingresar una dirección nueva',
+	'buyPrescription.addressReference.label': 'Piso, puerta, oficina o referencia',
+	'buyPrescription.addressReference.placeholder': 'Ejemplo: puerta 4, oficina 501',
+	'buyPrescription.submitAddress': 'Actualizar dirección',
+	'askAddress.addressReference.error': 'Debes ingresar una referencia',
 };

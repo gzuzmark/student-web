@@ -140,10 +140,10 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 				return;
 			}
 
-			if (currentPositionMarker) {
+			if (activePosition) {
 				await postAddress(sessionId, {
-					latitude: String(activePosition?.lat) || '',
-					longitude: String(activePosition?.lng) || '',
+					latitude: String(activePosition.lat) || '',
+					longitude: String(activePosition.lng) || '',
 					address: humanActivePosition,
 					reference: addressReference,
 				});
@@ -153,16 +153,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			setReferenceError('Hubo un problema al enviar la cita, vuelva a intentarlo');
 			setIsSubmitting(false);
 		}
-	}, [
-		addressReference,
-		humanActivePosition,
-		submitCallback,
-		currentPositionMarker,
-		t,
-		sessionId,
-		activePosition,
-		openSuccesModal,
-	]);
+	}, [addressReference, humanActivePosition, submitCallback, t, sessionId, activePosition, openSuccesModal]);
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
 		const addressInputWrapper = document.querySelector<HTMLElement>('.address-input-wrapper');
 

@@ -7,7 +7,7 @@ import { useLocation } from 'react-router';
 import { parse } from 'query-string';
 
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
 
 import AskAddressForm from './components/AskAddressForm';
 import AddressBenefits from './components/AddressBenefits';
@@ -69,7 +69,7 @@ const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElemen
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const location = useLocation();
 	const params = parse(location.search);
-	const activeSessionId = sessionId || 'test' || (params.useId as string);
+	const activeSessionId = sessionId || (params.sessionId as string);
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
 	const redirectToAccount = () => {
 		console.log('to somwhere !');
@@ -77,6 +77,10 @@ const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElemen
 	const openSuccesModal = () => {
 		setIsSuccessModalOpen(true);
 	};
+
+	if (!activeSessionId) {
+		redirectToBaseAlivia();
+	}
 
 	return (
 		<div className={classes.container}>
