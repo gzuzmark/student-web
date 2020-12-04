@@ -30,5 +30,10 @@ export default {
 	'buyPrescription.addressReference.label': 'Piso, puerta, oficina o referencia',
 	'buyPrescription.addressReference.placeholder': 'Ejemplo: puerta 4, oficina 501',
 	'buyPrescription.submitAddress': 'Actualizar dirección',
-	'askAddress.addressReference.error': 'Debes ingresar una referencia',
+	'buyPrescription.addressReference.error': 'Debes ingresar una referencia',
+	'buyPrescription.redirectToInkafarma.title': 'Estás siendo redirigido a la tienda online de Inkafarma.',
+	'buyPrescription.redirectToInkafarma.body.firstLine':
+		'Aquí podrás realizar el pago y finalizar el proceso de compra de tu receta.',
+	'buyPrescription.redirectToInkafarma.body.secondLine':
+		'Si no eres redirigido automáticamente en los próximos segundos, pulsa en Continuar.',
 };

@@ -15,6 +15,7 @@ export interface StoreMedicine {
 }
 
 export interface PrescribedMedicine {
+	skuInkafarma: string;
 	name: string;
 	individualMeasure: string;
 	individualCost: string;
@@ -22,8 +23,11 @@ export interface PrescribedMedicine {
 	totalCost: string;
 	imgUrl: string;
 	hasStock: boolean;
-	alternativeMedicine?: Omit<PrescribedMedicine, 'alternativeMedicine'>;
+	alternativeMedicine: PrescribedMedicine | null;
 	isAvailableForECommerce: boolean;
+	totalQuantity: number;
+	pharmaceuticalForm: string;
+	totalPrice: number;
 }
 
 export interface Prescription {
@@ -41,11 +45,12 @@ interface ImagesApi {
 }
 
 interface MedicineAPI {
+	skuInkafarma: string;
 	productName: string;
 	totalQuantity: number;
 	totalPrice: number;
 	images: ImagesApi[];
-	alternative_medicine?: Omit<MedicineAPI, 'alternative_medicine'>;
+	recomendedProduct: MedicineAPI | null;
 	statusCode: number;
 	pharmaceuticalFormPrice: number;
 	pharmaceuticalForm: string;
@@ -63,10 +68,9 @@ interface PrescriptionAPI {
 	not_available_near_you: boolean;
 }
 
-const formatAlternativeMedicine = (
-	medicineAPI: Omit<MedicineAPI, 'alternative_medicine'> | undefined,
-): Omit<PrescribedMedicine, 'alternativeMedicine'> | undefined =>
+const formatAlternativeMedicine = (medicineAPI: MedicineAPI | null): PrescribedMedicine | null =>
 	medicineAPI && {
+		skuInkafarma: medicineAPI.skuInkafarma,
 		name: medicineAPI.productName,
 		individualMeasure: `${medicineAPI.pharmaceuticalForm} ${medicineAPI.unitQuantity} ${medicineAPI.unit}`,
 		individualCost: medicineAPI.pharmaceuticalFormPrice.toFixed(2),
@@ -75,6 +79,10 @@ const formatAlternativeMedicine = (
 		imgUrl: medicineAPI.images.find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
 		hasStock: medicineAPI.statusCode === 1,
 		isAvailableForECommerce: true,
+		totalQuantity: medicineAPI.totalQuantity,
+		pharmaceuticalForm: medicineAPI.pharmaceuticalForm,
+		alternativeMedicine: null,
+		totalPrice: medicineAPI.totalPrice,
 	};
 
 const formatPrescription = ({
@@ -90,17 +98,19 @@ const formatPrescription = ({
 	notAvailableNearYou: not_available_near_you,
 	medicines: availableProducts.map(
 		({
+			skuInkafarma,
 			productName,
 			totalQuantity,
 			totalPrice,
 			images,
-			alternative_medicine,
+			recomendedProduct,
 			statusCode,
 			pharmaceuticalFormPrice,
 			pharmaceuticalForm,
 			unitQuantity,
 			unit,
 		}) => ({
+			skuInkafarma,
 			name: productName,
 			individualMeasure: `${pharmaceuticalForm} ${unitQuantity} ${unit}`,
 			individualCost: (pharmaceuticalFormPrice || 0).toFixed(2),
@@ -110,8 +120,11 @@ const formatPrescription = ({
 			totalCost: (totalPrice || 0).toFixed(2),
 			imgUrl: (images || []).find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
 			hasStock: statusCode === 1,
-			alternativeMedicine: formatAlternativeMedicine(alternative_medicine),
+			alternativeMedicine: formatAlternativeMedicine(recomendedProduct),
 			isAvailableForECommerce: statusCode !== 3,
+			totalQuantity,
+			pharmaceuticalForm,
+			totalPrice,
 		}),
 	),
 });
@@ -131,6 +144,30 @@ export const getPrescription = async (
 		return formatPrescription(resp.data);
 	} catch (e) {
 		console.log(e);
+		throw Error(e);
+	}
+};
+
+interface SelectedMedicine {
+	sku: string;
+	quantity: number;
+	pharmaceuticalForm: string;
+}
+
+interface RedirectUrlResponse {
+	code: string;
+	error: string;
+	object: string;
+}
+
+export type SelectedMedicines = SelectedMedicine[];
+
+export const getRedirectUrl = async (selectedItems: SelectedMedicines): Promise<string> => {
+	try {
+		const resp = await ugoConsoleAxios.post<RedirectUrlResponse>('/alivia/ecommerce_url', { items: selectedItems });
+
+		return resp.data.object;
+	} catch (e) {
 		throw Error(e);
 	}
 };

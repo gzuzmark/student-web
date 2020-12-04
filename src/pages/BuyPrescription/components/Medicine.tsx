@@ -30,12 +30,14 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 		borderRadius: '5px',
 		marginBottom: '26px',
 	},
-	wrapper: {
+	medicineContainer: {
 		border: ({ isActive }: StylesProps) => `1px solid ${isActive ? palette.primary.main : 'transparent'}`,
 		borderRadius: ({ hasAlternativeMedicine }: StylesProps) => (hasAlternativeMedicine ? '0 0 5px 5px' : '5px'),
 		cursor: 'pointer',
+	},
+	wrapper: {
 		display: 'flex',
-		padding: '18px 0 38px 9px',
+		padding: '18px 9px 38px',
 	},
 	outOfStockMedicine: {
 		backgroundColor: 'rgba(217, 217, 220, 0.4)',
@@ -186,16 +188,8 @@ export interface MedicineProps {
 
 const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): ReactElement => {
 	const { alternativeMedicine } = medicine;
-	const {
-		name,
-		individualMeasure,
-		individualCost,
-		totalMeasure,
-		totalCost,
-		imgUrl,
-		isAvailableForECommerce,
-		hasStock,
-	} = alternativeMedicine || medicine;
+	const { name, individualMeasure, individualCost, totalMeasure, totalCost, imgUrl, isAvailableForECommerce } =
+		alternativeMedicine || medicine;
 	const classes = useStyles({ isActive, hasAlternativeMedicine: !!alternativeMedicine });
 	const { t } = useTranslation('buyPrescription');
 
@@ -223,7 +217,7 @@ const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): R
 				{t('buyPrescription.prescribedMedication.title', { index: titleIndex + 1 })}
 			</Typography>
 			<div className={classes.container}>
-				{!hasStock && (
+				{!medicine.hasStock && (
 					<div className={classes.outOfStockMedicine}>
 						<div className={classes.outOfStockMedicineInfo}>
 							<div>
@@ -242,8 +236,8 @@ const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): R
 						</div>
 					</div>
 				)}
-				{(medicine.hasStock || (!!medicine.alternativeMedicine && medicine.hasStock)) && (
-					<div>
+				{(medicine.hasStock || (!!medicine.alternativeMedicine && medicine.alternativeMedicine.hasStock)) && (
+					<div className={classes.medicineContainer} onClick={onClick}>
 						{!!alternativeMedicine && (
 							<div className={classes.alternativeTitle}>
 								<div className={classes.alternativeTitleIcon}>
@@ -252,7 +246,7 @@ const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): R
 								<Typography variant="button">{t('buyPrescription.prescribedMedication.alternativeLabel')}</Typography>
 							</div>
 						)}
-						<div className={classes.wrapper} onClick={onClick}>
+						<div className={classes.wrapper}>
 							<div>
 								<img className={classes.img} src={imgUrl} alt={`medicine-${name}-sample`} />
 							</div>

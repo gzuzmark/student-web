@@ -15,6 +15,7 @@ import Medicines from './components/Medicines';
 import CheckoutInformation from './components/CheckoutInformation';
 import SelectPrescriptionType from './components/SelectPrescriptionType';
 import NotAvailableNearYou from './components/NotAvailableNearYour';
+import RedirectToInkafarma from './components/RedirectToInkafarma';
 import AskAddress from '../AskAddress/AskAddress';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -69,6 +70,7 @@ const requestPrescription = async ({
 	sessionId,
 	updatedPosition,
 	folioNumber,
+	savedAddress,
 }: {
 	setMedicines: Function;
 	setUserAddress: Function;
@@ -78,6 +80,7 @@ const requestPrescription = async ({
 	sessionId: string;
 	updatedPosition: Position | undefined;
 	folioNumber: string;
+	savedAddress: string | undefined;
 }) => {
 	try {
 		const {
@@ -88,8 +91,11 @@ const requestPrescription = async ({
 			folioNumber: newFolioNumber,
 		} = await getPrescription(sessionId, updatedPosition, folioNumber);
 
+		if (!savedAddress) {
+			setUserAddress(address);
+		}
+
 		setFolioNumber(newFolioNumber);
-		setUserAddress(address);
 		setMedicines(medicines);
 		setNotAvailableNearYou(notAvailableNearYou);
 		setPrescriptionPath(prescriptionPath);
@@ -108,6 +114,7 @@ const BuyPrescription = (): ReactElement => {
 	const [notAvailableNearYou, setNotAvailableNearYou] = useState<boolean>(false);
 	const [showingQuotedPrescription, setShowingQuotedPrescription] = useState<boolean>(false);
 	const [isShowingEditAddressScreen, setIsShowingEditAddressScreen] = useState<boolean>(false);
+	const [showingRedirectPage, setShowingRedirectPage] = useState<boolean>(false);
 	const [updatedPosition, setUpdatedPosition] = useState<Position>();
 	const classes = useStyles();
 	const outOfStock =
@@ -142,9 +149,25 @@ const BuyPrescription = (): ReactElement => {
 		setUpdatedPosition(pos);
 		setUserAddress(address);
 		setIsShowingEditAddressScreen(false);
+		requestPrescription({
+			setMedicines,
+			setUserAddress,
+			setNotAvailableNearYou,
+			setFolioNumber,
+			setPrescriptionPath,
+			sessionId,
+			updatedPosition,
+			folioNumber,
+			savedAddress: userAddress,
+		});
 	};
 	const openEPrescription = () => {
 		window.open(prescriptionPath, '_blank');
+	};
+	const showRedirectPage = () => {
+		if (selectedMedicines.length >= 1) {
+			setShowingRedirectPage(true);
+		}
 	};
 
 	if (!sessionId) {
@@ -161,8 +184,14 @@ const BuyPrescription = (): ReactElement => {
 			sessionId,
 			updatedPosition,
 			folioNumber,
+			savedAddress: userAddress,
 		});
-	}, [updatedPosition, sessionId, folioNumber]);
+		//eslint-disable-next-line
+	}, []);
+
+	if (showingRedirectPage) {
+		return <RedirectToInkafarma medicines={medicines} selectedMedicines={selectedMedicines} />;
+	}
 
 	if (isShowingEditAddressScreen) {
 		return <AskAddress sessionId={sessionId} submitCallback={onAskAddressSubmit} />;
@@ -203,6 +232,7 @@ const BuyPrescription = (): ReactElement => {
 					selectedMedicines={selectedMedicines}
 					onAddressUpdate={onAskAddressSubmit}
 					openEPrescription={openEPrescription}
+					showRedirectPage={showRedirectPage}
 				/>
 			</div>
 		</div>

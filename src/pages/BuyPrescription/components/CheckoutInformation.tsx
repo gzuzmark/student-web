@@ -14,6 +14,7 @@ import { Position } from 'pages/api';
 import ElectronicPrescription from './ElectronicPrescription';
 import SearchAddress from 'pages/LaboratoryExams/components/SearchAddress';
 import { MapInstance, MapsApi, Place, Marker } from 'pages/AskAddress/types';
+import { roundToNDecimals } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	container: {
@@ -195,6 +196,7 @@ export interface CheckoutInformationProps {
 	address: string;
 	onAddressUpdate: (pos: Position, address: string) => void;
 	openEPrescription: () => void;
+	showRedirectPage: () => void;
 }
 
 const CheckoutInformation = ({
@@ -203,10 +205,16 @@ const CheckoutInformation = ({
 	selectedMedicines,
 	onAddressUpdate,
 	openEPrescription,
+	showRedirectPage,
 }: CheckoutInformationProps): ReactElement => {
 	const { t } = useTranslation('buyPrescription');
 	const classes = useStyles();
-	const total = selectedMedicines.reduce((acc, index) => acc + parseFloat(medicines[index].totalCost), 0);
+	const total = selectedMedicines.reduce((acc, index) => {
+		const medicine = medicines[index];
+		const total = (medicine.hasStock ? medicine.totalPrice : medicine.alternativeMedicine?.totalPrice) || 0;
+
+		return acc + roundToNDecimals(total, 2);
+	}, 0);
 	const totalCount = medicines.filter(
 		({ isAvailableForECommerce, hasStock, alternativeMedicine }) =>
 			isAvailableForECommerce && (hasStock || (!!alternativeMedicine && alternativeMedicine.hasStock)),
@@ -233,7 +241,7 @@ const CheckoutInformation = ({
 	};
 	const updateAddress = () => {
 		if (!addressReference) {
-			setReferenceError(t('askAddress.addressReference.error'));
+			setReferenceError(t('buyPrescription.addressReference.error'));
 			return;
 		} else {
 			setReferenceError('');
@@ -303,7 +311,7 @@ const CheckoutInformation = ({
 						S./{total.toFixed(2)}
 					</Typography>
 				</div>
-				<Button variant="contained" fullWidth>
+				<Button onClick={showRedirectPage} variant="contained" fullWidth>
 					{t('buyPrescription.total.continueWithPayment')}
 				</Button>
 			</div>
@@ -393,7 +401,7 @@ const CheckoutInformation = ({
 					</Typography>
 				</div>
 				<Divider />
-				<Button className={classes.continueButton} variant="contained" fullWidth>
+				<Button onClick={showRedirectPage} className={classes.continueButton} variant="contained" fullWidth>
 					{t('buyPrescription.total.continueWithPayment')}
 				</Button>
 			</div>
