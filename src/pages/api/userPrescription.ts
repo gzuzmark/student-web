@@ -29,6 +29,7 @@ export interface PrescribedMedicine {
 export interface Prescription {
 	address: string;
 	folioNumber: string;
+	prescriptionPath: string;
 	medicines: PrescribedMedicine[];
 	notAvailableNearYou: boolean;
 }
@@ -72,7 +73,7 @@ const formatAlternativeMedicine = (
 		totalMeasure: `${medicineAPI.totalQuantity} ${medicineAPI.pharmaceuticalForm} ${medicineAPI.unitQuantity} ${medicineAPI.unit}`,
 		totalCost: medicineAPI.totalPrice.toFixed(2),
 		imgUrl: medicineAPI.images.find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
-		hasStock: true,
+		hasStock: medicineAPI.statusCode === 1,
 		isAvailableForECommerce: true,
 	};
 
@@ -80,10 +81,12 @@ const formatPrescription = ({
 	address,
 	folioNumber,
 	availableProducts,
+	prescriptionPath,
 	not_available_near_you,
 }: PrescriptionAPI): Prescription => ({
 	address,
 	folioNumber,
+	prescriptionPath,
 	notAvailableNearYou: not_available_near_you,
 	medicines: availableProducts.map(
 		({
@@ -100,12 +103,12 @@ const formatPrescription = ({
 		}) => ({
 			name: productName,
 			individualMeasure: `${pharmaceuticalForm} ${unitQuantity} ${unit}`,
-			individualCost: pharmaceuticalFormPrice.toFixed(2),
-			totalMeasure: `${totalQuantity} ${pharmaceuticalForm.toLowerCase()}${
+			individualCost: (pharmaceuticalFormPrice || 0).toFixed(2),
+			totalMeasure: `${totalQuantity} ${(pharmaceuticalForm || '').toLowerCase()}${
 				totalQuantity > 1 ? 's' : ''
 			} ${unitQuantity} ${unit}`,
-			totalCost: totalPrice.toFixed(2),
-			imgUrl: images.find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
+			totalCost: (totalPrice || 0).toFixed(2),
+			imgUrl: (images || []).find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
 			hasStock: statusCode === 1,
 			alternativeMedicine: formatAlternativeMedicine(alternative_medicine),
 			isAvailableForECommerce: statusCode !== 3,
@@ -127,6 +130,7 @@ export const getPrescription = async (
 
 		return formatPrescription(resp.data);
 	} catch (e) {
+		console.log(e);
 		throw Error(e);
 	}
 };

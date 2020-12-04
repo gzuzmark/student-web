@@ -186,8 +186,16 @@ export interface MedicineProps {
 
 const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): ReactElement => {
 	const { alternativeMedicine } = medicine;
-	const { name, individualMeasure, individualCost, totalMeasure, totalCost, imgUrl, isAvailableForECommerce } =
-		alternativeMedicine || medicine;
+	const {
+		name,
+		individualMeasure,
+		individualCost,
+		totalMeasure,
+		totalCost,
+		imgUrl,
+		isAvailableForECommerce,
+		hasStock,
+	} = alternativeMedicine || medicine;
 	const classes = useStyles({ isActive, hasAlternativeMedicine: !!alternativeMedicine });
 	const { t } = useTranslation('buyPrescription');
 
@@ -215,15 +223,11 @@ const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): R
 				{t('buyPrescription.prescribedMedication.title', { index: titleIndex + 1 })}
 			</Typography>
 			<div className={classes.container}>
-				{!!alternativeMedicine && (
+				{!hasStock && (
 					<div className={classes.outOfStockMedicine}>
 						<div className={classes.outOfStockMedicineInfo}>
 							<div>
-								<img
-									className={classes.img}
-									src={medicine.imgUrl}
-									alt={`medicine-${alternativeMedicine.name}-sample`}
-								/>
+								<img className={classes.img} src={medicine.imgUrl} alt={`medicine-${medicine.name}-sample`} />
 							</div>
 							<div>
 								<Typography className={classes.name}>{medicine.name}</Typography>
@@ -238,38 +242,40 @@ const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): R
 						</div>
 					</div>
 				)}
-				<div>
-					{!!alternativeMedicine && (
-						<div className={classes.alternativeTitle}>
-							<div className={classes.alternativeTitleIcon}>
-								<SortIcon />
+				{(medicine.hasStock || (!!medicine.alternativeMedicine && medicine.hasStock)) && (
+					<div>
+						{!!alternativeMedicine && (
+							<div className={classes.alternativeTitle}>
+								<div className={classes.alternativeTitleIcon}>
+									<SortIcon />
+								</div>
+								<Typography variant="button">{t('buyPrescription.prescribedMedication.alternativeLabel')}</Typography>
 							</div>
-							<Typography variant="button">{t('buyPrescription.prescribedMedication.alternativeLabel')}</Typography>
-						</div>
-					)}
-					<div className={classes.wrapper} onClick={onClick}>
-						<div>
-							<img className={classes.img} src={imgUrl} alt={`medicine-${name}-sample`} />
-						</div>
-						<div>
-							<Typography className={classes.name}>{name}</Typography>
-							<div className={classes.individualValues}>
-								<Typography className={classes.individualMeasure}>{individualMeasure}</Typography>
-								<Typography className={classes.individualCost}>S./{individualCost}</Typography>
+						)}
+						<div className={classes.wrapper} onClick={onClick}>
+							<div>
+								<img className={classes.img} src={imgUrl} alt={`medicine-${name}-sample`} />
 							</div>
-							<Typography className={classes.doctorLabel}>
-								{t('buyPrescription.prescribedMedication.doctorLabel')}
-							</Typography>
-							<div className={classes.totalValues}>
-								<Typography className={classes.totalMeasure}>{totalMeasure}</Typography>
-								<Typography color="primary" variant="button">
-									S./{totalCost}
+							<div>
+								<Typography className={classes.name}>{name}</Typography>
+								<div className={classes.individualValues}>
+									<Typography className={classes.individualMeasure}>{individualMeasure}</Typography>
+									<Typography className={classes.individualCost}>S./{individualCost}</Typography>
+								</div>
+								<Typography className={classes.doctorLabel}>
+									{t('buyPrescription.prescribedMedication.doctorLabel')}
 								</Typography>
+								<div className={classes.totalValues}>
+									<Typography className={classes.totalMeasure}>{totalMeasure}</Typography>
+									<Typography color="primary" variant="button">
+										S./{totalCost}
+									</Typography>
+								</div>
 							</div>
+							<Checkbox className={classes.checkbox} checked={isActive} color="primary" disableRipple />
 						</div>
-						<Checkbox className={classes.checkbox} checked={isActive} color="primary" disableRipple />
 					</div>
-				</div>
+				)}
 			</div>
 			<Divider className={classes.divider} />
 		</div>

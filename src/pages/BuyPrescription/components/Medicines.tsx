@@ -40,9 +40,15 @@ export interface MedicinesProps {
 	medicines: PrescribedMedicine[];
 	selectedMedicines: number[];
 	toggleMedicine: (index: number) => () => void;
+	openEPrescription: () => void;
 }
 
-const Medicines = ({ medicines, selectedMedicines, toggleMedicine }: MedicinesProps): ReactElement => {
+const Medicines = ({
+	medicines,
+	selectedMedicines,
+	toggleMedicine,
+	openEPrescription,
+}: MedicinesProps): ReactElement => {
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
 	const availableMedicines = useMemo(
@@ -93,7 +99,7 @@ const Medicines = ({ medicines, selectedMedicines, toggleMedicine }: MedicinesPr
 				/>
 			))}
 			<div className={classes.electronicPrescription}>
-				<ElectronicPrescription />
+				<ElectronicPrescription openEPrescription={openEPrescription} />
 			</div>
 		</div>
 	);

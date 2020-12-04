@@ -65,6 +65,7 @@ const requestPrescription = async ({
 	setUserAddress,
 	setNotAvailableNearYou,
 	setFolioNumber,
+	setPrescriptionPath,
 	sessionId,
 	updatedPosition,
 	folioNumber,
@@ -73,21 +74,25 @@ const requestPrescription = async ({
 	setUserAddress: Function;
 	setNotAvailableNearYou: Function;
 	setFolioNumber: Function;
+	setPrescriptionPath: Function;
 	sessionId: string;
 	updatedPosition: Position | undefined;
 	folioNumber: string;
 }) => {
 	try {
-		const { address, medicines, notAvailableNearYou, folioNumber: newFolioNumber } = await getPrescription(
-			sessionId,
-			updatedPosition,
-			folioNumber,
-		);
+		const {
+			address,
+			medicines,
+			prescriptionPath,
+			notAvailableNearYou,
+			folioNumber: newFolioNumber,
+		} = await getPrescription(sessionId, updatedPosition, folioNumber);
 
 		setFolioNumber(newFolioNumber);
 		setUserAddress(address);
 		setMedicines(medicines);
 		setNotAvailableNearYou(notAvailableNearYou);
+		setPrescriptionPath(prescriptionPath);
 	} catch (e) {}
 };
 
@@ -99,6 +104,7 @@ const BuyPrescription = (): ReactElement => {
 	const [medicines, setMedicines] = useState<PrescribedMedicine[]>([]);
 	const [userAddress, setUserAddress] = useState<string>('');
 	const [folioNumber, setFolioNumber] = useState<string>('');
+	const [prescriptionPath, setPrescriptionPath] = useState<string>('');
 	const [notAvailableNearYou, setNotAvailableNearYou] = useState<boolean>(false);
 	const [showingQuotedPrescription, setShowingQuotedPrescription] = useState<boolean>(false);
 	const [isShowingEditAddressScreen, setIsShowingEditAddressScreen] = useState<boolean>(false);
@@ -137,6 +143,9 @@ const BuyPrescription = (): ReactElement => {
 		setUserAddress(address);
 		setIsShowingEditAddressScreen(false);
 	};
+	const openEPrescription = () => {
+		window.open(prescriptionPath, '_blank');
+	};
 
 	if (!sessionId) {
 		redirectToBaseAlivia();
@@ -148,6 +157,7 @@ const BuyPrescription = (): ReactElement => {
 			setUserAddress,
 			setNotAvailableNearYou,
 			setFolioNumber,
+			setPrescriptionPath,
 			sessionId,
 			updatedPosition,
 			folioNumber,
@@ -163,7 +173,9 @@ const BuyPrescription = (): ReactElement => {
 	}
 
 	if (!showingQuotedPrescription) {
-		return <SelectPrescriptionType showQuotedPrescription={showQuotedPrescription} />;
+		return (
+			<SelectPrescriptionType showQuotedPrescription={showQuotedPrescription} openEPrescription={openEPrescription} />
+		);
 	}
 
 	return (
@@ -178,13 +190,19 @@ const BuyPrescription = (): ReactElement => {
 				{t(outOfStock ? 'buyPrescription.subTitle.outOfStock' : 'buyPrescription.subTitle')}
 			</Typography>
 			<div className={classes.body}>
-				<Medicines medicines={medicines} selectedMedicines={selectedMedicines} toggleMedicine={toggleMedicine} />
+				<Medicines
+					medicines={medicines}
+					selectedMedicines={selectedMedicines}
+					toggleMedicine={toggleMedicine}
+					openEPrescription={openEPrescription}
+				/>
 				<Divider orientation="vertical" flexItem />
 				<CheckoutInformation
 					address={userAddress}
 					medicines={medicines}
 					selectedMedicines={selectedMedicines}
 					onAddressUpdate={onAskAddressSubmit}
+					openEPrescription={openEPrescription}
 				/>
 			</div>
 		</div>

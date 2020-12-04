@@ -94,9 +94,13 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface SelectPrescriptionType {
 	showQuotedPrescription: () => void;
+	openEPrescription: () => void;
 }
 
-const SelectPrescriptionType = ({ showQuotedPrescription }: SelectPrescriptionType): ReactElement => {
+const SelectPrescriptionType = ({
+	showQuotedPrescription,
+	openEPrescription,
+}: SelectPrescriptionType): ReactElement => {
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
 
@@ -122,7 +126,7 @@ const SelectPrescriptionType = ({ showQuotedPrescription }: SelectPrescriptionTy
 							</span>
 							<CartIcon />
 						</Button>
-						<Button className={classes.seeEPrescription} variant="outlined" fullWidth>
+						<Button onClick={openEPrescription} className={classes.seeEPrescription} variant="outlined" fullWidth>
 							<span className={classes.buttonLabel}>{t('buyPrescription.selectPrescriptionType.ePrescription')}</span>
 							<PrescriptionIcon />
 						</Button>

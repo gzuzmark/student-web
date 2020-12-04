@@ -194,6 +194,7 @@ export interface CheckoutInformationProps {
 	selectedMedicines: number[];
 	address: string;
 	onAddressUpdate: (pos: Position, address: string) => void;
+	openEPrescription: () => void;
 }
 
 const CheckoutInformation = ({
@@ -201,11 +202,15 @@ const CheckoutInformation = ({
 	medicines,
 	selectedMedicines,
 	onAddressUpdate,
+	openEPrescription,
 }: CheckoutInformationProps): ReactElement => {
 	const { t } = useTranslation('buyPrescription');
 	const classes = useStyles();
 	const total = selectedMedicines.reduce((acc, index) => acc + parseFloat(medicines[index].totalCost), 0);
-	const totalCount = medicines.filter(({ isAvailableForECommerce }) => isAvailableForECommerce).length;
+	const totalCount = medicines.filter(
+		({ isAvailableForECommerce, hasStock, alternativeMedicine }) =>
+			isAvailableForECommerce && (hasStock || (!!alternativeMedicine && alternativeMedicine.hasStock)),
+	).length;
 	// edit address states
 	const [isEditAddressShowing, setIsEditAddressShowing] = useState<boolean>(false);
 	const [currentPositionMarker, setCurrentPositionMarker] = useState<Marker>();
@@ -393,7 +398,7 @@ const CheckoutInformation = ({
 				</Button>
 			</div>
 			<div className={classes.electronicPrescription}>
-				<ElectronicPrescription />
+				<ElectronicPrescription openEPrescription={openEPrescription} />
 			</div>
 		</div>
 	);
