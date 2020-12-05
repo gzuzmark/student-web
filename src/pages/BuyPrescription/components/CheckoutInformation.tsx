@@ -258,6 +258,9 @@ const CheckoutInformation = ({
 			onAddressUpdate(activePosition, humanActivePosition);
 			setIsSubmitting(true);
 			hideEditAddress();
+			setTimeout(() => {
+				setIsSubmitting(false);
+			}, 1000);
 		}
 	};
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
