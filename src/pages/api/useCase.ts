@@ -6,6 +6,7 @@ export interface UseCase {
 	name: string;
 	description: string;
 	totalCost: string;
+	averageDuration: string;
 }
 
 interface UseCaseAPI {
@@ -13,6 +14,7 @@ interface UseCaseAPI {
 	title: string;
 	description: string;
 	total_cost: string;
+	average_duration: string;
 }
 
 interface GetUseCaseResponse {
@@ -29,6 +31,7 @@ export const getUseCase = async (useCaseID: string): Promise<UseCase | undefined
 			name: data.title,
 			description: data.description,
 			totalCost: data.total_cost,
+			averageDuration: '40 minutos' || data.average_duration,
 		};
 	} catch (e) {
 		redirectToBaseAlivia();
