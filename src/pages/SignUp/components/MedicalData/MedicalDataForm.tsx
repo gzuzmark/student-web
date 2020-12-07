@@ -218,21 +218,13 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 							/>
 						</div>
 						<div className={classes.fieldWrapper}>
-							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
-								<Typography component="span">{t('medicalData.fields.files.label.firstPart')}</Typography>{' '}
-								<FormLabel className={classes.fieldClickable} htmlFor="files-input">
-									<Typography component="span" color="primary">
-										{t('medicalData.fields.files.label.secondPart')}
-									</Typography>{' '}
-								</FormLabel>
-								{matches ? (
-									<Typography component="span" className={classes.italicLabel}>
-										{t('medicalData.fields.optional.label')}
-									</Typography>
-								) : null}
-							</div>
-
-							<Field component={FilesGroupField} inputId="files-input" name="files" />
+							<Field
+								component={FilesGroupField}
+								inputId="files-input"
+								name="files"
+								labelText={t('medicalData.dropzone.label')}
+								isOptional
+							/>
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>

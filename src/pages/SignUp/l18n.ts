@@ -67,6 +67,7 @@ const signUp = {
 	'medicalData.privacyPolicy.firstSection': 'Estoy de acuerdo con la',
 	'medicalData.privacyPolicy.secondSection': 'política de privacidad',
 	'medicalData.submit.text': 'Continuar',
+	'medicalData.dropzone.label': 'Adjunta fotos o exámenes realizados',
 	// Contact
 	'contact.mobile.title': 'Usaremos tus datos de contacto para enviarte la información de tu cita',
 	'contact.title.firstLine': 'Usaremos los datos de contacto para',
