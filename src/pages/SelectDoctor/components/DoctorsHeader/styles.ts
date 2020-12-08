@@ -7,6 +7,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			display: 'flex',
 			padding: '0 0 16px 0',
+			flexWrap: 'wrap',
 		},
 	},
 	formLabel: {
@@ -55,6 +56,14 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		paddingRight: '16px',
 	},
 	appointmentCost: {
+		display: 'flex',
+		paddingBottom: '24px',
+		[breakpoints.up('lg')]: {
+			alignSelf: 'center',
+			padding: '24px 39px 0',
+		},
+	},
+	appointmentDuration: {
 		display: 'flex',
 		[breakpoints.up('lg')]: {
 			alignSelf: 'center',

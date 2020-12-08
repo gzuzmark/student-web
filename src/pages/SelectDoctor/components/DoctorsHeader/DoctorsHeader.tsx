@@ -6,6 +6,7 @@ import { DatePickerInput } from 'pages/common';
 import { UseCase } from 'pages/api/useCase';
 import { ReactComponent as SpecialityIcon } from 'icons/assigment.svg';
 import { ReactComponent as MoneyIcon } from 'icons/circleMoney.svg';
+import { ReactComponent as CircleClock } from 'icons/circle_clock.svg';
 
 import useStyles from './styles';
 
@@ -71,6 +72,19 @@ const DoctorsHeader = ({ date, updateDate, useCase, minDate }: DoctorsHeaderProp
 					</Typography>
 					<Typography component="div" className={classes.useCaseInput}>
 						<strong>S/ {useCase ? useCase.totalCost : ''}</strong>
+					</Typography>
+				</div>
+			</div>
+			<div className={classes.appointmentDuration}>
+				<div className={classes.iconWrapper}>
+					<CircleClock />
+				</div>
+				<div>
+					<Typography component="div" className={classes.appointmentCostLabel}>
+						{t('right.appointmentDurationLabel')}
+					</Typography>
+					<Typography component="div" className={classes.useCaseInput}>
+						<strong>{useCase ? useCase.averageDuration : ''} minutos</strong>
 					</Typography>
 				</div>
 			</div>
