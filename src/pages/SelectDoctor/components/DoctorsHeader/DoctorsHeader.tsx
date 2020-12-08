@@ -84,7 +84,7 @@ const DoctorsHeader = ({ date, updateDate, useCase, minDate }: DoctorsHeaderProp
 						{t('right.appointmentDurationLabel')}
 					</Typography>
 					<Typography component="div" className={classes.useCaseInput}>
-						<strong>{useCase ? useCase.averageDuration : ''}</strong>
+						<strong>{useCase ? useCase.averageDuration : ''} minutos</strong>
 					</Typography>
 				</div>
 			</div>
