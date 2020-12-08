@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect, useState, useMemo } from 'react';
-import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import throttle from 'lodash/throttle';
 
 import { Position } from 'pages/api';
@@ -36,6 +37,7 @@ const SearchAddress = ({
 			throttle((request: { input: string }, callback: (results?: Place[]) => void) => {
 				if (mapsApi) {
 					const geocoder = new mapsApi.Geocoder();
+
 					geocoder.geocode(
 						{ address: request.input },
 						(results: google.maps.GeocoderResult[], responseStatus: google.maps.GeocoderStatus) => {
@@ -59,6 +61,7 @@ const SearchAddress = ({
 
 		if (inputValue === '') {
 			setOptions(value ? [value] : []);
+
 			return undefined;
 		}
 
@@ -89,18 +92,22 @@ const SearchAddress = ({
 			className={className}
 			options={options}
 			getOptionLabel={(option) => (typeof option === 'string' ? option : option.address)}
+			filterOptions={(x) => x}
 			value={value}
+			autoComplete
 			filterSelectedOptions
-			fullWidth
+			includeInputInList
 			onChange={(_, newValue: Place | null) => {
-				setOptions(newValue ? [newValue, ...options] : options);
 				setValue(newValue);
 				updatePosition(newValue);
 			}}
-			onInputChange={(_, newInputValue) => {
+			renderInput={(params) => <TextField {...params} variant="outlined" fullWidth />}
+			onInputChange={(_: React.ChangeEvent<{}>, newInputValue: string) => {
 				setInputValue(newInputValue);
 			}}
-			renderInput={(params) => <TextField {...params} variant="outlined" fullWidth error={hasError} />}
+			renderOption={(option) => {
+				return <Typography>{option.address}</Typography>;
+			}}
 		/>
 	);
 };

@@ -1,16 +1,22 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect, useCallback } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
+import { useLocation } from 'react-router';
+import { parse } from 'query-string';
 
-import { getPrescription } from 'pages/api';
+import { getPrescription, Position } from 'pages/api';
 import { PrescribedMedicine } from 'pages/api/userPrescription';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
 
 import Medicines from './components/Medicines';
 import CheckoutInformation from './components/CheckoutInformation';
+import SelectPrescriptionType from './components/SelectPrescriptionType';
+import NotAvailableNearYou from './components/NotAvailableNearYour';
+import RedirectToInkafarma from './components/RedirectToInkafarma';
+import AskAddress from '../AskAddress/AskAddress';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -44,6 +50,8 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			fontSize: '20px',
 			lineHeight: '25px',
 			paddingBottom: '30px',
+			width: '575px',
+			fontWeight: 400,
 		},
 	},
 	body: {
@@ -56,44 +64,148 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 const requestPrescription = async ({
 	setMedicines,
 	setUserAddress,
+	setNotAvailableNearYou,
+	setFolioNumber,
+	setPrescriptionPath,
+	sessionId,
+	updatedPosition,
+	folioNumber,
+	savedAddress,
 }: {
 	setMedicines: Function;
 	setUserAddress: Function;
+	setNotAvailableNearYou: Function;
+	setFolioNumber: Function;
+	setPrescriptionPath: Function;
+	sessionId: string;
+	updatedPosition: Position | undefined;
+	folioNumber: string;
+	savedAddress: string | undefined;
 }) => {
 	try {
-		const prescription = await getPrescription();
+		const {
+			address,
+			medicines,
+			prescriptionPath,
+			notAvailableNearYou,
+			folioNumber: newFolioNumber,
+		} = await getPrescription(sessionId, updatedPosition, folioNumber);
 
-		setUserAddress(prescription.address);
-		setMedicines(prescription.medicines);
+		if (!savedAddress) {
+			setUserAddress(address);
+		}
+
+		setFolioNumber(newFolioNumber);
+		setMedicines(medicines);
+		setNotAvailableNearYou(notAvailableNearYou);
+		setPrescriptionPath(prescriptionPath);
 	} catch (e) {}
 };
 
 const BuyPrescription = (): ReactElement => {
 	const { t } = useTranslation('buyPrescription');
+	const location = useLocation();
+	const params = parse(location.search);
 	const [selectedMedicines, setSelectedMedicines] = useState<number[]>([]);
 	const [medicines, setMedicines] = useState<PrescribedMedicine[]>([]);
 	const [userAddress, setUserAddress] = useState<string>('');
+	const [folioNumber, setFolioNumber] = useState<string>('');
+	const [prescriptionPath, setPrescriptionPath] = useState<string>('');
+	const [notAvailableNearYou, setNotAvailableNearYou] = useState<boolean>(false);
+	const [showingQuotedPrescription, setShowingQuotedPrescription] = useState<boolean>(false);
+	const [isShowingEditAddressScreen, setIsShowingEditAddressScreen] = useState<boolean>(false);
+	const [showingRedirectPage, setShowingRedirectPage] = useState<boolean>(false);
+	const [updatedPosition, setUpdatedPosition] = useState<Position>();
 	const classes = useStyles();
-	const toggleMedicine = (index: number) => () => {
-		const positionIndex = selectedMedicines.indexOf(index);
-		const alreadySelected = positionIndex > -1;
+	const outOfStock =
+		medicines.filter(({ hasStock, isAvailableForECommerce }) => hasStock && isAvailableForECommerce).length < 1;
+	const sessionId = (params.sessionId as string) || '';
+	const toggleMedicine = useCallback(
+		(index: number) => () => {
+			const positionIndex = selectedMedicines.indexOf(index);
+			const alreadySelected = positionIndex > -1;
 
-		let newSelectedMedicines: number[] = [];
+			let newSelectedMedicines: number[] = [];
 
-		if (alreadySelected) {
-			newSelectedMedicines = [...selectedMedicines];
+			if (alreadySelected) {
+				newSelectedMedicines = [...selectedMedicines];
 
-			newSelectedMedicines.splice(positionIndex, 1);
-		} else {
-			newSelectedMedicines = [...selectedMedicines, index];
+				newSelectedMedicines.splice(positionIndex, 1);
+			} else {
+				newSelectedMedicines = [...selectedMedicines, index];
+			}
+
+			setSelectedMedicines(newSelectedMedicines);
+		},
+		[selectedMedicines],
+	);
+	const showQuotedPrescription = () => {
+		setShowingQuotedPrescription(true);
+	};
+	const showEditAddressScreen = () => {
+		setIsShowingEditAddressScreen(true);
+	};
+	const onAskAddressSubmit = (pos: Position, address: string) => {
+		setUpdatedPosition(pos);
+		setUserAddress(address);
+		setIsShowingEditAddressScreen(false);
+		requestPrescription({
+			setMedicines,
+			setUserAddress,
+			setNotAvailableNearYou,
+			setFolioNumber,
+			setPrescriptionPath,
+			sessionId,
+			updatedPosition,
+			folioNumber,
+			savedAddress: userAddress,
+		});
+	};
+	const openEPrescription = () => {
+		window.open(prescriptionPath, '_blank');
+	};
+	const showRedirectPage = () => {
+		if (selectedMedicines.length >= 1) {
+			setShowingRedirectPage(true);
 		}
-
-		setSelectedMedicines(newSelectedMedicines);
 	};
 
+	if (!sessionId) {
+		redirectToBaseAlivia();
+	}
+
 	useEffect(() => {
-		requestPrescription({ setMedicines, setUserAddress });
+		requestPrescription({
+			setMedicines,
+			setUserAddress,
+			setNotAvailableNearYou,
+			setFolioNumber,
+			setPrescriptionPath,
+			sessionId,
+			updatedPosition,
+			folioNumber,
+			savedAddress: userAddress,
+		});
+		//eslint-disable-next-line
 	}, []);
+
+	if (showingRedirectPage) {
+		return <RedirectToInkafarma medicines={medicines} selectedMedicines={selectedMedicines} />;
+	}
+
+	if (isShowingEditAddressScreen) {
+		return <AskAddress sessionId={sessionId} submitCallback={onAskAddressSubmit} />;
+	}
+
+	if (showingQuotedPrescription && notAvailableNearYou) {
+		return <NotAvailableNearYou address={userAddress} showEditAddressScreen={showEditAddressScreen} />;
+	}
+
+	if (!showingQuotedPrescription) {
+		return (
+			<SelectPrescriptionType showQuotedPrescription={showQuotedPrescription} openEPrescription={openEPrescription} />
+		);
+	}
 
 	return (
 		<div className={classes.container}>
@@ -103,11 +215,25 @@ const BuyPrescription = (): ReactElement => {
 			<Typography className={classes.title} variant="h1">
 				{t('buyPrescription.title')}
 			</Typography>
-			<Typography className={classes.subTitle}>{t('buyPrescription.subTitle')}</Typography>
+			<Typography className={classes.subTitle}>
+				{t(outOfStock ? 'buyPrescription.subTitle.outOfStock' : 'buyPrescription.subTitle')}
+			</Typography>
 			<div className={classes.body}>
-				<Medicines medicines={medicines} selectedMedicines={selectedMedicines} toggleMedicine={toggleMedicine} />
+				<Medicines
+					medicines={medicines}
+					selectedMedicines={selectedMedicines}
+					toggleMedicine={toggleMedicine}
+					openEPrescription={openEPrescription}
+				/>
 				<Divider orientation="vertical" flexItem />
-				<CheckoutInformation address={userAddress} medicines={medicines} selectedMedicines={selectedMedicines} />
+				<CheckoutInformation
+					address={userAddress}
+					medicines={medicines}
+					selectedMedicines={selectedMedicines}
+					onAddressUpdate={onAskAddressSubmit}
+					openEPrescription={openEPrescription}
+					showRedirectPage={showRedirectPage}
+				/>
 			</div>
 		</div>
 	);

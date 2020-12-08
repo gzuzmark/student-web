@@ -1,73 +1,172 @@
-// import axios from 'axios';
+import { ugoConsoleAxios } from 'utils/customAxios';
+import { Position } from './laboratories';
 
-const mockPrescription: PrescriptionAPI = {
-	address: 'Calle Los Castaños 200 SAN ISIDRO, LIMA',
-	medicines: [
-		{
-			name: 'Esomeprazol 40mg comprimidos',
-			measure: 'BLISTER 10 UN',
-			individual_cost: '5.50',
-			total_measure: '3 blister 10 UN',
-			total_cost: '15.50',
-			img_url: 'https://picsum.photos/500/700',
-		},
-		{
-			name: 'Gofen 400mg Cápsulas Blandas',
-			measure: 'BLISTER 10 UN',
-			individual_cost: '12.50',
-			total_measure: '2 blister de 10 UN',
-			total_cost: '25.00',
-			img_url: 'https://picsum.photos/500/700',
-		},
-	],
-};
+export interface StoreMedicine {
+	totalPrice: number;
+	totalQuantity: number;
+	name: string;
+	concentration: string;
+	activePrinciples: string;
+	unit: string;
+	unitQuantity: string;
+	pharmaceuticalFormPrice: number;
+	pharmaceuticalForm: string;
+	imgUrl: string;
+}
 
 export interface PrescribedMedicine {
+	skuInkafarma: string;
 	name: string;
 	individualMeasure: string;
 	individualCost: string;
 	totalMeasure: string;
 	totalCost: string;
 	imgUrl: string;
+	hasStock: boolean;
+	alternativeMedicine: PrescribedMedicine | null;
+	isAvailableForECommerce: boolean;
+	totalQuantity: number;
+	pharmaceuticalForm: string;
+	totalPrice: number;
 }
 
 export interface Prescription {
 	address: string;
+	folioNumber: string;
+	prescriptionPath: string;
 	medicines: PrescribedMedicine[];
+	notAvailableNearYou: boolean;
+}
+
+interface ImagesApi {
+	type: string;
+	url: string;
+	thumbnails: string | null;
 }
 
 interface MedicineAPI {
-	name: string;
-	measure: string;
-	individual_cost: string;
-	total_measure: string;
-	total_cost: string;
-	img_url: string;
+	skuInkafarma: string;
+	productName: string;
+	totalQuantity: number;
+	totalPrice: number;
+	images: ImagesApi[];
+	recomendedProduct: MedicineAPI | null;
+	statusCode: number;
+	pharmaceuticalFormPrice: number;
+	pharmaceuticalForm: string;
+	unitQuantity: number;
+	unit: string;
 }
 
 interface PrescriptionAPI {
 	address: string;
-	medicines: MedicineAPI[];
+	folioNumber: string;
+	latitude: string;
+	longitude: string;
+	prescriptionPath: string;
+	availableProducts: MedicineAPI[];
+	not_available_near_you: boolean;
 }
 
-const formatPrescription = ({ address, medicines }: PrescriptionAPI): Prescription => ({
+const formatAlternativeMedicine = (medicineAPI: MedicineAPI | null): PrescribedMedicine | null =>
+	medicineAPI && {
+		skuInkafarma: medicineAPI.skuInkafarma,
+		name: medicineAPI.productName,
+		individualMeasure: `${medicineAPI.pharmaceuticalForm} ${medicineAPI.unitQuantity} ${medicineAPI.unit}`,
+		individualCost: medicineAPI.pharmaceuticalFormPrice.toFixed(2),
+		totalMeasure: `${medicineAPI.totalQuantity} ${medicineAPI.pharmaceuticalForm} ${medicineAPI.unitQuantity} ${medicineAPI.unit}`,
+		totalCost: medicineAPI.totalPrice.toFixed(2),
+		imgUrl: medicineAPI.images.find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
+		hasStock: medicineAPI.statusCode === 1,
+		isAvailableForECommerce: true,
+		totalQuantity: medicineAPI.totalQuantity,
+		pharmaceuticalForm: medicineAPI.pharmaceuticalForm,
+		alternativeMedicine: null,
+		totalPrice: medicineAPI.totalPrice,
+	};
+
+const formatPrescription = ({
 	address,
-	medicines: medicines.map(({ name, measure, individual_cost, total_measure, total_cost, img_url }) => ({
-		name,
-		individualMeasure: measure,
-		individualCost: individual_cost,
-		totalMeasure: total_measure,
-		totalCost: total_cost,
-		imgUrl: img_url,
-	})),
+	folioNumber,
+	availableProducts,
+	prescriptionPath,
+	not_available_near_you,
+}: PrescriptionAPI): Prescription => ({
+	address,
+	folioNumber,
+	prescriptionPath,
+	notAvailableNearYou: not_available_near_you,
+	medicines: availableProducts.map(
+		({
+			skuInkafarma,
+			productName,
+			totalQuantity,
+			totalPrice,
+			images,
+			recomendedProduct,
+			statusCode,
+			pharmaceuticalFormPrice,
+			pharmaceuticalForm,
+			unitQuantity,
+			unit,
+		}) => ({
+			skuInkafarma,
+			name: productName,
+			individualMeasure: `${pharmaceuticalForm} ${unitQuantity} ${unit}`,
+			individualCost: (pharmaceuticalFormPrice || 0).toFixed(2),
+			totalMeasure: `${totalQuantity} ${(pharmaceuticalForm || '').toLowerCase()}${
+				totalQuantity > 1 ? 's' : ''
+			} ${unitQuantity} ${unit}`,
+			totalCost: (totalPrice || 0).toFixed(2),
+			imgUrl: (images || []).find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
+			hasStock: statusCode === 1,
+			alternativeMedicine: formatAlternativeMedicine(recomendedProduct),
+			isAvailableForECommerce: statusCode !== 3,
+			totalQuantity,
+			pharmaceuticalForm,
+			totalPrice,
+		}),
+	),
 });
 
-export const getPrescription = async (): Promise<Prescription> => {
+export const getPrescription = async (
+	userId: string,
+	updatedPosition: Position | undefined,
+	folioNumber: string,
+): Promise<Prescription> => {
 	try {
-		// const resp = await axios.get<PrescriptionAPI>('http://somewhere-over-the-rainbow/prescription');
-		const resp = { data: mockPrescription };
+		const resp = await ugoConsoleAxios.get<PrescriptionAPI>(
+			`/alivia/available_products?sessionId=${userId}&folioNumber=${folioNumber}&latitude=${
+				updatedPosition?.lat || ''
+			}&longitude=${updatedPosition?.lng || ''}`,
+		);
 
 		return formatPrescription(resp.data);
+	} catch (e) {
+		console.log(e);
+		throw Error(e);
+	}
+};
+
+interface SelectedMedicine {
+	sku: string;
+	quantity: number;
+	pharmaceuticalForm: string;
+}
+
+interface RedirectUrlResponse {
+	code: string;
+	error: string;
+	object: string;
+}
+
+export type SelectedMedicines = SelectedMedicine[];
+
+export const getRedirectUrl = async (selectedItems: SelectedMedicines): Promise<string> => {
+	try {
+		const resp = await ugoConsoleAxios.post<RedirectUrlResponse>('/alivia/ecommerce_url', { items: selectedItems });
+
+		return resp.data.object;
 	} catch (e) {
 		throw Error(e);
 	}

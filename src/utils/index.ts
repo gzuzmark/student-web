@@ -8,3 +8,4 @@ export * from './date';
 export * from './googleAnalytics';
 export * from './culquiIntegration';
 export * from './position';
+export * from './math';

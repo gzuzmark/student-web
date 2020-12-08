@@ -43,13 +43,17 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const ElectronicPrescription = (): ReactElement => {
+interface ElectronicPrescriptionProps {
+	openEPrescription: () => void;
+}
+
+const ElectronicPrescription = ({ openEPrescription }: ElectronicPrescriptionProps): ReactElement => {
 	const { t } = useTranslation('buyPrescription');
 	const classes = useStyles();
 
 	return (
 		<div className={classes.container}>
-			<Button variant="outlined" className={classes.button}>
+			<Button onClick={openEPrescription} variant="outlined" className={classes.button}>
 				<span className={classes.buttonText}>{t('buyPrescription.seeEPrescription')}</span>
 				<PrescriptionIcon />
 			</Button>

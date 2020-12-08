@@ -27,6 +27,7 @@ build_stage_dev:
     REACT_APP_CULQI_PK_KEY: "$CULQI_PK_KEY_DEV"
     REACT_APP_CONFERENCE_URL: "$CONFERENCE_BASE_URL_DEV"
     REACT_APP_GOOGLE_MAPS_KEY: "$GOOGLE_MAPS_KEY_DEV"
+    REACT_APP_UGO_API_URL: "$UGO_API_URL_DEV"
   script:
     - yarn build
   dependencies:
@@ -51,6 +52,7 @@ build_stage_prod:
     REACT_APP_CULQI_PK_KEY: "$CULQI_PK_KEY_PROD"
     REACT_APP_CONFERENCE_URL: "$CONFERENCE_BASE_URL_PROD"
     REACT_APP_GOOGLE_MAPS_KEY: "$GOOGLE_MAPS_KEY_PROD"
+    REACT_APP_UGO_API_URL: "$UGO_API_URL_PROD"
   script:
     - yarn build
   dependencies:
