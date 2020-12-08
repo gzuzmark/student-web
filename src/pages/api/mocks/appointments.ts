@@ -3,6 +3,7 @@ import { ApiAppointmentDetail } from '../appointments';
 export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 	{
 		id: '123',
+		final_cost: '24.00',
 		appointment_type: {
 			id: 'asdfas',
 			name: 'videollamada',
@@ -39,6 +40,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 	},
 	{
 		id: '125',
+		final_cost: '24.00',
 		appointment_type: {
 			id: 'asdfas',
 			name: 'videollamada',
@@ -75,6 +77,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 	},
 	{
 		id: '129',
+		final_cost: '24.00',
 		appointment_type: {
 			id: 'asfasbhlkjfas',
 			name: 'videollamada',
@@ -111,6 +114,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 	},
 	{
 		id: '127',
+		final_cost: '24.00',
 		appointment_type: {
 			id: 'asfasbhlkjfas',
 			name: 'videollamada',
@@ -149,6 +153,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 
 export const mockAppointmentDetail: ApiAppointmentDetail = {
 	id: '123',
+	final_cost: '24.00',
 	appointment_type: {
 		id: 'asdfas',
 		name: 'videollamada',

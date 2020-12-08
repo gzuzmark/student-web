@@ -1,10 +1,11 @@
 import React from 'react';
-import { LinearProgress, Typography, Theme } from '@material-ui/core';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from '@material-ui/core/Typography';
 
 import { ReactComponent as FilledCloseIcon } from 'icons/filledClose.svg';
 import { stylesWithTheme } from 'utils';
 
-const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(() => ({
 	wrapper: {
 		display: 'flex',
 		justifyContent: 'space-between',
@@ -16,6 +17,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	iconWrapper: {
 		height: '20px',
+		cursor: 'pointer',
+	},
+	progressBar: {
+		height: '10px',
+		borderRadius: '255px',
+		marginBottom: '10px',
 	},
 }));
 
@@ -29,7 +36,7 @@ const File = ({ fileName, onRemove, isLoading }: FileProps) => {
 	const classes = useStyles();
 
 	return isLoading ? (
-		<LinearProgress color="primary" />
+		<LinearProgress className={classes.progressBar} color="primary" />
 	) : (
 		<div className={classes.wrapper}>
 			<Typography>{fileName}</Typography>
