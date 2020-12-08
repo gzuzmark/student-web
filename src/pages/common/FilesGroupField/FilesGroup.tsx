@@ -100,13 +100,14 @@ const updloadRecentFile = async (
 	newFiles: FileElement[],
 	setFiles: Function,
 	setFieldValue: Function,
+	fieldValue: any,
 ) => {
 	try {
-		await Promise.all(droppedFiles.map((file) => uploadFile(file)));
+		const fileIds = await Promise.all(droppedFiles.map((file) => uploadFile(file)));
 		const loadedFiles = newFiles.map((newFile) => ({ ...newFile, isLoading: false }));
 
 		setFiles(loadedFiles);
-		setFieldValue(loadedFiles);
+		setFieldValue([...fieldValue, ...fileIds]);
 	} catch (e) {
 		const filesWithoutFails = newFiles.filter(
 			(file) => droppedFiles.findIndex((droppedFile) => droppedFile.name === file.fileName) > -1,
@@ -141,7 +142,7 @@ const FilesGroupField = ({
 		const newFiles = [...files, ...formattedFiles];
 
 		setFiles(newFiles);
-		updloadRecentFile(droppedFiles, newFiles, setFiles, updateFieldValue);
+		updloadRecentFile(droppedFiles, newFiles, setFiles, updateFieldValue, field.value);
 	};
 
 	const { getRootProps, getInputProps } = useDropzone({ onDrop });
