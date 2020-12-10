@@ -20,7 +20,7 @@ export interface PrescribedMedicine {
 	individualMeasure: string;
 	individualCost: string;
 	totalMeasure: string;
-	totalCost: string;
+	totalCost: number;
 	imgUrl: string;
 	hasStock: boolean;
 	alternativeMedicine: PrescribedMedicine | null;
@@ -28,6 +28,7 @@ export interface PrescribedMedicine {
 	totalQuantity: number;
 	pharmaceuticalForm: string;
 	totalPrice: number;
+	medicamentNumber: number;
 }
 
 export interface Prescription {
@@ -56,6 +57,7 @@ interface MedicineAPI {
 	pharmaceuticalForm: string;
 	unitQuantity: number;
 	unit: string;
+	medicamentNumber: number;
 }
 
 interface PrescriptionAPI {
@@ -68,14 +70,17 @@ interface PrescriptionAPI {
 	not_available_near_you: boolean;
 }
 
-const formatAlternativeMedicine = (medicineAPI: MedicineAPI | null): PrescribedMedicine | null =>
+const formatAlternativeMedicine = (
+	medicineAPI: MedicineAPI | null,
+	originalMedicamentNumber: number,
+): PrescribedMedicine | null =>
 	medicineAPI && {
 		skuInkafarma: medicineAPI.skuInkafarma,
 		name: medicineAPI.productName,
 		individualMeasure: `${medicineAPI.pharmaceuticalForm} ${medicineAPI.unitQuantity} ${medicineAPI.unit}`,
 		individualCost: medicineAPI.pharmaceuticalFormPrice.toFixed(2),
 		totalMeasure: `${medicineAPI.totalQuantity} ${medicineAPI.pharmaceuticalForm} ${medicineAPI.unitQuantity} ${medicineAPI.unit}`,
-		totalCost: medicineAPI.totalPrice.toFixed(2),
+		totalCost: medicineAPI.totalPrice || 0,
 		imgUrl: medicineAPI.images.find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
 		hasStock: medicineAPI.statusCode === 1,
 		isAvailableForECommerce: true,
@@ -83,6 +88,7 @@ const formatAlternativeMedicine = (medicineAPI: MedicineAPI | null): PrescribedM
 		pharmaceuticalForm: medicineAPI.pharmaceuticalForm,
 		alternativeMedicine: null,
 		totalPrice: medicineAPI.totalPrice,
+		medicamentNumber: originalMedicamentNumber,
 	};
 
 const formatPrescription = ({
@@ -109,6 +115,7 @@ const formatPrescription = ({
 			pharmaceuticalForm,
 			unitQuantity,
 			unit,
+			medicamentNumber,
 		}) => ({
 			skuInkafarma,
 			name: productName,
@@ -117,14 +124,15 @@ const formatPrescription = ({
 			totalMeasure: `${totalQuantity} ${(pharmaceuticalForm || '').toLowerCase()}${
 				totalQuantity > 1 ? 's' : ''
 			} ${unitQuantity} ${unit}`,
-			totalCost: (totalPrice || 0).toFixed(2),
+			totalCost: totalPrice || 0,
 			imgUrl: (images || []).find((image) => image.type.includes('IMAGEN_DEFAULT_SMALL'))?.url || '',
 			hasStock: statusCode === 1,
-			alternativeMedicine: formatAlternativeMedicine(recomendedProduct),
+			alternativeMedicine: formatAlternativeMedicine(recomendedProduct, medicamentNumber),
 			isAvailableForECommerce: statusCode !== 3,
 			totalQuantity,
 			pharmaceuticalForm,
 			totalPrice,
+			medicamentNumber,
 		}),
 	),
 });
