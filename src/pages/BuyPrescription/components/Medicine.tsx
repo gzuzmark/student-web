@@ -262,7 +262,7 @@ const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): R
 								<div className={classes.totalValues}>
 									<Typography className={classes.totalMeasure}>{totalMeasure}</Typography>
 									<Typography color="primary" variant="button">
-										S./{totalCost}
+										S./{totalCost.toFixed(2)}
 									</Typography>
 								</div>
 							</div>

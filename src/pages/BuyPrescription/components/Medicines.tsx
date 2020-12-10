@@ -70,8 +70,8 @@ const Medicines = ({
 				<Medicine
 					key={`available-${medicine.name}-${index}`}
 					medicine={medicine}
-					isActive={selectedMedicines.indexOf(index) > -1}
-					onClick={toggleMedicine(index)}
+					isActive={selectedMedicines.indexOf(medicine.medicamentNumber - 1) > -1}
+					onClick={toggleMedicine(medicine.medicamentNumber - 1)}
 					titleIndex={index}
 				/>
 			))}
@@ -82,8 +82,8 @@ const Medicines = ({
 				<Medicine
 					key={`out-of-stock-${medicine.name}-${index}`}
 					medicine={medicine}
-					isActive={selectedMedicines.indexOf(availableMedicines.length + index) > -1}
-					onClick={toggleMedicine(availableMedicines.length + index)}
+					isActive={selectedMedicines.indexOf(medicine.medicamentNumber - 1) > -1}
+					onClick={toggleMedicine(medicine.medicamentNumber - 1)}
 					titleIndex={availableMedicines.length + index}
 				/>
 			))}
@@ -94,7 +94,7 @@ const Medicines = ({
 				<Medicine
 					key={`not-available-medicines-${medicine.name}-${index}`}
 					medicine={medicine}
-					isActive={selectedMedicines.indexOf(outOfStockMedicines.length + availableMedicines.length + index) > -1}
+					isActive={selectedMedicines.indexOf(medicine.medicamentNumber - 1) > -1}
 					titleIndex={outOfStockMedicines.length + availableMedicines.length + index}
 				/>
 			))}
