@@ -29,6 +29,8 @@ export interface PrescribedMedicine {
 	pharmaceuticalForm: string;
 	totalPrice: number;
 	medicamentNumber: number;
+	concentrations: string;
+	activePrinciples: string;
 }
 
 export interface Prescription {
@@ -58,6 +60,8 @@ interface MedicineAPI {
 	unitQuantity: number;
 	unit: string;
 	medicamentNumber: number;
+	concentrations: string;
+	activePrinciples: string;
 }
 
 interface PrescriptionAPI {
@@ -89,6 +93,8 @@ const formatAlternativeMedicine = (
 		alternativeMedicine: null,
 		totalPrice: medicineAPI.totalPrice,
 		medicamentNumber: originalMedicamentNumber,
+		concentrations: medicineAPI.concentrations,
+		activePrinciples: medicineAPI.activePrinciples,
 	};
 
 const formatPrescription = ({
@@ -116,6 +122,8 @@ const formatPrescription = ({
 			unitQuantity,
 			unit,
 			medicamentNumber,
+			concentrations,
+			activePrinciples,
 		}) => ({
 			skuInkafarma,
 			name: productName,
@@ -133,6 +141,8 @@ const formatPrescription = ({
 			pharmaceuticalForm,
 			totalPrice,
 			medicamentNumber,
+			concentrations,
+			activePrinciples,
 		}),
 	),
 });
