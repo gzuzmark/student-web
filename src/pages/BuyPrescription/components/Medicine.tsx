@@ -188,8 +188,17 @@ export interface MedicineProps {
 
 const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): ReactElement => {
 	const { alternativeMedicine } = medicine;
-	const { name, individualMeasure, individualCost, totalMeasure, totalCost, imgUrl, isAvailableForECommerce } =
-		alternativeMedicine || medicine;
+	const {
+		name,
+		individualMeasure,
+		individualCost,
+		totalMeasure,
+		totalCost,
+		imgUrl,
+		isAvailableForECommerce,
+		activePrinciples,
+		concentrations,
+	} = alternativeMedicine || medicine;
 	const classes = useStyles({ isActive, hasAlternativeMedicine: !!alternativeMedicine });
 	const { t } = useTranslation('buyPrescription');
 
@@ -202,7 +211,9 @@ const Medicine = ({ medicine, isActive, onClick, titleIndex }: MedicineProps): R
 						<MedicineTablets />
 					</div>
 					<div>
-						<Typography>{name}</Typography>
+						<Typography>
+							{activePrinciples} {concentrations}
+						</Typography>
 						<div className={classes.notAvailableLabel}>{t('buyPrescription.prescribedMedication.notAvailable')}</div>
 					</div>
 				</div>
