@@ -156,7 +156,7 @@ const BuyPrescription = (): ReactElement => {
 			setFolioNumber,
 			setPrescriptionPath,
 			sessionId,
-			updatedPosition,
+			updatedPosition: pos,
 			folioNumber,
 			savedAddress: userAddress,
 		});
