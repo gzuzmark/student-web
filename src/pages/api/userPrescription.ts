@@ -107,7 +107,7 @@ const formatPrescription = ({
 	address,
 	folioNumber,
 	prescriptionPath,
-	notAvailableNearYou: hasCoverage,
+	notAvailableNearYou: !hasCoverage,
 	medicines: availableProducts.map(
 		({
 			skuInkafarma,
