@@ -15,5 +15,5 @@ export default {
 	'askAddress.successModal.title': '¡Gracias! Ya puedes ver tu receta médica',
 	'askAddress.successModal.body.firstLine': 'Ya está disponible',
 	'askAddress.successModal.body.secondLine': 'tu receta médica cotizada.',
-	'askAddress.successModal.continue': 'Ver mi receta',
+	'askAddress.successModal.continue': 'Ver mi receta digital',
 };
