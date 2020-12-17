@@ -108,7 +108,7 @@ const formatPrescription = ({
 	folioNumber,
 	prescriptionPath,
 	notAvailableNearYou: !hasCoverage,
-	medicines: availableProducts.map(
+	medicines: (availableProducts || []).map(
 		({
 			skuInkafarma,
 			productName,
