@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router';
+import { useLocation, useHistory } from 'react-router';
 import { parse } from 'query-string';
 
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
@@ -68,11 +68,12 @@ const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElemen
 	const classes = useStyles({ isAlternativeActive: !!sessionId });
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const location = useLocation();
+	const history = useHistory();
 	const params = parse(location.search);
 	const activeSessionId = sessionId || (params.sessionId as string);
 	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
 	const redirectToAccount = () => {
-		console.log('to somwhere !');
+		history.push(`/comprar_receta?sessionId=${activeSessionId}`);
 	};
 	const openSuccesModal = () => {
 		setIsSuccessModalOpen(true);

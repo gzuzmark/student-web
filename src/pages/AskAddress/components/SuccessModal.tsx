@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-
 import { Modal, Button, Typography } from '@material-ui/core';
 import { FloatCard } from 'pages/common';
 import { Theme } from '@material-ui/core/styles';
@@ -93,7 +92,10 @@ const SuccessModal = ({ isOpen, onClose }: SuccessModalProps): ReactElement => {
 					<div className={classes.iconWrapper}>
 						<ThumbsUpIcon />
 					</div>
-					<Typography className={classes.body}>{t('askAddress.successModal.body')}</Typography>
+					<Typography className={classes.body}>
+						<div>{t('askAddress.successModal.body.firstLine')}</div>
+						<div>{t('askAddress.successModal.body.secondLine')}</div>
+					</Typography>
 					<div className={classes.actions}>
 						<Button className={classes.action} variant="contained" onClick={onClose}>
 							{t('askAddress.successModal.continue')}
