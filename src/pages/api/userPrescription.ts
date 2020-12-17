@@ -71,7 +71,7 @@ interface PrescriptionAPI {
 	longitude: string;
 	prescriptionPath: string;
 	availableProducts: MedicineAPI[];
-	not_available_near_you: boolean;
+	hasCoverage: boolean;
 }
 
 const formatAlternativeMedicine = (
@@ -102,12 +102,12 @@ const formatPrescription = ({
 	folioNumber,
 	availableProducts,
 	prescriptionPath,
-	not_available_near_you,
+	hasCoverage,
 }: PrescriptionAPI): Prescription => ({
 	address,
 	folioNumber,
 	prescriptionPath,
-	notAvailableNearYou: not_available_near_you,
+	notAvailableNearYou: hasCoverage,
 	medicines: availableProducts.map(
 		({
 			skuInkafarma,
