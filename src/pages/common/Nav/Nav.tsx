@@ -7,6 +7,7 @@ import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import AppContext from 'AppContext';
+import clsx from 'clsx';
 
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { ReactComponent as LeftIcon } from 'icons/left.svg';
@@ -104,7 +105,7 @@ const Nav = () => {
 
 	return (
 		<div>
-			<nav className={classes.container}>
+			<nav className={clsx(classes.container, 'nav-container')}>
 				<LeftIcon className={classes.arrowIcon} onClick={onGoBack} />
 				<BrandLogo className={classes.brandLogo} />
 				{user && user.id !== '' ? (
