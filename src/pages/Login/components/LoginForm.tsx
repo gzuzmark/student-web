@@ -184,6 +184,14 @@ const LoginForm = ({ updateContextState, appointmentCreationStep, showSmallSignU
 							{t('login.submit.text')}
 						</Button>
 					</div>
+					<div className={classes.signUpWrapper}>
+						<Typography component="span">{t('login.signUp.text')} </Typography>
+						<Link to="/creacion_cuenta/sobre_ti" className={classes.signUpLink}>
+							<Typography component="span" color="primary">
+								{t('login.signUp.link')}
+							</Typography>
+						</Link>
+					</div>
 				</Form>
 			)}
 		</Formik>

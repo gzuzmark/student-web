@@ -6,6 +6,11 @@ import { stylesWithTheme } from 'utils';
 import { LeftLayout, DashboardSideBar } from 'pages/common';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+	'@global': {
+		'#root .nav-container': {
+			display: 'flex !important',
+		},
+	},
 	layout: {
 		display: 'none',
 		[breakpoints.up('lg')]: {

@@ -15,6 +15,7 @@ import {
 	LaboratoryExams,
 	BuyPrescription,
 	AskAddress,
+	NewSignUp,
 } from 'pages';
 import SmallSignUp from 'pages/SignUp/SmallSignUp';
 
@@ -74,6 +75,7 @@ export const routes: RoutesType = [
 	{ id: 'LaboratoryExams', path: '/dashboard/laboratorios/*', component: LaboratoryExams, guard: true },
 	{ id: 'ForgotPassword', path: '/reestablecer_contrasena', component: ForgotPassword },
 	{ id: 'SelectProfile', path: '/seleccionar_paciente', component: SelectProfile, guard: true },
+	{ id: 'NewSignUp', path: '/creacion_cuenta/*', component: NewSignUp },
 	// { id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile, guard: true },
 ];
 
