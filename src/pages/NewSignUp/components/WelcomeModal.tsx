@@ -1,6 +1,5 @@
 import React, { ReactElement, useContext, useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
@@ -10,7 +9,6 @@ import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { ReactComponent as ThumbsUpIcon } from 'icons/good_quality.svg';
 import { stylesWithTheme } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
-import { ReducerAction } from '../types';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	'@global': {
