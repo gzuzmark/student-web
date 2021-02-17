@@ -1,5 +1,5 @@
 export default {
-	'left.title': 'Estás a unos pasos de crearte una cuenta',
+	'left.title': 'Estás a unos pasos de ser parte de Alivia',
 	'left.step.first.label': 'SOBRE EL PACIENTE',
 	'left.step.second.label': 'CONTACTO',
 	'left.step.third.label': 'CONTRASEÑA',
@@ -31,11 +31,15 @@ export default {
 	'contactPatient.fields.phoneNumber.helperText': 'Será necesario para ingresar a tu cuenta',
 	'contactPatient.fields.email.label': 'Ingresa un correo de contacto',
 	'contactPatient.fields.email.helperText': 'Enviaremos un recordatorio a este correo',
+	'contactPatient.fields.address.label': 'Ingresa tu dirección de domicilio actual',
+	'contactPatient.fields.address.helperText': 'Con la dirección se emitirá una receta válida',
+	'contactPatient.fields.ubigeo.label': 'Ubigeo',
+	'contactPatient.fields.ubigeo.helperText': 'Con la dirección se emitirá una receta válida',
 	'contactPatient.legalInformation.firstSection': 'Al continuar estás confirmando que estás de acuerdo con nuestra',
 	'contactPatient.legalInformation.privacyPolicyLink': 'política de privacidad',
 	'contactPatient.legalInformation.secondSection': 'y nuestros',
 	'contactPatient.legalInformation.termsAndConditionsLink': 'términos y condiciones',
-	'contactPatient.submit.text': 'De acuerdo, deseo agendar',
+	'contactPatient.submit.text': 'Continuar',
 	'contactPatient.validation.id.required': 'El DNI o CE del paciente es obligatorio',
 	'contactPatient.validation.id.digits': 'Ingrese un DNI o CE valido',
 	'contactPatient.validation.phoneNumber.required': 'El número de celular de contacto es obligatorio',
@@ -55,7 +59,10 @@ export default {
 	'patientPassword.legalInformation.termsAndConditionsLink': 'términos y condiciones',
 	'patientPassword.submit.text': 'Finalizar y crear mi cuenta',
 	// Success Message
-	'successSignUp.title.firstLine': '¡Listo!',
-	'successSignUp.title.secondLine': 'Te damos la bienvenida a Alivia.',
-	'successSignUp.continue': 'CONTINUAR A MI CUENTA',
+	'successSignUp.title.firstLine': ' tu cuenta ha sido creada',
+	'successSignUp.title.secondLine': 'de manera exitosa',
+	'successSignUp.continue': 'Ir a mi espacio',
+	'successSignUp.appointment': 'Agendar una cita',
+	// Welcome Message
+	'welcomeSignUp.title.firstLine': ' te damos la bienvenida a Alivia',
 };

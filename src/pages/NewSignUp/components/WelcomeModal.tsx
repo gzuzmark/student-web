@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, useContext, useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -27,12 +27,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			backgroundColor: BACKGROUND_DEFAULT,
 			minHeight: '100vh',
 		},
-	},
-	buttonWrapper: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-		flexDirection: 'column',
 	},
 	wrapper: {
 		backgroundColor: 'white',
@@ -77,7 +71,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	continueButton: {
 		width: '263px',
-		margin: '10px',
 		fontSize: '15px',
 		[breakpoints.up('lg')]: {
 			padding: '12.5px 0',
@@ -85,21 +78,21 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-export interface SuccessSignUpProps {
-	showWelcomeScreen: (payload: ReducerAction) => void;
+export interface WelcomeScreenProps {
+	path: string;
 }
 
-const SuccessSignUp = ({ showWelcomeScreen }: SuccessSignUpProps): ReactElement => {
+const SuccessSignUp = ({ path }: WelcomeScreenProps): ReactElement => {
 	const { t } = useTranslation('newSignUp');
+	const history = useHistory();
 	const { user: currentUser } = useContext(AppContext);
-	const goToDashboard = () => {
-		showWelcomeScreen({ type: 'REDIRECT_DASHBOARD_SCREEN' });
-	};
-
-	const goToAppointments = () => {
-		showWelcomeScreen({ type: 'REDIRECT_APPOINTMENT_SCREEN' });
-	};
 	const classes = useStyles();
+
+	useEffect(() => {
+		setTimeout(() => {
+			history.push(path);
+		}, 3000);
+	});
 
 	return (
 		<div className={classes.container}>
@@ -114,20 +107,11 @@ const SuccessSignUp = ({ showWelcomeScreen }: SuccessSignUpProps): ReactElement 
 					<div className={classes.title}>
 						<Typography variant="h1">
 							{currentUser && currentUser.name ? currentUser.name : ''}
-							{t('successSignUp.title.firstLine')}
+							{t('welcomeSignUp.title.firstLine')}
 						</Typography>
-						<Typography variant="h1">{t('successSignUp.title.secondLine')}</Typography>
 					</div>
 					<div className={classes.thumbsUpIcon}>
 						<ThumbsUpIcon />
-					</div>
-					<div className={classes.buttonWrapper}>
-						<Button className={classes.continueButton} variant="contained" onClick={goToAppointments}>
-							{t('successSignUp.appointment')}
-						</Button>
-						<Button className={classes.continueButton} variant="outlined" onClick={goToDashboard}>
-							{t('successSignUp.continue')}
-						</Button>
 					</div>
 				</div>
 			</div>

@@ -1,11 +1,14 @@
-import React, { ReactElement, useCallback } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
+import { TextField as MaterialTextField } from '@material-ui/core';
+import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { getLocations, Ubigeo } from 'pages/api';
 import { stylesWithTheme } from 'utils/createStyles';
 
 import { contactPatientValidationSchema } from './validationSchema';
@@ -55,7 +58,6 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		textDecoration: 'underline',
 	},
 }));
-
 export interface ContactPatientFormProps {
 	contactPatient: ContactPatientValues;
 	onChangeStep: (payload: ReducerAction, redirectPath: string) => void;
@@ -71,6 +73,7 @@ const ContactPatientForm = ({
 }: ContactPatientFormProps): ReactElement => {
 	const { t } = useTranslation('newSignUp');
 	const classes = useStyles();
+	const [ubigeos, setUbigeos] = useState<string[]>([]);
 	const onSubmit = useCallback(
 		(values: ContactPatientValues) => {
 			try {
@@ -78,6 +81,8 @@ const ContactPatientForm = ({
 					...values,
 					identification: values.identification.trim(),
 					email: values.email.trim(),
+					address: values.address.trim(),
+					ubigeo: values.ubigeo.trim(),
 				};
 
 				onChangeStep({ type: 'COMPLETE_CONTACT_STEP', contactPatient: formatedValues }, '/creacion_cuenta/password');
@@ -88,13 +93,24 @@ const ContactPatientForm = ({
 		[onChangeStep],
 	);
 
+	const handleTypeUbigeo = async (e: any) => {
+		const value = e.target.value;
+		if (value) {
+			const response = await getLocations(value);
+			const locations = response.data.map((r: Ubigeo) => r.description);
+			setUbigeos(locations);
+		} else {
+			setUbigeos([]);
+		}
+	};
+
 	return (
 		<Formik
 			initialValues={contactPatient || initialContactPatientValues}
 			onSubmit={onSubmit}
 			validationSchema={contactPatientValidationSchema}
 		>
-			{({ submitForm, isSubmitting }) => (
+			{({ submitForm, isSubmitting, setFieldValue, values }) => (
 				<Form className={classes.form}>
 					<div>
 						<div className={classes.fieldWrapper}>
@@ -131,6 +147,41 @@ const ContactPatientForm = ({
 								fullWidth
 							/>
 						</div>
+
+						<>
+							<div className={classes.fieldWrapper}>
+								<Field
+									component={TextField}
+									className={classes.fieldWithHelperText}
+									name="address"
+									label={t('contactPatient.fields.address.label')}
+									variant="outlined"
+									helperText={t('contactPatient.fields.address.helperText')}
+									fullWidth
+								/>
+							</div>
+							<div className={classes.fieldWrapper}>
+								<Field
+									component={Autocomplete}
+									options={ubigeos}
+									getOptionLabel={(option: string) => option}
+									className={classes.fieldWithHelperText}
+									name="ubigeo"
+									variant="outlined"
+									fullWidth
+									renderInput={(params: AutocompleteRenderInputParams) => (
+										<MaterialTextField
+											{...params}
+											error={false}
+											helperText={t('contactPatient.fields.address.helperText')}
+											label={t('contactPatient.fields.ubigeo.label')}
+											variant="outlined"
+											onChange={handleTypeUbigeo}
+										/>
+									)}
+								/>
+							</div>
+						</>
 					</div>
 					<div className={classes.privacyPolicyWrapper}>
 						<Typography className={classes.legalInformation} component="span">

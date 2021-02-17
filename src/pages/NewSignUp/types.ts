@@ -10,6 +10,8 @@ export interface ContactPatientValues {
 	identification: string;
 	phoneNumber: string;
 	email: string;
+	address: string;
+	ubigeo: string;
 }
 
 export interface PatientPasswordValues {
@@ -32,6 +34,12 @@ export type ReducerAction =
 	  }
 	| {
 			type: 'FINISH_SUBMITTING';
+	  }
+	| {
+			type: 'REDIRECT_DASHBOARD_SCREEN';
+	  }
+	| {
+			type: 'REDIRECT_APPOINTMENT_SCREEN';
 	  };
 
 export interface State {
@@ -41,4 +49,6 @@ export interface State {
 	aboutPatient: AboutPatientValues;
 	contactPatient: ContactPatientValues;
 	patientPassword: PatientPasswordValues;
+	showWelcomeMessage: boolean;
+	path: string;
 }
