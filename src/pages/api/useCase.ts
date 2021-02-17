@@ -9,6 +9,11 @@ export interface UseCase {
 	averageDuration: string;
 }
 
+export interface Skill {
+	id: string;
+	name: string;
+}
+
 interface UseCaseAPI {
 	id: string;
 	title: string;
@@ -19,6 +24,10 @@ interface UseCaseAPI {
 
 interface GetUseCaseResponse {
 	data: UseCaseAPI;
+}
+
+interface GetUseCasesResponse {
+	data: UseCaseAPI[];
 }
 
 export const getUseCase = async (useCaseID: string): Promise<UseCase | undefined> => {
@@ -33,6 +42,17 @@ export const getUseCase = async (useCaseID: string): Promise<UseCase | undefined
 			totalCost: data.total_cost,
 			averageDuration: data.duration,
 		};
+	} catch (e) {
+		redirectToBaseAlivia();
+	}
+};
+
+export const getUseCases = async (): Promise<UseCaseAPI[] | undefined> => {
+	try {
+		const resp = await aliviaAxios.get<GetUseCasesResponse>(`/use-cases`);
+		const data = resp.data.data;
+
+		return data;
 	} catch (e) {
 		redirectToBaseAlivia();
 	}

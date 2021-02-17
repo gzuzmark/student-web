@@ -41,12 +41,16 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	}),
 );
 
+interface LeftSideProps {
+	step?: number | undefined;
+}
+
 const createSteps = (t: Function, isMobile: boolean) =>
 	isMobile
 		? [t('steps.mobile.firstStep.label'), t('steps.mobile.secondStep.label'), t('steps.mobile.thirdStep.label')]
 		: [t('steps.firstStep.label'), t('steps.secondStep.label'), t('steps.thirdStep.label')];
 
-const LeftSide = () => {
+const LeftSide = ({ step = 0 }: LeftSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
@@ -67,7 +71,12 @@ const LeftSide = () => {
 					{t('left.title.secondLine')}
 				</Typography>
 			</div>
-			<Stepper steps={steps} orientation={matches ? 'vertical' : 'horizontal'} alternativeLabel={!matches} />
+			<Stepper
+				activeStep={step}
+				steps={steps}
+				orientation={matches ? 'vertical' : 'horizontal'}
+				alternativeLabel={!matches}
+			/>
 		</LeftLayout>
 	);
 };

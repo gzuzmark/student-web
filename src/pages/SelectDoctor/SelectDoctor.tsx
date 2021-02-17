@@ -12,6 +12,7 @@ import { RightSide } from './components/RightSide';
 import WarningModal from './components/WarningModal/WarningModal';
 import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
 import { formatDoctor } from './utils';
+import { Skills } from './components/Skills';
 
 const DEFAULT_TRIAGE_VALUES = [
 	{ question: '¿Para quién es la consulta?', answer: 'relative' },
@@ -113,10 +114,6 @@ const SelectDoctor = () => {
 	useEffect(() => {
 		const useCaseParam = params.malestar as string;
 
-		if (!useCaseParam) {
-			redirectToBaseAlivia();
-		}
-
 		if (!useCase && useCaseParam && updateState) {
 			requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
 		}
@@ -144,17 +141,22 @@ const SelectDoctor = () => {
 
 	return (
 		<Container>
-			<LeftSide />
-			<RightSide
-				isUserLoggedIn={!!userToken}
-				useCase={useCase}
-				minutes={minutes}
-				numSessions={numSessions}
-				selectDoctorCallback={selectDoctorCallback}
-				setDoctor={setDoctor}
-				setSchedule={setSchedule}
-				shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
-			/>
+			<LeftSide step={!params.malestar ? -1 : 0} />
+			{!params.malestar ? (
+				<Skills />
+			) : (
+				<RightSide
+					isUserLoggedIn={!!userToken}
+					useCase={useCase}
+					minutes={minutes}
+					numSessions={numSessions}
+					selectDoctorCallback={selectDoctorCallback}
+					setDoctor={setDoctor}
+					setSchedule={setSchedule}
+					shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
+				/>
+			)}
+
 			<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
 			<SelectAppointmentOwner
 				isOpen={isSelectOwnerOpen}

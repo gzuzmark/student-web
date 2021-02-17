@@ -5,11 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, Redirect, useLocation } from 'react-router-dom';
 import { Location } from 'history';
-
+import Snackbar from '@material-ui/core/Snackbar';
 import { Container, RightLayout, LeftLayout, Stepper } from 'pages/common';
 import AppContext from 'AppContext';
 import { stylesWithTheme, usePageTitle, setLocalValue } from 'utils';
-
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import { State, ReducerAction } from './types';
 import { initialAboutPatientValues, initialContactPatientValues, initialPatientPassword } from './constants';
 import AboutPatient from './components/AboutPatient';
@@ -17,6 +17,11 @@ import ContactPatient from './components/ContactPatient';
 import PatientPassword from './components/PatientPassword';
 import { createAccount, createPatient } from 'pages/api';
 import SuccessSignUp from './components/SuccessSignUp';
+import WelcomeModal from './components/WelcomeModal';
+
+const Alert = (props: AlertProps) => {
+	return <MuiAlert elevation={6} variant="filled" {...props} />;
+};
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -58,9 +63,11 @@ const initialValues: State = {
 	contactPatient: initialContactPatientValues,
 	patientPassword: initialPatientPassword,
 	showConfirmationMessage: false,
+	showWelcomeMessage: false,
+	path: '/dashboard/citas',
 };
 
-const newSignUpReducer = (state: State, action: ReducerAction): State => {
+export const newSignUpReducer = (state: State, action: ReducerAction): State => {
 	switch (action.type) {
 		case 'COMPLETE_ABOUT_PATIENT': {
 			return {
@@ -89,6 +96,22 @@ const newSignUpReducer = (state: State, action: ReducerAction): State => {
 				showConfirmationMessage: true,
 			};
 		}
+		case 'REDIRECT_DASHBOARD_SCREEN': {
+			return {
+				...state,
+				showConfirmationMessage: false,
+				showWelcomeMessage: true,
+				path: '/dashboard/default',
+			};
+		}
+		case 'REDIRECT_APPOINTMENT_SCREEN': {
+			return {
+				...state,
+				showConfirmationMessage: false,
+				showWelcomeMessage: true,
+				path: '/seleccionar_doctor',
+			};
+		}
 		default: {
 			throw Error(`The action ${action} is not supported`);
 		}
@@ -103,7 +126,16 @@ const NewSignUp = (): ReactElement => {
 	const classes = useStyles();
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const steps = createSteps(t, isDesktop);
+	const [open, setOpen] = React.useState(false);
+	const [errorMessage, setErrorMessage] = React.useState('');
 	const { updateState } = useContext(AppContext);
+	const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		setOpen(false);
+	};
 	const onSubmit = useCallback(
 		async ({ aboutPatient, contactPatient, patientPassword }: State) => {
 			try {
@@ -131,6 +163,8 @@ const NewSignUp = (): ReactElement => {
 
 				dispatch({ type: 'FINISH_SUBMITTING' });
 			} catch (e) {
+				setOpen(true);
+				setErrorMessage('Email y Nr. de documento deben ser únicos.');
 				console.error(e);
 			}
 		},
@@ -144,6 +178,10 @@ const NewSignUp = (): ReactElement => {
 		} else {
 			onSubmit({ ...state, patientPassword: payload.patientPassword });
 		}
+	};
+
+	const showWelcomeScreen = (payload: ReducerAction): void => {
+		dispatch(payload);
 	};
 
 	useLayoutEffect(() => {
@@ -163,11 +201,20 @@ const NewSignUp = (): ReactElement => {
 	usePageTitle('Registro');
 
 	if (state.showConfirmationMessage) {
-		return <SuccessSignUp />;
+		return <SuccessSignUp showWelcomeScreen={showWelcomeScreen} />;
+	}
+
+	if (state.showWelcomeMessage) {
+		return <WelcomeModal path={state.path} />;
 	}
 
 	return (
 		<Container>
+			<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+				<Alert onClose={handleClose} severity="error">
+					{errorMessage}
+				</Alert>
+			</Snackbar>
 			<LeftLayout>
 				<div className={classes.wrapper}>
 					<Typography className={classes.title} variant="h1">

@@ -98,57 +98,61 @@ const NewUser = ({
 	};
 	const submitSignUp = useCallback(
 		async (contactInfo: ContactValues) => {
-			if (updateState) {
-				const newUser = {
-					...(aboutMeData as AboutMeValues),
-					...(medicalData as MedicalDataValues),
-					...contactInfo,
-				};
-				let localUserToken = null;
-				let user = null;
-				let patientUser = null;
-				let reservationAccountID = '';
-				let redirectPath = '/pago';
-				let appointmentCreationStep = PAYMENT_STEP;
+			try {
+				if (updateState) {
+					const newUser = {
+						...(aboutMeData as AboutMeValues),
+						...(medicalData as MedicalDataValues),
+						...contactInfo,
+					};
+					let localUserToken = null;
+					let user = null;
+					let patientUser = null;
+					let reservationAccountID = '';
+					let redirectPath = '/pago';
+					let appointmentCreationStep = PAYMENT_STEP;
 
-				// If the user is a Guest then, he is creating an appointment, thus an appointment is created with an empty token
-				// If the user is not a Guest, but is creating an appointment, then we need to create him an account token and with that token create an appoinment
-				// If the user is not a guest and is not creating an appointment, then we should only create him an account token and redirect him to /citas
+					// If the user is a Guest then, he is creating an appointment, thus an appointment is created with an empty token
+					// If the user is not a Guest, but is creating an appointment, then we need to create him an account token and with that token create an appoinment
+					// If the user is not a guest and is not creating an appointment, then we should only create him an account token and redirect him to /citas
 
-				if (isGuest || (!isGuest && !isUserLoggedIn)) {
-					reservationAccountID = await createGuestPatient(newUser);
-					patientUser = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
-					localUserToken = currentUser?.id;
-				} else if (!isGuest && useCase) {
-					localUserToken = await createAccount(contactInfo);
-					reservationAccountID = await createPatient(newUser, localUserToken);
-					user = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
+					if (isGuest || (!isGuest && !isUserLoggedIn)) {
+						reservationAccountID = await createGuestPatient(newUser);
+						patientUser = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
+						localUserToken = currentUser?.id;
+					} else if (!isGuest && useCase) {
+						localUserToken = await createAccount(contactInfo);
+						reservationAccountID = await createPatient(newUser, localUserToken);
+						user = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
 
-					setLocalValue('userToken', localUserToken);
-				} else {
-					localUserToken = await createAccount(contactInfo);
-					reservationAccountID = await createPatient(newUser, localUserToken);
-					user = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
-					redirectPath = '/dashboard/citas';
-					appointmentCreationStep = '';
+						setLocalValue('userToken', localUserToken);
+					} else {
+						localUserToken = await createAccount(contactInfo);
+						reservationAccountID = await createPatient(newUser, localUserToken);
+						user = { id: reservationAccountID, ...formatNewUser(newUser), isUnderAge: isAChild };
+						redirectPath = '/dashboard/citas';
+						appointmentCreationStep = '';
 
-					setLocalValue('userToken', localUserToken);
+						setLocalValue('userToken', localUserToken);
+					}
+
+					addGAEvent({
+						category: 'Agendar cita - Paso 2.3',
+						action: 'Avance satisfactorio',
+						label: '(not available)',
+					});
+					updateState({
+						reservationAccountID,
+						userToken: localUserToken,
+						user,
+						patientUser,
+						appointmentCreationStep,
+						userFiles: medicalData?.files || [],
+					});
+					push(redirectPath);
 				}
-
-				addGAEvent({
-					category: 'Agendar cita - Paso 2.3',
-					action: 'Avance satisfactorio',
-					label: '(not available)',
-				});
-				updateState({
-					reservationAccountID,
-					userToken: localUserToken,
-					user,
-					patientUser,
-					appointmentCreationStep,
-					userFiles: medicalData?.files || [],
-				});
-				push(redirectPath);
+			} catch (e) {
+				console.error(e);
 			}
 		},
 		[aboutMeData, currentUser, isAChild, isGuest, isUserLoggedIn, medicalData, push, updateState, useCase],

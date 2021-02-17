@@ -12,6 +12,8 @@ export const initialContactPatientValues: ContactPatientValues = {
 	identification: '',
 	phoneNumber: '',
 	email: '',
+	address: '',
+	ubigeo: '',
 };
 
 export const initialPatientPassword: PatientPasswordValues = {

@@ -60,7 +60,6 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 const StepIcon = ({ active, icon }: StepIconProps) => {
 	const isFirstChild = icon === 1;
 	const classes = useStyles();
-
 	return (
 		<div
 			className={clsx(classes.root, {

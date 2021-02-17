@@ -19,6 +19,7 @@ import laboratoryExamsL18n from 'pages/LaboratoryExams/l18n';
 import buyPrescriptionL18n from 'pages/BuyPrescription/l18n';
 import askAddressL18n from 'pages/AskAddress/l18n';
 import newSignUpl18n from 'pages/NewSignUp/l18n';
+import defaultDashboard from 'pages/DashboardDefault/l18n';
 
 export default {
 	nav: {
@@ -63,4 +64,5 @@ export default {
 	buyPrescription: { ...buyPrescriptionL18n },
 	askAddress: { ...askAddressL18n },
 	newSignUp: { ...newSignUpl18n },
+	defaultDashboard: { ...defaultDashboard },
 };
