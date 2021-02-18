@@ -1,12 +1,11 @@
 import React, { ReactNode } from 'react';
 import Card from '@material-ui/core/Card';
-import { Theme } from '@material-ui/core/styles';
 import { useLocation, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils';
 
-const useStyles = stylesWithTheme(({ palette }: Theme) => ({
+const useStyles = stylesWithTheme(() => ({
 	card: {
 		alignItems: 'center',
 		backgroundColor: 'white',
@@ -21,16 +20,10 @@ const useStyles = stylesWithTheme(({ palette }: Theme) => ({
 		textAlign: 'center',
 		width: '150px',
 		userSelect: 'none',
-		// borderColor: '#1ecd96',
-		// borderWidth: '1.1px',
 		border: '1px solid #1ecd96',
 		'&:hover': {
 			boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
 		},
-
-		// '&.active': {
-		// 	border: `1px solid ${palette.primary.main}`,
-		// },
 	},
 }));
 
