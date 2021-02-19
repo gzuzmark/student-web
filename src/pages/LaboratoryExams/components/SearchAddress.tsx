@@ -41,6 +41,7 @@ const SearchAddress = ({
 					geocoder.geocode(
 						{ address: request.input },
 						(results: google.maps.GeocoderResult[], responseStatus: google.maps.GeocoderStatus) => {
+							console.log('====>', results);
 							if (responseStatus === 'OK') {
 								callback(
 									results.map(({ formatted_address, geometry: { location } }) => ({
@@ -98,6 +99,7 @@ const SearchAddress = ({
 			filterSelectedOptions
 			includeInputInList
 			onChange={(_, newValue: Place | null) => {
+				console.log('hola', newValue);
 				setValue(newValue);
 				updatePosition(newValue);
 			}}
