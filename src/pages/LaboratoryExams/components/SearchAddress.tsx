@@ -6,7 +6,7 @@ import throttle from 'lodash/throttle';
 
 import { Position } from 'pages/api';
 
-import { MapsApi, Place, FormattedPlace, AddressComponent } from './types';
+import { MapsApi, Place, FormattedPlace, AddressComponent, AddressTypesEnum } from './types';
 
 interface SearchAddressProps {
 	id?: string;
@@ -23,12 +23,12 @@ const findAddressItem = (addressComponents: AddressComponent[], key: string): Ad
 };
 
 const getFormattedPlace = (addressComponents: AddressComponent[]): FormattedPlace => {
-	const number = findAddressItem(addressComponents, 'street_number');
-	const street = findAddressItem(addressComponents, 'route');
-	const district = findAddressItem(addressComponents, 'locality');
-	const city = findAddressItem(addressComponents, 'administrative_area_level_2');
-	const country = findAddressItem(addressComponents, 'country');
-	const name = findAddressItem(addressComponents, 'sublocality_level_1');
+	const number = findAddressItem(addressComponents, AddressTypesEnum.number);
+	const street = findAddressItem(addressComponents, AddressTypesEnum.street);
+	const district = findAddressItem(addressComponents, AddressTypesEnum.district);
+	const city = findAddressItem(addressComponents, AddressTypesEnum.city);
+	const country = findAddressItem(addressComponents, AddressTypesEnum.country);
+	const name = findAddressItem(addressComponents, AddressTypesEnum.name);
 	return {
 		number: number?.long_name || '',
 		street: street?.long_name || '',

@@ -12,6 +12,14 @@ export interface FormattedPlace {
 	name: string;
 }
 
+export enum AddressTypesEnum {
+	number = 'street_number',
+	country = 'country',
+	district = 'locality',
+	street = 'route',
+	city = 'administrative_area_level_2',
+	name = 'sublocality_level_1',
+}
 export interface AddressComponent {
 	long_name: string;
 	short_name: string;
