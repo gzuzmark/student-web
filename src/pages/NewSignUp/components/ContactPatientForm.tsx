@@ -1,16 +1,19 @@
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { useEffect, ReactElement, useCallback, useState, ChangeEvent } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { TextField as MaterialTextField } from '@material-ui/core';
-import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
+import SearchAddress from 'pages/LaboratoryExams/components/SearchAddress';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
+import GoogleMapReact, { Maps } from 'google-map-react';
 
-import { getLocations, Ubigeo } from 'pages/api';
+import { Position, postAddress } from 'pages/api';
+import clsx from 'clsx';
 import { stylesWithTheme } from 'utils/createStyles';
-
+import { MapInstance, MapsApi, Place, Marker } from 'pages/AskAddress/types';
+import { defaultCenter, getUserCurrentPosition } from 'utils';
 import { contactPatientValidationSchema } from './validationSchema';
 import { ContactPatientValues, ReducerAction } from '../types';
 import { initialContactPatientValues } from '../constants';
@@ -19,6 +22,13 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
 			maxWidth: '403px',
+		},
+	},
+	addressReferenceLabel: {
+		fontSize: '15px',
+		paddingBottom: '10px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '8px',
 		},
 	},
 	fieldWrapper: {
@@ -32,6 +42,14 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 				paddingBottom: '27px',
 			},
 		},
+	},
+	mapWrapper: {
+		height: '206px',
+	},
+	addressInput: {
+		display: 'none',
+		padding: '17px 12px 0 18px',
+		width: 'calc(100% - 30px)',
 	},
 	fieldWithHelperText: {
 		'& .MuiFormHelperText-root': {
@@ -52,12 +70,58 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		fontSize: '13px',
 		color: palette.info.main,
 	},
+	addressReferenceInput: {
+		marginBottom: '18px',
+		[breakpoints.up('lg')]: {
+			marginBottom: '33px',
+		},
+	},
 	privacyPolicyLink: {
 		fontSize: '13px',
 		cursor: 'pointer',
 		textDecoration: 'underline',
 	},
 }));
+
+const mapOptionsCreator = (map: Maps) => ({
+	fullscreenControl: false,
+	zoomControlOptions: {
+		position: map.ControlPosition.RIGHT_TOP,
+	},
+});
+
+const getCurrentPosition = async ({
+	mapsApi,
+	mapInstance,
+	setCurrentPositionMarker,
+	setActivePosition,
+}: {
+	mapsApi: MapsApi | undefined;
+	mapInstance: MapInstance | undefined;
+	setCurrentPositionMarker: Function;
+	setActivePosition: Function;
+}) => {
+	try {
+		if (mapsApi && mapInstance) {
+			const userPosition = await getUserCurrentPosition();
+			const marker = new mapsApi.Marker({
+				position: {
+					...userPosition,
+				},
+				map: mapInstance,
+			});
+
+			setCurrentPositionMarker(marker);
+			setActivePosition(userPosition);
+			mapInstance.setCenter(userPosition);
+		}
+	} catch (e) {
+		if (mapInstance) {
+			mapInstance.setCenter(defaultCenter);
+		}
+	}
+};
+
 export interface ContactPatientFormProps {
 	contactPatient: ContactPatientValues;
 	onChangeStep: (payload: ReducerAction, redirectPath: string) => void;
@@ -73,7 +137,19 @@ const ContactPatientForm = ({
 }: ContactPatientFormProps): ReactElement => {
 	const { t } = useTranslation('newSignUp');
 	const classes = useStyles();
-	const [ubigeos, setUbigeos] = useState<string[]>([]);
+	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
+	const [currentPositionMarker, setCurrentPositionMarker] = useState<Marker>();
+	const [activePosition, setActivePosition] = useState<Position | null>(null);
+	const [mapsApi, setMapApi] = useState<MapsApi>();
+	const [hasAddressError, setHasAddressError] = useState<boolean>(false);
+	const [addressReference, setAddressReference] = useState<string>('');
+	const [mapInstance, setMapInstance] = useState<MapInstance>();
+	const [referenceError, setReferenceError] = useState<string>('');
+
+	const updateDirectionReference = (e: ChangeEvent<HTMLInputElement>) => {
+		setAddressReference(e.target.value);
+	};
+
 	const onSubmit = useCallback(
 		(values: ContactPatientValues) => {
 			try {
@@ -93,16 +169,43 @@ const ContactPatientForm = ({
 		[onChangeStep],
 	);
 
-	const handleTypeUbigeo = async (e: any) => {
-		const value = e.target.value;
-		if (value) {
-			const response = await getLocations(value);
-			const locations = response.data.map((r: Ubigeo) => r.description);
-			setUbigeos(locations);
-		} else {
-			setUbigeos([]);
+	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
+		const addressInputWrapper = document.querySelector<HTMLElement>('.address-input-wrapper');
+
+		if (addressInputWrapper) {
+			map.controls[maps.ControlPosition.TOP_RIGHT].push(addressInputWrapper);
+			setTimeout(() => {
+				addressInputWrapper.style.display = 'block';
+			}, 900);
 		}
+
+		setMapApi(maps);
+		setMapInstance(map);
 	};
+
+	const updatePosition = useCallback(
+		(place: Place | null) => {
+			if (place && mapInstance && currentPositionMarker) {
+				currentPositionMarker.setVisible(false);
+				setHumanActivePosition(place.address);
+				setActivePosition(place.position);
+				currentPositionMarker.setPosition(place.position);
+				currentPositionMarker.setVisible(true);
+				mapInstance.setCenter(place.position);
+				mapInstance.setZoom(17);
+			}
+		},
+		[currentPositionMarker, mapInstance],
+	);
+
+	useEffect(() => {
+		getCurrentPosition({
+			mapsApi,
+			mapInstance,
+			setCurrentPositionMarker,
+			setActivePosition,
+		});
+	}, [mapInstance, mapsApi]);
 
 	return (
 		<Formik
@@ -149,7 +252,7 @@ const ContactPatientForm = ({
 						</div>
 
 						<>
-							<div className={classes.fieldWrapper}>
+							{/* <div className={classes.fieldWrapper}>
 								<Field
 									component={TextField}
 									className={classes.fieldWithHelperText}
@@ -159,28 +262,39 @@ const ContactPatientForm = ({
 									helperText={t('contactPatient.fields.address.helperText')}
 									fullWidth
 								/>
+							</div> */}
+							<SearchAddress
+								className={clsx(classes.addressInput, 'address-input-wrapper')}
+								defaultValue={humanActivePosition}
+								defaultPosition={activePosition}
+								mapsApi={mapsApi}
+								updatePosition={updatePosition}
+								hasError={hasAddressError}
+							/>
+							<div className={classes.mapWrapper}>
+								<GoogleMapReact
+									bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY || '', libraries: 'places' }}
+									defaultCenter={defaultCenter}
+									defaultZoom={17}
+									options={mapOptionsCreator}
+									yesIWantToUseGoogleMapApiInternals
+									onGoogleApiLoaded={onGoogleApiLoaded}
+								></GoogleMapReact>
 							</div>
-							<div className={classes.fieldWrapper}>
-								<Field
-									component={Autocomplete}
-									options={ubigeos}
-									getOptionLabel={(option: string) => option}
-									className={classes.fieldWithHelperText}
-									name="ubigeo"
-									variant="outlined"
-									fullWidth
-									renderInput={(params: AutocompleteRenderInputParams) => (
-										<MaterialTextField
-											{...params}
-											error={false}
-											helperText={t('contactPatient.fields.address.helperText')}
-											label={t('contactPatient.fields.ubigeo.label')}
-											variant="outlined"
-											onChange={handleTypeUbigeo}
-										/>
-									)}
-								/>
-							</div>
+							<Typography className={classes.addressReferenceLabel}>
+								{t('askAddress.addressReference.label')}
+							</Typography>
+							<MaterialTextField
+								className={classes.addressReferenceInput}
+								value={addressReference}
+								onChange={updateDirectionReference}
+								name="address-reference"
+								placeholder={t('askAddress.addressReference.placeholder')}
+								variant="outlined"
+								error={!!referenceError}
+								helperText={referenceError}
+								fullWidth
+							/>
 						</>
 					</div>
 					<div className={classes.privacyPolicyWrapper}>

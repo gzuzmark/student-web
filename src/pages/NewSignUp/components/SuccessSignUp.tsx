@@ -3,7 +3,6 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
-import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AppContext from 'AppContext';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
