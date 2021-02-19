@@ -11,7 +11,6 @@ export interface ContactPatientValues {
 	phoneNumber: string;
 	email: string;
 	address: string;
-	ubigeo: string;
 }
 
 export interface PatientPasswordValues {

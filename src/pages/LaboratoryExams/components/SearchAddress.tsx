@@ -6,7 +6,7 @@ import throttle from 'lodash/throttle';
 
 import { Position } from 'pages/api';
 
-import { MapsApi, Place } from './types';
+import { MapsApi, Place, FormattedPlace, AddressComponent } from './types';
 
 interface SearchAddressProps {
 	id?: string;
@@ -17,6 +17,27 @@ interface SearchAddressProps {
 	updatePosition: (place: Place | null) => void;
 	mapsApi: MapsApi | undefined;
 }
+
+const findAddressItem = (addressComponents: AddressComponent[], key: string): AddressComponent | undefined => {
+	return addressComponents.find((item) => item.types.find((type) => type === key));
+};
+
+const getFormattedPlace = (addressComponents: AddressComponent[]): FormattedPlace => {
+	const number = findAddressItem(addressComponents, 'street_number');
+	const street = findAddressItem(addressComponents, 'route');
+	const district = findAddressItem(addressComponents, 'locality');
+	const city = findAddressItem(addressComponents, 'administrative_area_level_2');
+	const country = findAddressItem(addressComponents, 'country');
+	const name = findAddressItem(addressComponents, 'sublocality_level_1');
+	return {
+		number: number?.long_name || '',
+		street: street?.long_name || '',
+		district: district?.long_name || '',
+		city: city?.long_name || '',
+		country: country?.long_name || '',
+		name: name?.long_name || '',
+	};
+};
 
 const SearchAddress = ({
 	id,
@@ -41,12 +62,12 @@ const SearchAddress = ({
 					geocoder.geocode(
 						{ address: request.input },
 						(results: google.maps.GeocoderResult[], responseStatus: google.maps.GeocoderStatus) => {
-							console.log('====>', results);
 							if (responseStatus === 'OK') {
 								callback(
-									results.map(({ formatted_address, geometry: { location } }) => ({
+									results.map(({ formatted_address, address_components, geometry: { location } }) => ({
 										address: formatted_address,
 										position: { lat: location.lat(), lng: location.lng() },
+										formattedPlace: getFormattedPlace(address_components),
 									})),
 								);
 							}
@@ -99,7 +120,6 @@ const SearchAddress = ({
 			filterSelectedOptions
 			includeInputInList
 			onChange={(_, newValue: Place | null) => {
-				console.log('hola', newValue);
 				setValue(newValue);
 				updatePosition(newValue);
 			}}

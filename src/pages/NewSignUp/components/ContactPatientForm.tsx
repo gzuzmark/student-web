@@ -12,7 +12,7 @@ import GoogleMapReact, { Maps } from 'google-map-react';
 import { Position } from 'pages/api';
 import clsx from 'clsx';
 import { stylesWithTheme } from 'utils/createStyles';
-import { MapInstance, MapsApi, Place, Marker } from 'pages/AskAddress/types';
+import { MapInstance, MapsApi, Place, Marker, FormattedPlace } from 'pages/AskAddress/types';
 import { defaultCenter, getUserCurrentPosition } from 'utils';
 import { contactPatientValidationSchema } from './validationSchema';
 import { ContactPatientValues, ReducerAction } from '../types';
@@ -145,6 +145,14 @@ const ContactPatientForm = ({
 	const [addressReference, setAddressReference] = useState<string>('');
 	const [mapInstance, setMapInstance] = useState<MapInstance>();
 	const [referenceError, setReferenceError] = useState<string>('');
+	const [formattedPlace, setFormattedPlace] = useState<FormattedPlace>({
+		name: '',
+		district: '',
+		country: '',
+		city: '',
+		number: '',
+		street: '',
+	});
 
 	const updateDirectionReference = (e: ChangeEvent<HTMLInputElement>) => {
 		setAddressReference(e.target.value);
@@ -153,16 +161,29 @@ const ContactPatientForm = ({
 	const onSubmit = useCallback(
 		(values: ContactPatientValues) => {
 			try {
-				// TODO: Remove both
-				setHasAddressError(false);
-				setReferenceError('');
+				if (!addressReference) {
+					setReferenceError(t('contactPatient.addressReference.error'));
+					return;
+				} else {
+					setReferenceError('');
+				}
+
+				if (!humanActivePosition) {
+					setHasAddressError(true);
+				} else {
+					setHasAddressError(false);
+				}
 
 				const formatedValues: ContactPatientValues = {
 					...values,
 					identification: values.identification.trim(),
 					email: values.email.trim(),
-					address: values.address.trim(),
-					ubigeo: values.ubigeo.trim(),
+					address: JSON.stringify({
+						...formattedPlace,
+						notes: addressReference,
+						latitude: activePosition?.lat,
+						longitude: activePosition?.lng,
+					}),
 				};
 
 				onChangeStep({ type: 'COMPLETE_CONTACT_STEP', contactPatient: formatedValues }, '/creacion_cuenta/password');
@@ -170,7 +191,7 @@ const ContactPatientForm = ({
 				console.error(e);
 			}
 		},
-		[onChangeStep],
+		[activePosition, addressReference, formattedPlace, humanActivePosition, onChangeStep, t],
 	);
 
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
@@ -192,6 +213,7 @@ const ContactPatientForm = ({
 			if (place && mapInstance && currentPositionMarker) {
 				currentPositionMarker.setVisible(false);
 				setHumanActivePosition(place.address);
+				setFormattedPlace(place.formattedPlace);
 				setActivePosition(place.position);
 				currentPositionMarker.setPosition(place.position);
 				currentPositionMarker.setVisible(true);
@@ -256,17 +278,6 @@ const ContactPatientForm = ({
 						</div>
 
 						<>
-							{/* <div className={classes.fieldWrapper}>
-								<Field
-									component={TextField}
-									className={classes.fieldWithHelperText}
-									name="address"
-									label={t('contactPatient.fields.address.label')}
-									variant="outlined"
-									helperText={t('contactPatient.fields.address.helperText')}
-									fullWidth
-								/>
-							</div> */}
 							<SearchAddress
 								className={clsx(classes.addressInput, 'address-input-wrapper')}
 								defaultValue={humanActivePosition}
@@ -286,14 +297,14 @@ const ContactPatientForm = ({
 								></GoogleMapReact>
 							</div>
 							<Typography className={classes.addressReferenceLabel}>
-								{t('askAddress.addressReference.label')}
+								{t('contactPatient.addressReference.label')}
 							</Typography>
 							<MaterialTextField
 								className={classes.addressReferenceInput}
 								value={addressReference}
 								onChange={updateDirectionReference}
 								name="address-reference"
-								placeholder={t('askAddress.addressReference.placeholder')}
+								placeholder={t('contactPatient.addressReference.placeholder')}
 								variant="outlined"
 								error={!!referenceError}
 								helperText={referenceError}
