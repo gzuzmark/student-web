@@ -9,7 +9,7 @@ import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
 import GoogleMapReact, { Maps } from 'google-map-react';
 
-import { Position, postAddress } from 'pages/api';
+import { Position } from 'pages/api';
 import clsx from 'clsx';
 import { stylesWithTheme } from 'utils/createStyles';
 import { MapInstance, MapsApi, Place, Marker } from 'pages/AskAddress/types';
@@ -153,6 +153,10 @@ const ContactPatientForm = ({
 	const onSubmit = useCallback(
 		(values: ContactPatientValues) => {
 			try {
+				// TODO: Remove both
+				setHasAddressError(false);
+				setReferenceError('');
+
 				const formatedValues: ContactPatientValues = {
 					...values,
 					identification: values.identification.trim(),
