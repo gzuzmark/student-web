@@ -50,7 +50,20 @@ const SearchAddress = ({
 }: SearchAddressProps): ReactElement | null => {
 	const [inputValue, setInputValue] = useState<string>(defaultValue);
 	const [value, setValue] = useState<Place | null>(
-		defaultPosition ? { address: defaultValue, position: defaultPosition } : null,
+		defaultPosition
+			? {
+					address: defaultValue,
+					position: defaultPosition,
+					formattedPlace: {
+						number: '',
+						street: '',
+						district: '',
+						city: '',
+						country: '',
+						name: '',
+					},
+			  }
+			: null,
 	);
 	const [options, setOptions] = useState<Place[]>([]);
 	const fetch = useMemo(
