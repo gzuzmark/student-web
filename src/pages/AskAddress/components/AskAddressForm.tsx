@@ -171,7 +171,11 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 		(place: Place | null) => {
 			if (place && mapInstance && currentPositionMarker) {
 				currentPositionMarker.setVisible(false);
-				setHumanActivePosition(place.address);
+				setHumanActivePosition(
+					JSON.stringify({
+						...place.formattedPlace,
+					}),
+				);
 				setActivePosition(place.position);
 				currentPositionMarker.setPosition(place.position);
 				currentPositionMarker.setVisible(true);
