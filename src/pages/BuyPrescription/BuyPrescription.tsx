@@ -91,8 +91,12 @@ const requestPrescription = async ({
 			folioNumber: newFolioNumber,
 		} = await getPrescription(sessionId, updatedPosition, folioNumber);
 
+		const addressObject = JSON.parse(address);
+		const newAddress = `${addressObject.street || ''} , ${addressObject.number || ''}, ${
+			addressObject.district || ''
+		} , ${addressObject.country || ''}`;
 		if (!savedAddress) {
-			setUserAddress(address);
+			setUserAddress(newAddress);
 		}
 
 		setFolioNumber(newFolioNumber);
