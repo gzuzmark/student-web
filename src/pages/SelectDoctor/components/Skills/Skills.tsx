@@ -12,7 +12,7 @@ export const FAKE_SESSION_ID = 'fake';
 const RightSide = () => {
 	const classes = useStyles();
 	const skills = process.env.NODE_ENV === 'production' ? PROD_IMAGES : DEV_IMAGES;
-
+	console.log('ENV', process.env.NODE_ENV);
 	return (
 		<RightLayout>
 			<div className={classes.wrapper}>
