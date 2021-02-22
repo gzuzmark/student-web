@@ -11,11 +11,14 @@ import { DatePickerField } from 'pages/common';
 import { redirectToURL } from 'utils';
 
 import validationSchema from './validationSchema';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 
 export interface SmallSignUpFormValues {
 	name: string;
 	lastName: string;
 	birthDate: Date | null;
+	identificationType: string;
 	identification: string;
 	phoneNumber: string;
 	email: string;
@@ -98,6 +101,7 @@ const initialValues: SmallSignUpFormValues = {
 	lastName: '',
 	birthDate: null,
 	identification: '',
+	identificationType: 'DNI',
 	phoneNumber: '',
 	email: '',
 };
@@ -172,6 +176,18 @@ const SmallSignUpForm = ({ onSubmit, validateAgeAfterSelecting }: SmallSignUpFor
 									}}
 								/>
 							</div>
+							<FormControl className={classes.fieldWrapper} fullWidth>
+								<Field
+									component={TextField}
+									label={t('aboutme.fields.documenttype.label.minor')}
+									name="identificationtype"
+									variant="outlined"
+									select
+								>
+									<MenuItem value={0}>DNI</MenuItem>
+									<MenuItem value={1}>CE</MenuItem>
+								</Field>
+							</FormControl>
 							<div className={classes.fieldWrapper}>
 								<Field
 									component={TextField}

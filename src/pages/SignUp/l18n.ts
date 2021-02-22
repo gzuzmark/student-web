@@ -26,6 +26,7 @@ const signUp = {
 	'aboutme.fields.gender.label': 'Sexo del paciente',
 	'aboutme.fields.gender.label.minor': 'Sexo del menor',
 	'aboutme.fields.gender.placeholder': 'Selecciona tu género',
+	'aboutme.fields.documenttype.label.minor': 'Tipo de documento',
 	'aboutme.fields.document.label.minor': 'DNI o CE del menor',
 	'aboutme.fields.documentIssueDate.label.minor': 'Fecha de emisión del DNI del menor:',
 	'aboutme.validation.name.required': 'El nombre es obligatorio',

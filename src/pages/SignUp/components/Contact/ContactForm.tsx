@@ -16,6 +16,7 @@ import { getLocations, Ubigeo } from 'pages/api';
 
 export interface ContactValues {
 	identification: string;
+	identificationType: string;
 	phoneNumber: string;
 	email?: string;
 	password?: string;
@@ -26,6 +27,7 @@ export interface ContactValues {
 
 interface FormikContactValues {
 	identification: string;
+	identificationType: string;
 	phoneNumber: string;
 	email: string;
 	password: string;
@@ -43,6 +45,7 @@ interface ContactFormProps {
 
 const initialValues = {
 	identification: '',
+	identificationType: 'DNI',
 	phoneNumber: '',
 	email: '',
 	password: '',
