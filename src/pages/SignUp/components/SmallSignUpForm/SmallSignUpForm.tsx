@@ -184,8 +184,8 @@ const SmallSignUpForm = ({ onSubmit, validateAgeAfterSelecting }: SmallSignUpFor
 									variant="outlined"
 									select
 								>
-									<MenuItem value={'DNI'}>DNI</MenuItem>
-									<MenuItem value={'CE'}>CE</MenuItem>
+									<MenuItem value={'1'}>DNI</MenuItem>
+									<MenuItem value={'2'}>CE</MenuItem>
 								</Field>
 							</FormControl>
 							<div className={classes.fieldWrapper}>
