@@ -45,6 +45,7 @@ export default {
 	'contactPatient.legalInformation.termsAndConditionsLink': 'términos y condiciones',
 	'contactPatient.submit.text': 'Continuar',
 	'contactPatient.validation.id.required': 'El DNI o CE del paciente es obligatorio',
+	'contactPatient.validation.idType.required': 'El tipo de documento del paciente es obligatorio',
 	'contactPatient.validation.id.digits': 'Ingrese un DNI o CE valido',
 	'contactPatient.validation.phoneNumber.required': 'El número de celular de contacto es obligatorio',
 	'contactPatient.validation.email.required': 'El correo electrónico es obligatorio',

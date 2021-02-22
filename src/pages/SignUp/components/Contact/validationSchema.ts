@@ -12,6 +12,9 @@ const messages = {
 		required: i18next.t('signUp:contact.validation.id.required'),
 		digits: i18next.t('signUp:contact.validation.id.digits'),
 	},
+	identificationType: {
+		required: i18next.t('signUp:contact.validation.idType.required'),
+	},
 	phoneNumber: {
 		required: i18next.t('signUp:contact.validation.phoneNumber.required'),
 	},
@@ -44,6 +47,7 @@ export const newUservalidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
+	identificationtype: string().required(messages.identificationType.required),
 });
 
 export const defaultNewUserValidationSchema = object().shape({
@@ -84,4 +88,5 @@ export const guestValidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
+	identificationtype: string().required(messages.identificationType.required),
 });

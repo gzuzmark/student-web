@@ -27,6 +27,9 @@ const messages = {
 		required: i18next.t('newSignUp:contactPatient.validation.id.required'),
 		digits: i18next.t('newSignUp:contactPatient.validation.id.digits'),
 	},
+	identificationType: {
+		required: i18next.t('newSignUp:contactPatient.validation.idType.required'),
+	},
 	phoneNumber: {
 		required: i18next.t('newSignUp:contactPatient.validation.phoneNumber.required'),
 	},
@@ -72,7 +75,7 @@ export const contactPatientValidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	identificationtype: string().required(messages.gender.required),
+	identificationtype: string().required(messages.identificationType.required),
 });
 
 export const patientPasswordValidationSchema = object().shape({
