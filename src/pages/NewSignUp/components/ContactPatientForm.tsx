@@ -253,8 +253,8 @@ const ContactPatientForm = ({
 								variant="outlined"
 								select
 							>
-								<MenuItem value={0}>DNI</MenuItem>
-								<MenuItem value={1}>CE</MenuItem>
+								<MenuItem value={'DNI'}>DNI</MenuItem>
+								<MenuItem value={'CE'}>CE</MenuItem>
 							</Field>
 						</FormControl>
 						<div className={classes.fieldWrapper}>
