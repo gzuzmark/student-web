@@ -74,6 +74,8 @@ const signUp = {
 	'contact.title.firstLine': 'Usaremos los datos de contacto para',
 	'contact.title.secondLine': 'enviar información de la cita',
 	'contact.subTitle': '3. DATOS DE CONTACTO',
+	'contact.fields.idType.label.toYou': 'Tipo de documento',
+	'contact.fields.idType.label.toSomeoneElse': 'Tipo de documento del paciente',
 	'contact.fields.id.label.toYou': 'Ingresa tu DNI o CE',
 	'contact.fields.id.label.toSomeoneElse': 'DNI o CE del paciente',
 	'contact.fields.phoneNumber.label.toYou': 'Ingresa tu número celular',

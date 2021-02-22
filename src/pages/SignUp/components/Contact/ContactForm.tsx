@@ -13,6 +13,8 @@ import { stylesWithTheme } from 'utils/createStyles';
 import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
 import AppContext from 'AppContext';
 import { getLocations, Ubigeo } from 'pages/api';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
 
 export interface ContactValues {
 	identification: string;
@@ -110,6 +112,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 				const formatedValues = {
 					...values,
 					identification: values.identification.trim(),
+					identificationType: values.identificationType,
 					email: values.email?.trim(),
 				};
 				await submitSignUp(formatedValues);
@@ -147,6 +150,18 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
 					<div>
+						<FormControl className={classes.fieldWrapper} fullWidth>
+							<Field
+								component={TextField}
+								label={t(`contact.fields.idType.label.${contactKey}`)}
+								name="identificationType"
+								variant="outlined"
+								select
+							>
+								<MenuItem value={0}>DNI</MenuItem>
+								<MenuItem value={1}>CE</MenuItem>
+							</Field>
+						</FormControl>
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={TextField}
