@@ -47,7 +47,6 @@ export const newUservalidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	identificationtype: string().required(messages.identificationType.required),
 });
 
 export const defaultNewUserValidationSchema = object().shape({
@@ -88,5 +87,4 @@ export const guestValidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	identificationtype: string().required(messages.identificationType.required),
 });
