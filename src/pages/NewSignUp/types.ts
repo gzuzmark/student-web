@@ -8,6 +8,7 @@ export interface AboutPatientValues {
 
 export interface ContactPatientValues {
 	identification: string;
+	identificationType: string;
 	phoneNumber: string;
 	email: string;
 	address: string;

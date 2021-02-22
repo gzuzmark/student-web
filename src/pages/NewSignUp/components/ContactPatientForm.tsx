@@ -17,6 +17,8 @@ import { defaultCenter, getUserCurrentPosition } from 'utils';
 import { contactPatientValidationSchema } from './validationSchema';
 import { ContactPatientValues, ReducerAction } from '../types';
 import { initialContactPatientValues } from '../constants';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	form: {
@@ -177,6 +179,7 @@ const ContactPatientForm = ({
 				const formatedValues: ContactPatientValues = {
 					...values,
 					identification: values.identification.trim(),
+					identificationType: values.identificationType,
 					email: values.email.trim(),
 					address: JSON.stringify({
 						...formattedPlace,
@@ -242,6 +245,18 @@ const ContactPatientForm = ({
 			{({ submitForm, isSubmitting, setFieldValue, values }) => (
 				<Form className={classes.form}>
 					<div>
+						<FormControl className={classes.fieldWrapper} fullWidth>
+							<Field
+								component={TextField}
+								label={t('contactPatient.fields.identificationType.label')}
+								name="identificationType"
+								variant="outlined"
+								select
+							>
+								<MenuItem value={0}>DNI</MenuItem>
+								<MenuItem value={1}>CE</MenuItem>
+							</Field>
+						</FormControl>
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={TextField}

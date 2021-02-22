@@ -27,6 +27,7 @@ export default {
 	'contactPatient.title.thridSection': 'para continuar',
 	'contactPatient.subTitle': '2. DATOS DE CONTACTO',
 	'contactPatient.fields.id.label': 'DNI o CE del paciente',
+	'contactPatient.fields.identificationType.label': 'Tipo de documento',
 	'contactPatient.fields.phoneNumber.label': 'Ingresa un número celular de contacto',
 	'contactPatient.fields.phoneNumber.helperText': 'Será necesario para ingresar a tu cuenta',
 	'contactPatient.fields.email.label': 'Ingresa un correo de contacto',

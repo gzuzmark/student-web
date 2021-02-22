@@ -12,6 +12,7 @@ interface NewUser {
 	lastName: string; // last_name
 	secondSurname: string; // second_last_name
 	identification: string; // document_number
+	identificationType: string; // document_type
 	birthDate: Date | null; // birth_date
 	gender: number | undefined;
 	medicineList?: string; // meds
@@ -79,6 +80,7 @@ export const createPatient = async (user: NewUser, authToken: string): Promise<s
 				second_last_name: user.secondSurname,
 				gender: user.gender,
 				document_number: user.identification,
+				document_type: user.identificationType,
 				birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
 				allergies: user.allergies || '',
 				meds: user.medicineList || '',

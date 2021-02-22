@@ -10,6 +10,7 @@ export const initialAboutPatientValues: AboutPatientValues = {
 
 export const initialContactPatientValues: ContactPatientValues = {
 	identification: '',
+	identificationType: '',
 	phoneNumber: '',
 	email: '',
 	address: '',
