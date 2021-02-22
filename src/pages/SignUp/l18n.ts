@@ -91,7 +91,7 @@ const signUp = {
 	'contact.fields.password.label': 'Contraseña',
 	'contact.fields.repeatPassword.label': 'Repetir Contraseña',
 	'contact.validation.id.required': 'El DNI o CE del paciente es obligatorio',
-	'contact.validation.idType.required': 'El tipo del paciente es obligatorio',
+	'contact.validation.idType.required': 'El tipo de documento del paciente es obligatorio',
 	'contact.validation.id.digits': 'Ingrese un DNI o CE valido',
 	'contact.validation.phoneNumber.required': 'El número de celular de contacto es obligatorio',
 	'contact.validation.password.required': 'Ingresa una contraseña',
