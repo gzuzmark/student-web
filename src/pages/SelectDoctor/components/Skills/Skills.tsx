@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Trans } from 'react-i18next';
-import { DEV_IMAGES, PROD_IMAGES } from 'utils/skillImages';
+import { DEV_IMAGES } from 'utils/skillImages';
 import { RightLayout } from 'pages/common';
 
 import useStyles from './styles';
@@ -11,8 +11,8 @@ export const FAKE_SESSION_ID = 'fake';
 
 const RightSide = () => {
 	const classes = useStyles();
-	const skills = process.env.NODE_ENV === 'production' ? PROD_IMAGES : DEV_IMAGES;
-	console.log('ENV', process.env.NODE_ENV);
+	const skills = DEV_IMAGES;
+
 	return (
 		<RightLayout>
 			<div className={classes.wrapper}>
