@@ -10,14 +10,29 @@ import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
 import { stylesWithTheme, addGAEvent, isWeekDayLateNightOrSunday } from 'utils';
-import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
+import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
 import pagoEfectivo from 'icons/pagoefectivo.png';
 import { CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
+import {
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Grid,
+	InputAdornment,
+} from '@material-ui/core';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import PersonIcon from '@material-ui/icons/Person';
+import LockIcon from '@material-ui/icons/Lock';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import { Field, Form, Formik } from 'formik';
+import { DatePickerField } from '../../common/index';
 
-const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
 	container: {
 		'&&': {
 			minHeight: 'calc(100vh - 301px)',
@@ -216,6 +231,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		height: '30px',
 		paddingRight: '10px',
 	},
+	kushkiTitle: {
+		textAlign: 'center',
+	},
+	kushkiMargin: {
+		margin: spacing(1),
+	},
 }));
 
 interface RightSideProps {
@@ -240,11 +261,30 @@ const RightSide = ({
 	const { t } = useTranslation('payment');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+
+	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
+
+	const initialValues = {
+		cardName: '',
+		cardNumber: null,
+		expDate: '',
+		cardPin: null,
+	};
+
 	const onClickSendDiscount = () => {
 		if (discountCode !== '') {
 			sendDiscount();
 		}
 	};
+
+	const openKushkiForm = () => {
+		setOpenKushkiModal(true);
+	};
+
+	const callKushki = (values: any, { setSubmitting }: any) => {
+		console.log('values', values);
+	};
+
 	const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
 
 	return (
@@ -289,19 +329,22 @@ const RightSide = ({
 				<div className={classes.buttonWrapper}>
 					<Button
 						className={classes.option}
+						// onClick={(e) => {
+						// 	addGAEvent({
+						// 		category: 'Agendar cita - Paso 3',
+						// 		action: 'Avance satisfactorio',
+						// 		label: 'Tarjeta de crédito o débito',
+						// 	});
+						// 	executePayment(CULQI_PAYMENT_ID)(e);
+						// }}
 						onClick={(e) => {
-							addGAEvent({
-								category: 'Agendar cita - Paso 3',
-								action: 'Avance satisfactorio',
-								label: 'Tarjeta de crédito o débito',
-							});
-							executePayment(CULQI_PAYMENT_ID)(e);
+							openKushkiForm();
 						}}
 						variant="outlined"
 					>
 						<div className={classes.optionBody}>
 							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<CreditCardIcon />
+								<CreditCardSvg />
 							</div>
 							<Typography className={classes.optionLabel} variant="h3">
 								{t('payment.right.payCulqiButton')}
@@ -345,6 +388,134 @@ const RightSide = ({
 					</div>
 				) : null}
 			</div>
+			<Dialog
+				open={openKushkiModal}
+				onClose={() => {
+					setOpenKushkiModal(false);
+				}}
+				aria-labelledby="form-dialog-title"
+			>
+				<DialogTitle className={classes.kushkiTitle}>
+					<CreditCardIcon /> Tarjeta de Crédito
+				</DialogTitle>
+				<DialogContent style={{ overflow: 'none' }}>
+					<Grid container spacing={3}>
+						<Grid item xs={12}>
+							<Grid container spacing={2} style={{ justifyContent: 'center' }}>
+								<Grid item xs={2} style={{ textAlign: 'center' }}>
+									<img src={visa} width={35} height={12} alt="Brand Visa" />
+								</Grid>
+								<Grid item xs={2} style={{ textAlign: 'center' }}>
+									<img src={mastercard} width={28} height={18} alt="Brand Mastercard" />
+								</Grid>
+							</Grid>
+						</Grid>
+						<Grid item xs={12}>
+							<Formik initialValues={initialValues} onSubmit={callKushki}>
+								{({ submitForm, isSubmitting, values, handleChange, setFieldValue }: any) => (
+									<Form className={classes.form}>
+										<div>
+											<Grid container spacing={2}>
+												<Grid item xs={12}>
+													<TextField
+														name="cardName"
+														value={values.cardName}
+														className={classes.kushkiMargin}
+														label="Nombre en Tarjeta"
+														fullWidth
+														InputProps={{
+															startAdornment: (
+																<InputAdornment position="start">
+																	<PersonIcon />
+																</InputAdornment>
+															),
+														}}
+														onChange={handleChange}
+													/>
+												</Grid>
+												<Grid item xs={10}>
+													<TextField
+														name="cardNumber"
+														value={values.cardNumber}
+														className={classes.kushkiMargin}
+														label="Número de Tarjeta"
+														type="number"
+														fullWidth
+														InputProps={{
+															startAdornment: (
+																<InputAdornment position="start">
+																	<CreditCardIcon />
+																</InputAdornment>
+															),
+														}}
+														onChange={handleChange}
+													/>
+												</Grid>
+												<Grid item xs={2} style={{ textAlign: 'center' }}>
+													<img src={mastercard} width={'100%'} height={'100%'} alt="Brand Mastercard" />
+												</Grid>
+												<Grid item xs={6}>
+													<TextField
+														name="expDate"
+														value={values.expDate}
+														className={classes.kushkiMargin}
+														label="Fecha Exp."
+														fullWidth
+														InputProps={{
+															startAdornment: (
+																<InputAdornment position="start">
+																	<CalendarTodayIcon />
+																</InputAdornment>
+															),
+														}}
+														onChange={handleChange}
+													/>
+												</Grid>
+												<Grid item xs={6}>
+													<TextField
+														name="cardPin"
+														value={values.cardPin}
+														className={classes.kushkiMargin}
+														label="Código de Seguridad"
+														type="number"
+														fullWidth
+														InputProps={{
+															startAdornment: (
+																<InputAdornment position="start">
+																	<LockIcon />
+																</InputAdornment>
+															),
+														}}
+														onChange={handleChange}
+													/>
+												</Grid>
+												<Grid item xs={12}>
+													<Button
+														// className={classes.saveAction}
+														variant="contained"
+														fullWidth
+														onClick={submitForm}
+														// disabled={isSubmitting}
+													>
+														{/* {tFamily('familyMembers.editProfile.complete')} */}
+														<LockIcon /> Suscribirse por S/{totalCost}
+													</Button>
+												</Grid>
+											</Grid>
+										</div>
+									</Form>
+								)}
+							</Formik>
+						</Grid>
+						<Grid item xs={12} style={{ textAlign: 'center', margin: '5px 0px' }}>
+							<img src={visa} width={'33%'} height={30} alt="Kushki" />
+						</Grid>
+					</Grid>
+					<DialogContentText style={{ margin: '5px 0px', color: '#848181' }}>
+						Este pago es procesado de forma segura por Kushki, un proovedor de pagos PCI de nivel 1.
+					</DialogContentText>
+				</DialogContent>
+			</Dialog>
 		</RightLayout>
 	);
 };
