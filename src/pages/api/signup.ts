@@ -12,6 +12,7 @@ interface NewUser {
 	lastName: string; // last_name
 	secondSurname: string; // second_last_name
 	identification: string; // document_number
+	identificationType: string; // document_type
 	birthDate: Date | null; // birth_date
 	gender: number | undefined;
 	medicineList?: string; // meds
@@ -69,30 +70,37 @@ export const createGuestPatient = async (user: NewUser): Promise<string> => {
 };
 
 export const createPatient = async (user: NewUser, authToken: string): Promise<string> => {
-	const headers = { Authorization: `Bearer ${authToken}` };
-	const resp = await aliviaAxios.post<CreatePatientResponse>(
-		'/patients',
-		{
-			name: user.name,
-			last_name: user.lastName,
-			second_last_name: user.secondSurname,
-			gender: user.gender,
-			document_number: user.identification,
-			birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
-			allergies: user.allergies || '',
-			meds: user.medicineList || '',
-			extra_info: user.moreInfo || '',
-			contact_email: user.email || '',
-			contact_phone: user.phoneNumber,
-			is_main: true,
-		},
-		{
-			headers,
-		},
-	);
-	const data = resp.data.data;
+	try {
+		const headers = { Authorization: `Bearer ${authToken}` };
+		const resp = await aliviaAxios.post<CreatePatientResponse>(
+			'/patients',
+			{
+				name: user.name,
+				last_name: user.lastName,
+				second_last_name: user.secondSurname,
+				gender: user.gender,
+				document_number: user.identification,
+				document_type: user.identificationType,
+				birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
+				allergies: user.allergies || '',
+				meds: user.medicineList || '',
+				extra_info: user.moreInfo || '',
+				contact_email: user.email || '',
+				contact_phone: user.phoneNumber,
+				address: user.address || '',
+				ubigeo: user.ubigeo || '',
+				is_main: true,
+			},
+			{
+				headers,
+			},
+		);
+		const data = resp.data.data;
 
-	return data.id;
+		return data.id;
+	} catch (e) {
+		throw Error(e);
+	}
 };
 
 export const createNewProfile = async (newProfile: User): Promise<string> => {
@@ -133,17 +141,21 @@ export const createAccount = async ({
 	address = '',
 	ubigeo = '',
 }: ContactValuesRequest): Promise<string> => {
-	const resp = await aliviaAxios.post<TokenResponse>('/users', {
-		username: email,
-		phone: phoneNumber,
-		password,
-		document_number: identification,
-		address,
-		ubigeo,
-	});
-	const data = resp.data;
+	try {
+		const resp = await aliviaAxios.post<TokenResponse>('/users', {
+			username: email,
+			phone: phoneNumber,
+			password,
+			document_number: identification,
+			address,
+			ubigeo,
+		});
+		const data = resp.data;
 
-	return data.token;
+		return data.token;
+	} catch (e) {
+		throw Error(e);
+	}
 };
 
 export const getLocations = async (query: string): Promise<UbigeoResponse> => {

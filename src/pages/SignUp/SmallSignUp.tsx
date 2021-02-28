@@ -65,6 +65,7 @@ const SmallSignUp = (): ReactElement => {
 						...values,
 						email: values.email.trim(),
 						identification: values.identification.trim(),
+						identificationType: values.identificationType,
 						secondSurname: 'ugito',
 						gender: 0,
 					};

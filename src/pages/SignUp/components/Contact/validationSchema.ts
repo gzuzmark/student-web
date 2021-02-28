@@ -12,6 +12,9 @@ const messages = {
 		required: i18next.t('signUp:contact.validation.id.required'),
 		digits: i18next.t('signUp:contact.validation.id.digits'),
 	},
+	identificationType: {
+		required: i18next.t('signUp:contact.validation.idType.required'),
+	},
 	phoneNumber: {
 		required: i18next.t('signUp:contact.validation.phoneNumber.required'),
 	},

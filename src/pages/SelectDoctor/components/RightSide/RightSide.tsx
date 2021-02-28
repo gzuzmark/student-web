@@ -216,31 +216,37 @@ const RightSide = ({
 		}
 	}, [useCase]);
 
+	const sectionWithSpecialty = () => (
+		<>
+			<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
+			<Divider className={classes.divider} />
+			{doctors.length > 0 ? (
+				<DoctorList
+					doctors={doctors}
+					selectDoctorCallback={selectDoctorCallback}
+					setDoctor={setDoctor}
+					setSchedule={setSchedule}
+					shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
+				/>
+			) : (
+				<div className={classes.emptyMessageWrapper}>
+					<Typography component="div" className={classes.emptyMessage}>
+						{t('right.notFoundDoctors')}
+					</Typography>
+				</div>
+			)}
+		</>
+	);
+
 	return (
 		<RightLayout>
 			<div className={classes.wrapper}>
 				<div className={classes.titleContainer}>
 					<Typography component="span" className={classes.title}>
-						<Trans i18nKey="selectDoctor:right.title" />
+						<Trans i18nKey={`selectDoctor:${'right.title'}`} />
 					</Typography>
 				</div>
-				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
-				<Divider className={classes.divider} />
-				{doctors.length > 0 ? (
-					<DoctorList
-						doctors={doctors}
-						selectDoctorCallback={selectDoctorCallback}
-						setDoctor={setDoctor}
-						setSchedule={setSchedule}
-						shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
-					/>
-				) : (
-					<div className={classes.emptyMessageWrapper}>
-						<Typography component="div" className={classes.emptyMessage}>
-							{t('right.notFoundDoctors')}
-						</Typography>
-					</div>
-				)}
+				{sectionWithSpecialty()}
 			</div>
 		</RightLayout>
 	);
