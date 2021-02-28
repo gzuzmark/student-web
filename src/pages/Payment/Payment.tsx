@@ -27,6 +27,7 @@ import {
 	sendFakeSession,
 } from 'pages/api';
 import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
+import { Kushki } from '@kushki/js';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -58,6 +59,11 @@ const Payment = () => {
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
+
+	const kushki = new Kushki({
+		merchantId: '85bafa3897634ed6928229fddebf7644', // Your public merchant id
+		inTestEnvironment: true,
+	});
 
 	React.useEffect(() => {
 		const { id = '', startTime, endTime } = schedule || {};
@@ -152,6 +158,7 @@ const Payment = () => {
 
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
+			console.log('tipo de pago: ' + paymentMethod);
 			const { id: scheduleId = '' } = schedule || {};
 			const isFakeSession = scheduleId.includes(FAKE_SESSION_ID);
 			if (!isFakeSession) {
@@ -181,6 +188,56 @@ const Payment = () => {
 		},
 		[schedule, reservationAccountID, doctor, useCase, performTransactionPayment],
 	);
+
+	const makeKushkiPayment = (values: any) => {
+		console.log('values', values);
+
+		const totalCost = discount.totalCost || useCase?.totalCost;
+		const amount = totalCost ? totalCost.toString() : '';
+
+		if (schedule && activeUser) {
+			setIsPaymentLoading(true);
+			kushki.requestToken(
+				{
+					amount: amount,
+					currency: 'PEN',
+					card: {
+						name: values.cardName,
+						number: values.cardNumber.toString(),
+						cvc: values.cardCvv.toString(),
+						expiryMonth: values.expDate.split('/')[0],
+						expiryYear: values.expDate.split('/')[1],
+					},
+				},
+				async (response: any) => {
+					if (!response.code) {
+						console.log('respuesta --->>> <<<---');
+						console.log(response);
+
+						await createPayment({
+							cost: amount,
+							appointmentTypeID: 'ugito',
+							scheduleID: schedule.id,
+							discountID: discount.id,
+							email: values.email,
+							token: response.token,
+							dni: activeUser.identification || '',
+							name: '',
+							lastName: '',
+							phone: '',
+							paymentType: CULQI_PAYMENT_ID,
+							trackParams: trackParams || EMPTY_TRACK_PARAMS,
+							reservationAccountID: activeUser.id,
+						});
+					} else {
+						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
+					}
+					setIsPaymentLoading(false);
+				},
+			);
+		}
+	};
+
 	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target) {
 			setDiscountCode(e.target.value);
@@ -218,7 +275,7 @@ const Payment = () => {
 						if (!!window.Culqi.token) {
 							const token = window.Culqi.token.id;
 							const email = window.Culqi.token.email;
-
+							console.log('useEffect', schedule);
 							await createPayment({
 								cost: useCase?.totalCost,
 								appointmentTypeID: 'ugito',
@@ -313,6 +370,7 @@ const Payment = () => {
 				onChangeDiscount={onChangeDiscount}
 				executePayment={makePayment}
 				errorMessage={errorMessage}
+				makeKushkiPayment={makeKushkiPayment}
 			/>
 		</Container>
 	) : (

@@ -7,6 +7,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 import { RightLayout } from 'pages/common';
 import { stylesWithTheme, addGAEvent, isWeekDayLateNightOrSunday } from 'utils';
@@ -14,8 +15,9 @@ import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
+import kushkiLogo from 'icons/kushki_logo.png';
 import pagoEfectivo from 'icons/pagoefectivo.png';
-import { CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
+import { createPayment, CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 import {
 	Dialog,
 	DialogActions,
@@ -28,6 +30,7 @@ import {
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
+import EmailIcon from '@material-ui/icons/Email';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import { Field, Form, Formik } from 'formik';
 import { DatePickerField } from '../../common/index';
@@ -247,6 +250,7 @@ interface RightSideProps {
 	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
 	executePayment: (pm: number) => (e: MouseEvent) => void;
 	errorMessage: string;
+	makeKushkiPayment: (values: any) => (e: MouseEvent) => void;
 }
 
 const RightSide = ({
@@ -257,6 +261,7 @@ const RightSide = ({
 	onChangeDiscount,
 	executePayment,
 	errorMessage,
+	makeKushkiPayment,
 }: RightSideProps) => {
 	const { t } = useTranslation('payment');
 	const classes = useStyles();
@@ -266,9 +271,10 @@ const RightSide = ({
 
 	const initialValues = {
 		cardName: '',
-		cardNumber: null,
+		cardNumber: '',
 		expDate: '',
-		cardPin: null,
+		cardCvv: '',
+		email: '',
 	};
 
 	const onClickSendDiscount = () => {
@@ -282,7 +288,7 @@ const RightSide = ({
 	};
 
 	const callKushki = (values: any, { setSubmitting }: any) => {
-		console.log('values', values);
+		makeKushkiPayment(values);
 	};
 
 	const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
@@ -330,15 +336,21 @@ const RightSide = ({
 					<Button
 						className={classes.option}
 						// onClick={(e) => {
-						// 	addGAEvent({
-						// 		category: 'Agendar cita - Paso 3',
-						// 		action: 'Avance satisfactorio',
-						// 		label: 'Tarjeta de crédito o débito',
-						// 	});
+						// addGAEvent({
+						// 	category: 'Agendar cita - Paso 3',
+						// 	action: 'Avance satisfactorio',
+						// 	label: 'Tarjeta de crédito o débito',
+						// });
 						// 	executePayment(CULQI_PAYMENT_ID)(e);
 						// }}
 						onClick={(e) => {
 							openKushkiForm();
+							// addGAEvent({
+							// 	category: 'Agendar cita - Paso 3',
+							// 	action: 'Avance satisfactorio',
+							// 	label: 'Tarjeta de crédito o débito',
+							// });
+							// executePayment(CULQI_PAYMENT_ID)(e);
 						}}
 						variant="outlined"
 					>
@@ -418,75 +430,132 @@ const RightSide = ({
 											<Grid container spacing={2}>
 												<Grid item xs={12}>
 													<TextField
+														variant="standard"
 														name="cardName"
 														value={values.cardName}
-														className={classes.kushkiMargin}
 														label="Nombre en Tarjeta"
+														className={classes.kushkiMargin}
 														fullWidth
-														InputProps={{
+														onChange={(e: any) => {
+															if (e.target.validity.valid || !e.target.value) {
+																setFieldValue('cardName', e.target.value);
+															}
+														}}
+														type="text"
+														inputProps={{
+															pattern: '[a-zA-Z ]*',
 															startAdornment: (
 																<InputAdornment position="start">
 																	<PersonIcon />
 																</InputAdornment>
 															),
 														}}
-														onChange={handleChange}
 													/>
 												</Grid>
-												<Grid item xs={10}>
+												<Grid item xs={12}>
 													<TextField
+														variant="standard"
 														name="cardNumber"
 														value={values.cardNumber}
-														className={classes.kushkiMargin}
 														label="Número de Tarjeta"
-														type="number"
+														className={classes.kushkiMargin}
 														fullWidth
-														InputProps={{
+														onChange={(e: any) => {
+															if (e.target.validity.valid || !e.target.value) {
+																if (e.target.value.length <= 16) {
+																	setFieldValue('cardNumber', e.target.value);
+																}
+															}
+														}}
+														type="text"
+														inputProps={{
+															pattern: '[0-9]*',
 															startAdornment: (
 																<InputAdornment position="start">
 																	<CreditCardIcon />
 																</InputAdornment>
 															),
 														}}
-														onChange={handleChange}
 													/>
-												</Grid>
-												<Grid item xs={2} style={{ textAlign: 'center' }}>
-													<img src={mastercard} width={'100%'} height={'100%'} alt="Brand Mastercard" />
 												</Grid>
 												<Grid item xs={6}>
 													<TextField
+														variant="standard"
 														name="expDate"
 														value={values.expDate}
-														className={classes.kushkiMargin}
 														label="Fecha Exp."
+														className={classes.kushkiMargin}
 														fullWidth
-														InputProps={{
+														onChange={(event) => {
+															let text = event.target.value;
+															if (text.charAt(text.length - 1) == '/') {
+																return;
+															}
+															if (event.target.validity.valid || !text) {
+																if (text.length <= 5) {
+																	if (text.length == 2 && values.expDate.charAt(2) != '/') {
+																		text = text + '/';
+																	}
+																	setFieldValue('expDate', text);
+																}
+															}
+														}}
+														type="text"
+														inputProps={{
+															pattern: '[\\0-9]*',
 															startAdornment: (
 																<InputAdornment position="start">
 																	<CalendarTodayIcon />
 																</InputAdornment>
 															),
 														}}
-														onChange={handleChange}
 													/>
 												</Grid>
 												<Grid item xs={6}>
 													<TextField
-														name="cardPin"
-														value={values.cardPin}
-														className={classes.kushkiMargin}
+														variant="standard"
+														name="cardCvv"
+														value={values.cardCvv}
 														label="Código de Seguridad"
-														type="number"
+														className={classes.kushkiMargin}
 														fullWidth
-														InputProps={{
+														onChange={(e: any) => {
+															if (e.target.validity.valid || !e.target.value) {
+																if (e.target.value.length <= 4) {
+																	setFieldValue('cardCvv', e.target.value);
+																}
+															}
+														}}
+														type="password"
+														inputProps={{
+															pattern: '[0-9]*',
 															startAdornment: (
 																<InputAdornment position="start">
 																	<LockIcon />
 																</InputAdornment>
 															),
 														}}
-														onChange={handleChange}
+													/>
+												</Grid>
+												<Grid item xs={12}>
+													<TextField
+														variant="standard"
+														name="email"
+														value={values.email}
+														label="Email"
+														className={classes.kushkiMargin}
+														fullWidth
+														onChange={(e: any) => {
+															setFieldValue('email', e.target.value);
+														}}
+														type="email"
+														inputProps={{
+															startAdornment: (
+																<InputAdornment position="start">
+																	<EmailIcon />
+																</InputAdornment>
+															),
+														}}
 													/>
 												</Grid>
 												<Grid item xs={12}>
@@ -495,6 +564,14 @@ const RightSide = ({
 														variant="contained"
 														fullWidth
 														onClick={submitForm}
+														disabled={
+															!values.cardName ||
+															!values.cardNumber ||
+															!values.cardCvv ||
+															values.cardCvv.length < 3 ||
+															!values.expDate ||
+															!values.email
+														}
 														// disabled={isSubmitting}
 													>
 														{/* {tFamily('familyMembers.editProfile.complete')} */}
@@ -508,7 +585,7 @@ const RightSide = ({
 							</Formik>
 						</Grid>
 						<Grid item xs={12} style={{ textAlign: 'center', margin: '5px 0px' }}>
-							<img src={visa} width={'33%'} height={30} alt="Kushki" />
+							<img src={kushkiLogo} width={'33%'} height={30} alt="Kushki" />
 						</Grid>
 					</Grid>
 					<DialogContentText style={{ margin: '5px 0px', color: '#848181' }}>
