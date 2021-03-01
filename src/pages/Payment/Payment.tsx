@@ -52,6 +52,7 @@ import LogoKsh from 'icons/logo_ksh.png';
 import LogoPci from 'icons/pci_logo.png';
 import amex from 'icons/amex.png';
 import dinersClub from 'icons/diners_club.png';
+import { AnyCnameRecord } from 'dns';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -260,6 +261,7 @@ const Payment = () => {
 				},
 				async (response: any) => {
 					if (!response.code) {
+						console.log(response);
 						await createPayment({
 							cost: amount,
 							appointmentTypeID: 'ugito',
@@ -336,6 +338,8 @@ const Payment = () => {
 						history.push('/confirmacion');
 					} else {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
+						setErrorMessage('Por favor ingresar correctamente los datos de la Tarjeta.');
+						setOpenKushkiModal(false);
 					}
 					setIsPaymentLoading(false);
 				},
@@ -637,6 +641,22 @@ const Payment = () => {
 														className={classes.kushkiMargin}
 														fullWidth
 														onChange={(e: any) => {
+															// const isValiEmail = (val: any) => {
+															// 	let regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+															// 	let isValid = true;
+															// 	if (!regEmail.test(val)) {
+															// 		isValid = false;
+
+															// 	} else {
+															// 		isValid = true;
+															// 	}
+															// 	return isValid;
+															//   }
+															//   let value = isValiEmail(e.target.value);
+
+															//  if(value === true) {
+
+															//  }
 															setFieldValue('email', e.target.value);
 														}}
 														type="email"
