@@ -578,12 +578,12 @@ const Payment = () => {
 														fullWidth
 														onChange={(event) => {
 															let text = event.target.value;
-															if (text.charAt(text.length - 1) == '/') {
+															if (text.charAt(text.length - 1) === '/') {
 																return;
 															}
 															if (event.target.validity.valid || !text) {
 																if (text.length <= 5) {
-																	if (text.length == 2 && values.expDate.charAt(2) != '/') {
+																	if (text.length === 2 && values.expDate.charAt(2) !== '/') {
 																		text = text + '/';
 																	}
 																	setFieldValue('expDate', text);
