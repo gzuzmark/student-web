@@ -52,7 +52,6 @@ import LogoKsh from 'icons/logo_ksh.png';
 import LogoPci from 'icons/pci_logo.png';
 import amex from 'icons/amex.png';
 import dinersClub from 'icons/diners_club.png';
-import { AnyCnameRecord } from 'dns';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -709,10 +708,6 @@ const Payment = () => {
 					<DialogContentText style={{ margin: '5px 0px', color: '#848181' }}>
 						<img src={LogoPci} width={'40px'} alt="Kushki" /> Este pago es procesado de forma segura por Kushki, un
 						proovedor de pagos PCI de nivel 1.{' '}
-						<a rel="noreferrer" target="_blank" href="https://www.kushkipagos.com/">
-							{' '}
-							Leer más.
-						</a>
 					</DialogContentText>
 				</DialogContent>
 			</Dialog>
