@@ -7,7 +7,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
 
 import { RightLayout } from 'pages/common';
 import { stylesWithTheme, addGAEvent, isWeekDayLateNightOrSunday } from 'utils';
@@ -15,25 +14,8 @@ import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
-import kushkiLogo from 'icons/kushki_logo.png';
 import pagoEfectivo from 'icons/pagoefectivo.png';
-import { createPayment, CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
-import {
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	Grid,
-	InputAdornment,
-} from '@material-ui/core';
-import CreditCardIcon from '@material-ui/icons/CreditCard';
-import PersonIcon from '@material-ui/icons/Person';
-import LockIcon from '@material-ui/icons/Lock';
-import EmailIcon from '@material-ui/icons/Email';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import { Field, Form, Formik } from 'formik';
-import { DatePickerField } from '../../common/index';
+import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
 	container: {
@@ -250,7 +232,6 @@ interface RightSideProps {
 	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
 	executePayment: (pm: number) => (e: MouseEvent) => void;
 	errorMessage: string;
-	makeKushkiPayment: (values: any) => (e: MouseEvent) => void;
 }
 
 const RightSide = ({
@@ -261,34 +242,15 @@ const RightSide = ({
 	onChangeDiscount,
 	executePayment,
 	errorMessage,
-	makeKushkiPayment,
 }: RightSideProps) => {
 	const { t } = useTranslation('payment');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 
-	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
-
-	const initialValues = {
-		cardName: '',
-		cardNumber: '',
-		expDate: '',
-		cardCvv: '',
-		email: '',
-	};
-
 	const onClickSendDiscount = () => {
 		if (discountCode !== '') {
 			sendDiscount();
 		}
-	};
-
-	const openKushkiForm = () => {
-		setOpenKushkiModal(true);
-	};
-
-	const callKushki = (values: any, { setSubmitting }: any) => {
-		makeKushkiPayment(values);
 	};
 
 	const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
@@ -344,13 +306,12 @@ const RightSide = ({
 						// 	executePayment(CULQI_PAYMENT_ID)(e);
 						// }}
 						onClick={(e) => {
-							openKushkiForm();
-							// addGAEvent({
-							// 	category: 'Agendar cita - Paso 3',
-							// 	action: 'Avance satisfactorio',
-							// 	label: 'Tarjeta de crédito o débito',
-							// });
-							// executePayment(CULQI_PAYMENT_ID)(e);
+							addGAEvent({
+								category: 'Agendar cita - Paso 3',
+								action: 'Avance satisfactorio',
+								label: 'Tarjeta de crédito o débito',
+							});
+							executePayment(KUSHKI_PAYMENT_ID)(e);
 						}}
 						variant="outlined"
 					>
@@ -379,6 +340,7 @@ const RightSide = ({
 								executePayment(PE_PAYMENT_ID)(e);
 							}}
 							variant="outlined"
+							style={{ display: 'none' }}
 						>
 							<div className={classes.optionBody}>
 								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
@@ -400,199 +362,6 @@ const RightSide = ({
 					</div>
 				) : null}
 			</div>
-			<Dialog
-				open={openKushkiModal}
-				onClose={() => {
-					setOpenKushkiModal(false);
-				}}
-				aria-labelledby="form-dialog-title"
-			>
-				<DialogTitle className={classes.kushkiTitle}>
-					<CreditCardIcon /> Tarjeta de Crédito
-				</DialogTitle>
-				<DialogContent style={{ overflow: 'none' }}>
-					<Grid container spacing={3}>
-						<Grid item xs={12}>
-							<Grid container spacing={2} style={{ justifyContent: 'center' }}>
-								<Grid item xs={2} style={{ textAlign: 'center' }}>
-									<img src={visa} width={35} height={12} alt="Brand Visa" />
-								</Grid>
-								<Grid item xs={2} style={{ textAlign: 'center' }}>
-									<img src={mastercard} width={28} height={18} alt="Brand Mastercard" />
-								</Grid>
-							</Grid>
-						</Grid>
-						<Grid item xs={12}>
-							<Formik initialValues={initialValues} onSubmit={callKushki}>
-								{({ submitForm, isSubmitting, values, handleChange, setFieldValue }: any) => (
-									<Form className={classes.form}>
-										<div>
-											<Grid container spacing={2}>
-												<Grid item xs={12}>
-													<TextField
-														variant="standard"
-														name="cardName"
-														value={values.cardName}
-														label="Nombre en Tarjeta"
-														className={classes.kushkiMargin}
-														fullWidth
-														onChange={(e: any) => {
-															if (e.target.validity.valid || !e.target.value) {
-																setFieldValue('cardName', e.target.value);
-															}
-														}}
-														type="text"
-														inputProps={{
-															pattern: '[a-zA-Z ]*',
-															startAdornment: (
-																<InputAdornment position="start">
-																	<PersonIcon />
-																</InputAdornment>
-															),
-														}}
-													/>
-												</Grid>
-												<Grid item xs={12}>
-													<TextField
-														variant="standard"
-														name="cardNumber"
-														value={values.cardNumber}
-														label="Número de Tarjeta"
-														className={classes.kushkiMargin}
-														fullWidth
-														onChange={(e: any) => {
-															if (e.target.validity.valid || !e.target.value) {
-																if (e.target.value.length <= 16) {
-																	setFieldValue('cardNumber', e.target.value);
-																}
-															}
-														}}
-														type="text"
-														inputProps={{
-															pattern: '[0-9]*',
-															startAdornment: (
-																<InputAdornment position="start">
-																	<CreditCardIcon />
-																</InputAdornment>
-															),
-														}}
-													/>
-												</Grid>
-												<Grid item xs={6}>
-													<TextField
-														variant="standard"
-														name="expDate"
-														value={values.expDate}
-														label="Fecha Exp."
-														className={classes.kushkiMargin}
-														fullWidth
-														onChange={(event) => {
-															let text = event.target.value;
-															if (text.charAt(text.length - 1) == '/') {
-																return;
-															}
-															if (event.target.validity.valid || !text) {
-																if (text.length <= 5) {
-																	if (text.length == 2 && values.expDate.charAt(2) != '/') {
-																		text = text + '/';
-																	}
-																	setFieldValue('expDate', text);
-																}
-															}
-														}}
-														type="text"
-														inputProps={{
-															pattern: '[\\0-9]*',
-															startAdornment: (
-																<InputAdornment position="start">
-																	<CalendarTodayIcon />
-																</InputAdornment>
-															),
-														}}
-													/>
-												</Grid>
-												<Grid item xs={6}>
-													<TextField
-														variant="standard"
-														name="cardCvv"
-														value={values.cardCvv}
-														label="Código de Seguridad"
-														className={classes.kushkiMargin}
-														fullWidth
-														onChange={(e: any) => {
-															if (e.target.validity.valid || !e.target.value) {
-																if (e.target.value.length <= 4) {
-																	setFieldValue('cardCvv', e.target.value);
-																}
-															}
-														}}
-														type="password"
-														inputProps={{
-															pattern: '[0-9]*',
-															startAdornment: (
-																<InputAdornment position="start">
-																	<LockIcon />
-																</InputAdornment>
-															),
-														}}
-													/>
-												</Grid>
-												<Grid item xs={12}>
-													<TextField
-														variant="standard"
-														name="email"
-														value={values.email}
-														label="Email"
-														className={classes.kushkiMargin}
-														fullWidth
-														onChange={(e: any) => {
-															setFieldValue('email', e.target.value);
-														}}
-														type="email"
-														inputProps={{
-															startAdornment: (
-																<InputAdornment position="start">
-																	<EmailIcon />
-																</InputAdornment>
-															),
-														}}
-													/>
-												</Grid>
-												<Grid item xs={12}>
-													<Button
-														// className={classes.saveAction}
-														variant="contained"
-														fullWidth
-														onClick={submitForm}
-														disabled={
-															!values.cardName ||
-															!values.cardNumber ||
-															!values.cardCvv ||
-															values.cardCvv.length < 3 ||
-															!values.expDate ||
-															!values.email
-														}
-														// disabled={isSubmitting}
-													>
-														{/* {tFamily('familyMembers.editProfile.complete')} */}
-														<LockIcon /> Suscribirse por S/{totalCost}
-													</Button>
-												</Grid>
-											</Grid>
-										</div>
-									</Form>
-								)}
-							</Formik>
-						</Grid>
-						<Grid item xs={12} style={{ textAlign: 'center', margin: '5px 0px' }}>
-							<img src={kushkiLogo} width={'33%'} height={30} alt="Kushki" />
-						</Grid>
-					</Grid>
-					<DialogContentText style={{ margin: '5px 0px', color: '#848181' }}>
-						Este pago es procesado de forma segura por Kushki, un proovedor de pagos PCI de nivel 1.
-					</DialogContentText>
-				</DialogContent>
-			</Dialog>
 		</RightLayout>
 	);
 };

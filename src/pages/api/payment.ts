@@ -4,6 +4,7 @@ import { TrackParams } from 'AppContext';
 export const CULQI_PAYMENT_ID = 1;
 export const PE_PAYMENT_ID = 2;
 export const TRANSACTION_PAYMENT_ID = 3;
+export const KUSHKI_PAYMENT_ID = 1;
 
 interface PaymentRequestBody {
 	cost: string;
