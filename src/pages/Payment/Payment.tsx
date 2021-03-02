@@ -343,11 +343,11 @@ const Payment = () => {
 					} else {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
 						if (response.code === KUSHKI_RESPONSE_K001) {
-							setErrorMessage('Error-' + response.code + ': ' + 'Ingresar correctamente datos de la Tarjeta.');
+							setErrorMessage('Error-K001: Ingresar correctamente datos de la Tarjeta.');
 						} else if (response.code === KUSHKI_RESPONSE_K005) {
-							setErrorMessage('Error-' + response.code + ': ' + response.message);
+							setErrorMessage('Error-K005: El número de tarjeta no es válido.');
 						} else if (response.code === KUSHKI_RESPONSE_K004) {
-							setErrorMessage('Error-' + response.code + ': ' + response.message);
+							setErrorMessage('Error-K004: ID del comercio o credencial no válido.');
 						}
 						setOpenKushkiModal(false);
 					}
