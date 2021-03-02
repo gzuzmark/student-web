@@ -649,18 +649,24 @@ const Payment = () => {
 														className={classes.kushkiMargin}
 														fullWidth
 														onChange={(e: any) => {
-															const isValiEmail = (val: any) => {
-																const regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-																let isValid = true;
-																if (!regEmail.test(val)) {
-																	isValid = false;
-																} else {
-																	isValid = true;
-																}
-																return isValid;
+															const validateEmail = (email: any) => {
+																const at = email.indexOf('@');
+																const dot = email.lastIndexOf('.');
+																return (
+																	email.length > 0 &&
+																	at > 0 &&
+																	dot > at + 1 &&
+																	dot < email.length &&
+																	email[at + 1] !== '.' &&
+																	email.indexOf(' ') === -1 &&
+																	email.indexOf('..') === -1
+																);
 															};
-															const value = isValiEmail(e.target.value);
+
+															const assert = (a: any, b: any) => {
+																return a == b;
+															};
+															const value = assert(validateEmail(e.target.value), true);
 															if (value === true) {
 																setValidEmail(value);
 															} else {
