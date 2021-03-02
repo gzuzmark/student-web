@@ -123,7 +123,6 @@ const Payment = () => {
 				reservation_account_id: reservationAccountID || '',
 				use_case_id: useCaseId,
 				doctor_id: (doctor && doctor.id) || '',
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				start_time: dateToUTCUnixTimestamp(startTime!),
 				end_time: dateToUTCUnixTimestamp(endTime!),
 			}).catch((err) => {
@@ -340,11 +339,11 @@ const Payment = () => {
 						history.push('/confirmacion');
 					} else {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
-						if (response.code === 'K001') {
+						if (response.code === KUSHKI_RESPONSE_K001) {
 							setErrorMessage('Error-' + response.code + ': ' + 'Ingresar correctamente datos de la Tarjeta.');
-						} else if (response.code === 'K005') {
+						} else if (response.code === KUSHKI_RESPONSE_K005) {
 							setErrorMessage('Error-' + response.code + ': ' + response.message);
-						} else if (response.code === 'K004') {
+						} else if (response.code === KUSHKI_RESPONSE_K004) {
 							setErrorMessage('Error-' + response.code + ': ' + response.message);
 						}
 						setOpenKushkiModal(false);
