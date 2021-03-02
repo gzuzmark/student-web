@@ -493,7 +493,6 @@ const Payment = () => {
 				onClose={() => {
 					setOpenKushkiModal(false);
 				}}
-				maxWidth={'md'}
 				aria-labelledby="form-dialog-title"
 				style={{ overflow: 'scroll', height: '100%' }}
 			>
@@ -651,7 +650,9 @@ const Payment = () => {
 														fullWidth
 														onChange={(e: any) => {
 															const isValiEmail = (val: any) => {
-																const regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+																const regEmail = new RegExp(
+																	/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+																);
 																let isValid = true;
 																if (!regEmail.test(val)) {
 																	isValid = false;
