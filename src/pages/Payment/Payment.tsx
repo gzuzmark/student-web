@@ -123,6 +123,7 @@ const Payment = () => {
 				reservation_account_id: reservationAccountID || '',
 				use_case_id: useCaseId,
 				doctor_id: (doctor && doctor.id) || '',
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				start_time: dateToUTCUnixTimestamp(startTime!),
 				end_time: dateToUTCUnixTimestamp(endTime!),
 			}).catch((err) => {
@@ -338,12 +339,16 @@ const Payment = () => {
 
 						history.push('/confirmacion');
 					} else {
+						// eslint-disable-next-line prettier/prettier
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
 						if (response.code === 'K001') {
+							// eslint-disable-next-line prettier/prettier
 							setErrorMessage('Error-' + response.code + ': ' + 'Ingresar correctamente datos de la Tarjeta.');
 						} else if (response.code === 'K005') {
+							// eslint-disable-next-line prettier/prettier
 							setErrorMessage('Error-' + response.code + ': ' + response.message);
 						} else if (response.code === 'K004') {
+							// eslint-disable-next-line prettier/prettier
 							setErrorMessage('Error-' + response.code + ': ' + response.message);
 						}
 						setOpenKushkiModal(false);
