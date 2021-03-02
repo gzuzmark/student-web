@@ -44,7 +44,6 @@ import CreditCardIcon from '@material-ui/icons/CreditCard';
 import PersonIcon from '@material-ui/icons/Person';
 import LockIcon from '@material-ui/icons/Lock';
 import EmailIcon from '@material-ui/icons/Email';
-import Paper from '@material-ui/core/Paper';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
