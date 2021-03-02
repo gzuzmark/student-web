@@ -109,6 +109,8 @@ const Payment = () => {
 		email: '',
 	};
 
+	const [validEmail, setValidEmail] = useState(false);
+
 	const openKushkiForm = () => {
 		setOpenKushkiModal(true);
 	};
@@ -337,7 +339,13 @@ const Payment = () => {
 						history.push('/confirmacion');
 					} else {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
-						setErrorMessage('Por favor ingresar correctamente los datos de la Tarjeta.');
+						if (response.code === 'K001') {
+							setErrorMessage('Error-' + response.code + ': ' + 'Ingresar correctamente datos de la Tarjeta.');
+						} else if (response.code == 'K005') {
+							setErrorMessage('Error-' + response.code + ': ' + response.message);
+						} else if (response.code == 'K004') {
+							setErrorMessage('Error-' + response.code + ': ' + response.message);
+						}
 						setOpenKushkiModal(false);
 					}
 					setIsPaymentLoading(false);
@@ -376,7 +384,7 @@ const Payment = () => {
 
 	useEffect(() => {
 		if (useCase?.totalCost) {
-			makePayment(4);
+			makePayment(1);
 			// window.culqi = async () => {
 			// 	try {
 			// 		setIsPaymentLoading(true);
@@ -485,7 +493,9 @@ const Payment = () => {
 				onClose={() => {
 					setOpenKushkiModal(false);
 				}}
+				maxWidth={'md'}
 				aria-labelledby="form-dialog-title"
+				style={{ overflow: 'scroll', height: '100%' }}
 			>
 				<DialogTitle className={classes.kushkiTitle}>
 					<CreditCardIcon /> Tarjeta de Crédito o Débito
@@ -640,22 +650,22 @@ const Payment = () => {
 														className={classes.kushkiMargin}
 														fullWidth
 														onChange={(e: any) => {
-															// const isValiEmail = (val: any) => {
-															// 	let regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-															// 	let isValid = true;
-															// 	if (!regEmail.test(val)) {
-															// 		isValid = false;
-
-															// 	} else {
-															// 		isValid = true;
-															// 	}
-															// 	return isValid;
-															//   }
-															//   let value = isValiEmail(e.target.value);
-
-															//  if(value === true) {
-
-															//  }
+															const isValiEmail = (val: any) => {
+																const regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+																let isValid = true;
+																if (!regEmail.test(val)) {
+																	isValid = false;
+																} else {
+																	isValid = true;
+																}
+																return isValid;
+															};
+															const value = isValiEmail(e.target.value);
+															if (value === true) {
+																setValidEmail(value);
+															} else {
+																setValidEmail(value);
+															}
 															setFieldValue('email', e.target.value);
 														}}
 														type="email"
@@ -681,7 +691,8 @@ const Payment = () => {
 															!values.cardCvv ||
 															values.cardCvv.length < 3 ||
 															!values.expDate ||
-															!values.email
+															!values.email ||
+															!validEmail
 														}
 														// disabled={isSubmitting}
 													>
@@ -706,8 +717,14 @@ const Payment = () => {
 						</Grid>
 					</Grid>
 					<DialogContentText style={{ margin: '5px 0px', color: '#848181' }}>
-						<img src={LogoPci} width={'40px'} alt="Kushki" /> Este pago es procesado de forma segura por Kushki, un
-						proovedor de pagos PCI de nivel 1.{' '}
+						<Grid container spacing={2}>
+							<Grid item xs={2}>
+								<img src={LogoPci} width={'70px'} alt="Kushki" />
+							</Grid>
+							<Grid item xs={10}>
+								Este pago es procesado de forma segura por Kushki, un proovedor de pagos PCI de nivel 1.{' '}
+							</Grid>
+						</Grid>
 					</DialogContentText>
 				</DialogContent>
 			</Dialog>
