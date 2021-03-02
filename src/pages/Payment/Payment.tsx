@@ -664,7 +664,7 @@ const Payment = () => {
 															};
 
 															const assert = (a: any, b: any) => {
-																return a == b;
+																return a === b;
 															};
 															const value = assert(validateEmail(e.target.value), true);
 															if (value === true) {
