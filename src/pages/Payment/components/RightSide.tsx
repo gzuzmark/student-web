@@ -10,14 +10,14 @@ import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
 import { stylesWithTheme, addGAEvent, isWeekDayLateNightOrSunday } from 'utils';
-import { ReactComponent as CreditCardIcon } from 'icons/creditCard.svg';
+import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
 import pagoEfectivo from 'icons/pagoefectivo.png';
-import { CULQI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
+import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
-const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
 	container: {
 		'&&': {
 			minHeight: 'calc(100vh - 301px)',
@@ -216,6 +216,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		height: '30px',
 		paddingRight: '10px',
 	},
+	kushkiTitle: {
+		textAlign: 'center',
+	},
+	kushkiMargin: {
+		margin: spacing(1),
+	},
 }));
 
 interface RightSideProps {
@@ -240,11 +246,13 @@ const RightSide = ({
 	const { t } = useTranslation('payment');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+
 	const onClickSendDiscount = () => {
 		if (discountCode !== '') {
 			sendDiscount();
 		}
 	};
+
 	const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
 
 	return (
@@ -289,19 +297,27 @@ const RightSide = ({
 				<div className={classes.buttonWrapper}>
 					<Button
 						className={classes.option}
+						// onClick={(e) => {
+						// addGAEvent({
+						// 	category: 'Agendar cita - Paso 3',
+						// 	action: 'Avance satisfactorio',
+						// 	label: 'Tarjeta de crédito o débito',
+						// });
+						// 	executePayment(CULQI_PAYMENT_ID)(e);
+						// }}
 						onClick={(e) => {
 							addGAEvent({
 								category: 'Agendar cita - Paso 3',
 								action: 'Avance satisfactorio',
 								label: 'Tarjeta de crédito o débito',
 							});
-							executePayment(CULQI_PAYMENT_ID)(e);
+							executePayment(KUSHKI_PAYMENT_ID)(e);
 						}}
 						variant="outlined"
 					>
 						<div className={classes.optionBody}>
 							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<CreditCardIcon />
+								<CreditCardSvg />
 							</div>
 							<Typography className={classes.optionLabel} variant="h3">
 								{t('payment.right.payCulqiButton')}
@@ -324,6 +340,7 @@ const RightSide = ({
 								executePayment(PE_PAYMENT_ID)(e);
 							}}
 							variant="outlined"
+							style={{ display: 'none' }}
 						>
 							<div className={classes.optionBody}>
 								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
