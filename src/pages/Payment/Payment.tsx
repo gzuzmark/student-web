@@ -341,9 +341,9 @@ const Payment = () => {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
 						if (response.code === 'K001') {
 							setErrorMessage('Error-' + response.code + ': ' + 'Ingresar correctamente datos de la Tarjeta.');
-						} else if (response.code == 'K005') {
+						} else if (response.code === 'K005') {
 							setErrorMessage('Error-' + response.code + ': ' + response.message);
-						} else if (response.code == 'K004') {
+						} else if (response.code === 'K004') {
 							setErrorMessage('Error-' + response.code + ': ' + response.message);
 						}
 						setOpenKushkiModal(false);
