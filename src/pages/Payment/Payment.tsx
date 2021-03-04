@@ -29,6 +29,7 @@ import {
 	KUSHKI_RESPONSE_K001,
 	KUSHKI_RESPONSE_K004,
 	KUSHKI_RESPONSE_K005,
+	KUSHKI_RESPONSE_K017,
 } from 'pages/api';
 import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
 import { Kushki } from '@kushki/js';
@@ -244,8 +245,6 @@ const Payment = () => {
 	);
 
 	const makeKushkiPayment = (values: any) => {
-		console.log('values', values);
-		console.log(`${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`);
 		const totalCost = discount.totalCost || useCase?.totalCost;
 		const amount = totalCost ? totalCost.toString() : '';
 
@@ -348,6 +347,8 @@ const Payment = () => {
 							setErrorMessage('Error-K005: El número de tarjeta no es válido.');
 						} else if (response.code === KUSHKI_RESPONSE_K004) {
 							setErrorMessage('Error-K004: ID del comercio o credencial no válido.');
+						} else if (response.code === KUSHKI_RESPONSE_K017) {
+							setErrorMessage('Error-017: Transacción rechazada, ingresar correctamente datos de una tarjeta válida.');
 						}
 						setOpenKushkiModal(false);
 					}
