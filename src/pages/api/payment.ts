@@ -9,6 +9,7 @@ export const KUSHKI_PAYMENT_ID = 1;
 export const KUSHKI_RESPONSE_K001 = 'K001';
 export const KUSHKI_RESPONSE_K004 = 'K004';
 export const KUSHKI_RESPONSE_K005 = 'K005';
+export const KUSHKI_RESPONSE_K017 = '017';
 
 interface PaymentRequestBody {
 	cost: string;
