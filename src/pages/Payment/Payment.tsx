@@ -247,7 +247,6 @@ const Payment = () => {
 	const makeKushkiPayment = (values: any) => {
 		const totalCost = discount.totalCost || useCase?.totalCost;
 		const amount = totalCost ? totalCost.toString() : '';
-
 		if (schedule && updateContextState && useCase && triage && activeUser) {
 			setIsPaymentLoading(true);
 			kushki.requestToken(
@@ -341,7 +340,8 @@ const Payment = () => {
 						history.push('/confirmacion');
 					} else {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
-						if (response.code === KUSHKI_RESPONSE_K001) {
+						setErrorMessage('Error-' + response.code + ': ' + response.message);
+						/*if (response.code === KUSHKI_RESPONSE_K001) {
 							setErrorMessage('Error-K001: Ingresar correctamente datos de Tarjeta.');
 						} else if (response.code === KUSHKI_RESPONSE_K005) {
 							setErrorMessage('Error-K005: El número de tarjeta no es válido.');
@@ -349,7 +349,7 @@ const Payment = () => {
 							setErrorMessage('Error-K004: ID del comercio o credencial no válido.');
 						} else if (response.code === KUSHKI_RESPONSE_K017) {
 							setErrorMessage('Error-017: Transacción rechazada, ingresar correctamente datos de una tarjeta válida.');
-						}
+						}*/
 						setOpenKushkiModal(false);
 					}
 					setIsPaymentLoading(false);
