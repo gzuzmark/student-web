@@ -29,6 +29,7 @@ import {
 	KUSHKI_RESPONSE_K001,
 	KUSHKI_RESPONSE_K004,
 	KUSHKI_RESPONSE_K005,
+	KUSHKI_RESPONSE_K017,
 } from 'pages/api';
 import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
 import { Kushki } from '@kushki/js';
@@ -98,8 +99,8 @@ const Payment = () => {
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 
 	const kushki = new Kushki({
-		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
-		inTestEnvironment: true,
+		merchantId: '5f2c989bea794296bd461c39f9932368', // Your public merchant id
+		inTestEnvironment: false,
 	});
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
@@ -244,11 +245,8 @@ const Payment = () => {
 	);
 
 	const makeKushkiPayment = (values: any) => {
-		console.log('values', values);
-
 		const totalCost = discount.totalCost || useCase?.totalCost;
 		const amount = totalCost ? totalCost.toString() : '';
-
 		if (schedule && updateContextState && useCase && triage && activeUser) {
 			setIsPaymentLoading(true);
 			kushki.requestToken(
@@ -342,13 +340,16 @@ const Payment = () => {
 						history.push('/confirmacion');
 					} else {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
-						if (response.code === KUSHKI_RESPONSE_K001) {
-							setErrorMessage('Error-K001: Ingresar correctamente datos de la Tarjeta.');
+						setErrorMessage('Error-' + response.code + ': ' + response.message);
+						/*if (response.code === KUSHKI_RESPONSE_K001) {
+							setErrorMessage('Error-K001: Ingresar correctamente datos de Tarjeta.');
 						} else if (response.code === KUSHKI_RESPONSE_K005) {
 							setErrorMessage('Error-K005: El número de tarjeta no es válido.');
 						} else if (response.code === KUSHKI_RESPONSE_K004) {
 							setErrorMessage('Error-K004: ID del comercio o credencial no válido.');
-						}
+						} else if (response.code === KUSHKI_RESPONSE_K017) {
+							setErrorMessage('Error-017: Transacción rechazada, ingresar correctamente datos de una tarjeta válida.');
+						}*/
 						setOpenKushkiModal(false);
 					}
 					setIsPaymentLoading(false);
