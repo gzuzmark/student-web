@@ -26,10 +26,6 @@ import {
 	KUSHKI_PAYMENT_ID,
 	PE_PAYMENT_ID,
 	sendFakeSession,
-	KUSHKI_RESPONSE_K001,
-	KUSHKI_RESPONSE_K004,
-	KUSHKI_RESPONSE_K005,
-	KUSHKI_RESPONSE_K017,
 } from 'pages/api';
 import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
 import { Kushki } from '@kushki/js';
