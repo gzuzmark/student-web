@@ -227,6 +227,7 @@ const BuyPrescription = (): ReactElement => {
 				/>
 				<Divider orientation="vertical" flexItem />
 				<CheckoutInformation
+					sessionId={sessionId}
 					address={userAddress}
 					medicines={medicines}
 					selectedMedicines={selectedMedicines}
