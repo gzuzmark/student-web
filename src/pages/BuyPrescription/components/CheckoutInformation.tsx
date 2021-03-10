@@ -229,6 +229,7 @@ const CheckoutInformation = ({
 	const [mapsApi, setMapApi] = useState<MapsApi>();
 	const [mapInstance, setMapInstance] = useState<MapInstance>();
 	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
+	const [localAddress, setLocalAddress] = useState<string>('');
 	const [hasAddressError, setHasAddressError] = useState<boolean>(false);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
@@ -293,6 +294,7 @@ const CheckoutInformation = ({
 						...place.formattedPlace,
 					}),
 				);
+				setLocalAddress(place.address);
 				setActivePosition(place.position);
 				currentPositionMarker.setPosition(place.position);
 				currentPositionMarker.setVisible(true);
@@ -396,7 +398,7 @@ const CheckoutInformation = ({
 							</Button>
 						</div>
 					) : (
-						<Typography className={classes.address}>{address}</Typography>
+						<Typography className={classes.address}>{localAddress || address}</Typography>
 					)}
 				</div>
 				<Divider />
