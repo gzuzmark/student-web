@@ -1,5 +1,5 @@
 import React, { ReactElement, ChangeEvent, useState, useCallback, useEffect } from 'react';
-import { PrescribedMedicine } from 'pages/api';
+import { postAddress, PrescribedMedicine } from 'pages/api';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
@@ -191,6 +191,7 @@ const getCurrentPosition = async ({
 };
 
 export interface CheckoutInformationProps {
+	sessionId: string;
 	medicines: PrescribedMedicine[];
 	selectedMedicines: number[];
 	address: string;
@@ -200,6 +201,7 @@ export interface CheckoutInformationProps {
 }
 
 const CheckoutInformation = ({
+	sessionId,
 	address,
 	medicines,
 	selectedMedicines,
@@ -239,7 +241,7 @@ const CheckoutInformation = ({
 	const hideEditAddress = () => {
 		setIsEditAddressShowing(false);
 	};
-	const updateAddress = () => {
+	const updateAddress = async () => {
 		if (!addressReference) {
 			setReferenceError(t('buyPrescription.addressReference.error'));
 			return;
@@ -256,6 +258,12 @@ const CheckoutInformation = ({
 
 		if (activePosition) {
 			onAddressUpdate(activePosition, humanActivePosition);
+			await postAddress(sessionId, {
+				latitude: String(activePosition.lat) || '',
+				longitude: String(activePosition.lng) || '',
+				address: humanActivePosition,
+				reference: addressReference,
+			});
 			setIsSubmitting(true);
 			hideEditAddress();
 			setTimeout(() => {
