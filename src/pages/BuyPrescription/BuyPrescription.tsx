@@ -146,8 +146,12 @@ const BuyPrescription = (): ReactElement => {
 		setIsShowingEditAddressScreen(true);
 	};
 	const onAskAddressSubmit = (pos: Position, address: string) => {
+		const addressObject = JSON.parse(address);
+		const newAddress = `${addressObject.street || ''} , ${addressObject.number || ''}, ${
+			addressObject.district || ''
+		} , ${addressObject.country || ''}`;
 		setUpdatedPosition(pos);
-		setUserAddress(address);
+		setUserAddress(newAddress);
 		setIsShowingEditAddressScreen(false);
 		requestPrescription({
 			setMedicines,

@@ -398,7 +398,7 @@ const CheckoutInformation = ({
 							</Button>
 						</div>
 					) : (
-						<Typography className={classes.address}>{localAddress}</Typography>
+						<Typography className={classes.address}>{localAddress || address}</Typography>
 					)}
 				</div>
 				<Divider />
