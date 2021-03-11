@@ -16,6 +16,7 @@ import { defaultCenter, getUserCurrentPosition } from 'utils';
 import SearchAddress from 'pages/LaboratoryExams/components/SearchAddress';
 
 import { MapInstance, MapsApi, Place, Marker } from '../types';
+import { FormattedPlace } from 'pages/LaboratoryExams/components/types';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	form: {
@@ -167,15 +168,21 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 		setMapApi(maps);
 		setMapInstance(map);
 	};
+	const isValidAddress = (address: FormattedPlace): boolean => {
+		return Boolean(address.street && address.district && address.city && address.country);
+	};
 	const updatePosition = useCallback(
 		(place: Place | null) => {
 			if (place && mapInstance && currentPositionMarker) {
 				currentPositionMarker.setVisible(false);
-				setHumanActivePosition(
-					JSON.stringify({
-						...place.formattedPlace,
-					}),
-				);
+				const address = place.formattedPlace;
+				if (isValidAddress(address)) {
+					setHumanActivePosition(
+						JSON.stringify({
+							...place.formattedPlace,
+						}),
+					);
+				}
 				setActivePosition(place.position);
 				currentPositionMarker.setPosition(place.position);
 				currentPositionMarker.setVisible(true);
