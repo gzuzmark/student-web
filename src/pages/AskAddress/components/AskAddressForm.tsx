@@ -126,8 +126,9 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			}
 
 			if (!humanActivePosition) {
+				setReferenceError(t('askAddress.address.error'));
 				setHasAddressError(true);
-				// return;
+				return;
 			} else {
 				setHasAddressError(false);
 			}
