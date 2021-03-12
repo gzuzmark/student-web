@@ -53,6 +53,7 @@ export const createGuestPatient = async (user: NewUser): Promise<string> => {
 		name: user.name,
 		last_name: user.lastName,
 		second_last_name: user.secondSurname,
+		document_type: user.identificationType,
 		document_number: user.identification,
 		gender: user.gender,
 		birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
