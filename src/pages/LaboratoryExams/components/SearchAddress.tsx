@@ -7,6 +7,7 @@ import throttle from 'lodash/throttle';
 import { Position } from 'pages/api';
 
 import { MapsApi, Place, FormattedPlace, AddressComponent, AddressTypesEnum } from './types';
+import { useTranslation } from 'react-i18next';
 
 interface SearchAddressProps {
 	id?: string;
@@ -35,7 +36,7 @@ const getFormattedPlace = (addressComponents: AddressComponent[]): FormattedPlac
 		district: district?.long_name || '',
 		city: city?.long_name || '',
 		country: country?.long_name || '',
-		name: name?.long_name || '',
+		name: name?.long_name || 'Dirección delivery',
 	};
 };
 
