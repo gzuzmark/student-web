@@ -7,7 +7,6 @@ import throttle from 'lodash/throttle';
 import { Position } from 'pages/api';
 
 import { MapsApi, Place, FormattedPlace, AddressComponent, AddressTypesEnum } from './types';
-import { useTranslation } from 'react-i18next';
 
 interface SearchAddressProps {
 	id?: string;
