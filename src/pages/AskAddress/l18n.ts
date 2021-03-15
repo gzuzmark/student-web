@@ -7,6 +7,8 @@ export default {
 	'askAddress.addressReference.label': 'Piso, puerta, oficina o referencia',
 	'askAddress.addressReference.placeholder': 'Ejemplo: puerta 4, oficina 501',
 	'askAddress.addressReference.error': 'Debes ingresar una referencia',
+	'askAddress.address.error': 'Verifique que la dirección sea válida',
+	'askAddress.address.name.default': 'Dirección Delivery',
 	'askAddress.submitAddress': 'Continuar a ver mi receta',
 	'askAddress.addressBenefits.title': 'Beneficios de añadir tu dirección:',
 	'askAddress.addressBenefits.firstReason': 'Recibe la cotización de tu receta después de la cita',
