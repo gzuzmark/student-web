@@ -14,7 +14,7 @@ import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
-import pagoEfectivo from 'icons/pagoefectivo.png';
+// import pagoEfectivo from 'icons/pagoefectivo.png';
 import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
@@ -340,7 +340,7 @@ const RightSide = ({
 								executePayment(PE_PAYMENT_ID)(e);
 							}}
 							variant="outlined"
-							style={{ display: 'none' }}
+							style={{}}
 						>
 							<div className={classes.optionBody}>
 								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
@@ -350,7 +350,7 @@ const RightSide = ({
 									{t('payment.right.pagoEfectivo')}
 								</Typography>
 								<div className={classes.optionBrandWrapper}>
-									<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
+									{/* <img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" /> */}
 								</div>
 							</div>
 						</Button>
