@@ -128,9 +128,8 @@ const Payment = () => {
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 
 	const kushki = new Kushki({
-		merchantId: '58a5abb5b775460abf6be0ac141ad7c3', // Your public merchant id
-		inTestEnvironment: true,
-		regional: false,
+		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
+		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_DEV}`,
 	});
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
@@ -499,6 +498,8 @@ const Payment = () => {
 				}
 			} else {
 				console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
+				setErrorMessage('Error-' + response.code + ': ' + response.message);
+				setOpenKushkiCashModal(false);
 			}
 		};
 		kushki.requestCashToken(
