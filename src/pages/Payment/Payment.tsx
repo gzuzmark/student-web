@@ -690,11 +690,7 @@ const Payment = () => {
 						<Grid container spacing={3}>
 							<Grid item xs={12}>
 								<Grid item xs={12}>
-									<Grid
-										container
-										spacing={2}
-										style={{ justifyContent: 'center', marginBottom: '7px', marginTop: '5px' }}
-									>
+									<Grid container spacing={2} style={{ justifyContent: 'center', marginBottom: '25px' }}>
 										<Grid item xs={2} style={{ textAlign: 'center' }}>
 											<img src={amex} width={28} height={18} alt="Brand Mastercard" />
 										</Grid>
