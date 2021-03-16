@@ -206,81 +206,81 @@ const Payment = () => {
 		// eslint-disable-next-line
 	}, []);
 
-	const performTransactionPayment = useCallback(
-		async (method: number) => {
-			if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
-				console.log(initialValuesCash);
-				try {
-					setIsPaymentLoading(true);
-					const userName = activeUser.name;
-					const userPhone = activeUser.phoneNumber;
-					const response: any = await createPayment({
-						cost: useCase?.totalCost,
-						appointmentTypeID: 'ugito',
-						scheduleID: schedule.id,
-						discountID: discount.id,
-						email: activeUser.email || '',
-						token: 'SnzVSB3cSA',
-						dni: activeUser.identification || '',
-						name: userName || '',
-						lastName: activeUser.lastName,
-						phone: userPhone || '',
-						paymentType: method,
-						trackParams: trackParams || EMPTY_TRACK_PARAMS,
-						reservationAccountID: activeUser.id,
-					});
-					await createAppointment(
-						{
-							reservationAccountID: activeUser.id,
-							appointmentTypeID: 'ugito',
-							useCaseID: useCase.id,
-							scheduleID: schedule.id,
-							triage,
-							media: userFiles || [],
-							isGuest: appointmentOwner === GUEST,
-						},
-						userToken,
-					);
-					setIsPaymentLoading(false);
-					let link = null;
-					if (method === PE_PAYMENT_ID) {
-						if (response?.data) {
-							console.log('<<<<response.data>>>>');
-							link = response?.data?.data?.reference_link as string;
-						}
-					} else {
-						link = buildTransactionURL(doctor.name, doctor.lastName, userName || '', userPhone || '');
-					}
-					updateContextState({
-						useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-						paymentURL: link,
-						appointmentCreationStep: CONFIRMATION_STEP,
-					});
-					history.push('/confirmacion');
-				} catch (e) {
-					setErrorMessage(t('payment.error.pe'));
-					setIsPaymentLoading(false);
-				}
-			}
-		},
-		[
-			schedule,
-			updateContextState,
-			useCase,
-			triage,
-			activeUser,
-			doctor,
-			initialValuesCash,
-			discount.id,
-			discount.totalCost,
-			trackParams,
-			userFiles,
-			appointmentOwner,
-			userToken,
-			history,
-			t,
-		],
-	);
+	// const performTransactionPayment = useCallback(
+	// 	async (method: number) => {
+	// 		if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
+	// 			console.log(initialValuesCash);
+	// 			try {
+	// 				setIsPaymentLoading(true);
+	// 				const userName = activeUser.name;
+	// 				const userPhone = activeUser.phoneNumber;
+	// 				const response: any = await createPayment({
+	// 					cost: useCase?.totalCost,
+	// 					appointmentTypeID: 'ugito',
+	// 					scheduleID: schedule.id,
+	// 					discountID: discount.id,
+	// 					email: activeUser.email || '',
+	// 					token: 'SnzVSB3cSA',
+	// 					dni: activeUser.identification || '',
+	// 					name: userName || '',
+	// 					lastName: activeUser.lastName,
+	// 					phone: userPhone || '',
+	// 					paymentType: method,
+	// 					trackParams: trackParams || EMPTY_TRACK_PARAMS,
+	// 					reservationAccountID: activeUser.id,
+	// 				});
+	// 				await createAppointment(
+	// 					{
+	// 						reservationAccountID: activeUser.id,
+	// 						appointmentTypeID: 'ugito',
+	// 						useCaseID: useCase.id,
+	// 						scheduleID: schedule.id,
+	// 						triage,
+	// 						media: userFiles || [],
+	// 						isGuest: appointmentOwner === GUEST,
+	// 					},
+	// 					userToken,
+	// 				);
+	// 				setIsPaymentLoading(false);
+	// 				let link = null;
+	// 				if (method === PE_PAYMENT_ID) {
+	// 					if (response?.data) {
+	// 						console.log('<<<<response.data>>>>');
+	// 						link = response?.data?.data?.reference_link as string;
+	// 					}
+	// 				} else {
+	// 					link = buildTransactionURL(doctor.name, doctor.lastName, userName || '', userPhone || '');
+	// 				}
+	// 				updateContextState({
+	// 					useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+	// 					paymentURL: link,
+	// 					appointmentCreationStep: CONFIRMATION_STEP,
+	// 				});
+	// 				history.push('/confirmacion');
+	// 			} catch (e) {
+	// 				setErrorMessage(t('payment.error.pe'));
+	// 				setIsPaymentLoading(false);
+	// 			}
+	// 		}
+	// 	},
+	// 	[
+	// 		schedule,
+	// 		updateContextState,
+	// 		useCase,
+	// 		triage,
+	// 		activeUser,
+	// 		doctor,
+	// 		initialValuesCash,
+	// 		discount.id,
+	// 		discount.totalCost,
+	// 		trackParams,
+	// 		userFiles,
+	// 		appointmentOwner,
+	// 		userToken,
+	// 		history,
+	// 		t,
+	// 	],
+	// );
 
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
