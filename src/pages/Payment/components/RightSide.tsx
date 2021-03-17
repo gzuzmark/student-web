@@ -329,7 +329,7 @@ const RightSide = ({
 						</div>
 					</Button>
 					{/* {isPagoEfectivoVisible && ( */}
-					<Button
+					{/* <Button
 						className={classes.option}
 						onClick={(e) => {
 							addGAEvent({
@@ -350,10 +350,10 @@ const RightSide = ({
 								{t('payment.right.pagoEfectivo')}
 							</Typography>
 							<div className={classes.optionBrandWrapper}>
-								{/* <img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" /> */}
+								 <img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" /> 
 							</div>
 						</div>
-					</Button>
+					</Button> */}
 					{/* )} */}
 				</div>
 				{errorMessage ? (
