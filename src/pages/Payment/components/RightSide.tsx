@@ -253,7 +253,7 @@ const RightSide = ({
 		}
 	};
 
-	//const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
+	const isPagoEfectivoVisible = false; //isWeekDayLateNightOrSunday();
 
 	return (
 		<RightLayout className={classes.container}>
@@ -328,33 +328,33 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					{/* {isPagoEfectivoVisible && ( */}
-					{/* <Button
-						className={classes.option}
-						onClick={(e) => {
-							addGAEvent({
-								category: 'Agendar cita - Paso 3',
-								action: 'Avance satisfactorio',
-								label: 'Depósitos y transferencias',
-							});
-							executePayment(PE_PAYMENT_ID)(e);
-						}}
-						variant="outlined"
-						style={{}}
-					>
-						<div className={classes.optionBody}>
-							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<CashierIcon />
+					{isPagoEfectivoVisible && (
+						<Button
+							className={classes.option}
+							onClick={(e) => {
+								addGAEvent({
+									category: 'Agendar cita - Paso 3',
+									action: 'Avance satisfactorio',
+									label: 'Depósitos y transferencias',
+								});
+								executePayment(PE_PAYMENT_ID)(e);
+							}}
+							variant="outlined"
+							style={{}}
+						>
+							<div className={classes.optionBody}>
+								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+									<CashierIcon />
+								</div>
+								<Typography className={classes.optionLabel} variant="h3">
+									{t('payment.right.pagoEfectivo')}
+								</Typography>
+								<div className={classes.optionBrandWrapper}>
+									{/* <img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />  */}
+								</div>
 							</div>
-							<Typography className={classes.optionLabel} variant="h3">
-								{t('payment.right.pagoEfectivo')}
-							</Typography>
-							<div className={classes.optionBrandWrapper}>
-								 <img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" /> 
-							</div>
-						</div>
-					</Button> */}
-					{/* )} */}
+						</Button>
+					)}
 				</div>
 				{errorMessage ? (
 					<div className={classes.errorWrapper}>
