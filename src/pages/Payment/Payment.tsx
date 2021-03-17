@@ -127,9 +127,6 @@ const Payment = () => {
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 
-	console.log('==REACT_APP_KUSHKI_MERCHANT_ID==', process.env.REACT_APP_KUSHKI_MERCHANT_ID);
-	console.log('==REACT_APP_KUSHKI_IN_TEST_ENV==', process.env.REACT_APP_KUSHKI_IN_TEST_ENV);
-
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
 		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
