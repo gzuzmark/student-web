@@ -292,7 +292,6 @@ const Payment = () => {
 					// window.Culqi.open();
 					openKushkiForm();
 				} else {
-					console.log('pago efect 1 ---->');
 					openKushkiCashForm();
 					//performTransactionPayment(paymentMethod);
 				}
@@ -432,10 +431,9 @@ const Payment = () => {
 	};
 
 	const makeKushkiCashPayment = (values: any) => {
-		console.log('data: ', values);
 		const totalCost = discount.totalCost || useCase?.totalCost;
 		const amount = totalCost ? totalCost.toString() : '';
-		console.log(amount);
+		setIsPaymentLoading(true);
 		const callback = async function (response: any) {
 			if (!response.code) {
 				console.log(response);
@@ -443,7 +441,7 @@ const Payment = () => {
 					const method = 2;
 					const token = response.token;
 					try {
-						setIsPaymentLoading(true);
+						//setIsPaymentLoading(true);
 						//const userName = activeUser.name;
 						const userPhone = activeUser.phoneNumber;
 						const response: any = await createPayment({
