@@ -9,12 +9,12 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
-import { stylesWithTheme, addGAEvent, isWeekDayLateNightOrSunday } from 'utils';
+import { stylesWithTheme, addGAEvent } from 'utils';
 import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
-import pagoEfectivo from 'icons/pagoefectivo.png';
+// import pagoEfectivo from 'icons/pagoefectivo.png';
 import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
@@ -253,7 +253,7 @@ const RightSide = ({
 		}
 	};
 
-	const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
+	//const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
 
 	return (
 		<RightLayout className={classes.container}>
@@ -328,33 +328,33 @@ const RightSide = ({
 							</div>
 						</div>
 					</Button>
-					{isPagoEfectivoVisible && (
-						<Button
-							className={classes.option}
-							onClick={(e) => {
-								addGAEvent({
-									category: 'Agendar cita - Paso 3',
-									action: 'Avance satisfactorio',
-									label: 'Depósitos y transferencias',
-								});
-								executePayment(PE_PAYMENT_ID)(e);
-							}}
-							variant="outlined"
-							style={{ display: 'none' }}
-						>
-							<div className={classes.optionBody}>
-								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-									<CashierIcon />
-								</div>
-								<Typography className={classes.optionLabel} variant="h3">
-									{t('payment.right.pagoEfectivo')}
-								</Typography>
-								<div className={classes.optionBrandWrapper}>
-									<img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />
-								</div>
+					{/* {isPagoEfectivoVisible && ( */}
+					<Button
+						className={classes.option}
+						onClick={(e) => {
+							addGAEvent({
+								category: 'Agendar cita - Paso 3',
+								action: 'Avance satisfactorio',
+								label: 'Depósitos y transferencias',
+							});
+							executePayment(PE_PAYMENT_ID)(e);
+						}}
+						variant="outlined"
+						style={{}}
+					>
+						<div className={classes.optionBody}>
+							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+								<CashierIcon />
 							</div>
-						</Button>
-					)}
+							<Typography className={classes.optionLabel} variant="h3">
+								{t('payment.right.pagoEfectivo')}
+							</Typography>
+							<div className={classes.optionBrandWrapper}>
+								{/* <img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" /> */}
+							</div>
+						</div>
+					</Button>
+					{/* )} */}
 				</div>
 				{errorMessage ? (
 					<div className={classes.errorWrapper}>
