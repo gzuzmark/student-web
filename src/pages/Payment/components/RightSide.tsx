@@ -9,7 +9,7 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
-import { stylesWithTheme, addGAEvent, isWeekDayLateNightOrSunday } from 'utils';
+import { stylesWithTheme, addGAEvent } from 'utils';
 import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
@@ -253,7 +253,7 @@ const RightSide = ({
 		}
 	};
 
-	const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
+	//const isPagoEfectivoVisible = !isWeekDayLateNightOrSunday();
 
 	return (
 		<RightLayout className={classes.container}>
