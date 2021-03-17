@@ -35,7 +35,7 @@ const getFormattedPlace = (addressComponents: AddressComponent[]): FormattedPlac
 		district: district?.long_name || '',
 		city: city?.long_name || '',
 		country: country?.long_name || '',
-		name: name?.long_name || '',
+		name: name?.long_name || 'Dirección delivery',
 	};
 };
 
@@ -79,7 +79,10 @@ const SearchAddress = ({
 								callback(
 									results.map(({ formatted_address, address_components, geometry: { location } }) => ({
 										address: formatted_address,
-										position: { lat: location.lat(), lng: location.lng() },
+										position: {
+											lat: Number.parseFloat(location.lat().toFixed(7)) || location.lat(),
+											lng: Number.parseFloat(location.lng().toFixed(7)) || location.lng(),
+										},
 										formattedPlace: getFormattedPlace(address_components),
 									})),
 								);

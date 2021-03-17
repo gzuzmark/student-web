@@ -1,5 +1,5 @@
 import React, { ReactElement, ChangeEvent, useState, useCallback, useEffect } from 'react';
-import { PrescribedMedicine } from 'pages/api';
+import { postAddress, PrescribedMedicine } from 'pages/api';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
@@ -191,6 +191,7 @@ const getCurrentPosition = async ({
 };
 
 export interface CheckoutInformationProps {
+	sessionId: string;
 	medicines: PrescribedMedicine[];
 	selectedMedicines: number[];
 	address: string;
@@ -200,6 +201,7 @@ export interface CheckoutInformationProps {
 }
 
 const CheckoutInformation = ({
+	sessionId,
 	address,
 	medicines,
 	selectedMedicines,
@@ -227,6 +229,7 @@ const CheckoutInformation = ({
 	const [mapsApi, setMapApi] = useState<MapsApi>();
 	const [mapInstance, setMapInstance] = useState<MapInstance>();
 	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
+	const [localAddress, setLocalAddress] = useState<string>('');
 	const [hasAddressError, setHasAddressError] = useState<boolean>(false);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
@@ -239,7 +242,7 @@ const CheckoutInformation = ({
 	const hideEditAddress = () => {
 		setIsEditAddressShowing(false);
 	};
-	const updateAddress = () => {
+	const updateAddress = async () => {
 		if (!addressReference) {
 			setReferenceError(t('buyPrescription.addressReference.error'));
 			return;
@@ -256,6 +259,12 @@ const CheckoutInformation = ({
 
 		if (activePosition) {
 			onAddressUpdate(activePosition, humanActivePosition);
+			await postAddress(sessionId, {
+				latitude: String(activePosition.lat) || '',
+				longitude: String(activePosition.lng) || '',
+				address: humanActivePosition,
+				reference: addressReference,
+			});
 			setIsSubmitting(true);
 			hideEditAddress();
 			setTimeout(() => {
@@ -280,7 +289,12 @@ const CheckoutInformation = ({
 		(place: Place | null) => {
 			if (place && mapInstance && currentPositionMarker) {
 				currentPositionMarker.setVisible(false);
-				setHumanActivePosition(place.address);
+				setHumanActivePosition(
+					JSON.stringify({
+						...place.formattedPlace,
+					}),
+				);
+				setLocalAddress(place.address);
 				setActivePosition(place.position);
 				currentPositionMarker.setPosition(place.position);
 				currentPositionMarker.setVisible(true);
@@ -384,7 +398,7 @@ const CheckoutInformation = ({
 							</Button>
 						</div>
 					) : (
-						<Typography className={classes.address}>{address}</Typography>
+						<Typography className={classes.address}>{localAddress || address}</Typography>
 					)}
 				</div>
 				<Divider />
