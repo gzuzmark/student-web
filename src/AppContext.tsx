@@ -2,7 +2,6 @@ import React, { ReactElement, useState, useCallback } from 'react';
 import { getLocalValue } from 'utils';
 import { UseCase } from 'pages/api/useCase';
 import { Doctor, Schedule } from 'pages/api/selectDoctor';
-import { isJSDocNullableType } from 'typescript';
 
 export const EMPTY_TRACK_PARAMS = {
 	utmSource: '',
