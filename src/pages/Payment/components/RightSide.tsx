@@ -253,7 +253,7 @@ const RightSide = ({
 		}
 	};
 
-	const isPagoEfectivoVisible = false; //isWeekDayLateNightOrSunday();
+	const isPagoEfectivoVisible = true; //isWeekDayLateNightOrSunday();
 
 	return (
 		<RightLayout className={classes.container}>
@@ -342,7 +342,7 @@ const RightSide = ({
 							variant="outlined"
 							style={{}}
 						>
-							<div className={classes.optionBody}>
+							<div className={classes.optionBody} style={{ width: 'inherit' }}>
 								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
 									<CashierIcon />
 								</div>

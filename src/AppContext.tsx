@@ -2,6 +2,7 @@ import React, { ReactElement, useState, useCallback } from 'react';
 import { getLocalValue } from 'utils';
 import { UseCase } from 'pages/api/useCase';
 import { Doctor, Schedule } from 'pages/api/selectDoctor';
+import { isJSDocNullableType } from 'typescript';
 
 export const EMPTY_TRACK_PARAMS = {
 	utmSource: '',
@@ -92,6 +93,7 @@ interface ContextProps {
 	userFiles: string[];
 	trackParams: TrackParams;
 	showSmallSignUp: boolean;
+	ticketNumber: string;
 }
 
 const defaultState: ContextProps = {
@@ -114,6 +116,7 @@ const defaultState: ContextProps = {
 	userFiles: [],
 	trackParams: {},
 	showSmallSignUp: false,
+	ticketNumber: '',
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 
