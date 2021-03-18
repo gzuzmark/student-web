@@ -1114,7 +1114,9 @@ const Payment = () => {
 											variant="outlined"
 											fullWidth
 											onChange={(e: any) => {
-												setFieldValue('description', e.target.value);
+												if (e.target.validity.valid || !e.target.value) {
+													setFieldValue('description', e.target.value);
+												}
 											}}
 											value={values.description}
 											InputProps={{
@@ -1138,7 +1140,8 @@ const Payment = () => {
 											!values.documentType ||
 											!values.documentNumber ||
 											!values.email ||
-											!validEmail
+											!validEmail ||
+											!values.description
 										}
 									>
 										<LockIcon />
