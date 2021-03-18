@@ -1,14 +1,16 @@
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, useContext } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
+import AppContext from 'AppContext';
 
 import { stylesWithTheme } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
 import { ReactComponent as MailIcon } from 'icons/beforeSection.svg';
 import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
 import { ReactComponent as ChecklistIcon } from 'icons/afterSection.svg';
+import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 
 // const ALIVIA_CONTACT_EMAIL = 'alivia@lavictoria.pe';
 // const ALIVIA_CONTACT_WHATSAPP_NUMBER = '947907184';
@@ -168,6 +170,8 @@ const AppointmentTips = ({
 		}
 		navigator.clipboard.writeText(conferenceLink);
 	};
+	const { ticketNumber } = useContext(AppContext);
+	const pdfLink = 'https://api.kushkipagos.com/cash/v1/charges/' + ticketNumber + '/receipt';
 
 	return (
 		<div className={classes.tipsWrapper}>
@@ -181,6 +185,33 @@ const AppointmentTips = ({
 				<Typography className={classes.tipTitle} variant="h3">
 					{t('confirmation.right.before.title')}
 				</Typography>
+
+				<div className={classes.sectionContainer}>
+					<div>
+						<CreditCardSvg />
+					</div>
+					<div className={classes.textContainer}>
+						<Typography>{t('confirmation.right.before.paymentNumber')} </Typography>
+					</div>
+				</div>
+				<div className={classes.copyWrapper}>
+					<div className={classes.callLinkWrapper}>
+						<Typography className={classes.callLink} color="primary">
+							{pdfLink}
+						</Typography>
+					</div>
+					<Button
+						className={classes.copyButton}
+						variant="contained"
+						onClick={() => {
+							window.open(pdfLink, '_blank');
+							return null;
+						}}
+					>
+						{t('confirmation.right.before.downloadPdf')}
+					</Button>
+				</div>
+				<br></br>
 				<div className={classes.sectionContainer}>
 					<div>
 						<MailIcon />

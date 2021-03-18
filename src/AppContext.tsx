@@ -92,6 +92,7 @@ interface ContextProps {
 	userFiles: string[];
 	trackParams: TrackParams;
 	showSmallSignUp: boolean;
+	ticketNumber: string;
 }
 
 const defaultState: ContextProps = {
@@ -114,6 +115,7 @@ const defaultState: ContextProps = {
 	userFiles: [],
 	trackParams: {},
 	showSmallSignUp: false,
+	ticketNumber: '',
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

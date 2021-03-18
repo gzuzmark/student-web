@@ -45,6 +45,8 @@ const confirmationL18n = {
 	'confirmation.linkAccount.linkAccountLabel': 'VINCULAR A MI CUENTA',
 	'confirmation.linkedAccount.title': '{{name}} se ha vinculado exítosamente a tu cuenta',
 	'confirmation.linkedAccount.redirect': 'Continuar a mi cuenta',
+	'confirmation.right.before.paymentNumber': 'Descargar PDF para visualizar el número de pago',
+	'confirmation.right.before.downloadPdf': 'Descargar',
 };
 
 export default confirmationL18n;
