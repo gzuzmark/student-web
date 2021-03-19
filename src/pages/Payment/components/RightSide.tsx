@@ -253,7 +253,7 @@ const RightSide = ({
 		}
 	};
 
-	const isPagoEfectivoVisible = true; //isWeekDayLateNightOrSunday();
+	const isPagoEfectivoVisible = false; //isWeekDayLateNightOrSunday();
 
 	return (
 		<RightLayout className={classes.container}>
