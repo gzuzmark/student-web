@@ -127,9 +127,13 @@ const Payment = () => {
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 
+	// const kushki = new Kushki({
+	// 	merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
+	// 	inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
+	// });
 	const kushki = new Kushki({
-		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
-		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
+		merchantId: '5f2c989bea794296bd461c39f9932368', // Your public merchant id
+		inTestEnvironment: false,
 	});
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
@@ -436,7 +440,6 @@ const Payment = () => {
 		setIsPaymentLoading(true);
 		const callback = async function (response: any) {
 			if (!response.code) {
-				console.log(response);
 				if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
 					const method = 2;
 					const token = response.token;
@@ -476,17 +479,16 @@ const Payment = () => {
 
 						if (method === PE_PAYMENT_ID) {
 							if (response?.data) {
-								console.log('<<<<response.data>>>>');
 								link = response?.data?.data?.reference_link as string;
-								console.log('link: ', link);
 							}
 						} else {
 							link = buildTransactionURL(doctor.name, doctor.lastName, values.fullName || '', userPhone || '');
 						}
 						updateContextState({
 							useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-							paymentURL: link,
+							paymentURL: '',
 							appointmentCreationStep: CONFIRMATION_STEP,
+							ticketNumber: link,
 						});
 						history.push('/confirmacion');
 					} catch (e) {
@@ -714,7 +716,7 @@ const Payment = () => {
 														variant="outlined"
 														name="cardName"
 														value={values.cardName}
-														label="Nombre en Tarjeta"
+														label="Nombre del Titular"
 														fullWidth
 														onChange={(e: any) => {
 															if (e.target.validity.valid || !e.target.value) {
@@ -1112,7 +1114,9 @@ const Payment = () => {
 											variant="outlined"
 											fullWidth
 											onChange={(e: any) => {
-												setFieldValue('description', e.target.value);
+												if (e.target.validity.valid || !e.target.value) {
+													setFieldValue('description', e.target.value);
+												}
 											}}
 											value={values.description}
 											InputProps={{
@@ -1136,7 +1140,8 @@ const Payment = () => {
 											!values.documentType ||
 											!values.documentNumber ||
 											!values.email ||
-											!validEmail
+											!validEmail ||
+											!values.description
 										}
 									>
 										<LockIcon />

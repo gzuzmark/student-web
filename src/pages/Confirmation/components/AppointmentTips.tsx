@@ -177,6 +177,7 @@ const AppointmentTips = ({
 				</Typography>
 				<div className={classes.separator}></div>
 			</div>
+
 			<div className={classes.beforeSection}>
 				<Typography className={classes.tipTitle} variant="h3">
 					{t('confirmation.right.before.title')}
