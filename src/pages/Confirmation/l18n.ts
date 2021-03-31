@@ -45,8 +45,10 @@ const confirmationL18n = {
 	'confirmation.linkAccount.linkAccountLabel': 'VINCULAR A MI CUENTA',
 	'confirmation.linkedAccount.title': '{{name}} se ha vinculado exítosamente a tu cuenta',
 	'confirmation.linkedAccount.redirect': 'Continuar a mi cuenta',
-	'confirmation.right.before.paymentNumber': 'Descargar PDF para visualizar el número de pago',
+	'confirmation.right.before.paymentNumber':
+		'Para confirmar su CITA pagar con el CÓDIGO DE PAGO que encontrará al descargar PDF en el siguiente link:',
 	'confirmation.right.before.downloadPdf': 'Descargar',
+	'confirmation.right.before.time': 'Recordar que el CÓDIGO DE PAGO expira en 12 Horas.',
 };
 
 export default confirmationL18n;
