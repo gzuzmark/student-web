@@ -195,7 +195,10 @@ const AppointmentTips = ({
 								<CreditCardSvg style={{ width: '59px', height: '59px' }} />
 							</div>
 							<div className={classes.textContainer}>
-								<Typography>{t('confirmation.right.before.paymentNumber')} </Typography>
+								<Typography>
+									<strong>Para confirmar su CITA</strong> pagar con el CÓDIGO DE PAGO que encontrará al descargar PDF en
+									el siguiente link:{' '}
+								</Typography>
 							</div>
 						</div>
 						<div className={classes.copyWrapper}>
@@ -223,7 +226,9 @@ const AppointmentTips = ({
 								<TimeSvg style={{ width: '59px', height: '59px' }} />
 							</div>
 							<div className={classes.textContainer}>
-								<Typography>{t('confirmation.right.before.time')} </Typography>
+								<Typography>
+									Recordar que el CÓDIGO DE PAGO <strong>expira en 12 Horas</strong>{' '}
+								</Typography>
 							</div>
 						</div>
 						<br></br>
