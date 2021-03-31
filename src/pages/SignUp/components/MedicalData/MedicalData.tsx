@@ -50,7 +50,10 @@ const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDat
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
 	const openDialog = () => {
-		redirectToURL('https://drive.google.com/open?id=1RjgoOp4wR2zCUtktj0d_PqhT9FC7TGyR', true);
+		redirectToURL(
+			'https://docs.google.com/document/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
+			true,
+		);
 	};
 
 	return (

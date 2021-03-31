@@ -100,7 +100,10 @@ const AboutNewProfile = ({ submitCallback, validateAfterDateSelected }: AboutNew
 		[submitCallback],
 	);
 	const openPrivacyPolicy = () => {
-		redirectToURL('https://drive.google.com/open?id=12DfeCL1FGluiEmYcH_fo4uZBUu1k-LtV', true);
+		redirectToURL(
+			'https://docs.google.com/document/u/2/d/e/2PACX-1vS3SBl2FrGqj_qWltyMkUOF1B3dNSHtvr7sbqGy6OJvuKQKGcIklLBvO4GIOev4YQ/pub',
+			true,
+		);
 	};
 
 	return (
