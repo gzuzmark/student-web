@@ -115,10 +115,16 @@ const SmallSignUpForm = ({ onSubmit, validateAgeAfterSelecting }: SmallSignUpFor
 	const classes = useStyles();
 	const { t } = useTranslation('signUp');
 	const openPrivacyPolicy = () => {
-		redirectToURL('https://drive.google.com/open?id=1RjgoOp4wR2zCUtktj0d_PqhT9FC7TGyR', true);
+		redirectToURL(
+			'https://docs.google.com/document/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
+			true,
+		);
 	};
 	const openTermsAndConditions = () => {
-		redirectToURL('https://drive.google.com/open?id=12DfeCL1FGluiEmYcH_fo4uZBUu1k-LtV', true);
+		redirectToURL(
+			'https://docs.google.com/document/u/2/d/e/2PACX-1vS3SBl2FrGqj_qWltyMkUOF1B3dNSHtvr7sbqGy6OJvuKQKGcIklLBvO4GIOev4YQ/pub',
+			true,
+		);
 	};
 
 	return (
