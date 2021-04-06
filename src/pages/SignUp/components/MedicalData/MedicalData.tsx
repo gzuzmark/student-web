@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, ReactElement } from 'react';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { stylesWithTheme, redirectToURL } from 'utils';
 
 import MedicalDataForm, { MedicalDataValues } from './MedicalDataForm';
+
+import IndicacionesModal from '../MedicalData/components/IndicacionesModal';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -49,8 +51,12 @@ const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDat
 	const { t } = useTranslation('signUp');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
+	const [isIndicacionesModalOpen, setIsIndicacionesModalOpen] = useState<boolean>(false);
 	const openDialog = () => {
 		redirectToURL('https://drive.google.com/open?id=1RjgoOp4wR2zCUtktj0d_PqhT9FC7TGyR', true);
+	};
+	const openIndicacionesModal = () => {
+		setIsIndicacionesModalOpen(true);
 	};
 
 	return (
@@ -92,7 +98,12 @@ const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDat
 			<Typography className={classes.subTitle} color="primary">
 				{t(defaultLabelType ? `medicalData.subTitle.${defaultLabelType}` : 'medicalData.subTitle')}
 			</Typography>
-			<MedicalDataForm medicalData={medicalData} onChangeStep={onChangeStep} openPrivacyPolicy={openDialog} />
+			<MedicalDataForm
+				medicalData={medicalData}
+				onChangeStep={onChangeStep}
+				openIndicacionesModal={openIndicacionesModal}
+				openPrivacyPolicy={openDialog}
+			/>
 		</div>
 	);
 };
