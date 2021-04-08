@@ -120,6 +120,7 @@ const createRedirectUrl = async (
 	selectedMedicines: SelectedMedicines,
 	setIsLoading: Function,
 	setRedirectUrl: Function,
+	userId: string,
 ) => {
 	try {
 		const redirectUrl = await getRedirectUrl(selectedMedicines);
@@ -141,8 +142,11 @@ export interface RedirectToInkafarmaProps {
 const RedirectToInkafarma = ({ medicines, selectedMedicines }: RedirectToInkafarmaProps): ReactElement | null => {
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
+	const location = useLocation();
+	const params = parse(location.search);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [redirectUrl, setRedirectUrl] = useState();
+	const sessionId = (params.sessionId as string) || '';
 	const parsedSelectedMedicines: SelectedMedicines = selectedMedicines
 		.map((index) => medicines[index])
 		.map(({ skuInkafarma, totalQuantity, pharmaceuticalForm, hasStock, alternativeMedicine }) =>
@@ -159,7 +163,7 @@ const RedirectToInkafarma = ({ medicines, selectedMedicines }: RedirectToInkafar
 	};
 
 	useEffect(() => {
-		createRedirectUrl(parsedSelectedMedicines, setIsLoading, setRedirectUrl);
+		createRedirectUrl(parsedSelectedMedicines, setIsLoading, setRedirectUrl, sessionId);
 		// eslint-disable-next-line
 	}, []);
 
