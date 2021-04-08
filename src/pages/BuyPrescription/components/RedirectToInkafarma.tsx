@@ -9,6 +9,8 @@ import { PrescribedMedicine, SelectedMedicines, getRedirectUrl } from 'pages/api
 import { stylesWithTheme } from 'utils';
 import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { parse } from 'query-string';
+import { useLocation } from 'react-router';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -123,7 +125,7 @@ const createRedirectUrl = async (
 	userId: string,
 ) => {
 	try {
-		const redirectUrl = await getRedirectUrl(selectedMedicines);
+		const redirectUrl = await getRedirectUrl(userId, selectedMedicines);
 
 		setIsLoading(false);
 		setRedirectUrl(redirectUrl);
