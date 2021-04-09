@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from 'react';
+import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
@@ -7,8 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { stylesWithTheme, redirectToURL } from 'utils';
 
 import MedicalDataForm, { MedicalDataValues } from './MedicalDataForm';
-
-import IndicacionesModal from '../MedicalData/components/IndicacionesModal';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {

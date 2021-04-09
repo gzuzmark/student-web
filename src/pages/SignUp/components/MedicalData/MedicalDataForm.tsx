@@ -1,5 +1,5 @@
-import React, { useCallback, useLayoutEffect, useRef, useEffect, useContext, useState } from 'react';
-import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
+import React, { useCallback, useLayoutEffect, useRef, useContext } from 'react';
+import AppContext from 'AppContext';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
@@ -16,8 +16,6 @@ import { OptionsGroup, Option, FilesGroupField } from 'pages/common';
 
 import validationSchema from './validationSchema';
 import ActionAfterError from './ActionAfterError';
-import { getUseCase } from 'pages/api';
-import { ESPIPE } from 'constants';
 
 export interface MedicalDataValues {
 	takeMedicines: boolean | null;
@@ -128,20 +126,16 @@ function especialidad() {
 	}
 }
 
-function mejorefotos() {
-	const esp = 'Derman';
-
-	if (esp === 'Derman') {
+function mejorefotos(speciality = '') {
+	if (speciality === 'Derman') {
 		return 'Mejores fotos para un diagnóstico más preciso.';
 	} else {
 		return '';
 	}
 }
 
-function indicaciones() {
-	const esp = 'Derman';
-
-	if (esp === 'Derman') {
+function indicaciones(speciality = '') {
+	if (speciality === 'Derman') {
 		return 'Indicaciones';
 	} else {
 		return '';
@@ -268,20 +262,32 @@ const MedicalDataForm = ({
 							/>
 						</div>
 						<div className={classes.fieldWrapper}>
-							<Field
-								component={FilesGroupField}
-								inputId="files-input"
-								name="files"
-								//labelText ={t('medicalData.dropzone.label')}
-								labelText={especialidad()}
-								//--------------------------
-								//--------------------------
-								isOptional
-							/>
-							<Typography component="span">{mejorefotos()} </Typography>
+							{useCase?.name === 'Derman' ? (
+								<Field
+									component={FilesGroupField}
+									inputId="files-input"
+									name="files"
+									//labelText ={t('medicalData.dropzone.label')}
+									labelText={especialidad()}
+									//--------------------------
+									//--------------------------
+									optional
+								/>
+							) : (
+								<Field
+									component={FilesGroupField}
+									inputId="files-input"
+									name="filesDerman"
+									labelText={t('medicalData.dropzone.label')}
+									//--------------------------
+									//--------------------------
+									optional
+								/>
+							)}
+							<Typography component="span">{mejorefotos(useCase?.name)} </Typography>
 
 							<Button variant="text" onClick={onModal}>
-								{indicaciones()}
+								{indicaciones(useCase?.name)}
 							</Button>
 						</div>
 					</div>

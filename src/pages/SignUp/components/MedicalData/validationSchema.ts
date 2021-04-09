@@ -1,4 +1,4 @@
-import { object, string, boolean } from 'yup';
+import { object, string, boolean, array } from 'yup';
 import i18next from 'l18n/index';
 
 const messages = {
@@ -20,6 +20,7 @@ const validationSchema = object().shape({
 	takeMedicines: boolean().required(messages.takeMedicines.required).nullable(),
 	medicineList: string().when('takeMedicines', { is: true, then: string().required(messages.medicineList.required) }),
 	haveAllergies: boolean().required(messages.haveAllergies.required).nullable(),
+	filesDerman: array().ensure().required('Adjuntar mínimo dos fotos').min(2, 'Adjuntar mínimo dos fotos'),
 	allergies: string().when('haveAllergies', { is: true, then: string().required(messages.allergy.required) }),
 	moreInfo: string(),
 });

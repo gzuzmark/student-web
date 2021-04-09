@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useContext, useState } from 'react';
-import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
+import React, { useCallback, useContext } from 'react';
+import AppContext from 'AppContext';
 
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';

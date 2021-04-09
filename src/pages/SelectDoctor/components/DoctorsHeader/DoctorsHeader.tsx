@@ -9,7 +9,6 @@ import { ReactComponent as MoneyIcon } from 'icons/circleMoney.svg';
 import { ReactComponent as CircleClock } from 'icons/circle_clock.svg';
 
 import useStyles from './styles';
-import { Console } from 'console';
 
 interface DoctorsHeaderProps {
 	date: Date | null;
