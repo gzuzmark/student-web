@@ -16,6 +16,12 @@ import { OptionsGroup, Option, FilesGroupField } from 'pages/common';
 
 import validationSchema from './validationSchema';
 import ActionAfterError from './ActionAfterError';
+import { getUseCase } from 'pages/api';
+import { ESPIPE } from 'constants';
+import { isJsxAttribute, isOptionalChain } from 'typescript';
+import { EditAttributes } from '@material-ui/icons';
+import { property } from 'lodash';
+import { boolean, string } from 'yup';
 
 export interface MedicalDataValues {
 	takeMedicines: boolean | null;
@@ -116,11 +122,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-function especialidad() {
-	const esp = 'Derman';
-
-	if (esp === 'Derman') {
-		return 'Adjunta al menos dos fotos de la lesión, una a 10 cm y otra a 30 cm de distancia.';
+function especialidad(speciality = '') {
+	if (speciality === 'Derman') {
+		return 'Adjunta al menos dos fotos del problema en piel, una a 10 cm y otra a 30 cm de distancia.';
 	} else {
 		return 'Adjunta fotos o exámenes realizados.';
 	}
@@ -141,6 +145,15 @@ function indicaciones(speciality = '') {
 		return '';
 	}
 }
+//-----------------------------------------------
+function cargaimgenes() {
+	const speciality = 'Derman';
+	const carga = 'length == 0';
+	if (carga === 'length == 0') {
+		return 'Falta imagenes';
+	}
+}
+//-----------------------------------------------
 
 const MedicalDataForm = ({
 	onChangeStep,
@@ -160,9 +173,10 @@ const MedicalDataForm = ({
 		[onChangeStep],
 	);
 
-	const onModal = useCallback(() => {
+	const onModal = useCallback(async () => {
 		openIndicacionesModal();
 	}, [openIndicacionesModal]);
+
 	const onError = () => {
 		if (consultReasonRef.current) {
 			animateScrollTo(consultReasonRef.current, { verticalOffset: -50, speed: 750 });
@@ -176,7 +190,6 @@ const MedicalDataForm = ({
 	const { useCase, userToken, updateState } = useContext(AppContext);
 
 	//console.log(useCase?.name);
-	console.log(useCase);
 
 	return (
 		<Formik initialValues={medicalData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
