@@ -4,6 +4,7 @@ import { FloatCard } from 'pages/common';
 import { Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from 'react-i18next';
+import desktopImage from 'icons/indicacionesModal.PNG';
 
 import { stylesWithTheme } from 'utils';
 import { ReactComponent as ThumbsUpIcon } from 'icons/good_quality.svg';
@@ -84,18 +85,16 @@ const IndicacionesModal = ({ isOpen, onClose }: IndicacionesModalProps): ReactEl
 
 	return (
 		<Modal open={isOpen} onClose={onClose}>
-			<FloatCard className={classes.card} height={isDesktop ? 515 : 478} width={isDesktop ? 856 : 327} mobile>
+			<FloatCard className={classes.card} height={isDesktop ? 600 : 478} width={isDesktop ? 500 : 327} mobile>
 				<div className={classes.wrapper}>
-					<Typography variant="h2" className={classes.title}>
-						{t('HOLAAAA SOY JOEL')}
-					</Typography>
-					<div className={classes.iconWrapper}>
-						<ThumbsUpIcon />
+					<div className={classes.imgWrapper}>
+						<img className={classes.desktopImg} src={desktopImage} width={450} />
 					</div>
-					<Typography className={classes.body}>
-						<div>{t('ASDASDASDASDASDASDASDADSASDASDASDASDADSADS')}</div>
-						<div>{t('ZXCZCXZXCXCZXCCZXCZXCZXCZXCZXCZCZXCZXCZXCC')}</div>
-					</Typography>
+					<div className={classes.actions}>
+						<Button className={classes.action} variant="contained" onClick={onClose}>
+							{t('askAddress.successModal.close')}
+						</Button>
+					</div>
 				</div>
 			</FloatCard>
 		</Modal>

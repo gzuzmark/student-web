@@ -18,6 +18,10 @@ import validationSchema from './validationSchema';
 import ActionAfterError from './ActionAfterError';
 import { getUseCase } from 'pages/api';
 import { ESPIPE } from 'constants';
+import { isJsxAttribute, isOptionalChain } from 'typescript';
+import { EditAttributes } from '@material-ui/icons';
+import { property } from 'lodash';
+import { boolean, string } from 'yup';
 
 export interface MedicalDataValues {
 	takeMedicines: boolean | null;
@@ -118,35 +122,38 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-function especialidad() {
-	const esp = 'Derman';
-
-	if (esp === 'Derman') {
-		return 'Adjunta al menos dos fotos de la lesión, una a 10 cm y otra a 30 cm de distancia.';
+function especialidad(speciality = '') {
+	if (speciality === 'Derman') {
+		return 'Adjunta al menos dos fotos del problema en piel, una a 10 cm y otra a 30 cm de distancia.';
 	} else {
 		return 'Adjunta fotos o exámenes realizados.';
 	}
 }
 
-function mejorefotos() {
-	const esp = 'Derman';
-
-	if (esp === 'Derman') {
+function mejorefotos(speciality = '') {
+	if (speciality === 'Derman') {
 		return 'Mejores fotos para un diagnóstico más preciso.';
 	} else {
 		return '';
 	}
 }
 
-function indicaciones() {
-	const esp = 'Derman';
-
-	if (esp === 'Derman') {
+function indicaciones(speciality = '') {
+	if (speciality === 'Derman') {
 		return 'Indicaciones';
 	} else {
 		return '';
 	}
 }
+//-----------------------------------------------
+function cargaimgenes() {
+	const speciality = 'Derman';
+	const carga = 'length == 0';
+	if (carga === 'length == 0') {
+		return 'Falta imagenes';
+	}
+}
+//-----------------------------------------------
 
 const MedicalDataForm = ({
 	onChangeStep,
@@ -166,9 +173,10 @@ const MedicalDataForm = ({
 		[onChangeStep],
 	);
 
-	const onModal = useCallback(() => {
+	const onModal = useCallback(async () => {
 		openIndicacionesModal();
 	}, [openIndicacionesModal]);
+
 	const onError = () => {
 		if (consultReasonRef.current) {
 			animateScrollTo(consultReasonRef.current, { verticalOffset: -50, speed: 750 });
@@ -182,7 +190,6 @@ const MedicalDataForm = ({
 	const { useCase, userToken, updateState } = useContext(AppContext);
 
 	//console.log(useCase?.name);
-	console.log(useCase);
 
 	return (
 		<Formik initialValues={medicalData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -272,17 +279,14 @@ const MedicalDataForm = ({
 								component={FilesGroupField}
 								inputId="files-input"
 								name="files"
-								//labelText ={t('medicalData.dropzone.label')}
-								labelText={especialidad()}
-								//--------------------------
-								//--------------------------
+								labelText={especialidad(useCase?.name)}
 								isOptional
 							/>
-							<Typography component="span">{mejorefotos()} </Typography>
+							<Typography component="span">{mejorefotos(useCase?.name)}</Typography>
 
-							<Button variant="text" onClick={onModal}>
-								{indicaciones()}
-							</Button>
+							<Typography className={classes.privacyPolicyLink} component="span" color="primary" onClick={onModal}>
+								{indicaciones(useCase?.name)}
+							</Typography>
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>
