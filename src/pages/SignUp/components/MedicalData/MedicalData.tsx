@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { stylesWithTheme, redirectToURL } from 'utils';
 
 import MedicalDataForm, { MedicalDataValues } from './MedicalDataForm';
+import IndicacionesModal from './components/IndicacionesModal';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -53,6 +54,11 @@ const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDat
 	const openDialog = () => {
 		redirectToURL('https://drive.google.com/open?id=1RjgoOp4wR2zCUtktj0d_PqhT9FC7TGyR', true);
 	};
+
+	const closeIndicacionesModal = () => {
+		setIsIndicacionesModalOpen(false);
+	};
+
 	const openIndicacionesModal = () => {
 		setIsIndicacionesModalOpen(true);
 	};
@@ -102,6 +108,7 @@ const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDat
 				openIndicacionesModal={openIndicacionesModal}
 				openPrivacyPolicy={openDialog}
 			/>
+			<IndicacionesModal isOpen={isIndicacionesModalOpen} onClose={closeIndicacionesModal} />
 		</div>
 	);
 };

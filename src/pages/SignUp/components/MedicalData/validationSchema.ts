@@ -11,6 +11,9 @@ const messages = {
 	haveAllergies: {
 		required: i18next.t('signUp:medicalData.validation.haveAllergy.required'),
 	},
+	filesDerman: {
+		required: i18next.t('signUp:medicalData.validation.filesDerman.required'),
+	},
 	allergy: {
 		required: i18next.t('signUp:medicalData.validation.allergy.required'),
 	},

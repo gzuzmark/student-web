@@ -124,9 +124,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 
 function especialidad(speciality = '') {
 	if (speciality === 'Derman') {
-		return 'Adjunta al menos dos fotos del problema en piel, una a 10 cm y otra a 30 cm de distancia.';
+		return 'Adjunta al menos dos fotos del problema en piel, una a 10 cm y otra a 30 cm de distancia. (Obligatorio)';
 	} else {
-		return 'Adjunta fotos o exámenes realizados.';
+		return 'Adjunta fotos o exámenes realizados. (Opcional)';
 	}
 }
 
@@ -281,27 +281,25 @@ const MedicalDataForm = ({
 									inputId="files-input"
 									name="files"
 									//labelText ={t('medicalData.dropzone.label')}
-									labelText={especialidad()}
+									labelText={especialidad(useCase?.name)}
 									//--------------------------
 									//--------------------------
-									optional
 								/>
 							) : (
 								<Field
 									component={FilesGroupField}
 									inputId="files-input"
 									name="filesDerman"
-									labelText={t('medicalData.dropzone.label')}
+									labelText={especialidad(useCase?.name)}
 									//--------------------------
 									//--------------------------
-									optional
 								/>
 							)}
 							<Typography component="span">{mejorefotos(useCase?.name)} </Typography>
 
-							<Button variant="text" onClick={onModal}>
+							<Typography className={classes.privacyPolicyLink} component="span" color="primary" onClick={onModal}>
 								{indicaciones(useCase?.name)}
-							</Button>
+							</Typography>
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>

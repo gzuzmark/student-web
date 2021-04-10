@@ -159,12 +159,8 @@ const FilesGroupField = ({
 						<Typography component="span" className={classes.labelText}>
 							{labelText}
 						</Typography>{' '}
-						<Typography component="span" className={classes.optionalDesktop}>
-							(opcional)
-						</Typography>
 					</>
 				)}
-				{isOptional && <Typography className={classes.optionalMobile}>(Opcional)</Typography>}
 			</div>
 			{files.map((file, index) => (
 				<File key={`${file.fileName}-${index}`} {...file} onRemove={removeFile(index)} />
