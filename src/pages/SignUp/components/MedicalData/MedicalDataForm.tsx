@@ -31,6 +31,7 @@ export interface MedicalDataValues {
 	moreInfo: string;
 	consultReason: string;
 	files?: string[];
+	isDermatology: boolean | null;
 }
 
 interface MedicalDataFormProps {
@@ -50,6 +51,7 @@ const initialValues = {
 	moreInfo: '',
 	consultReason: '',
 	files: [],
+	isDermatology: false,
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -188,6 +190,7 @@ const MedicalDataForm = ({
 	}, []);
 
 	const { useCase, userToken, updateState } = useContext(AppContext);
+	initialValues.isDermatology = useCase?.name === 'Derman';
 
 	//console.log(useCase?.name);
 
@@ -275,28 +278,18 @@ const MedicalDataForm = ({
 							/>
 						</div>
 						<div className={classes.fieldWrapper}>
-							{useCase?.name === 'Derman' ? (
-								<Field
-									component={FilesGroupField}
-									inputId="files-input"
-									name="files"
-									//labelText ={t('medicalData.dropzone.label')}
-									labelText={especialidad()}
-									//--------------------------
-									//--------------------------
-									optional
-								/>
-							) : (
-								<Field
-									component={FilesGroupField}
-									inputId="files-input"
-									name="filesDerman"
-									labelText={t('medicalData.dropzone.label')}
-									//--------------------------
-									//--------------------------
-									optional
-								/>
-							)}
+							<input name="isDermatology" value={String(useCase?.name === 'Derman')} type="hidden" />
+
+							<Field
+								component={FilesGroupField}
+								inputId="files-input"
+								name="files"
+								//labelText ={t('medicalData.dropzone.label')}
+								labelText={especialidad(useCase?.name)}
+								//--------------------------
+								//--------------------------
+							/>
+
 							<Typography component="span">{mejorefotos(useCase?.name)} </Typography>
 
 							<Button variant="text" onClick={onModal}>
