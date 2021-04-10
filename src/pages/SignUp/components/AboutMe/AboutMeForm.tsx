@@ -1,4 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
+import AppContext from 'AppContext';
+
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -89,6 +91,11 @@ const AboutMeForm = ({
 		[onChangeStep],
 	);
 	const userLabelExists = !!userLabel;
+
+	const { useCase, userToken, updateState } = useContext(AppContext);
+
+	//console.log(useCase?.name);
+	console.log(useCase);
 
 	return (
 		<Formik
