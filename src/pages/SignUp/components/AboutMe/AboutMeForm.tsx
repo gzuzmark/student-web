@@ -94,9 +94,6 @@ const AboutMeForm = ({
 
 	const { useCase } = useContext(AppContext);
 
-	//console.log(useCase?.name);
-	console.log(useCase);
-
 	return (
 		<Formik
 			initialValues={aboutMeData || initialValues}
