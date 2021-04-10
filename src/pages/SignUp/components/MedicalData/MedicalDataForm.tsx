@@ -16,12 +16,6 @@ import { OptionsGroup, Option, FilesGroupField } from 'pages/common';
 
 import validationSchema from './validationSchema';
 import ActionAfterError from './ActionAfterError';
-import { getUseCase } from 'pages/api';
-import { ESPIPE } from 'constants';
-import { isJsxAttribute, isOptionalChain } from 'typescript';
-import { EditAttributes } from '@material-ui/icons';
-import { property } from 'lodash';
-import { boolean, string } from 'yup';
 
 export interface MedicalDataValues {
 	takeMedicines: boolean | null;
@@ -147,15 +141,6 @@ function indicaciones(speciality = '') {
 		return '';
 	}
 }
-//-----------------------------------------------
-function cargaimgenes() {
-	const speciality = 'Derman';
-	const carga = 'length == 0';
-	if (carga === 'length == 0') {
-		return 'Falta imagenes';
-	}
-}
-//-----------------------------------------------
 
 const MedicalDataForm = ({
 	onChangeStep,
@@ -189,10 +174,8 @@ const MedicalDataForm = ({
 		consultReasonRef.current = document.querySelector('.consult-reason-field');
 	}, []);
 
-	const { useCase, userToken, updateState } = useContext(AppContext);
+	const { useCase } = useContext(AppContext);
 	initialValues.isDermatology = useCase?.name === 'Derman';
-
-	//console.log(useCase?.name);
 
 	return (
 		<Formik initialValues={medicalData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>

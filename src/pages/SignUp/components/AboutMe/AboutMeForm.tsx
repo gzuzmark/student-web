@@ -92,7 +92,7 @@ const AboutMeForm = ({
 	);
 	const userLabelExists = !!userLabel;
 
-	const { useCase, userToken, updateState } = useContext(AppContext);
+	const { useCase } = useContext(AppContext);
 
 	//console.log(useCase?.name);
 	console.log(useCase);
