@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Modal, Button, Typography } from '@material-ui/core';
+import { Modal, Button } from '@material-ui/core';
 import { FloatCard } from 'pages/common';
 import { Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import desktopImage from 'icons/indicacionesModal.png';
 
 import { stylesWithTheme } from 'utils';
-import { ReactComponent as ThumbsUpIcon } from 'icons/good_quality.svg';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	card: {
@@ -88,7 +87,7 @@ const IndicacionesModal = ({ isOpen, onClose }: IndicacionesModalProps): ReactEl
 			<FloatCard className={classes.card} height={isDesktop ? 600 : 478} width={isDesktop ? 500 : 327} mobile>
 				<div className={classes.wrapper}>
 					<div className={classes.imgWrapper}>
-						<img className={classes.desktopImg} src={desktopImage} width={450} />
+						<img alt="appointment desktop" className={classes.desktopImg} src={desktopImage} width={450} />
 					</div>
 					<div className={classes.actions}>
 						<Button className={classes.action} variant="contained" onClick={onClose}>
