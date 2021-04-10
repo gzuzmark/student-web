@@ -192,8 +192,6 @@ const MedicalDataForm = ({
 	const { useCase, userToken, updateState } = useContext(AppContext);
 	initialValues.isDermatology = useCase?.name === 'Derman';
 
-	//console.log(useCase?.name);
-
 	return (
 		<Formik initialValues={medicalData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
 			{({ submitForm, isSubmitting, values, submitCount, isValid }) => (

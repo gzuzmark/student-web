@@ -81,7 +81,6 @@ const SelectDoctor = () => {
 			if (showSmallSignUp) {
 				history.push('/informacion_paciente');
 			} else if (isForSomeoneElse || !isUserLoggedIn) {
-				console.log(useCase?.name);
 				history.push('/registro/sobre_ti');
 			} else if (!isForSomeoneElse && isUserLoggedIn) {
 				history.push('/registro/datos_medicos');
