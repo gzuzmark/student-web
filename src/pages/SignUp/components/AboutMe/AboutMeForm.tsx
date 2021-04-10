@@ -92,10 +92,7 @@ const AboutMeForm = ({
 	);
 	const userLabelExists = !!userLabel;
 
-	const { useCase, userToken, updateState } = useContext(AppContext);
-
-	//console.log(useCase?.name);
-	console.log(useCase);
+	const { useCase } = useContext(AppContext);
 
 	return (
 		<Formik
