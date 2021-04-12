@@ -18,4 +18,5 @@ export default {
 	'askAddress.successModal.body.firstLine': 'Ya está disponible',
 	'askAddress.successModal.body.secondLine': 'tu receta médica cotizada.',
 	'askAddress.successModal.continue': 'Ver mi receta digital',
+	'askAddress.successModal.close': 'Cerrar',
 };

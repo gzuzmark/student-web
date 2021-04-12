@@ -1,4 +1,5 @@
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useContext } from 'react';
+import AppContext from 'AppContext';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
@@ -24,12 +25,16 @@ export interface MedicalDataValues {
 	moreInfo: string;
 	consultReason: string;
 	files?: string[];
+	isDermatology: boolean | null;
 }
 
 interface MedicalDataFormProps {
 	onChangeStep: (values: MedicalDataValues) => void;
 	openPrivacyPolicy: () => void;
 	medicalData: MedicalDataValues | undefined;
+	//---------------------------
+	openIndicacionesModal: () => void;
+	//---------------------------
 }
 
 const initialValues = {
@@ -40,6 +45,7 @@ const initialValues = {
 	moreInfo: '',
 	consultReason: '',
 	files: [],
+	isDermatology: false,
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -112,7 +118,36 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: MedicalDataFormProps) => {
+function especialidad(speciality = '') {
+	if (speciality === 'Derman') {
+		return 'Adjunta al menos dos fotos del problema en piel, una a 10 cm y otra a 30 cm de distancia. (Obligatorio)';
+	} else {
+		return 'Adjunta fotos o exámenes realizados. (Opcional)';
+	}
+}
+
+function mejorefotos(speciality = '') {
+	if (speciality === 'Derman') {
+		return 'Mejores fotos para un diagnóstico más preciso.';
+	} else {
+		return '';
+	}
+}
+
+function indicaciones(speciality = '') {
+	if (speciality === 'Derman') {
+		return 'Indicaciones';
+	} else {
+		return '';
+	}
+}
+
+const MedicalDataForm = ({
+	onChangeStep,
+	openPrivacyPolicy,
+	medicalData,
+	openIndicacionesModal,
+}: MedicalDataFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
@@ -124,6 +159,11 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 		},
 		[onChangeStep],
 	);
+
+	const onModal = useCallback(async () => {
+		openIndicacionesModal();
+	}, [openIndicacionesModal]);
+
 	const onError = () => {
 		if (consultReasonRef.current) {
 			animateScrollTo(consultReasonRef.current, { verticalOffset: -50, speed: 750 });
@@ -133,6 +173,9 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 	useLayoutEffect(() => {
 		consultReasonRef.current = document.querySelector('.consult-reason-field');
 	}, []);
+
+	const { useCase } = useContext(AppContext);
+	initialValues.isDermatology = useCase?.name === 'Derman';
 
 	return (
 		<Formik initialValues={medicalData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -218,13 +261,23 @@ const MedicalDataForm = ({ onChangeStep, openPrivacyPolicy, medicalData }: Medic
 							/>
 						</div>
 						<div className={classes.fieldWrapper}>
+							<input name="isDermatology" value={String(useCase?.name === 'Derman')} type="hidden" />
+
 							<Field
 								component={FilesGroupField}
 								inputId="files-input"
 								name="files"
-								labelText={t('medicalData.dropzone.label')}
-								isOptional
+								//labelText ={t('medicalData.dropzone.label')}
+								labelText={especialidad(useCase?.name)}
+								//--------------------------
+								//--------------------------
 							/>
+
+							<Typography component="span">{mejorefotos(useCase?.name)} </Typography>
+
+							<Typography className={classes.privacyPolicyLink} component="span" color="primary" onClick={onModal}>
+								{indicaciones(useCase?.name)}
+							</Typography>
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>

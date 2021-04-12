@@ -41,6 +41,7 @@ const SelectDoctor = () => {
 	const [isSelectOwnerOpen, setSelectOwnerOpen] = useState<boolean>(false);
 	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
 	const [schedule, setSchedule] = useState<Schedule | null>(null);
+
 	const location = useLocation();
 	const history = useHistory();
 	const params = parse(location.search);

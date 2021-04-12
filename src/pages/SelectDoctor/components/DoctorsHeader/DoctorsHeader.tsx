@@ -21,7 +21,6 @@ const DoctorsHeader = ({ date, updateDate, useCase, minDate }: DoctorsHeaderProp
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [openDatePicker, setOpenDatePicker] = useState<boolean>(false);
-
 	return (
 		<div className={classes.form}>
 			<div className={classes.datePickerField}>
