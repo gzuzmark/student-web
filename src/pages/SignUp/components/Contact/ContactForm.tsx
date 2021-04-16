@@ -2,6 +2,10 @@ import React, { useCallback, useContext, useState } from 'react';
 import { TextField as MaterialTextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
@@ -25,6 +29,8 @@ export interface ContactValues {
 	repeatPassword?: string;
 	address?: string;
 	ubigeo?: string;
+	isTerm?: boolean;
+	isClub?: boolean;
 }
 
 interface FormikContactValues {
@@ -36,6 +42,8 @@ interface FormikContactValues {
 	repeatPassword: string;
 	address: string;
 	ubigeo: string;
+	isTerm: boolean;
+	isClub: boolean;
 }
 
 interface ContactFormProps {
@@ -54,6 +62,8 @@ const initialValues = {
 	repeatPassword: '',
 	address: '',
 	ubigeo: '',
+	isTerm: false,
+	isClub: false,
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -98,6 +108,13 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		cursor: 'pointer',
 		textDecoration: 'underline',
 	},
+	// checkbox: {
+	// 	position: 'absolute',
+	// 	bottom: '15px',
+	// 	left: '15px',
+	// 	padding: '0',
+	// 	color: palette.primary.main,
+	// }
 }));
 
 const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, isGuest }: ContactFormProps) => {
@@ -232,8 +249,61 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 								</div>
 							</>
 						)}
+						<div className={classes.fieldWrapper}>
+							<FormControlLabel
+								control={<Checkbox className={classes.checkbox} name="isTerm" color="primary" disableRipple />}
+								label={
+									<>
+										<Typography className={classes.legalInformation} component="span">
+											{t('contact.legalInformation.firstSection1')}{' '}
+										</Typography>
+										<Typography
+											className={classes.privacyPolicyLink}
+											component="span"
+											color="primary"
+											onClick={openPrivacyPolicy}
+										>
+											{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
+										</Typography>
+										<Typography className={classes.legalInformation} component="span">
+											{t('contact.legalInformation.secondSection1')}{' '}
+										</Typography>
+										<Typography
+											className={classes.privacyPolicyLink}
+											component="span"
+											color="primary"
+											onClick={openPrivacyPolicy}
+										>
+											{t('contact.legalInformation.privacyPolicyLink1')}{' '}
+										</Typography>
+									</>
+								}
+							/>
+						</div>
+						<div className={classes.fieldWrapper}>
+							<FormControlLabel
+								control={<Checkbox className={classes.checkbox} name="isClub" color="primary" disableRipple />}
+								label={
+									<>
+										<Typography className={classes.legalInformation} component="span">
+											{t('contact.legalInformation.firstSection2')}{' '}
+										</Typography>
+										<Typography
+											className={classes.privacyPolicyLink}
+											component="span"
+											color="primary"
+											onClick={openPrivacyPolicy}
+										>
+											{t('contact.legalInformation.dataRegisterClub')}{' '}
+										</Typography>
+									</>
+								}
+							/>
+						</div>
 					</div>
-					<div className={classes.privacyPolicyWrapper}>
+
+					{/* <div className={classes.privacyPolicyWrapper}>
+						<Checkbox className={classes.checkbox} color="primary" disableRipple />
 						<Typography className={classes.legalInformation} component="span">
 							{t('contact.legalInformation.firstSection')}{' '}
 						</Typography>
@@ -245,6 +315,8 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 						>
 							{t('contact.legalInformation.privacyPolicyLink')}{' '}
 						</Typography>
+
+						
 						<Typography className={classes.legalInformation} component="span">
 							{t('contact.legalInformation.secondSection')}{' '}
 						</Typography>
@@ -256,7 +328,8 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 						>
 							{t('contact.legalInformation.termsAndConditionsLink')}
 						</Typography>
-					</div>
+					</div> */}
+
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
 							{t('contact.submit.text')}

@@ -101,6 +101,15 @@ const signUp = {
 	'contact.validation.email.required': 'El correo electrónico es obligatorio',
 	'contact.validation.email.validEmail': 'Ingrese un correo de contacto valido',
 	'contact.legalInformation.firstSection': 'Al ingresar estás confirmando que estás de acuerdo con nuestra',
+
+	'contact.legalInformation.firstSection1': 'He leído y acepto los',
+	'contact.legalInformation.termsAndConditionsLink1': 'Términos y Condiciones',
+	'contact.legalInformation.secondSection1': 'y las',
+	'contact.legalInformation.privacyPolicyLink1': 'Política de Privacidad',
+
+	'contact.legalInformation.firstSection2': 'He leído y acepto el',
+	'contact.legalInformation.dataRegisterClub': 'uso de mis datos y registro en Inkaclub para acumulación de puntos',
+
 	'contact.legalInformation.privacyPolicyLink': 'política de privacidad',
 	'contact.legalInformation.secondSection': 'y nuestros',
 	'contact.legalInformation.termsAndConditionsLink': 'términos y condiciones.',
