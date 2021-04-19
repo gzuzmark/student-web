@@ -2,14 +2,13 @@ import React, { useCallback, useContext, useState } from 'react';
 import { TextField as MaterialTextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-
-import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
+import { Checkbox } from 'formik-material-ui';
 import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
-import { Formik, Form, Field, FormikHelpers } from 'formik';
+import { Formik, Form, Field, FormikHelpers, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
@@ -18,6 +17,7 @@ import { newUservalidationSchema, guestValidationSchema } from './validationSche
 import AppContext from 'AppContext';
 import { getLocations, Ubigeo } from 'pages/api';
 import FormControl from '@material-ui/core/FormControl';
+
 import MenuItem from '@material-ui/core/MenuItem';
 
 export interface ContactValues {
@@ -29,7 +29,7 @@ export interface ContactValues {
 	repeatPassword?: string;
 	address?: string;
 	ubigeo?: string;
-	isTerm?: boolean;
+	isTerm?: boolean | null;
 	isClub?: boolean;
 }
 
@@ -108,21 +108,15 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		cursor: 'pointer',
 		textDecoration: 'underline',
 	},
-	// checkbox: {
-	// 	position: 'absolute',
-	// 	bottom: '15px',
-	// 	left: '15px',
-	// 	padding: '0',
-	// 	color: palette.primary.main,
-	// }
 }));
 
 const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, isGuest }: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
 	const { isUbigeoEnabled } = useContext(AppContext);
 	const [ubigeos, setUbigeos] = useState<string[]>([]);
-	const classes = useStyles();
+	const classes = useStyles(initialValues.isTerm);
 	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
+
 	const onSubmit = useCallback(
 		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
 			try {
@@ -132,8 +126,8 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 					identificationType: values.identificationType,
 					email: values.email?.trim(),
 				};
+				console.log(formatedValues);
 				await submitSignUp(formatedValues);
-
 				setSubmitting(false);
 			} catch (e) {
 				setFieldError('identification', t('contact.fields.identification.error'));
@@ -251,7 +245,11 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 						)}
 						<div className={classes.fieldWrapper}>
 							<FormControlLabel
-								control={<Checkbox className={classes.checkbox} name="isTerm" color="primary" disableRipple />}
+								control={
+									<>
+										<Field component={Checkbox} type="checkbox" name="isTerm" color="primary" />
+									</>
+								}
 								label={
 									<>
 										<Typography className={classes.legalInformation} component="span">
@@ -279,10 +277,11 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 									</>
 								}
 							/>
+							<ErrorMessage name="isTerm" component="span"></ErrorMessage>
 						</div>
 						<div className={classes.fieldWrapper}>
 							<FormControlLabel
-								control={<Checkbox className={classes.checkbox} name="isClub" color="primary" disableRipple />}
+								control={<Field component={Checkbox} type="checkbox" name="isClub" color="primary" />}
 								label={
 									<>
 										<Typography className={classes.legalInformation} component="span">
@@ -301,35 +300,6 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 							/>
 						</div>
 					</div>
-
-					{/* <div className={classes.privacyPolicyWrapper}>
-						<Checkbox className={classes.checkbox} color="primary" disableRipple />
-						<Typography className={classes.legalInformation} component="span">
-							{t('contact.legalInformation.firstSection')}{' '}
-						</Typography>
-						<Typography
-							className={classes.privacyPolicyLink}
-							component="span"
-							color="primary"
-							onClick={openPrivacyPolicy}
-						>
-							{t('contact.legalInformation.privacyPolicyLink')}{' '}
-						</Typography>
-
-						
-						<Typography className={classes.legalInformation} component="span">
-							{t('contact.legalInformation.secondSection')}{' '}
-						</Typography>
-						<Typography
-							className={classes.privacyPolicyLink}
-							component="span"
-							color="primary"
-							onClick={openTermsAndConditions}
-						>
-							{t('contact.legalInformation.termsAndConditionsLink')}
-						</Typography>
-					</div> */}
-
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
 							{t('contact.submit.text')}

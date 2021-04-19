@@ -100,6 +100,8 @@ const signUp = {
 	'contact.validation.repeatPassword.notEqual': 'Las contraseñas no coinciden. Intenta de nuevo',
 	'contact.validation.email.required': 'El correo electrónico es obligatorio',
 	'contact.validation.email.validEmail': 'Ingrese un correo de contacto valido',
+	'contact.validation.isterm.required': 'Se requiere aceptar los términos y condiciones',
+
 	'contact.legalInformation.firstSection': 'Al ingresar estás confirmando que estás de acuerdo con nuestra',
 
 	'contact.legalInformation.firstSection1': 'He leído y acepto los',
