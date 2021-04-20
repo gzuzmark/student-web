@@ -50,7 +50,7 @@ export const newUservalidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	isTerm: Yup.array().required(messages.isterm.required).nullable(),
+	isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], messages.isterm.required),
 });
 
 export const defaultNewUserValidationSchema = object().shape({
@@ -91,5 +91,5 @@ export const guestValidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	isTerm: Yup.array().required(messages.isterm.required).nullable(),
+	isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], 'gest'),
 });

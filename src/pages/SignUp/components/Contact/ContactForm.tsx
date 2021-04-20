@@ -126,7 +126,6 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 					identificationType: values.identificationType,
 					email: values.email?.trim(),
 				};
-				console.log(formatedValues);
 				await submitSignUp(formatedValues);
 				setSubmitting(false);
 			} catch (e) {

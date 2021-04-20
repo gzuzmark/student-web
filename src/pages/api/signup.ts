@@ -141,6 +141,8 @@ export const createAccount = async ({
 	identification,
 	address = '',
 	ubigeo = '',
+	isTerm,
+	isClub,
 }: ContactValuesRequest): Promise<string> => {
 	try {
 		const resp = await aliviaAxios.post<TokenResponse>('/users', {
@@ -150,6 +152,8 @@ export const createAccount = async ({
 			document_number: identification,
 			address,
 			ubigeo,
+			isTerm,
+			isClub,
 		});
 		const data = resp.data;
 
