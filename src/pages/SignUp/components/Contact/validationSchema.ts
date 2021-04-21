@@ -91,5 +91,5 @@ export const guestValidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], 'gest'),
+	// isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], 'gest'),
 });

@@ -2,8 +2,10 @@ import React, { ReactElement, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { Checkbox } from 'formik-material-ui';
 
 import { PasswordField } from 'pages/common';
 import { stylesWithTheme } from 'utils/createStyles';
@@ -54,6 +56,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		fontSize: '13px',
 		cursor: 'pointer',
 		textDecoration: 'underline',
+	},
+	termsConditions: {
+		marginLeft: '30px',
+		fontSize: '0.85rem',
+		fontWeight: '500',
+		color: '#FE6B6F',
 	},
 }));
 
@@ -113,29 +121,61 @@ const PatientPasswordForm = ({
 							/>
 						</div>
 					</div>
-					<div className={classes.privacyPolicyWrapper}>
-						<Typography className={classes.legalInformation} component="span">
-							{t('patientPassword.legalInformation.firstSection')}{' '}
-						</Typography>
-						<Typography
-							className={classes.privacyPolicyLink}
-							component="span"
-							color="primary"
-							onClick={openPrivacyPolicy}
-						>
-							{t('patientPassword.legalInformation.privacyPolicyLink')}{' '}
-						</Typography>
-						<Typography className={classes.legalInformation} component="span">
-							{t('patientPassword.legalInformation.secondSection')}{' '}
-						</Typography>
-						<Typography
-							className={classes.privacyPolicyLink}
-							component="span"
-							color="primary"
-							onClick={openTermsAndConditions}
-						>
-							{t('patientPassword.legalInformation.termsAndConditionsLink')}
-						</Typography>
+					<div className={classes.fieldWrapper}>
+						<FormControlLabel
+							control={
+								<>
+									<Field component={Checkbox} type="checkbox" name="isTerm" color="primary" />
+								</>
+							}
+							label={
+								<>
+									<Typography className={classes.legalInformation} component="span">
+										{t('patientPassword.legalInformation.firstSection1')}{' '}
+									</Typography>
+									<Typography
+										className={classes.privacyPolicyLink}
+										component="span"
+										color="primary"
+										onClick={openPrivacyPolicy}
+									>
+										{t('patientPassword.legalInformation.termsAndConditionsLink1')}{' '}
+									</Typography>
+									<Typography className={classes.legalInformation} component="span">
+										{t('patientPassword.legalInformation.secondSection1')}{' '}
+									</Typography>
+									<Typography
+										className={classes.privacyPolicyLink}
+										component="span"
+										color="primary"
+										onClick={openPrivacyPolicy}
+									>
+										{t('patientPassword.legalInformation.privacyPolicyLink1')}{' '}
+									</Typography>
+								</>
+							}
+						/>
+						<ErrorMessage className={classes.termsConditions} name="isTerm" component="p"></ErrorMessage>
+					</div>
+					<div className={classes.fieldWrapper}>
+						<FormControlLabel
+							control={<Field component={Checkbox} type="checkbox" name="isClub" color="primary" />}
+							label={
+								<>
+									<Typography className={classes.legalInformation} component="span">
+										{t('patientPassword.legalInformation.firstSection2')}{' '}
+									</Typography>
+									<Typography
+										className={classes.privacyPolicyLink}
+										component="span"
+										color="primary"
+										onClick={openPrivacyPolicy}
+									>
+										{t('patientPassword.legalInformation.analysisData')}{' '}
+									</Typography>
+								</>
+							}
+						/>
 					</div>
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>

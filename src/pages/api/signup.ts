@@ -22,6 +22,8 @@ interface NewUser {
 	email?: string;
 	address?: string;
 	ubigeo?: string;
+	isTerm?: boolean | null;
+	isClub?: boolean | null;
 }
 
 interface NewPatient extends NewUser {
@@ -64,6 +66,8 @@ export const createGuestPatient = async (user: NewUser): Promise<string> => {
 		contact_phone: user.phoneNumber,
 		address: user.address || 'Sin dirección',
 		ubigeo: user.ubigeo,
+		privacy_policies: user.isTerm ? 1 : 0,
+		terms_conditions: user.isClub ? 1 : 0,
 	});
 	const data = resp.data.data;
 
@@ -91,6 +95,8 @@ export const createPatient = async (user: NewUser, authToken: string): Promise<s
 				address: user.address || '',
 				ubigeo: user.ubigeo || '',
 				is_main: true,
+				privacy_policies: user.isTerm ? 1 : 0,
+				terms_conditions: user.isClub ? 1 : 0, //DATA ANALYTICS
 			},
 			{
 				headers,
@@ -141,8 +147,6 @@ export const createAccount = async ({
 	identification,
 	address = '',
 	ubigeo = '',
-	isTerm,
-	isClub,
 }: ContactValuesRequest): Promise<string> => {
 	try {
 		const resp = await aliviaAxios.post<TokenResponse>('/users', {
@@ -152,8 +156,6 @@ export const createAccount = async ({
 			document_number: identification,
 			address,
 			ubigeo,
-			isTerm,
-			isClub,
 		});
 		const data = resp.data;
 

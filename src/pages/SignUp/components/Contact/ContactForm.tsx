@@ -108,6 +108,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		cursor: 'pointer',
 		textDecoration: 'underline',
 	},
+	termsConditions: {
+		marginLeft: '30px',
+		fontSize: '0.85rem',
+		fontWeight: '500',
+		color: '#FE6B6F',
+	},
 }));
 
 const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, isGuest }: ContactFormProps) => {
@@ -276,7 +282,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 									</>
 								}
 							/>
-							<ErrorMessage name="isTerm" component="span"></ErrorMessage>
+							<ErrorMessage className={classes.termsConditions} name="isTerm" component="p"></ErrorMessage>
 						</div>
 						<div className={classes.fieldWrapper}>
 							<FormControlLabel

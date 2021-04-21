@@ -146,7 +146,10 @@ const NewSignUp = (): ReactElement => {
 				const patientInfo = {
 					...aboutPatient,
 					...contactPatient,
+					isTerm: patientPassword.isTerm,
+					isClub: patientPassword.isClub,
 				};
+
 				const localUserToken = await createAccount(accountInfo);
 				const reservationAccountID = await createPatient(patientInfo, localUserToken);
 

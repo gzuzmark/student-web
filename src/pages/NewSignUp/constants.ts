@@ -19,4 +19,6 @@ export const initialContactPatientValues: ContactPatientValues = {
 export const initialPatientPassword: PatientPasswordValues = {
 	password: '',
 	confirmPassword: '',
+	isTerm: false,
+	isClub: false,
 };
