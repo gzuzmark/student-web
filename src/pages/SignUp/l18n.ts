@@ -100,7 +100,18 @@ const signUp = {
 	'contact.validation.repeatPassword.notEqual': 'Las contraseñas no coinciden. Intenta de nuevo',
 	'contact.validation.email.required': 'El correo electrónico es obligatorio',
 	'contact.validation.email.validEmail': 'Ingrese un correo de contacto valido',
+	'contact.validation.isterm.required': 'Se requiere aceptar los términos y condiciones',
+
 	'contact.legalInformation.firstSection': 'Al ingresar estás confirmando que estás de acuerdo con nuestra',
+
+	'contact.legalInformation.firstSection1': 'He leído y acepto los',
+	'contact.legalInformation.termsAndConditionsLink1': 'Términos y Condiciones',
+	'contact.legalInformation.secondSection1': 'y las',
+	'contact.legalInformation.privacyPolicyLink1': 'Política de Privacidad',
+
+	'contact.legalInformation.firstSection2': 'He leído y acepto el',
+	'contact.legalInformation.analysisData': 'tratamiento de mis datos personales para fines adicionales',
+
 	'contact.legalInformation.privacyPolicyLink': 'política de privacidad',
 	'contact.legalInformation.secondSection': 'y nuestros',
 	'contact.legalInformation.termsAndConditionsLink': 'términos y condiciones.',

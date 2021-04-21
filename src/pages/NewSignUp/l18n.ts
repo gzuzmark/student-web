@@ -50,6 +50,7 @@ export default {
 	'contactPatient.validation.phoneNumber.required': 'El número de celular de contacto es obligatorio',
 	'contactPatient.validation.email.required': 'El correo electrónico es obligatorio',
 	'contactPatient.validation.email.validEmail': 'Ingrese un correo de contacto valido',
+	'contactPatient.validation.isterm.required': 'Se requiere aceptar los términos y condiciones',
 	// Patient Password
 	'patientPassword.title.firstSection': 'Crea tu',
 	'patientPassword.title.secondSection': 'contraseña',
@@ -63,6 +64,14 @@ export default {
 	'patientPassword.legalInformation.secondSection': 'y nuestros',
 	'patientPassword.legalInformation.termsAndConditionsLink': 'términos y condiciones',
 	'patientPassword.submit.text': 'Finalizar y crear mi cuenta',
+
+	'patientPassword.legalInformation.firstSection1': 'He leído y acepto los',
+	'patientPassword.legalInformation.termsAndConditionsLink1': 'Términos y Condiciones',
+	'patientPassword.legalInformation.secondSection1': 'y las',
+	'patientPassword.legalInformation.privacyPolicyLink1': 'Política de Privacidad',
+	'patientPassword.legalInformation.firstSection2': 'He leído y acepto el',
+	'patientPassword.legalInformation.analysisData': 'tratamiento de mis datos personales para fines adicionales',
+
 	// Success Message
 	'successSignUp.title.firstLine': ' tu cuenta ha sido creada',
 	'successSignUp.title.secondLine': 'de manera exitosa',

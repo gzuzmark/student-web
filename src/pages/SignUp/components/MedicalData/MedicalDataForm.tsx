@@ -285,7 +285,7 @@ const MedicalDataForm = ({
 							{t('medicalData.submit.text')}
 						</Button>
 					</div>
-					<div className={classes.privacyPolicyWrapper}>
+					{/* <div className={classes.privacyPolicyWrapper}>
 						<Typography component="span">{t('medicalData.privacyPolicy.firstSection')} </Typography>
 						<Typography
 							className={classes.privacyPolicyLink}
@@ -295,7 +295,7 @@ const MedicalDataForm = ({
 						>
 							{t('medicalData.privacyPolicy.secondSection')}
 						</Typography>
-					</div>
+					</div> */}
 				</Form>
 			)}
 		</Formik>
