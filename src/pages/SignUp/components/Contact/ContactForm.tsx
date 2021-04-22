@@ -294,7 +294,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 											color="primary"
 											onClick={openPrivacyPolicy}
 										>
-											{t('contact.legalInformation.dataRegisterClub')}{' '}
+											{t('contact.legalInformation.analysisData')}{' '}
 										</Typography>
 									</>
 								}

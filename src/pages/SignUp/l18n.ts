@@ -108,7 +108,7 @@ const signUp = {
 	'contact.legalInformation.privacyPolicyLink1': 'Política de Privacidad',
 
 	'contact.legalInformation.firstSection2': 'He leído y acepto el',
-	'contact.legalInformation.dataRegisterClub': 'uso de mis datos y registro en Inkaclub para acumulación de puntos',
+	'contact.legalInformation.analysisData': 'tratamiento de mis datos personales para fines adicionales',
 
 	'contact.legalInformation.privacyPolicyLink': 'política de privacidad',
 	'contact.legalInformation.secondSection': 'y nuestros',
