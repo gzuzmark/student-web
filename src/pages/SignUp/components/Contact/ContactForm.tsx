@@ -50,6 +50,7 @@ interface ContactFormProps {
 	submitSignUp: (values: ContactValues) => Promise<void>;
 	openPrivacyPolicy: () => void;
 	openTermsAndConditions: () => void;
+	openDataAnalitycs: () => void;
 	isGuest: boolean;
 }
 
@@ -116,7 +117,13 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, isGuest }: ContactFormProps) => {
+const ContactForm = ({
+	submitSignUp,
+	openPrivacyPolicy,
+	openTermsAndConditions,
+	openDataAnalitycs,
+	isGuest,
+}: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
 	const { isUbigeoEnabled } = useContext(AppContext);
 	const [ubigeos, setUbigeos] = useState<string[]>([]);
@@ -146,6 +153,11 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 		[submitSignUp, t],
 	);
 
+	const [isChecked, setChecked] = useState(false);
+	const handleChange = (event: any) => {
+		setChecked(event.target.checked);
+	};
+
 	const handleTypeUbigeo = async (e: any) => {
 		const value = e.target.value;
 		if (value) {
@@ -159,6 +171,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 
 	return (
 		<Formik
+			enableReinitialize
 			initialValues={initialValues}
 			onSubmit={onSubmit}
 			validationSchema={isGuest ? guestValidationSchema : newUservalidationSchema}
@@ -252,7 +265,14 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 							<FormControlLabel
 								control={
 									<>
-										<Field component={Checkbox} type="checkbox" name="isTerm" color="primary" />
+										<Field
+											component={Checkbox}
+											type="checkbox"
+											name="isTerm"
+											color="primary"
+											checked={isChecked}
+											onClick={handleChange}
+										/>
 									</>
 								}
 								label={
@@ -264,7 +284,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 											className={classes.privacyPolicyLink}
 											component="span"
 											color="primary"
-											onClick={openPrivacyPolicy}
+											onClick={openTermsAndConditions}
 										>
 											{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
 										</Typography>
@@ -296,7 +316,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 											className={classes.privacyPolicyLink}
 											component="span"
 											color="primary"
-											onClick={openPrivacyPolicy}
+											onClick={openDataAnalitycs}
 										>
 											{t('contact.legalInformation.analysisData')}{' '}
 										</Typography>
@@ -306,7 +326,7 @@ const ContactForm = ({ submitSignUp, openPrivacyPolicy, openTermsAndConditions, 
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>
-						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
+						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
 							{t('contact.submit.text')}
 						</Button>
 					</div>
