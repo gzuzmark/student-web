@@ -70,6 +70,7 @@ export interface PatientPasswordFormProps {
 	onChangeStep: (payload: ReducerAction, redirectPath: string) => void;
 	openPrivacyPolicy: () => void;
 	openTermsAndConditions: () => void;
+	openDataAnalitycs: () => void;
 }
 
 const PatientPasswordForm = ({
@@ -77,6 +78,7 @@ const PatientPasswordForm = ({
 	onChangeStep,
 	openPrivacyPolicy,
 	openTermsAndConditions,
+	openDataAnalitycs,
 }: PatientPasswordFormProps): ReactElement => {
 	const { t } = useTranslation('newSignUp');
 	const classes = useStyles();
@@ -90,6 +92,11 @@ const PatientPasswordForm = ({
 		},
 		[onChangeStep],
 	);
+
+	const [isChecked, setChecked] = React.useState(false);
+	const handleChange = (event: any) => {
+		setChecked(event.target.checked);
+	};
 
 	return (
 		<Formik
@@ -125,7 +132,14 @@ const PatientPasswordForm = ({
 						<FormControlLabel
 							control={
 								<>
-									<Field component={Checkbox} type="checkbox" name="isTerm" color="primary" />
+									<Field
+										component={Checkbox}
+										type="checkbox"
+										name="isTerm"
+										color="primary"
+										checked={isChecked}
+										onClick={handleChange}
+									/>
 								</>
 							}
 							label={
@@ -137,7 +151,7 @@ const PatientPasswordForm = ({
 										className={classes.privacyPolicyLink}
 										component="span"
 										color="primary"
-										onClick={openPrivacyPolicy}
+										onClick={openTermsAndConditions}
 									>
 										{t('patientPassword.legalInformation.termsAndConditionsLink1')}{' '}
 									</Typography>
@@ -169,7 +183,7 @@ const PatientPasswordForm = ({
 										className={classes.privacyPolicyLink}
 										component="span"
 										color="primary"
-										onClick={openPrivacyPolicy}
+										onClick={openDataAnalitycs}
 									>
 										{t('patientPassword.legalInformation.analysisData')}{' '}
 									</Typography>
