@@ -50,13 +50,19 @@ const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
 	const classes = useStyles();
 	const gotToPolicy = () => {
 		redirectToURL(
-			'https://docs.google.com/document/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
+			'https://docs.google.com/document/u/1/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
 			true,
 		);
 	};
 	const gotToTermsAndConditions = () => {
 		redirectToURL(
 			'https://docs.google.com/document/u/2/d/e/2PACX-1vS3SBl2FrGqj_qWltyMkUOF1B3dNSHtvr7sbqGy6OJvuKQKGcIklLBvO4GIOev4YQ/pub',
+			true,
+		);
+	};
+	const gotToDataAnalitycs = () => {
+		redirectToURL(
+			'https://docs.google.com/document/d/e/2PACX-1vSJapxUoM7Uqusf9D8VXyiWg6N5FSF1f5yg0lwt_6l-9FmsP_gdiiEnpftNqhrvmQ/pub',
 			true,
 		);
 	};
@@ -81,6 +87,7 @@ const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
 				submitSignUp={submitSignUp}
 				openPrivacyPolicy={gotToPolicy}
 				openTermsAndConditions={gotToTermsAndConditions}
+				openDataAnalitycs={gotToDataAnalitycs}
 				isGuest={isGuest}
 			/>
 		</div>
