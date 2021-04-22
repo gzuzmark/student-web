@@ -45,6 +45,9 @@ const messages = {
 		required: i18next.t('global:createPassword.validation.repeatPassword.required'),
 		notEqual: i18next.t('global:createPassword.validation.repeatPassword.notEqual'),
 	},
+	isterm: {
+		required: i18next.t('newSignUp:contactPatient.validation.isterm.required'),
+	},
 };
 
 export const aboutPatientValidationSchema = object().shape({
@@ -84,4 +87,5 @@ export const patientPasswordValidationSchema = object().shape({
 		// eslint-disable-next-line
 		// @ts-ignore
 		.toEqual('password', messages.repeatPassword.notEqual),
+	isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], messages.isterm.required),
 });

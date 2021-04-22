@@ -105,6 +105,7 @@ const NewUser = ({
 						...(medicalData as MedicalDataValues),
 						...contactInfo,
 					};
+
 					let localUserToken = null;
 					let user = null;
 					let patientUser = null;

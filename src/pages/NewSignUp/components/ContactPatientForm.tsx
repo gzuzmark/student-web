@@ -327,7 +327,7 @@ const ContactPatientForm = ({
 							/>
 						</>
 					</div>
-					<div className={classes.privacyPolicyWrapper}>
+					{/* <div className={classes.privacyPolicyWrapper}>
 						<Typography className={classes.legalInformation} component="span">
 							{t('contactPatient.legalInformation.firstSection')}{' '}
 						</Typography>
@@ -350,7 +350,7 @@ const ContactPatientForm = ({
 						>
 							{t('contactPatient.legalInformation.termsAndConditionsLink')}
 						</Typography>
-					</div>
+					</div> */}
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
 							{t('contactPatient.submit.text')}
