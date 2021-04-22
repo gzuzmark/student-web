@@ -17,6 +17,8 @@ export interface ContactPatientValues {
 export interface PatientPasswordValues {
 	password: string;
 	confirmPassword: string;
+	isTerm: boolean;
+	isClub: boolean;
 }
 
 export type ReducerAction =
