@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
+// import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
@@ -181,7 +181,7 @@ const AboutMeForm = ({
 							</>
 						) : null}
 					</div>
-					<div className={classes.privacyPolicyWrapper}>
+					{/* <div className={classes.privacyPolicyWrapper}>
 						<Typography component="span">{t('aboutme.privacyPolicy.firstSection')} </Typography>
 						<Typography
 							className={classes.privacyPolicyLink}
@@ -191,7 +191,7 @@ const AboutMeForm = ({
 						>
 							{t('aboutme.privacyPolicy.secondSection')}
 						</Typography>
-					</div>
+					</div> */}
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
 							{t('aboutme.submit.text')}
