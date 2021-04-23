@@ -18,3 +18,4 @@ export * from './BuyPrescription';
 export * from './AskAddress';
 export * from './NewSignUp';
 export * from './DashboardDefault';
+export * from './ClinicalExamination';
