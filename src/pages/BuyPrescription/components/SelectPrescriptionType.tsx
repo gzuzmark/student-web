@@ -9,8 +9,13 @@ import { Theme } from '@material-ui/core/styles';
 
 import { stylesWithTheme } from 'utils';
 import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
-import { ReactComponent as CartIcon } from 'icons/cart.svg';
-import { ReactComponent as PrescriptionIcon } from 'icons/prescription.svg';
+// import { ReactComponent as CartIcon } from 'icons/cart.svg';
+// import { ReactComponent as PrescriptionIcon } from 'icons/prescription.svg';
+import callMedic from 'icons/call_medic.svg';
+import recieptMedic from 'icons/reciept_medic.svg';
+import cartMedic from 'icons/cart_medic.svg';
+import cartMedicB from 'icons/cart_back_medic.svg';
+
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -26,14 +31,16 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			backgroundColor: 'white',
 			margin: '0 auto',
 			height: '632px',
-			width: '889px',
-			//width : '1040px'
+			// width: '889px',
+			width: '1040px',
 		},
 	},
 	content: {
+		// padding: '68px 26px 0',
 		padding: '68px 26px 0',
 		[breakpoints.up('lg')]: {
-			padding: '80px 206px 0',
+			// padding: '80px 206px 0',
+			padding: '80px 80px 0',
 		},
 	},
 	brandLogoWrapper: {
@@ -46,7 +53,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	brandLogo: {
 		[breakpoints.up('lg')]: {
-			height: '19px',
+			// height: '19px',
 		},
 	},
 	title: {
@@ -57,6 +64,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			fontSize: '40px',
 			textAlign: 'center',
 			paddingBottom: '20px',
+			paddingTop: '40px',
 		},
 	},
 	actionsWrapper: {
@@ -105,11 +113,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		margin: '0 16px 22px 0',
-		height: '125px',
-		// height : '140px',
+		// height: '125px',
+		height: '170px',
 		textAlign: 'center',
-		width: '150px',
-		// width : '195px',
+		// width: '150px',
+		width: '250px',
 		userSelect: 'none',
 		border: '1px solid #1ecd96',
 		'&:hover': {
@@ -119,6 +127,8 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapperFlex: {
 		display: 'flex',
 		justifyContent: 'center',
+		marginTop: '40px',
+		marginBottom: '40px',
 	},
 	textCard: {
 		fontSize: '10px',
@@ -128,7 +138,8 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		display: 'flex',
 		background: '#BBF0DF',
 		borderRadius: '50px',
-		width: 'auto',
+		width: '30rem',
+		maxWidth: '30rem',
 	},
 	gridText: {
 		whiteSpace: 'nowrap',
@@ -138,7 +149,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		marginLeft: '15px',
 	},
 	gridButtom: {
-		margin: 'auto',
+		margin: '0 auto',
 		textAlign: 'center',
 		fontWeight: '600',
 	},
@@ -149,6 +160,20 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	textCompartirTitle: {
 		marginBottom: 15,
+		textAlign: 'center',
+	},
+	img1: {
+		position: 'absolute',
+	},
+	containerIconsCard: {
+		textAlign: 'justify',
+		margin: '0 15px',
+	},
+	inkafarmaIcon: {
+		position: 'absolute',
+		width: '88px',
+		marginTop: '-7px',
+		marginLeft: '5px',
 	},
 }));
 
@@ -184,7 +209,7 @@ const SelectPrescriptionType = ({
 						<div className={classes.cardButton}>
 							<Card onClick={openEPrescription} className={classes.textCard}>
 								<div className={classes.iconWrapper}>
-									<img className={classes.img} src="icons/cart.svg" alt="working" />
+									<img className={classes.img} src={recieptMedic} alt="working" />
 								</div>
 								<Typography component="span" color="primary">
 									{t('buyPrescription.selectPrescriptionType.ePrescription2')}
@@ -195,24 +220,29 @@ const SelectPrescriptionType = ({
 						<div className={classes.cardButton}>
 							<Card onClick={showQuotedPrescription} className={classes.textCard}>
 								<div className={classes.iconWrapper}>
-									<img className={classes.img} src="icons/cart.svg" alt="working" />
+									<img className={classes.img1} src={cartMedic} alt="working" />
+									<img className={classes.img} src={cartMedicB} alt="working" />
 								</div>
-								<Typography component="span" color="primary">
-									{t('buyPrescription.selectPrescriptionType.quotedPrescription2')}
-								</Typography>
-								<InkafarmaIcon className={classes.inkafarmaIcon} />
+								<div className={classes.containerIconsCard}>
+									<Typography component="span" color="primary">
+										{t('buyPrescription.selectPrescriptionType.quotedPrescription2')}
+									</Typography>
+									<InkafarmaIcon className={classes.inkafarmaIcon} />
+								</div>
 							</Card>
 						</div>
 
 						<div className={classes.cardButton}>
 							<Card className={classes.textCard}>
 								<div className={classes.iconWrapper}>
-									<img className={classes.img} src="icons/cart.svg" alt="working" />
+									<img className={classes.img} src={callMedic} alt="working" />
 								</div>
-								<Typography component="span" color="primary">
-									{t('buyPrescription.selectPrescriptionType.callfarma')}
-								</Typography>
-								<InkafarmaIcon className={classes.inkafarmaIcon} />
+								<div className={classes.containerIconsCard}>
+									<Typography component="span" color="primary">
+										{t('buyPrescription.selectPrescriptionType.callfarma')}
+									</Typography>
+									<InkafarmaIcon className={classes.inkafarmaIcon} />
+								</div>
 							</Card>
 						</div>
 					</div>
