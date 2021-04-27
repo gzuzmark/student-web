@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import Button from '@material-ui/core/Button';
 import { Card } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 
@@ -9,8 +8,6 @@ import { Theme } from '@material-ui/core/styles';
 
 import { stylesWithTheme } from 'utils';
 import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
-// import { ReactComponent as CartIcon } from 'icons/cart.svg';
-// import { ReactComponent as PrescriptionIcon } from 'icons/prescription.svg';
 import callMedic from 'icons/call_medic.svg';
 import recieptMedic from 'icons/reciept_medic.svg';
 import cartMedic from 'icons/cart_medic.svg';
