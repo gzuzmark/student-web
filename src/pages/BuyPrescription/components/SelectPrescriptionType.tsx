@@ -15,6 +15,20 @@ import cartMedicB from 'icons/cart_back_medic.svg';
 
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 
+import { useSnackbar } from 'notistack';
+import Button from '@material-ui/core/Button';
+
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import { redirectToURL } from 'utils';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
 		[breakpoints.up('lg')]: {
@@ -27,7 +41,8 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			backgroundColor: 'white',
 			margin: '0 auto',
-			height: '632px',
+			// height: '632px',
+			height: '700px',
 			// width: '889px',
 			width: '1040px',
 		},
@@ -53,6 +68,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			// height: '19px',
 		},
 	},
+	brandLogo1: {
+		height: '19px'
+	},
+
 	title: {
 		fontWeight: 'bold',
 		fontSize: '28px',
@@ -64,6 +83,19 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			paddingTop: '40px',
 		},
 	},
+
+	title1: {
+		fontWeight: 'bold',
+		fontSize: '15px',
+		paddingBottom: '18px',
+		[breakpoints.up('lg')]: {
+			fontSize: '15px',
+			textAlign: 'center',
+			paddingBottom: '20px',
+			paddingTop: '40px',
+		},
+	},
+
 	actionsWrapper: {
 		[breakpoints.up('lg')]: {
 			width: '401px',
@@ -95,30 +127,9 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		display: 'flex',
 		justifyContent: 'center',
 		margin: '0',
+		marginBottom: '20px',
 		'& > span': {
 			fontSize: '13px',
-		},
-	},
-
-	cardButton: {
-		alignItems: 'center',
-		backgroundColor: 'white',
-		borderRadius: '5px',
-		boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
-		cursor: 'pointer',
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		margin: '0 16px 22px 0',
-		// height: '125px',
-		height: '170px',
-		textAlign: 'center',
-		// width: '150px',
-		width: '250px',
-		userSelect: 'none',
-		border: '1px solid #1ecd96',
-		'&:hover': {
-			boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
 		},
 	},
 	wrapperFlex: {
@@ -127,10 +138,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		marginTop: '40px',
 		marginBottom: '40px',
 	},
-	textCard: {
-		fontSize: '10px',
-	},
-
 	containerButtonCompartir: {
 		display: 'flex',
 		background: '#BBF0DF',
@@ -159,12 +166,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		marginBottom: 15,
 		textAlign: 'center',
 	},
+	img: {
+		height: '64px'
+	},
 	img1: {
 		position: 'absolute',
-	},
-	containerIconsCard: {
-		textAlign: 'justify',
-		margin: '0 15px',
+		height: '64px'
 	},
 	inkafarmaIcon: {
 		position: 'absolute',
@@ -172,12 +179,37 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		marginTop: '-7px',
 		marginLeft: '5px',
 	},
+	success: {
+		backgroundColor: '#1ecd96 !important',
+	},
+
+	containerCard: {
+		border: '1px solid #1ecd96',
+		borderRadius: '5px',
+		textAlign: 'center',
+		padding: '2.2rem 1rem',
+		margin: '0 16px 22px 0',
+		width: '13rem',
+		cursor: 'pointer',
+		'&:hover': {
+			boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
+		}
+	},
+	containerIMG: {
+		paddingBottom: '15px'
+	}
 }));
 
 interface SelectPrescriptionType {
 	showQuotedPrescription: () => void;
 	openEPrescription: () => void;
 }
+
+interface UserLog {
+	logType: string;
+	logDate: string;
+	logHours: string;
+};
 
 const SelectPrescriptionType = ({
 	showQuotedPrescription,
@@ -186,9 +218,54 @@ const SelectPrescriptionType = ({
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
 
+	// BUTTON COPY
 	const urlShare = window.location + '';
 	const copyShare = () => {
 		navigator.clipboard.writeText(urlShare);
+		notiShare();
+	};
+
+	// NOTIFI COPY
+	const { enqueueSnackbar } = useSnackbar();
+	const notiShare = () => {
+		enqueueSnackbar('Link copiado', {
+			anchorOrigin: {
+				vertical: 'top',
+				horizontal: 'right',
+			},
+			variant: 'success'
+		});
+	};
+	// DATA LOG
+	let logData: UserLog;
+	logData = {
+		logType: 'Paciente',
+		logDate: new Date().toLocaleDateString(),
+		logHours: new Date().getHours() + ':' + new Date().getMinutes()
+	}
+	console.log(logData)
+
+	// POPPUP CALL MEDIC
+	const [open, setOpen] = React.useState(false);
+	const handleClickOpen = () => {
+	  setOpen(true);
+	};
+  
+	const handleClose = () => {
+	  setOpen(false);
+	};
+
+	const gotToPolicy = () => {
+		redirectToURL(
+			'https://docs.google.com/document/u/1/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
+			true,
+		);
+	};
+	const gotToTermsAndConditions = () => {
+		redirectToURL(
+			'https://docs.google.com/document/u/2/d/e/2PACX-1vS3SBl2FrGqj_qWltyMkUOF1B3dNSHtvr7sbqGy6OJvuKQKGcIklLBvO4GIOev4YQ/pub',
+			true,
+		);
 	};
 
 	return (
@@ -203,45 +280,43 @@ const SelectPrescriptionType = ({
 					</Typography>
 
 					<div className={classes.wrapperFlex}>
-						<div className={classes.cardButton}>
-							<Card onClick={openEPrescription} className={classes.textCard}>
-								<div className={classes.iconWrapper}>
-									<img className={classes.img} src={recieptMedic} alt="working" />
-								</div>
-								<Typography component="span" color="primary">
+
+						<div className={classes.containerCard} onClick={openEPrescription} >
+							<div className={classes.containerIMG}>
+								<img className={classes.img} src={recieptMedic} alt="working" />
+							</div>
+							<div>
+								<Typography component="span" color="primary" >
 									{t('buyPrescription.selectPrescriptionType.ePrescription2')}
 								</Typography>
-							</Card>
+							</div>
 						</div>
 
-						<div className={classes.cardButton}>
-							<Card onClick={showQuotedPrescription} className={classes.textCard}>
-								<div className={classes.iconWrapper}>
-									<img className={classes.img1} src={cartMedic} alt="working" />
-									<img className={classes.img} src={cartMedicB} alt="working" />
-								</div>
-								<div className={classes.containerIconsCard}>
-									<Typography component="span" color="primary">
-										{t('buyPrescription.selectPrescriptionType.quotedPrescription2')}
-									</Typography>
-									<InkafarmaIcon className={classes.inkafarmaIcon} />
-								</div>
-							</Card>
+						<div className={classes.containerCard} onClick={showQuotedPrescription}>
+							<div className={classes.containerIMG}>
+								<img className={classes.img1} src={cartMedic} alt="working" />
+								<img className={classes.img} src={cartMedicB} alt="working" />
+							</div>
+							<div style={{ textAlign: 'justify' }}>
+								<Typography component="span" color="primary">
+									{t('buyPrescription.selectPrescriptionType.quotedPrescription2')}
+								</Typography>
+								<InkafarmaIcon className={classes.inkafarmaIcon} />
+							</div>
 						</div>
 
-						<div className={classes.cardButton}>
-							<Card className={classes.textCard}>
-								<div className={classes.iconWrapper}>
-									<img className={classes.img} src={callMedic} alt="working" />
-								</div>
-								<div className={classes.containerIconsCard}>
-									<Typography component="span" color="primary">
-										{t('buyPrescription.selectPrescriptionType.callfarma')}
-									</Typography>
-									<InkafarmaIcon className={classes.inkafarmaIcon} />
-								</div>
-							</Card>
+						<div className={classes.containerCard} onClick={handleClickOpen}>
+							<div className={classes.containerIMG}>
+								<img className={classes.img} src={callMedic} alt="working" />
+							</div>
+							<div style={{ textAlign: 'justify' }}>
+								<Typography component="span" color="primary">
+									{t('buyPrescription.selectPrescriptionType.callfarma')}
+								</Typography>
+								<InkafarmaIcon className={classes.inkafarmaIcon} />
+							</div>
 						</div>
+
 					</div>
 
 					<div className={classes.textCompartirTitle}>
@@ -249,6 +324,7 @@ const SelectPrescriptionType = ({
 							{t('buyPrescription.selectPrescriptionType.compartir')}
 						</Typography>
 					</div>
+
 					<div className={classes.benefitText}>
 						<Card className={classes.containerButtonCompartir}>
 							<Grid item xs={8} className={classes.gridText}>
@@ -263,6 +339,63 @@ const SelectPrescriptionType = ({
 					</div>
 				</div>
 			</div>
+
+			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+				<DialogTitle style={{textAlign: 'center'}}>
+					<BrandLogo className={classes.brandLogo1} />
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						<Typography className={classes.title1} component="span">
+							{t('buyPrescription.selectPrescriptionType.contactcall')}
+						</Typography>
+						<div style={{paddingTop: '15px'}}>
+							<FormControlLabel
+								control={
+									<>
+										<Checkbox
+											color="primary"
+											inputProps={{ 'aria-label': 'primary checkbox' }}
+										/>
+									</>
+								}
+								label={
+									<>
+										<Typography className={classes.legalInformation} component="span">
+											{t('buyPrescription.legalInformation.firstSection1')}{' '}
+										</Typography>
+										<Typography
+											className={classes.privacyPolicyLink}
+											component="span"
+											color="primary"
+											onClick={gotToTermsAndConditions}
+										>
+											{t('buyPrescription.legalInformation.termsAndConditionsLink1')}{' '}
+										</Typography>
+										<Typography className={classes.legalInformation} component="span">
+											{t('buyPrescription.legalInformation.secondSection1')}{' '}
+										</Typography>
+										<Typography
+											className={classes.privacyPolicyLink}
+											component="span"
+											color="primary"
+											onClick={gotToPolicy}
+										>
+											{t('buyPrescription.legalInformation.privacyPolicyLink1')}{' '}
+										</Typography>
+									</>
+								}
+							/>
+						</div>
+         			</DialogContentText>
+				</DialogContent>
+
+				<DialogActions>
+					<Button style={{textDecoration: 'auto', fontSize: 15, }} onClick={handleClose} color="primary">
+						Aceptar
+          			</Button>
+				</DialogActions>
+			</Dialog>
 		</div>
 	);
 };

@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'l18n/index';
+import { SnackbarProvider } from 'notistack';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<App />
+		<SnackbarProvider  maxSnack={1}>
+			<App />
+		</SnackbarProvider>
 	</React.StrictMode>,
 	document.getElementById('root'),
 );
