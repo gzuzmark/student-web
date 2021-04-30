@@ -28,6 +28,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import { sendLogs } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -69,7 +70,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	brandLogo1: {
-		height: '19px'
+		height: '19px',
 	},
 
 	title: {
@@ -167,11 +168,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		textAlign: 'center',
 	},
 	img: {
-		height: '64px'
+		height: '64px',
 	},
 	img1: {
 		position: 'absolute',
-		height: '64px'
+		height: '64px',
 	},
 	inkafarmaIcon: {
 		position: 'absolute',
@@ -191,13 +192,16 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		margin: '0 16px 22px 0',
 		width: '13rem',
 		cursor: 'pointer',
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'column',
 		'&:hover': {
 			boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
-		}
+		},
 	},
 	containerIMG: {
-		paddingBottom: '15px'
-	}
+		paddingBottom: '15px',
+	},
 }));
 
 interface SelectPrescriptionType {
@@ -206,10 +210,10 @@ interface SelectPrescriptionType {
 }
 
 interface UserLog {
-	logType: string;
+	logAction: string;
 	logDate: string;
 	logHours: string;
-};
+}
 
 const SelectPrescriptionType = ({
 	showQuotedPrescription,
@@ -217,14 +221,12 @@ const SelectPrescriptionType = ({
 }: SelectPrescriptionType): ReactElement => {
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
-
 	// BUTTON COPY
 	const urlShare = window.location + '';
 	const copyShare = () => {
 		navigator.clipboard.writeText(urlShare);
 		notiShare();
 	};
-
 	// NOTIFI COPY
 	const { enqueueSnackbar } = useSnackbar();
 	const notiShare = () => {
@@ -233,26 +235,17 @@ const SelectPrescriptionType = ({
 				vertical: 'top',
 				horizontal: 'right',
 			},
-			variant: 'success'
+			variant: 'success',
 		});
 	};
-	// DATA LOG
-	let logData: UserLog;
-	logData = {
-		logType: 'Paciente',
-		logDate: new Date().toLocaleDateString(),
-		logHours: new Date().getHours() + ':' + new Date().getMinutes()
-	}
-	console.log(logData)
-
 	// POPPUP CALL MEDIC
 	const [open, setOpen] = React.useState(false);
 	const handleClickOpen = () => {
-	  setOpen(true);
+		setOpen(true);
 	};
-  
+
 	const handleClose = () => {
-	  setOpen(false);
+		setOpen(false);
 	};
 
 	const gotToPolicy = () => {
@@ -267,6 +260,40 @@ const SelectPrescriptionType = ({
 			true,
 		);
 	};
+	// DATA LOG
+	const onSubmit = async (_param: string) => {
+		let logAction = '';
+
+		if (_param === '1') {
+			logAction = 'Descargar Receta';
+		} else if (_param === '2') {
+			logAction = 'Adquirir Tratamiento';
+		} else if (_param === '3') {
+			logAction = 'Quiero que me contacten';
+		}
+
+		const logData = {
+			logAction: logAction,
+			logDate: new Date().toLocaleDateString(),
+			logHours: new Date().getHours() + ':' + new Date().getMinutes(),
+		};
+
+		await sendLogs(logData);
+	};
+
+	const pressKey = (_param: any) => {
+		if (_param === '1') {
+			openEPrescription();
+			onSubmit(1);
+		} else if (_param === '2') {
+			showQuotedPrescription();
+			onSubmit(2);
+		} else if (_param === '3') {
+			handleClickOpen();
+			onSubmit(3);
+		}
+		console.log(_param);
+	};
 
 	return (
 		<div className={classes.container}>
@@ -280,19 +307,18 @@ const SelectPrescriptionType = ({
 					</Typography>
 
 					<div className={classes.wrapperFlex}>
-
-						<div className={classes.containerCard} onClick={openEPrescription} >
+						<div className={classes.containerCard} onClick={() => pressKey('1')}>
 							<div className={classes.containerIMG}>
 								<img className={classes.img} src={recieptMedic} alt="working" />
 							</div>
 							<div>
-								<Typography component="span" color="primary" >
+								<Typography component="span" color="primary">
 									{t('buyPrescription.selectPrescriptionType.ePrescription2')}
 								</Typography>
 							</div>
 						</div>
 
-						<div className={classes.containerCard} onClick={showQuotedPrescription}>
+						<div className={classes.containerCard} onClick={() => pressKey('2')}>
 							<div className={classes.containerIMG}>
 								<img className={classes.img1} src={cartMedic} alt="working" />
 								<img className={classes.img} src={cartMedicB} alt="working" />
@@ -305,7 +331,7 @@ const SelectPrescriptionType = ({
 							</div>
 						</div>
 
-						<div className={classes.containerCard} onClick={handleClickOpen}>
+						<div className={classes.containerCard} onClick={() => pressKey('3')}>
 							<div className={classes.containerIMG}>
 								<img className={classes.img} src={callMedic} alt="working" />
 							</div>
@@ -316,7 +342,6 @@ const SelectPrescriptionType = ({
 								<InkafarmaIcon className={classes.inkafarmaIcon} />
 							</div>
 						</div>
-
 					</div>
 
 					<div className={classes.textCompartirTitle}>
@@ -341,7 +366,7 @@ const SelectPrescriptionType = ({
 			</div>
 
 			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-				<DialogTitle style={{textAlign: 'center'}}>
+				<DialogTitle style={{ textAlign: 'center' }}>
 					<BrandLogo className={classes.brandLogo1} />
 				</DialogTitle>
 				<DialogContent>
@@ -349,14 +374,11 @@ const SelectPrescriptionType = ({
 						<Typography className={classes.title1} component="span">
 							{t('buyPrescription.selectPrescriptionType.contactcall')}
 						</Typography>
-						<div style={{paddingTop: '15px'}}>
+						<div style={{ paddingTop: '15px' }}>
 							<FormControlLabel
 								control={
 									<>
-										<Checkbox
-											color="primary"
-											inputProps={{ 'aria-label': 'primary checkbox' }}
-										/>
+										<Checkbox color="primary" inputProps={{ 'aria-label': 'primary checkbox' }} />
 									</>
 								}
 								label={
@@ -387,13 +409,13 @@ const SelectPrescriptionType = ({
 								}
 							/>
 						</div>
-         			</DialogContentText>
+					</DialogContentText>
 				</DialogContent>
 
 				<DialogActions>
-					<Button style={{textDecoration: 'auto', fontSize: 15, }} onClick={handleClose} color="primary">
+					<Button style={{ textDecoration: 'auto', fontSize: 15 }} onClick={handleClose} color="primary">
 						Aceptar
-          			</Button>
+					</Button>
 				</DialogActions>
 			</Dialog>
 		</div>

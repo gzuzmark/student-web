@@ -191,3 +191,18 @@ export const getRedirectUrl = async (selectedItems: SelectedMedicines): Promise<
 		throw Error(e);
 	}
 };
+
+interface UserLog {
+	logAction: string;
+	logDate: string;
+	logHours: string;
+}
+
+export const sendLogs = async (fields: UserLog): Promise<string | void> => {
+	try {
+		console.log(fields);
+	} catch (e) {
+		console.log(e);
+		throw Error(e);
+	}
+};
