@@ -284,13 +284,13 @@ const SelectPrescriptionType = ({
 	const pressKey = (_param: any) => {
 		if (_param === '1') {
 			openEPrescription();
-			onSubmit(1);
+			onSubmit('1');
 		} else if (_param === '2') {
 			showQuotedPrescription();
-			onSubmit(2);
+			onSubmit('2');
 		} else if (_param === '3') {
 			handleClickOpen();
-			onSubmit(3);
+			onSubmit('3');
 		}
 		console.log(_param);
 	};
