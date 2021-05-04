@@ -2,7 +2,6 @@ import React, { ReactElement, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
@@ -128,17 +127,6 @@ const AboutPatientForm = ({ aboutPatient, onChangeStep, openPrivacyPolicy }: Abo
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
 							{t('aboutPatient.submit.text')}
 						</Button>
-					</div>
-					<div className={classes.privacyPolicyWrapper}>
-						<Typography component="span">{t('aboutPatient.privacyPolicy.firstSection')} </Typography>
-						<Typography
-							className={classes.privacyPolicyLink}
-							component="span"
-							color="primary"
-							onClick={openPrivacyPolicy}
-						>
-							{t('aboutPatient.privacyPolicy.secondSection')}
-						</Typography>
 					</div>
 				</Form>
 			)}
