@@ -209,12 +209,6 @@ interface SelectPrescriptionType {
 	openEPrescription: () => void;
 }
 
-interface UserLog {
-	logAction: string;
-	logDate: string;
-	logHours: string;
-}
-
 const SelectPrescriptionType = ({
 	showQuotedPrescription,
 	openEPrescription,
@@ -261,36 +255,26 @@ const SelectPrescriptionType = ({
 		);
 	};
 	// DATA LOG
-	const onSubmit = async (_param: string) => {
-		let logAction = '';
-
-		if (_param === '1') {
-			logAction = 'Descargar Receta';
-		} else if (_param === '2') {
-			logAction = 'Adquirir Tratamiento';
-		} else if (_param === '3') {
-			logAction = 'Quiero que me contacten';
-		}
-
+	const pid = localStorage.getItem('_hjid');
+	const onSubmit = async (_paramActionType: number) => {
 		const logData = {
-			logAction: logAction,
-			logDate: new Date().toLocaleDateString(),
-			logHours: new Date().getHours() + ':' + new Date().getMinutes(),
+			action_date: new Date().toISOString().slice(0, 10) + '',
+			type_action_id: _paramActionType,
+			student_id: pid === null ? '12abd749-e529-4005-9b6f-ac5201198363' : pid,
 		};
-
 		await sendLogs(logData);
 	};
 
-	const pressKey = (_param: any) => {
-		if (_param === '1') {
+	const pressKey = (_param: number) => {
+		if (_param === 1) {
 			openEPrescription();
-			onSubmit('1');
-		} else if (_param === '2') {
+			onSubmit(1);
+		} else if (_param === 2) {
 			showQuotedPrescription();
-			onSubmit('2');
-		} else if (_param === '3') {
+			onSubmit(2);
+		} else if (_param === 3) {
 			handleClickOpen();
-			onSubmit('3');
+			onSubmit(3);
 		}
 		console.log(_param);
 	};
@@ -307,7 +291,7 @@ const SelectPrescriptionType = ({
 					</Typography>
 
 					<div className={classes.wrapperFlex}>
-						<div className={classes.containerCard} onClick={() => pressKey('1')}>
+						<div className={classes.containerCard} onClick={() => pressKey(1)}>
 							<div className={classes.containerIMG}>
 								<img className={classes.img} src={recieptMedic} alt="working" />
 							</div>
@@ -318,7 +302,7 @@ const SelectPrescriptionType = ({
 							</div>
 						</div>
 
-						<div className={classes.containerCard} onClick={() => pressKey('2')}>
+						<div className={classes.containerCard} onClick={() => pressKey(2)}>
 							<div className={classes.containerIMG}>
 								<img className={classes.img1} src={cartMedic} alt="working" />
 								<img className={classes.img} src={cartMedicB} alt="working" />
@@ -331,7 +315,7 @@ const SelectPrescriptionType = ({
 							</div>
 						</div>
 
-						<div className={classes.containerCard} onClick={() => pressKey('3')}>
+						<div className={classes.containerCard} onClick={() => pressKey(3)}>
 							<div className={classes.containerIMG}>
 								<img className={classes.img} src={callMedic} alt="working" />
 							</div>

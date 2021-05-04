@@ -1,5 +1,6 @@
 import { ugoConsoleAxios } from 'utils/customAxios';
 import { Position } from './laboratories';
+import aliviaAxios from 'utils/customAxios';
 
 export interface StoreMedicine {
 	totalPrice: number;
@@ -193,14 +194,26 @@ export const getRedirectUrl = async (selectedItems: SelectedMedicines): Promise<
 };
 
 interface UserLog {
-	logAction: string;
-	logDate: string;
-	logHours: string;
+	action_date: string;
+	type_action_id: number;
+	student_id: string;
 }
 
 export const sendLogs = async (fields: UserLog): Promise<string | void> => {
 	try {
+		const resp = await aliviaAxios.post('/logs-prescriptions', {
+			action_date: fields.action_date,
+			type_action_id: fields.type_action_id,
+			student_id: fields.student_id,
+		});
+
+		const data = resp.data;
+
+		// setLocalValue('userToken', data.token);
+		// setLocalValue('refreshToken', data.refresh_token);
+		// return data.token;
 		console.log(fields);
+		console.log(data);
 	} catch (e) {
 		console.log(e);
 		throw Error(e);
