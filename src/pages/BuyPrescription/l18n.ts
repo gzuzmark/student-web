@@ -49,5 +49,5 @@ export default {
 	'buyPrescription.selectPrescriptionType.callfarma': 'Quiero que me contacten de',
 	'buyPrescription.selectPrescriptionType.compartir': '¿Necesitas compartir tu tratamiento con alguien más?',
 	'buyPrescription.selectPrescriptionType.buttomCompartir': 'Compartir',
-	'buyPrescription.selectPrescriptionType.contactcall': 'En breve un(a) ejecutivo(a) se contactará con usted',
+	'buyPrescription.selectPrescriptionType.contactcall': 'En breve un(a) ejecutivo(a) se contactará con usted.',
 };

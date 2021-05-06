@@ -358,41 +358,6 @@ const SelectPrescriptionType = ({
 						<Typography className={classes.title1} component="span">
 							{t('buyPrescription.selectPrescriptionType.contactcall')}
 						</Typography>
-						<div style={{ paddingTop: '15px' }}>
-							<FormControlLabel
-								control={
-									<>
-										<Checkbox color="primary" inputProps={{ 'aria-label': 'primary checkbox' }} />
-									</>
-								}
-								label={
-									<>
-										<Typography className={classes.legalInformation} component="span">
-											{t('buyPrescription.legalInformation.firstSection1')}{' '}
-										</Typography>
-										<Typography
-											className={classes.privacyPolicyLink}
-											component="span"
-											color="primary"
-											onClick={gotToTermsAndConditions}
-										>
-											{t('buyPrescription.legalInformation.termsAndConditionsLink1')}{' '}
-										</Typography>
-										<Typography className={classes.legalInformation} component="span">
-											{t('buyPrescription.legalInformation.secondSection1')}{' '}
-										</Typography>
-										<Typography
-											className={classes.privacyPolicyLink}
-											component="span"
-											color="primary"
-											onClick={gotToPolicy}
-										>
-											{t('buyPrescription.legalInformation.privacyPolicyLink1')}{' '}
-										</Typography>
-									</>
-								}
-							/>
-						</div>
 					</DialogContentText>
 				</DialogContent>
 
