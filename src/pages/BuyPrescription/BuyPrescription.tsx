@@ -172,6 +172,7 @@ const BuyPrescription = (): ReactElement => {
 	const openEPrescription = () => {
 		window.open(prescriptionPath, '_blank');
 	};
+
 	const showRedirectPage = () => {
 		if (selectedMedicines.length >= 1) {
 			setShowingRedirectPage(true);

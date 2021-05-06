@@ -36,4 +36,18 @@ export default {
 		'Aquí podrás realizar el pago y finalizar el proceso de compra de tu receta.',
 	'buyPrescription.redirectToInkafarma.body.secondLine':
 		'Si no eres redirigido automáticamente en los próximos segundos, pulsa en Continuar.',
+
+	// 'buyPrescription.'
+	'buyPrescription.legalInformation.firstSection1': 'He leído y acepto los',
+	'buyPrescription.legalInformation.termsAndConditionsLink1': 'Términos y Condiciones',
+	'buyPrescription.legalInformation.secondSection1': 'y las',
+	'buyPrescription.legalInformation.privacyPolicyLink1': 'Política de Privacidad',
+
+	'buyPrescription.selectPrescriptionType.title2': 'Es momento de seguir con tu tratamiento',
+	'buyPrescription.selectPrescriptionType.ePrescription2': 'Descargar mi receta aquí',
+	'buyPrescription.selectPrescriptionType.quotedPrescription2': 'Adquirir mi tratamiento con la web',
+	'buyPrescription.selectPrescriptionType.callfarma': 'Quiero que me contacten de',
+	'buyPrescription.selectPrescriptionType.compartir': '¿Necesitas compartir tu tratamiento con alguien más?',
+	'buyPrescription.selectPrescriptionType.buttomCompartir': 'Compartir',
+	'buyPrescription.selectPrescriptionType.contactcall': 'En breve un(a) ejecutivo(a) se contactará con usted.',
 };

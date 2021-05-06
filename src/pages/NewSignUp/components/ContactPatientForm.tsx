@@ -164,8 +164,9 @@ const ContactPatientForm = ({
 		(values: ContactPatientValues) => {
 			try {
 				if (!addressReference) {
-					setReferenceError(t('contactPatient.addressReference.error'));
-					return;
+					setReferenceError('');
+					// setReferenceError(t('contactPatient.addressReference.error'));
+					// return;
 				} else {
 					setReferenceError('');
 				}
@@ -194,7 +195,7 @@ const ContactPatientForm = ({
 				console.error(e);
 			}
 		},
-		[activePosition, addressReference, formattedPlace, humanActivePosition, onChangeStep, t],
+		[activePosition, addressReference, formattedPlace, humanActivePosition, onChangeStep],
 	);
 
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
