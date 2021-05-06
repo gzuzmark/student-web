@@ -18,10 +18,6 @@ import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { useSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
 
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import { redirectToURL } from 'utils';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -242,18 +238,6 @@ const SelectPrescriptionType = ({
 		setOpen(false);
 	};
 
-	const gotToPolicy = () => {
-		redirectToURL(
-			'https://docs.google.com/document/u/1/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
-			true,
-		);
-	};
-	const gotToTermsAndConditions = () => {
-		redirectToURL(
-			'https://docs.google.com/document/u/2/d/e/2PACX-1vS3SBl2FrGqj_qWltyMkUOF1B3dNSHtvr7sbqGy6OJvuKQKGcIklLBvO4GIOev4YQ/pub',
-			true,
-		);
-	};
 	// DATA LOG
 	const pid = localStorage.getItem('_hjid');
 	const onSubmit = async (_paramActionType: number) => {
