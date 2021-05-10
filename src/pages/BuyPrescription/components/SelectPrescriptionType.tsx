@@ -220,7 +220,6 @@ const SelectPrescriptionType = ({
 	const { t } = useTranslation('buyPrescription');
 
 	const location = useLocation();
-	const history = useHistory();
 	const params = parse(location.search);
 
 	// BUTTON COPY
@@ -250,18 +249,6 @@ const SelectPrescriptionType = ({
 		setOpen(false);
 	};
 
-	const gotToPolicy = () => {
-		redirectToURL(
-			'https://docs.google.com/document/u/1/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
-			true,
-		);
-	};
-	const gotToTermsAndConditions = () => {
-		redirectToURL(
-			'https://docs.google.com/document/u/2/d/e/2PACX-1vS3SBl2FrGqj_qWltyMkUOF1B3dNSHtvr7sbqGy6OJvuKQKGcIklLBvO4GIOev4YQ/pub',
-			true,
-		);
-	};
 	// DATA LOG
 	//const pid = localStorage.getItem('_hjid');
 	const pid = sessionId || (params.sessionId as string);
