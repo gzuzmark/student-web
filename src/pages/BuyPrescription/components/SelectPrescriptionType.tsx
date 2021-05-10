@@ -18,8 +18,6 @@ import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { useSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
 
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import { redirectToURL } from 'utils';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -27,6 +25,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import { useLocation, useHistory } from 'react-router';
+import { parse } from 'query-string';
 
 import { sendLogs } from 'pages/api';
 
@@ -205,6 +206,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 interface SelectPrescriptionType {
+	sessionId?: string;
 	showQuotedPrescription: () => void;
 	openEPrescription: () => void;
 }
@@ -212,9 +214,15 @@ interface SelectPrescriptionType {
 const SelectPrescriptionType = ({
 	showQuotedPrescription,
 	openEPrescription,
+	sessionId,
 }: SelectPrescriptionType): ReactElement => {
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
+
+	const location = useLocation();
+	const history = useHistory();
+	const params = parse(location.search);
+
 	// BUTTON COPY
 	const urlShare = window.location + '';
 	const copyShare = () => {
@@ -255,7 +263,8 @@ const SelectPrescriptionType = ({
 		);
 	};
 	// DATA LOG
-	const pid = localStorage.getItem('_hjid');
+	//const pid = localStorage.getItem('_hjid');
+	const pid = sessionId || (params.sessionId as string);
 	const onSubmit = async (_paramActionType: number) => {
 		const logData = {
 			action_date: new Date().toISOString().slice(0, 10) + '',
