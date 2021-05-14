@@ -1,27 +1,26 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Typography from '@material-ui/core/Typography';
+import TextFieldMUI from '@material-ui/core/TextField';
 import { Theme } from '@material-ui/core/styles';
-import { TextField, Select } from 'formik-material-ui';
+import { TextField } from 'formik-material-ui';
 import { useTranslation } from 'react-i18next';
 import Divider from '@material-ui/core/Divider';
 import clsx from 'clsx';
 import { Formik, Form, Field } from 'formik';
 import { stylesWithTheme } from 'utils/createStyles';
 import { FilesGroupField } from 'pages/common';
+import { getExamsByModality } from 'pages/api';
+import { ExamByModality } from 'types';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { modalityOptions } from 'pages/ClinicalExamination/constants';
 
 export interface ExamDataValues {
-	name: string;
-	lastName: string;
-	secondSurname: string;
-	birthDate: Date | null;
-	identification?: string;
-	documentIssueDate?: Date | null;
 	modality: number;
-	typeExam: number | undefined;
+	typeExam: ExamByModality[];
 	files?: string[];
 }
 
@@ -30,16 +29,9 @@ interface ExamFormProps {
 	onChangeStep: (values: ExamDataValues) => void;
 }
 
-const initialValues = {
-	name: '',
-	lastName: '',
-	secondSurname: '',
-	birthDate: null,
-	gender: undefined,
-	identification: '',
-	documentIssueDate: null,
+const initialValues: ExamDataValues = {
 	modality: 0,
-	typeExam: 0,
+	typeExam: [],
 	files: [],
 };
 
@@ -126,6 +118,8 @@ function especialidad(speciality = '') {
 const ExamForm = ({ examData, onChangeStep }: ExamFormProps) => {
 	const { t } = useTranslation('clinicalExamination');
 	const classes = useStyles();
+	const [examsByModality, setExamsByModality] = useState<ExamByModality[]>([]);
+	const [examInputValue, setExamInputValue] = useState('');
 	const onSubmit = useCallback(
 		(values: ExamDataValues, { setSubmitting }: { setSubmitting: Function; setFieldError: Function }) => {
 			onChangeStep(values);
@@ -134,19 +128,50 @@ const ExamForm = ({ examData, onChangeStep }: ExamFormProps) => {
 		[onChangeStep],
 	);
 
-	const names = ['Prueba Molecular (PCR -RT)', 'Prueba de Antigeno'];
+	const getExams = async (id: number) => {
+		try {
+			if (id === 0) setExamsByModality([]);
+			else {
+				const response = await getExamsByModality(id);
+				setExamsByModality(response);
+			}
+		} catch (error) {}
+		// updateState({ useCase, appointmentCreationStep: TRIAGE_STEP });
+	};
+
+	function onKeyDown(keyEvent: any) {
+		if ((keyEvent.charCode || keyEvent.keyCode) === 13) {
+			keyEvent.preventDefault();
+		}
+	}
 
 	return (
-		<Formik initialValues={examData || initialValues} onSubmit={onSubmit}>
-			{({ submitForm, isSubmitting }) => (
-				<Form className={classes.form}>
+		<Formik initialValues={examData || initialValues} onSubmit={onSubmit} enableReinitialize>
+			{({ submitForm, isSubmitting, values, handleChange, setFieldValue }) => (
+				<Form className={classes.form} onKeyDown={onKeyDown}>
 					<div>
 						<div className={classes.fieldWrapper}>
 							<FormControl className={clsx(classes.fieldWrapper, 'with-less-padding')} fullWidth>
-								<Field component={TextField} name="modality" variant="outlined" select>
+								<Field
+									name="modality"
+									variant="outlined"
+									component={TextField}
+									select
+									InputProps={{
+										onChange: (event: any) => {
+											handleChange(event);
+											setFieldValue('typeExam', []);
+											setExamInputValue('');
+											getExams(Number(event.target.value));
+										},
+									}}
+								>
 									<MenuItem value={0}>Seleccionar</MenuItem>
-									<MenuItem value={1}>Modalidad 1</MenuItem>
-									<MenuItem value={2}>Modalidad 2</MenuItem>
+									{modalityOptions.map((m) => (
+										<MenuItem key={m.value} value={m.value}>
+											{m.label}
+										</MenuItem>
+									))}
 								</Field>
 							</FormControl>
 							<Divider className={classes.divider} />
@@ -157,42 +182,63 @@ const ExamForm = ({ examData, onChangeStep }: ExamFormProps) => {
 							</Typography>
 							<FormControl className={clsx(classes.fieldWrapper, 'with-less-padding')} fullWidth>
 								<div className={classes.spacy}></div>
-								<Field component={Select} name="exams" variant="outlined" options={names} defaultValue={[]} multiple>
-									<MenuItem value={0}>Seleccionar</MenuItem>
-									<MenuItem value={1}>Modalidad 1</MenuItem>
-									<MenuItem value={2}>Modalidad 2</MenuItem>
-								</Field>
+								<Autocomplete
+									options={examsByModality.filter((x) => !values.typeExam.includes(x))}
+									disabled={!examsByModality.length}
+									getOptionLabel={(option) => option.name || ''}
+									disableClearable
+									freeSolo
+									value=""
+									onChange={(event, value) => {
+										if (typeof value === 'string') return;
+										setFieldValue('typeExam', [...values.typeExam, value]);
+										setExamInputValue('');
+									}}
+									inputValue={examInputValue}
+									onInputChange={(event, newInputValue) => {
+										setExamInputValue(newInputValue);
+									}}
+									renderInput={(params) => (
+										<TextFieldMUI
+											{...params}
+											// margin="normal"
+											variant="outlined"
+											InputProps={{
+												...params.InputProps,
+												type: 'search',
+												style: {
+													padding: 6,
+												},
+											}}
+										/>
+									)}
+								/>
 							</FormControl>
 						</div>
 						<Divider className={classes.divider} />
 						<div className={classes.spacy}></div>
 						<FormControl className={classes.fieldWrapperExam}>
-							<div className={classes.labelExam}>
-								<div className={classes.textExam}>Prueba Molecular (PCR -RT)</div>
-								<div className={classes.icon}>
-									<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-										<path
-											fillRule="evenodd"
-											clipRule="evenodd"
-											d="M9.98783 0.108398C15.4541 0.108398 19.8663 4.53698 19.8663 9.96872C19.8663 15.4249 15.4541 19.829 9.98783 19.829C4.5461 19.829 0.109375 15.4249 0.109375 9.96872C0.109375 4.53698 4.5461 0.108398 9.98783 0.108398ZM9.98783 11.3878L6.36001 15.0335C5.42854 15.9632 4.00683 14.5441 4.93829 13.6144L8.56611 9.96872L4.93829 6.34756C4.00683 5.4178 5.42854 3.9987 6.36001 4.92846L9.98783 8.54962L13.6402 4.92846C14.5716 3.9987 15.9933 5.4178 15.0619 6.34756L11.4095 9.96872L15.0619 13.6144C15.9933 14.5441 14.5716 15.9632 13.6402 15.0335L9.98783 11.3878Z"
-											fill="#1ECD96"
-										></path>
-									</svg>
+							{values.typeExam.map((x) => (
+								<div key={x.id} className={classes.labelExam}>
+									<div className={classes.textExam}>{x.name}</div>
+									<div
+										className={classes.icon}
+										onClick={() => {
+											const result = values.typeExam.filter((tE) => tE.id !== x.id);
+											setFieldValue('typeExam', result);
+										}}
+									>
+										<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+											<path
+												fillRule="evenodd"
+												clipRule="evenodd"
+												d="M9.98783 0.108398C15.4541 0.108398 19.8663 4.53698 19.8663 9.96872C19.8663 15.4249 15.4541 19.829 9.98783 19.829C4.5461 19.829 0.109375 15.4249 0.109375 9.96872C0.109375 4.53698 4.5461 0.108398 9.98783 0.108398ZM9.98783 11.3878L6.36001 15.0335C5.42854 15.9632 4.00683 14.5441 4.93829 13.6144L8.56611 9.96872L4.93829 6.34756C4.00683 5.4178 5.42854 3.9987 6.36001 4.92846L9.98783 8.54962L13.6402 4.92846C14.5716 3.9987 15.9933 5.4178 15.0619 6.34756L11.4095 9.96872L15.0619 13.6144C15.9933 14.5441 14.5716 15.9632 13.6402 15.0335L9.98783 11.3878Z"
+												fill="#1ECD96"
+											></path>
+										</svg>
+									</div>
 								</div>
-							</div>
-							<div className={classes.labelExam}>
-								<div className={classes.textExam}>Prueba de Antigeno</div>
-								<div className={classes.icon}>
-									<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-										<path
-											fillRule="evenodd"
-											clipRule="evenodd"
-											d="M9.98783 0.108398C15.4541 0.108398 19.8663 4.53698 19.8663 9.96872C19.8663 15.4249 15.4541 19.829 9.98783 19.829C4.5461 19.829 0.109375 15.4249 0.109375 9.96872C0.109375 4.53698 4.5461 0.108398 9.98783 0.108398ZM9.98783 11.3878L6.36001 15.0335C5.42854 15.9632 4.00683 14.5441 4.93829 13.6144L8.56611 9.96872L4.93829 6.34756C4.00683 5.4178 5.42854 3.9987 6.36001 4.92846L9.98783 8.54962L13.6402 4.92846C14.5716 3.9987 15.9933 5.4178 15.0619 6.34756L11.4095 9.96872L15.0619 13.6144C15.9933 14.5441 14.5716 15.9632 13.6402 15.0335L9.98783 11.3878Z"
-											fill="#1ECD96"
-										></path>
-									</svg>
-								</div>
-							</div>
+							))}
 						</FormControl>
 						<div className={classes.fieldWrapper}>
 							<input name="isDermatology" value={'Derman'} type="hidden" />
@@ -200,7 +246,7 @@ const ExamForm = ({ examData, onChangeStep }: ExamFormProps) => {
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>
-						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
+						<Button type="submit" variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
 							{t('aboutme.submit.text')}
 						</Button>
 					</div>

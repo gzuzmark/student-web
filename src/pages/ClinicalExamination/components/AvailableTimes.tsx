@@ -3,6 +3,7 @@ import { Theme } from '@material-ui/core';
 
 import { stylesWithTheme } from 'utils';
 import TimeOption from './TimeOption';
+import { AvailableTime, Laboratory } from 'types';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -50,42 +51,30 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			padding: '11.5px 8px',
 		},
 	},
-	timesOverlay: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		cursor: 'pointer',
-	},
 }));
 
-const AvailableTimes = () => {
+interface AvailableTimePickerProps {
+	availableTimes: AvailableTime[];
+	onChoose: (value: AvailableTime) => void;
+	selectedLaboratory: Laboratory | undefined;
+}
+
+const AvailableTimePicker = (props: AvailableTimePickerProps) => {
 	const classes = useStyles();
-	const sweetArray = [
-		'12:30',
-		'11:30',
-		'01:30',
-		'02:30',
-		'03:30',
-		'10:30',
-		'14:30',
-		'15:30',
-		'16:30',
-		'17:30',
-		'18:30',
-		'19:30',
-	];
 	return (
 		<div className={classes.container}>
-			<div className={classes.timesOverlay} />
 			<div className={classes.times}>
-				{sweetArray.map((hours) => (
-					<TimeOption value={hours} key={`${hours}`} />
+				{props.availableTimes.map((time, index) => (
+					<TimeOption
+						key={index}
+						value={time}
+						onClick={props.onChoose}
+						disabled={props.selectedLaboratory ? props.selectedLaboratory.selected_time?.id !== time.id : false}
+					/>
 				))}
 			</div>
 		</div>
 	);
 };
 
-export default AvailableTimes;
+export default AvailableTimePicker;

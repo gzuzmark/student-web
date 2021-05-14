@@ -8,9 +8,11 @@ import {
 	AppointmentList,
 	Appointment,
 	Payment,
+	PaymentLaboratory,
 	Confirmation,
 	ForgotPassword,
 	SelectProfile,
+	SelectPatient,
 	FamilyMembers,
 	CreateAccount,
 	LaboratoryExams,
@@ -25,6 +27,7 @@ export const TRIAGE_ROUTE = 'triaje';
 export const SELECT_DOCTOR_ROUTE = 'seleccionar_doctor';
 export const PRE_SIGN_UP_ROUTE = 'pre_registro';
 export const PAYMENT_ROUTE = 'pago';
+export const PAYMENT_ROUTE_LABORATORY = 'pago_laboratory';
 export const CONFIRMATION_ROUTE = 'confirmacion';
 export const LOGIN_ROUTE = 'iniciar_sesion';
 export const SIGN_UP_ROUTE = 'registro';
@@ -44,13 +47,20 @@ export const routeToTitle: Record<string, string> = {
 	[`${SIGN_UP_ROUTE}_datos_medicos`]: 'Detalle Cita - Datos medicos',
 	[`${SIGN_UP_ROUTE}_contacto`]: 'Detalle Cita - Datos de contacto',
 	[APPOINTMENT_LIST_ROUTE]: 'Citas',
+	[PAYMENT_ROUTE_LABORATORY]: 'Pago Laboratorio',
 	[FORGORT_PASSWORD_ROUTE]: 'Reestrablecer contraseña',
 	[SELECT_PATIENT_ROUTE]: 'Seleccionar paciente',
 	[SMALL_SIGN_UP]: 'Detalle Cita - Sobre el paciente reducido',
 	'detalle-cita': 'Detalle Cita',
 };
 
-export type CreateAppointmentRoute = 'triaje' | 'seleccionar_doctor' | 'pre_registro' | 'pago' | 'confirmacion';
+export type CreateAppointmentRoute =
+	| 'triaje'
+	| 'seleccionar_doctor'
+	| 'pre_registro'
+	| 'pago'
+	| 'pago_laboratory'
+	| 'confirmacion';
 
 interface Route {
 	id: string;
@@ -79,6 +89,8 @@ export const routes: RoutesType = [
 	{ id: 'LaboratoryExams', path: '/dashboard/laboratorios/*', component: LaboratoryExams, guard: true },
 	{ id: 'ForgotPassword', path: '/reestablecer_contrasena', component: ForgotPassword },
 	{ id: 'SelectProfile', path: '/seleccionar_paciente', component: SelectProfile, guard: true },
+	{ id: 'SelectPatient', path: '/select_patient', component: SelectPatient, guard: false },
+	{ id: 'PaymentLaboratory', path: '/pago_laboratory', component: PaymentLaboratory, guard: false, exact: false },
 	{ id: 'NewSignUp', path: '/creacion_cuenta/*', component: NewSignUp },
 	// { id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile, guard: true },
 ];

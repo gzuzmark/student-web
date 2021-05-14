@@ -1,55 +1,44 @@
-import React, { useCallback } from 'react';
-import { OutlinedInput } from '@material-ui/core';
+import React, { useCallback, useState } from 'react';
+import { useHistory } from 'react-router';
+
+import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Theme } from '@material-ui/core/styles';
-import { TextField } from 'formik-material-ui';
-import { Formik, Form, Field, FormikHelpers } from 'formik';
-import { Trans, useTranslation } from 'react-i18next';
-import { DatePickerField } from 'pages/common';
 import Divider from '@material-ui/core/Divider';
-
-import { stylesWithTheme } from 'utils/createStyles';
-import clsx from 'clsx';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
-import AvailableTimes from '../AvailableTimes';
+import { Theme } from '@material-ui/core/styles';
 
-export interface ContactValues {
-	identification: string;
-	identificationType: string;
-	phoneNumber: string;
-	email?: string;
-	password?: string;
-	repeatPassword?: string;
-	address?: string;
-	ubigeo?: string;
-}
+import { Formik, Form, Field } from 'formik';
+import { Trans, useTranslation } from 'react-i18next';
+import { DatePickerField } from 'pages/common';
 
-interface FormikContactValues {
-	identification: string;
-	identificationType: string;
-	phoneNumber: string;
-	email: string;
-	password: string;
-	repeatPassword: string;
-	address: string;
-	ubigeo: string;
+import { stylesWithTheme } from 'utils/createStyles';
+
+import { ExamDataValues } from '../ExamForm';
+import { ContactPatientValues } from '../ContactPatient';
+import { modalityOptions } from 'pages/ClinicalExamination/constants';
+import LaboratoryPicker from 'pages/ClinicalExamination/LaboratoryPicker';
+import { Laboratory } from 'types';
+import { getLaboratoriesList } from 'pages/api';
+
+export interface LaboratoryFormValues {
+	selectedLaboratory: Laboratory | undefined;
+	dateLaboratory: Date | undefined;
 }
 
 interface ContactFormProps {
-	onChangeStep: (values: ContactValues, onError?: Function) => void;
+	previousData: {
+		contactData: ContactPatientValues | undefined;
+		examData: ExamDataValues | undefined;
+	};
+	laboratoryData: LaboratoryFormValues | undefined;
+	onChangeStep: (values: LaboratoryFormValues, onError?: Function) => void;
 }
 
-const initialValues = {
-	identification: '',
-	identificationType: 'DNI',
-	phoneNumber: '',
-	email: '',
-	password: '',
-	repeatPassword: '',
-	address: '',
-	ubigeo: '',
+const initialValues: LaboratoryFormValues = {
+	selectedLaboratory: undefined,
+	dateLaboratory: undefined,
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -63,23 +52,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			maxWidth: '691px',
 		},
 	},
-	laboratorioWrapper: {
-		backgroundColor: 'white',
-		padding: '40px 24px',
-		marginBottom: '8px',
-		boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
-		[breakpoints.up('lg')]: {
-			borderRadius: '10px',
-			padding: '34px 0 23px 36px',
-			marginBottom: '25px',
-			boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-		},
-	},
-	laboratory: {
-		display: 'flex',
-		alignItems: 'center',
-		paddingBottom: '20px',
-	},
+
 	tipsWrapper: {
 		padding: '40px 26px 27px',
 		[breakpoints.up('lg')]: {
@@ -159,15 +132,6 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		minWidth: 320,
 		paddingTop: 20,
 		float: 'left',
-	},
-	photoWrapper: {
-		paddingRight: '20px',
-		[breakpoints.up('lg')]: {
-			paddingRight: '58px',
-		},
-	},
-	nameWrapper: {
-		paddingBottom: '10px',
 	},
 	cmp: {
 		fontSize: '12px',
@@ -336,30 +300,41 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 }));
 
-const LaboratoryForm = ({ onChangeStep }: ContactFormProps) => {
+const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactFormProps) => {
 	const { t } = useTranslation('clinicalExamination');
 	const classes = useStyles();
-	const onSubmit = useCallback(
-		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
-			try {
-				onChangeStep(values);
-				setSubmitting(false);
-			} catch (e) {
-				setFieldError('identification', t('contact.fields.identification.error'));
-				setFieldError('phoneNumber', t('contact.phoneNumber.error'));
+	const history = useHistory();
 
-				if (values.email) {
-					setFieldError('email', t('contact.email.error'));
-				}
-			}
+	const [laboratories, setLaboratories] = useState<Laboratory[]>([]);
+
+	const onSubmit = useCallback(
+		async (values: LaboratoryFormValues, { setSubmitting }: { setSubmitting: Function; setFieldError: Function }) => {
+			onChangeStep(values);
+			setSubmitting(false);
 		},
-		[onChangeStep, t],
+		[onChangeStep],
 	);
 
-	const sweetArray = ['Laboratorio Pulso', 'Laboratorio Mi Lab'];
+	const handleContinueClick = () => {
+		history.push('/pago_laboratory');
+	};
+
+	// if (!previousData.contactData || !previousData.examData) return <Redirect to="/examenes/registrar" />;
+
+	const checkLaboratoriesByDate = async (date: Date) => {
+		console.log({ date });
+		const result = await getLaboratoriesList({
+			date,
+			modalityId: Number(previousData.examData?.modality),
+			laboratoryExamIds: previousData.examData?.typeExam.map((x) => x.id) || [],
+		});
+		console.log({ result });
+		setLaboratories(result);
+	};
+
 	return (
-		<Formik initialValues={initialValues} onSubmit={onSubmit}>
-			{({ submitForm, isSubmitting }) => (
+		<Formik initialValues={laboratoryData || initialValues} onSubmit={onSubmit} enableReinitialize>
+			{({ submitForm, isSubmitting, values, setFieldValue }) => (
 				<Form className={classes.fieldWrapper}>
 					<div className={classes.form}>
 						<FormControl className={classes.text}>
@@ -368,23 +343,17 @@ const LaboratoryForm = ({ onChangeStep }: ContactFormProps) => {
 							</Typography>
 						</FormControl>
 						<FormControl className={classes.select}>
-							<Field
-								component={TextField}
-								name="modality"
-								variant="outlined"
-								select
-								input={<OutlinedInput classes={{ input: classes.input }} />}
-							>
-								<MenuItem value={'1'}>A Domicilio</MenuItem>
-								<MenuItem value={'2'}> Presencial</MenuItem>
-							</Field>
+							<Select variant="outlined" id="modality" disabled value={previousData.examData?.modality}>
+								{modalityOptions.map((m) => (
+									<MenuItem key={m.value} value={m.value}>
+										{m.label}
+									</MenuItem>
+								))}
+							</Select>
 						</FormControl>
 						<FormControl className={classes.right}>
 							<FormControl className={classes.text}>
-								<Typography variant="body1">{t('right.label.calle')}</Typography>
-								<div>
-									<Button className={classes.editModality}>{t('right.modality.edit')}</Button>
-								</div>
+								<Typography variant="body1">{previousData.contactData?.address}</Typography>
 							</FormControl>
 						</FormControl>
 					</div>
@@ -397,32 +366,11 @@ const LaboratoryForm = ({ onChangeStep }: ContactFormProps) => {
 						<Typography variant="body1" className={classes.fieldWrapperExam}>
 							{t('left.label.exams')}
 						</Typography>
-						<div className={classes.labelExam}>
-							<div className={classes.textExam}>Prueba Molecular (PCR -RT)</div>
-							<div className={classes.icon}>
-								<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-									<path
-										fillRule="evenodd"
-										clipRule="evenodd"
-										d="M9.98783 0.108398C15.4541 0.108398 19.8663 4.53698 19.8663 9.96872C19.8663 15.4249 15.4541 19.829 9.98783 19.829C4.5461 19.829 0.109375 15.4249 0.109375 9.96872C0.109375 4.53698 4.5461 0.108398 9.98783 0.108398ZM9.98783 11.3878L6.36001 15.0335C5.42854 15.9632 4.00683 14.5441 4.93829 13.6144L8.56611 9.96872L4.93829 6.34756C4.00683 5.4178 5.42854 3.9987 6.36001 4.92846L9.98783 8.54962L13.6402 4.92846C14.5716 3.9987 15.9933 5.4178 15.0619 6.34756L11.4095 9.96872L15.0619 13.6144C15.9933 14.5441 14.5716 15.9632 13.6402 15.0335L9.98783 11.3878Z"
-										fill="#1ECD96"
-									></path>
-								</svg>
+						{previousData.examData?.typeExam.map((e, index) => (
+							<div key={index} className={classes.labelExam}>
+								<div className={classes.textExam}>{e.name}</div>
 							</div>
-						</div>
-						<div className={classes.labelExam}>
-							<div className={classes.textExam}>Prueba de Antigeno</div>
-							<div className={classes.icon}>
-								<svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-									<path
-										fillRule="evenodd"
-										clipRule="evenodd"
-										d="M9.98783 0.108398C15.4541 0.108398 19.8663 4.53698 19.8663 9.96872C19.8663 15.4249 15.4541 19.829 9.98783 19.829C4.5461 19.829 0.109375 15.4249 0.109375 9.96872C0.109375 4.53698 4.5461 0.108398 9.98783 0.108398ZM9.98783 11.3878L6.36001 15.0335C5.42854 15.9632 4.00683 14.5441 4.93829 13.6144L8.56611 9.96872L4.93829 6.34756C4.00683 5.4178 5.42854 3.9987 6.36001 4.92846L9.98783 8.54962L13.6402 4.92846C14.5716 3.9987 15.9933 5.4178 15.0619 6.34756L11.4095 9.96872L15.0619 13.6144C15.9933 14.5441 14.5716 15.9632 13.6402 15.0335L9.98783 11.3878Z"
-										fill="#1ECD96"
-									></path>
-								</svg>
-							</div>
-						</div>
+						))}
 					</FormControl>
 					<div className={classes.form}>
 						<Divider className={classes.divider} />
@@ -444,95 +392,44 @@ const LaboratoryForm = ({ onChangeStep }: ContactFormProps) => {
 									fullWidth: true,
 									placeholder: 'DD/MM/YYYY',
 								}}
+								allowSameDateSelection={false}
+								onAccept={checkLaboratoriesByDate}
 							/>
 						</FormControl>
 					</div>
-					{/* <div className={classes.form}>
-						<div className={classes.spacy}></div>
-						<Button onClick={submitForm} disabled={isSubmitting} className={classes.left} variant="outlined" fullWidth>
-							<span className={classes.buttonLabel}>Pagar</span>
-						</Button>
-						<Button className={classes.right} variant="outlined" fullWidth>
-							<span className={classes.buttonLabel}>Agendar</span>
-						</Button>
-					</div> */}
 					<div className={classes.form}></div>
 					<div className={classes.spacy}></div>
 					<div className={classes.form}></div>
 					<div className={classes.spacy}></div>
 					<div className={classes.form}>
-						{sweetArray.map((laboratory) => (
-							<div key={laboratory} className={classes.laboratorioWrapper}>
-								<div className={classes.laboratory}>
-									<div className={classes.photoWrapper}>
-										<img className={classes.photo} src="" alt="doctor" />
-									</div>
-									<div className={classes.info}>
-										<div className={classes.nameWrapper}>
-											<Typography component="span" className={clsx(classes.name, 'no-caps')}>
-												{laboratory}
-											</Typography>
-											<Typography component="span" className={classes.name}></Typography>
-										</div>
-										<div className={classes.flexWrapper}>
-											<div className={classes.specialityWrapper}>
-												<Typography className={classes.speciality}>Modalidad de Servicio:</Typography>
-											</div>
-											<div>
-												<Typography className={classes.cmp}>Domicilio - Presencial</Typography>
-											</div>
-											<div className={classes.right}></div>
-											<div className={classes.right}>
-												<Typography className={classes.precio}>S/256</Typography>
-											</div>
-										</div>
-
-										<div className={classes.ratingWrapper}>
-											{/* <Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly /> */}
-											<Button className={classes.editModality}>Ver Detalle</Button>
-										</div>
-
-										<div>
-											<Button
-												className={classes.doctorMoreInfo}
-												// onClick={() => {
-												// 	selectDoctorForModal(doctorIndex);
-												// 	openDetailedDoctorModal();
-												// }}
-											>
-												Mas Información
-											</Button>
-										</div>
-									</div>
-								</div>
-								<div className={classes.availableTitleWrapper}>
-									<Typography className={classes.availableTitle} component="span">
-										ELIGE UN HORARIO:
-									</Typography>
-								</div>
-								<div className={classes.timesWrapper}>
-									<AvailableTimes />
-								</div>
-							</div>
-						))}
+						<LaboratoryPicker
+							modalityId={Number(previousData.examData?.modality)}
+							laboratories={laboratories}
+							selectedLaboratory={values.selectedLaboratory}
+							onChoose={(lab) => {
+								setFieldValue('selectedLaboratory', lab);
+							}}
+						/>
 					</div>
 					<div className={classes.form}></div>
 					<div className={classes.spacy}></div>
 					<div className={classes.form}></div>
 					<div className={classes.spacy}></div>
 					<div className={classes.form}>
-						<FormControl className={classes.leftBottonAdentro}>
-							<Button
-								className={classes.leftBottonAdentro}
-								variant="contained"
-								fullWidth
-								onClick={submitForm}
-								disabled={isSubmitting}
-							>
-								{t('left.button.pago')}
-							</Button>
-						</FormControl>
-						<FormControl className={classes.rightBottonAdentro}>
+						<div className={classes.container}>
+							<FormControl className={classes.leftBottonAdentro}>
+								<Button
+									className={classes.leftBottonAdentro}
+									variant="contained"
+									fullWidth
+									onClick={handleContinueClick}
+									disabled={isSubmitting}
+								>
+									{t('left.button.continue')}
+								</Button>
+							</FormControl>
+						</div>
+						{/* <FormControl className={classes.rightBottonAdentro}>
 							<Button
 								className={classes.rightBottonAdentro}
 								variant="outlined"
@@ -542,7 +439,7 @@ const LaboratoryForm = ({ onChangeStep }: ContactFormProps) => {
 							>
 								{t('left.button.agendar')}
 							</Button>
-						</FormControl>
+						</FormControl> */}
 					</div>
 				</Form>
 			)}

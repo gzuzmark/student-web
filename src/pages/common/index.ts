@@ -11,6 +11,7 @@ export { default as PasswordField } from './PasswordField';
 export { default as Loading } from './Loading';
 export { default as Circle } from './Circle';
 export * from './ProfileList';
+export * from './PatientList';
 export { default as FloatCard } from './FloatCard';
 export * from './DashboardSideBar';
 export * from './CreatePasswordForm';
