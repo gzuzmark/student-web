@@ -2,10 +2,17 @@ import React from 'react';
 import { Theme } from '@material-ui/core/styles';
 import { stylesWithTheme } from 'utils/createStyles';
 
-import LaboratoryForm, { ContactValues } from './LaboratoryForm';
+import LaboratoryForm, { LaboratoryFormValues } from './LaboratoryForm';
+import { ExamDataValues } from '../ExamForm';
+import { ContactPatientValues } from '../ContactPatient';
 
 interface ContactProps {
-	onChangeStep: (values: ContactValues, onError?: Function) => void;
+	previousData: {
+		contactData: ContactPatientValues | undefined;
+		examData: ExamDataValues | undefined;
+	};
+	laboratoryData: LaboratoryFormValues | undefined;
+	onChangeStep: (values: LaboratoryFormValues, onError?: Function) => void;
 }
 
 export interface HeaderValues {
@@ -45,12 +52,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const Laboratory = ({ onChangeStep }: ContactProps) => {
+const Laboratory = ({ previousData, laboratoryData, onChangeStep }: ContactProps) => {
 	const classes = useStyles();
 
 	return (
 		<div className={classes.wrapper}>
-			<LaboratoryForm onChangeStep={onChangeStep} />
+			<LaboratoryForm previousData={previousData} laboratoryData={laboratoryData} onChangeStep={onChangeStep} />
 		</div>
 	);
 };
