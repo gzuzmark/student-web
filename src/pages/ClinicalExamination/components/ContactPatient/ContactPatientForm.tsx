@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import useStyles from './ContactPatientForm.styles';
 
 import { defaultCenter, getUserCurrentPosition } from 'utils';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
 import GoogleMapReact, { Maps } from 'google-map-react';
 import clsx from 'clsx';
@@ -29,6 +29,8 @@ export interface ContactPatientValues {
 	email: string;
 	address: string;
 	privacy: boolean;
+	isTerm?: boolean | null;
+	isClub?: boolean | null;
 }
 
 const GreenCheckbox = withStyles({
@@ -87,6 +89,8 @@ const initialValues: ContactPatientValues = {
 	email: '',
 	address: '',
 	privacy: true,
+	isTerm: false,
+	isClub: false,
 };
 
 const validationSchema = yup.object().shape({
@@ -103,20 +107,25 @@ const validationSchema = yup.object().shape({
 		.min(9, '9 caracteres'),
 	email: yup.string().required(REQUIRED_FIELD).email('Correo inválido'),
 	address: yup.string().required(REQUIRED_FIELD),
-	privacy: yup.boolean().isTrue(),
+	// isTerm: yup.boolean().isTrue(),
+	// isTerm: yup.bool().required('Se requiere aceptar los términos y condiciones').oneOf([true], 'Se requiere aceptar los términos y condiciones'),
 });
 
 export interface ContactPatientFormProps {
 	contactData: ContactPatientValues | undefined;
 	onChangeStep: (values: ContactPatientValues, onError?: Function) => void;
 	openPrivacyPolicy: () => void;
+	openTermsAndConditions: () => void;
+	openDataAnalitycs: () => void;
 }
 
 const ContactPatientForm = ({
 	contactData,
 	onChangeStep,
 	openPrivacyPolicy,
-}: ContactPatientFormProps): ReactElement => {
+	openTermsAndConditions,
+	openDataAnalitycs,
+}: ContactPatientFormProps) => {
 	const { t } = useTranslation('clinicalExamination');
 	const classes = useStyles();
 	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
@@ -147,7 +156,6 @@ const ContactPatientForm = ({
 
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
 		const addressInputWrapper = document.querySelector<HTMLElement>('.address-input-wrapper');
-		console.log(formattedPlace);
 		if (addressInputWrapper) {
 			map.controls[maps.ControlPosition.TOP_RIGHT].push(addressInputWrapper);
 			setTimeout(() => {
@@ -184,9 +192,14 @@ const ContactPatientForm = ({
 		});
 	}, [mapInstance, mapsApi]);
 
+	const [isChecked, setChecked] = useState(false);
+	const handleChange = (event: any) => {
+		setChecked(event.target.checked);
+	};
+
 	return (
 		<Formik initialValues={contactData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-			{({ submitForm, isSubmitting, isValid, dirty }) => (
+			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
 					<div>
 						<div className={classes.fieldWrapper}>
@@ -275,20 +288,68 @@ const ContactPatientForm = ({
 							/>
 						</>
 					</div>
-					<div className={classes.privacyPolicyWrapper}>
-						<FormControlLabel className={classes.checkbox} control={<GreenCheckbox name="privacy" />} label="" />
-						{/* <Field component={FormikCheckbox} type="checkbox" name="privacy" /> */}
-						<Typography
-							className={classes.legalInformation}
-							component="span"
-							color="primary"
-							onClick={openPrivacyPolicy}
-						>
-							{t('contactPatient.legalInformation.privacyPolicyLink')}{' '}
-						</Typography>
-					</div>
+
 					<div className={classes.fieldWrapper}>
-						<Button variant="contained" fullWidth onClick={submitForm} disabled={!(dirty && isValid) || isSubmitting}>
+						<FormControlLabel
+							control={
+								<>
+									<GreenCheckbox name="isTerm" color="primary" checked={isChecked} onClick={handleChange} />
+								</>
+							}
+							label={
+								<>
+									<Typography className={classes.legalInformation} component="span">
+										{t('contact.legalInformation.firstSection1')}{' '}
+									</Typography>
+									<Typography
+										className={classes.privacyPolicyLink}
+										component="span"
+										color="primary"
+										onClick={openTermsAndConditions}
+									>
+										{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
+									</Typography>
+									<Typography className={classes.legalInformation} component="span">
+										{t('contact.legalInformation.secondSection1')}{' '}
+									</Typography>
+									<Typography
+										className={classes.privacyPolicyLink}
+										component="span"
+										color="primary"
+										onClick={openPrivacyPolicy}
+									>
+										{t('contact.legalInformation.privacyPolicyLink1')}{' '}
+									</Typography>
+								</>
+							}
+						/>
+						<ErrorMessage className={classes.termsConditions} name="isTerm" component="p"></ErrorMessage>
+					</div>
+
+					<div className={classes.fieldWrapper}>
+						<FormControlLabel
+							className={classes.checkbox}
+							control={<GreenCheckbox name="isClub" color="primary" />}
+							label={
+								<>
+									<Typography className={classes.legalInformation} component="span">
+										{t('contact.legalInformation.firstSection2')}{' '}
+									</Typography>
+									<Typography
+										className={classes.privacyPolicyLink}
+										component="span"
+										color="primary"
+										onClick={openDataAnalitycs}
+									>
+										{t('contact.legalInformation.analysisData')}{' '}
+									</Typography>
+								</>
+							}
+						/>
+					</div>
+
+					<div className={classes.fieldWrapper}>
+						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
 							{t('contactPatient.submit.text')}
 						</Button>
 					</div>

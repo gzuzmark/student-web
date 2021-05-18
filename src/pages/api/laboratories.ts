@@ -66,6 +66,7 @@ export const getLaboratoriesList = async (params: LaboratoryRequest): Promise<La
 	};
 	try {
 		const response = await aliviaAxios.post('/laboratories', body);
+		console.log(response.data);
 		return response.data;
 	} catch (error) {
 		throw error;

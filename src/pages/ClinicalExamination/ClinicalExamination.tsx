@@ -50,7 +50,7 @@ const ClinicalExamination = () => {
 	useEffect(() => {
 		const removeListener = listen((location: Location) => {
 			const index = findStepExam(location);
-			console.log({ index });
+			// console.log({ index });
 			if (index >= 0 && index < 3) {
 				setStep(index);
 			}

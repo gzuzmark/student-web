@@ -9,6 +9,7 @@ const paymentLaboratoryL18n = {
 	'payment.right.payCulqiButton': 'Tarjeta de crédito o débito',
 	'payment.right.payTransaction': 'Yape o Tunki',
 	'payment.right.pagoEfectivo': 'Pago efectivo',
+	'payment.right.pagoEfectivo1': 'Pago en Local',
 	'payment.right.discountLabel': '¿Tienes un código de descuento? Ingrésalo:',
 	'payment.right.addDiscountLabel': 'Añadir código',
 	'payment.left.cmp': 'RUC:',

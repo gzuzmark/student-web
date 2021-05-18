@@ -120,6 +120,17 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		textDecoration: 'underline',
 	},
 	container: {
+		paddingBottom: '37px',
+		'&:last-child': {
+			paddingBottom: '25px',
+		},
+		[breakpoints.up('lg')]: {
+			paddingBottom: '48px',
+			'&:last-child': {
+				paddingBottom: '27px',
+			},
+		},
+
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -127,6 +138,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	text: {
 		minWidth: 120,
 		paddingTop: 20,
+	},
+	text1: {
+		padding: 0,
+	},
+	labelAddress: {
+		color: '#1ECD96',
 	},
 	dateLaboratory: {
 		minWidth: 320,
@@ -207,7 +224,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		padding: '8px 0 !important',
 	},
 	leftBottonAdentro: {
-		float: 'left',
+		// float: 'left',
 		width: '300px',
 		padding: '8px 0 !important',
 	},
@@ -322,19 +339,18 @@ const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactF
 	// if (!previousData.contactData || !previousData.examData) return <Redirect to="/examenes/registrar" />;
 
 	const checkLaboratoriesByDate = async (date: Date) => {
-		console.log({ date });
 		const result = await getLaboratoriesList({
 			date,
 			modalityId: Number(previousData.examData?.modality),
 			laboratoryExamIds: previousData.examData?.typeExam.map((x) => x.id) || [],
 		});
-		console.log({ result });
 		setLaboratories(result);
 	};
 
 	return (
 		<Formik initialValues={laboratoryData || initialValues} onSubmit={onSubmit} enableReinitialize>
-			{({ submitForm, isSubmitting, values, setFieldValue }) => (
+			{/* {({ submitForm, isSubmitting, values, setFieldValue }) => ( */}
+			{({ isSubmitting, values, setFieldValue }) => (
 				<Form className={classes.fieldWrapper}>
 					<div className={classes.form}>
 						<FormControl className={classes.text}>
@@ -352,7 +368,10 @@ const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactF
 							</Select>
 						</FormControl>
 						<FormControl className={classes.right}>
-							<FormControl className={classes.text}>
+							<FormControl className={classes.text1}>
+								<Typography className={classes.labelAddress} variant="body1">
+									{t('left.label.address')}
+								</Typography>
 								<Typography variant="body1">{previousData.contactData?.address}</Typography>
 							</FormControl>
 						</FormControl>
@@ -419,7 +438,7 @@ const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactF
 						<div className={classes.container}>
 							<FormControl className={classes.leftBottonAdentro}>
 								<Button
-									className={classes.leftBottonAdentro}
+									// className={classes.leftBottonAdentro}
 									variant="contained"
 									fullWidth
 									onClick={handleContinueClick}
