@@ -17,7 +17,18 @@ interface LaboratoryPickerProps {
 	selectedLaboratory: Laboratory | undefined;
 }
 
-const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+	form: {
+		[breakpoints.up('lg')]: {
+			maxWidth: '691px',
+		},
+	},
+	formCard: {
+		[breakpoints.up('lg')]: {
+			maxWidth: '691px',
+		},
+	},
+
 	laboratorioWrapper: {
 		backgroundColor: 'white',
 		padding: '40px 24px',
@@ -41,8 +52,256 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			paddingRight: '58px',
 		},
 	},
-	nameWrapper: {
-		paddingBottom: '10px',
+
+	tipsWrapper: {
+		padding: '40px 26px 27px',
+		[breakpoints.up('lg')]: {
+			padding: '96px 0 49px 0',
+			width: '675px',
+		},
+	},
+	fieldWrapper: {
+		paddingBottom: '37px',
+		'&:last-child': {
+			paddingBottom: '25px',
+		},
+		[breakpoints.up('lg')]: {
+			paddingBottom: '48px',
+			'&:last-child': {
+				paddingBottom: '27px',
+			},
+		},
+	},
+	fieldWrapperExam: {
+		paddingBottom: '37px',
+		'&:last-child': {
+			paddingBottom: '25px',
+		},
+		[breakpoints.up('lg')]: {
+			paddingBottom: '8px',
+			'&:last-child': {
+				paddingBottom: '27px',
+			},
+		},
+		minWidth: '400px',
+	},
+	fieldWithHelperText: {
+		'& .MuiFormHelperText-root': {
+			color: palette.info.main,
+		},
+		'& .MuiFormHelperText-root.Mui-error': {
+			color: palette.error.main,
+		},
+	},
+	privacyPolicyWrapper: {
+		paddingBottom: '19px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '28px',
+			marginRight: '-40px',
+		},
+	},
+	negrita: {
+		fontWeight: 600,
+		fontSize: '15px',
+		lineHeight: '25px',
+		[breakpoints.up('lg')]: {
+			fontSize: '15px',
+			lineHeight: '30px',
+			letterSpacing: '0.2px',
+		},
+	},
+	legalInformation: {
+		fontSize: '13px',
+		color: palette.info.main,
+	},
+	privacyPolicyLink: {
+		fontSize: '13px',
+		cursor: 'pointer',
+		textDecoration: 'underline',
+	},
+	container: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	text: {
+		minWidth: 120,
+		paddingTop: 20,
+	},
+	text1: {
+		padding: 0,
+		color: '#1ECD96',
+	},
+	dateLaboratory: {
+		minWidth: 320,
+		paddingTop: 20,
+		float: 'left',
+	},
+	cmp: {
+		fontSize: '12px',
+		lineHeight: '17px',
+		[breakpoints.up('lg')]: {
+			paddingRight: '57px',
+			paddingBottom: '11px',
+		},
+	},
+	precio: {
+		fontSize: '20px',
+		fontWeight: 'bold',
+		lineHeight: '17px',
+	},
+	ratingWrapper: {
+		display: 'flex',
+		paddingBottom: '12px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '22px',
+		},
+		float: 'right',
+	},
+	doctorRating: {
+		'&&': {
+			color: palette.primary.main,
+		},
+	},
+	ratingNumber: {
+		fontSize: '13px',
+		lineHeight: '24px',
+	},
+	doctorMoreInfo: {
+		textDecoration: 'none',
+		fontSize: '13px',
+		lineHeight: '18px',
+		padding: '6px 0',
+		'&:hover': {
+			textDecoration: 'none',
+		},
+	},
+	flexWrapper: {
+		paddingBottom: '8px',
+		[breakpoints.up('lg')]: {
+			display: 'flex',
+		},
+	},
+	specialityWrapper: {
+		paddingBottom: '5px',
+		[breakpoints.up('lg')]: {
+			paddingRight: '2px',
+			paddingBottom: '11px',
+		},
+	},
+	name: {
+		fontSize: '15px',
+		lineHeight: '18px',
+		textTransform: 'capitalize',
+		fontWeight: 'bold',
+		'&.no-caps': {
+			textTransform: 'none',
+		},
+		[breakpoints.up('lg')]: {
+			fontSize: '20px',
+			lineHeight: '25px',
+		},
+	},
+	left: {
+		float: 'left',
+	},
+	leftBotton: {
+		float: 'left',
+		width: '50%',
+		padding: '8px 0 !important',
+	},
+	leftBottonAdentro: {
+		float: 'left',
+		width: '300px',
+		padding: '8px 0 !important',
+	},
+	right: {
+		float: 'right',
+	},
+	rightBotton: {
+		padding: '8px 0',
+		float: 'right',
+		width: '50%',
+	},
+	rightBottonAdentro: {
+		padding: '8px 0',
+		float: 'right',
+		width: '300px',
+	},
+	type: {
+		fontWeight: 600,
+	},
+	input: {
+		padding: '10px 14px',
+	},
+	select: {
+		minWidth: 200,
+		maxWidth: 150,
+	},
+	search: {
+		maxWidth: 180,
+	},
+	spacy: {
+		lineHeight: '18px',
+		paddingBottom: '28px',
+	},
+	labelExam: {
+		display: 'flex',
+		padding: '8px 14px 8px 18px',
+		alignItems: 'center',
+		borderRadius: '255px',
+		marginBottom: '10px',
+		justifyContent: 'space-between',
+		backgroundColor: 'white',
+	},
+	textExam: {
+		color: '#535B6C',
+		[breakpoints.up('lg')]: {
+			fontSize: '15px',
+			lineHeight: '20px',
+		},
+		fontFamily: 'Montserrat,-apple-system,sans-serif',
+		fontWeight: '500',
+		lineHeight: '18px',
+		letterSpacing: '0.2px',
+	},
+	icon: {
+		cursor: 'pointer',
+		height: '20px',
+	},
+	editModality: {
+		// textDecoration: 'none',
+		fontSize: '13px',
+		// lineHeight: '18px',
+		// padding: '6px 0',
+		// '&:hover': {
+		// 	textDecoration: 'none',
+		// },
+		float: 'right',
+		paddingRight: 0,
+	},
+	actionsWrapper: {
+		[breakpoints.up('lg')]: {
+			width: '401px',
+			margin: '0 auto',
+		},
+	},
+	updateAddress: {
+		marginBottom: '12px',
+		padding: '16px 0',
+		[breakpoints.up('lg')]: {
+			marginBottom: '26px',
+			padding: '21.5px 0',
+		},
+	},
+	seeEPrescription: {
+		textTransform: 'none',
+		padding: '11px 0',
+		marginBottom: '28px',
+		[breakpoints.up('lg')]: {
+			marginBottom: '41px',
+			padding: '19.5px 0',
+		},
 	},
 }));
 
@@ -56,29 +315,33 @@ const LaboratoryPicker = ({ laboratories, modalityId, onChoose, selectedLaborato
 					<div className={classes.photoWrapper}>
 						<img className={classes.photo} src="" alt="doctor" />
 					</div>
-					<div className={classes.info}>
-						<div className={classes.nameWrapper}>
-							<Typography component="span" className={clsx(classes.name, 'no-caps')}>
-								{laboratory.name}
-							</Typography>
-							<Typography component="span" className={classes.name}></Typography>
-						</div>
-						<div className={classes.flexWrapper}>
-							<div className={classes.specialityWrapper}>
-								<Typography className={classes.speciality}>Modalidad de Servicio:</Typography>
-							</div>
-							<div>
-								<Typography className={classes.cmp}>
-									{modalityOptions.find((x) => x.value === modalityId)?.label || ''}
+					<div className={classes.info} style={{ display: 'flex', width: '100%' }}>
+						<div style={{ flex: '3' }}>
+							<div className={classes.nameWrapper}>
+								<Typography component="span" className={clsx(classes.name, 'no-caps')}>
+									{laboratory.name}
 								</Typography>
+								<Typography component="span" className={classes.name}></Typography>
 							</div>
-							<div className={classes.right}></div>
+
+							<div className={classes.flexWrapper}>
+								<div className={classes.specialityWrapper}>
+									<Typography className={classes.speciality}>Modalidad de Servicio:</Typography>
+								</div>
+								<div>
+									<Typography className={classes.speciality}>
+										{modalityOptions.find((x) => x.value === modalityId)?.label || ''}
+									</Typography>
+								</div>
+							</div>
+						</div>
+						<div style={{ flex: '1', paddingRight: '2rem' }}>
 							<div className={classes.right}>
 								<Typography className={classes.precio}>S/. {laboratory.total_cost}</Typography>
 							</div>
-						</div>
-						<div className={classes.ratingWrapper}>
-							<Button className={classes.editModality}>Ver Detalle</Button>
+							<div style={{ paddingRight: '0' }}>
+								<Button className={classes.editModality}>Ver Detalle</Button>
+							</div>
 						</div>
 					</div>
 				</div>
