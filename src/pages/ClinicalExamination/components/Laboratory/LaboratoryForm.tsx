@@ -8,7 +8,6 @@ import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Theme } from '@material-ui/core/styles';
-import { DatePickerInput } from 'pages/common';
 
 import { Formik, Form, Field } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
@@ -350,7 +349,8 @@ const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactF
 
 	return (
 		<Formik initialValues={laboratoryData || initialValues} onSubmit={onSubmit} enableReinitialize>
-			{({ submitForm, isSubmitting, values, setFieldValue }) => (
+			{/* {({ submitForm, isSubmitting, values, setFieldValue }) => ( */}
+			{({ isSubmitting, values, setFieldValue }) => (
 				<Form className={classes.fieldWrapper}>
 					<div className={classes.form}>
 						<FormControl className={classes.text}>

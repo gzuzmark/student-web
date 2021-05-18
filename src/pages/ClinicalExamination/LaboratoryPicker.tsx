@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { Laboratory } from 'types';
 
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Button, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 
 import { stylesWithTheme } from 'utils';
 import AvailableTimePicker from './components/AvailableTimes';
 import { modalityOptions } from './constants';
+import LaboratoryModal from './components/Laboratory/LaboratoryModal';
 
 interface LaboratoryPickerProps {
 	laboratories: Laboratory[];
@@ -50,6 +50,15 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		paddingRight: '20px',
 		[breakpoints.up('lg')]: {
 			paddingRight: '58px',
+		},
+	},
+	photo: {
+		borderRadius: '51%',
+		width: '94px',
+		height: '86px',
+		[breakpoints.up('lg')]: {
+			width: '111px',
+			height: '102px',
 		},
 	},
 
@@ -303,65 +312,126 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			padding: '19.5px 0',
 		},
 	},
+	// modal
+	card: {
+		left: '50%',
+		position: 'relative',
+		top: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: '327px',
+		[breakpoints.up('lg')]: {
+			width: '856px',
+		},
+	},
+	wrapper: {
+		textAlign: 'center',
+		padding: '58px 30px 0',
+		[breakpoints.up('lg')]: {
+			padding: '75px 107px 0',
+		},
+	},
+	title: {
+		paddingBottom: '28px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '39px',
+		},
+	},
+	actions: {
+		[breakpoints.up('lg')]: {
+			display: 'flex',
+			justifyContent: 'space-between',
+		},
+	},
+	action: {
+		width: '180px',
+		marginBottom: '25px',
+		[breakpoints.up('lg')]: {
+			width: '300px',
+			marginBottom: '0',
+		},
+	},
 }));
 
 const LaboratoryPicker = ({ laboratories, modalityId, onChoose, selectedLaboratory }: LaboratoryPickerProps) => {
 	const classes = useStyles();
 
+	const [selectedLab, setSelectedLab] = useState<Laboratory | null>(null);
+	const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false);
+	const selectLabForModal = (index: number) => {
+		setSelectedLab(laboratories[index]);
+	};
+	const closeDetailModal = () => {
+		setIsDetailModalOpen(false);
+	};
+	const openDetailedModal = () => {
+		setIsDetailModalOpen(true);
+	};
+
 	const renderItem = (laboratory: Laboratory, index: number) => {
 		return (
-			<div className={classes.laboratorioWrapper} key={index}>
-				<div className={classes.laboratory}>
-					<div className={classes.photoWrapper}>
-						<img className={classes.photo} src="" alt="doctor" />
-					</div>
-					<div className={classes.info} style={{ display: 'flex', width: '100%' }}>
-						<div style={{ flex: '3' }}>
-							<div className={classes.nameWrapper}>
-								<Typography component="span" className={clsx(classes.name, 'no-caps')}>
-									{laboratory.name}
-								</Typography>
-								<Typography component="span" className={classes.name}></Typography>
-							</div>
-
-							<div className={classes.flexWrapper}>
-								<div className={classes.specialityWrapper}>
-									<Typography className={classes.speciality}>Modalidad de Servicio:</Typography>
-								</div>
-								<div>
-									<Typography className={classes.speciality}>
-										{modalityOptions.find((x) => x.value === modalityId)?.label || ''}
+			<div>
+				<div className={classes.laboratorioWrapper} key={index}>
+					<div className={classes.laboratory}>
+						<div className={classes.photoWrapper}>
+							<img className={classes.photo} src={laboratory.logo} alt="doctor" />
+						</div>
+						<div className={classes.info} style={{ display: 'flex', width: '100%' }}>
+							<div style={{ flex: '3' }}>
+								<div className={classes.nameWrapper}>
+									<Typography component="span" className={clsx(classes.name, 'no-caps')}>
+										{laboratory.name}
 									</Typography>
+									<Typography component="span" className={classes.name}></Typography>
+								</div>
+
+								<div className={classes.flexWrapper}>
+									<div className={classes.specialityWrapper}>
+										<Typography className={classes.speciality}>Modalidad de Servicio:</Typography>
+									</div>
+									<div>
+										<Typography className={classes.speciality}>
+											{modalityOptions.find((x) => x.value === modalityId)?.label || ''}
+										</Typography>
+									</div>
+								</div>
+							</div>
+							<div style={{ flex: '1', paddingRight: '2rem' }}>
+								<div className={classes.right}>
+									<Typography className={classes.precio}>S/. {laboratory.total_cost}</Typography>
+								</div>
+								<div style={{ paddingRight: '0' }}>
+									<Button
+										className={classes.editModality}
+										onClick={() => {
+											selectLabForModal(index);
+											openDetailedModal();
+										}}
+									>
+										Ver Detalle
+									</Button>
 								</div>
 							</div>
 						</div>
-						<div style={{ flex: '1', paddingRight: '2rem' }}>
-							<div className={classes.right}>
-								<Typography className={classes.precio}>S/. {laboratory.total_cost}</Typography>
-							</div>
-							<div style={{ paddingRight: '0' }}>
-								<Button className={classes.editModality}>Ver Detalle</Button>
-							</div>
-						</div>
+					</div>
+					<div className={classes.availableTitleWrapper}>
+						<Typography className={classes.availableTitle} component="span">
+							ELIGE UN HORARIO:
+						</Typography>
+					</div>
+					<div className={classes.timesWrapper}>
+						<AvailableTimePicker
+							availableTimes={laboratory.available_times}
+							selectedLaboratory={selectedLaboratory}
+							onChoose={(aT) => {
+								onChoose({
+									...laboratory,
+									selected_time: aT,
+								});
+							}}
+						/>
 					</div>
 				</div>
-				<div className={classes.availableTitleWrapper}>
-					<Typography className={classes.availableTitle} component="span">
-						ELIGE UN HORARIO:
-					</Typography>
-				</div>
-				<div className={classes.timesWrapper}>
-					<AvailableTimePicker
-						availableTimes={laboratory.available_times}
-						selectedLaboratory={selectedLaboratory}
-						onChoose={(aT) => {
-							onChoose({
-								...laboratory,
-								selected_time: aT,
-							});
-						}}
-					/>
-				</div>
+				<LaboratoryModal laboratory={selectedLab} isOpen={isDetailModalOpen} onClose={closeDetailModal} />
 			</div>
 		);
 	};
