@@ -1,12 +1,12 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
-// import capitalize from 'lodash/capitalize';
+import capitalize from 'lodash/capitalize';
 
 import { LeftLayout } from 'pages/common';
-// import { Doctor, Schedule } from 'pages/api';
-import { stylesWithTheme } from 'utils';
-// import { User } from 'AppContext';
+import { Doctor, Schedule } from 'pages/api';
+import { stylesWithTheme, formatUTCDate } from 'utils';
+import { User } from 'AppContext';
 import { useTranslation } from 'react-i18next';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -104,16 +104,17 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-// interface LeftSideProps {
-// 	doctor: Doctor | null | undefined;
-// 	user: User | null | undefined;
-// 	schedule: Schedule | null | undefined;
-// 	channel: string | undefined;
-// }
+interface LeftSideProps {
+	doctor: Doctor | null | undefined;
+	user: User | null | undefined;
+	schedule: Schedule | null | undefined;
+	channel: string | undefined;
+}
 
-const LeftSide = () => {
+const LeftSide = ({ doctor, user, schedule, channel }: LeftSideProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('paymentLaboratory');
+
 	return (
 		<LeftLayout>
 			<div className={classes.wrapper}>
@@ -124,7 +125,7 @@ const LeftSide = () => {
 					{t('payment.left.title')}
 				</Typography>
 				<div className={classes.infoWrapper}>
-					{/* <div className={classes.appointmentSection}>
+					<div className={classes.appointmentSection}>
 						<Typography className={classes.infoTitle}>{t('payment.left.appointmentTitle')}</Typography>
 						<div className={classes.appointmentInfo}>
 							<Typography>
@@ -136,12 +137,12 @@ const LeftSide = () => {
 							<Typography>{schedule?.startTime ? formatUTCDate(schedule?.startTime, 'h:mm aaa') : ''}</Typography>
 							<Typography className={classes.appointmentChannel}>{channel}</Typography>
 						</div>
-					</div> */}
-					{/* <div className={classes.patientSection}>
+					</div>
+					<div className={classes.patientSection}>
 						<Typography className={classes.infoTitle}>{t('payment.left.pacientTitle')}</Typography>
 						<Typography className={classes.patientName}>{user?.name}</Typography>
-					</div> */}
-					{/* <div className={classes.doctorSection}>
+					</div>
+					<div className={classes.doctorSection}>
 						<Typography className={classes.infoTitle}>{t('payment.left.doctorTitle')}</Typography>
 						<div className={classes.doctorWrapper}>
 							<div className={classes.doctorImgWrapper}>
@@ -155,7 +156,7 @@ const LeftSide = () => {
 								</div>
 							</div>
 						</div>
-					</div> */}
+					</div>
 				</div>
 			</div>
 		</LeftLayout>
