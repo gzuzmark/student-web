@@ -1,4 +1,4 @@
-import React, { useEffect, ReactElement, useCallback, useState, ChangeEvent } from 'react';
+import React, { useEffect, useCallback, useState, ChangeEvent } from 'react';
 import { TextField } from 'formik-material-ui';
 
 import MaterialTextField from '@material-ui/core/TextField';
@@ -150,8 +150,9 @@ const ContactPatientForm = ({
 		(values: ContactPatientValues, { setSubmitting }: { setSubmitting: Function; setFieldError: Function }) => {
 			onChangeStep(values);
 			setSubmitting(false);
+			console.log(formattedPlace);
 		},
-		[onChangeStep],
+		[formattedPlace, onChangeStep],
 	);
 
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
