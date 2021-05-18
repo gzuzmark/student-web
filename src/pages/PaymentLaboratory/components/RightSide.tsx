@@ -309,6 +309,8 @@ const RightSide = ({ executePayment, errorMessage }: RightSideProps) => {
 							</div>
 						</Button>
 					)}
+				</div>
+				<div className={classes.buttonWrapper}>
 					<Button
 						className={classes.option}
 						onClick={(e) => {
@@ -336,9 +338,6 @@ const RightSide = ({ executePayment, errorMessage }: RightSideProps) => {
 						</div>
 					</Button>
 				</div>
-				{/* <div className={classes.buttonWrapper}>
-					
-				</div> */}
 				{errorMessage ? (
 					<div className={classes.errorWrapper}>
 						<FormHelperText error>{errorMessage}</FormHelperText>
