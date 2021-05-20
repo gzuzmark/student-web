@@ -233,7 +233,7 @@ const PaymentLaboratory = () => {
 				}
 			}
 		},
-		[doctor, makeKushkiLocalPayment, reservationAccountID, schedule, useCase],
+		[laboratorio, schedules],
 	);
 
 	const makeKushkiPayment = (values: any) => {
