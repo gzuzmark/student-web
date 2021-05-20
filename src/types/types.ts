@@ -103,6 +103,7 @@ export interface Laboratory {
 	selected_time: AvailableTime | undefined;
 	logo: string;
 	laboratory_exams: LaboratoryExamen[];
+	delivery_cost: number;
 }
 
 export interface LaboratoryExamen {

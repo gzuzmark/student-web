@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 import useStyles from './ContactPatientForm.styles';
 
@@ -23,14 +25,17 @@ import SearchAddress from 'pages/LaboratoryExams/components/SearchAddress';
 const REQUIRED_FIELD = 'Campo obligatorio';
 
 export interface ContactPatientValues {
+	identificationType: string;
 	identification: string;
 	name: string;
+	lastName: string;
+	secondSurname: string;
 	phoneNumber: string;
 	email: string;
 	address: string;
-	privacy: boolean;
-	isTerm?: boolean | null;
-	isClub?: boolean | null;
+	// privacy: boolean;
+	isTerm: boolean;
+	isClub: boolean;
 }
 
 const GreenCheckbox = withStyles({
@@ -84,22 +89,28 @@ const getCurrentPosition = async ({
 
 const initialValues: ContactPatientValues = {
 	identification: '',
+	identificationType: 'DNI',
 	name: '',
+	lastName: '',
+	secondSurname: '',
 	phoneNumber: '',
 	email: '',
 	address: '',
-	privacy: true,
+	// privacy: true,
 	isTerm: false,
 	isClub: false,
 };
 
 const validationSchema = yup.object().shape({
+	identificationType: yup.string().required(REQUIRED_FIELD),
 	identification: yup
 		.string()
 		.matches(/^[0-9]*$/, { message: 'Solo números' })
 		.required(REQUIRED_FIELD)
 		.min(8, 'Mínimo 8 caracteres'),
 	name: yup.string().required(REQUIRED_FIELD),
+	lastName: yup.string().required(REQUIRED_FIELD),
+	secondSurname: yup.string().required(REQUIRED_FIELD),
 	phoneNumber: yup
 		.string()
 		.matches(/^[0-9]*$/, { message: 'Solo números' })
@@ -108,7 +119,10 @@ const validationSchema = yup.object().shape({
 	email: yup.string().required(REQUIRED_FIELD).email('Correo inválido'),
 	address: yup.string().required(REQUIRED_FIELD),
 	// isTerm: yup.boolean().isTrue(),
-	// isTerm: yup.bool().required('Se requiere aceptar los términos y condiciones').oneOf([true], 'Se requiere aceptar los términos y condiciones'),
+	isTerm: yup
+		.bool()
+		.required('Se requiere aceptar los términos y condiciones')
+		.oneOf([true], 'Se requiere aceptar los términos y condiciones'),
 });
 
 export interface ContactPatientFormProps {
@@ -134,14 +148,14 @@ const ContactPatientForm = ({
 	const [mapsApi, setMapApi] = useState<MapsApi>();
 	const [addressReference, setAddressReference] = useState<string>('');
 	const [mapInstance, setMapInstance] = useState<MapInstance>();
-	const [formattedPlace, setFormattedPlace] = useState<FormattedPlace>({
-		name: '',
-		district: '',
-		country: '',
-		city: '',
-		number: '',
-		street: '',
-	});
+	// const [formattedPlace, setFormattedPlace] = useState<FormattedPlace>({
+	// 	name: '',
+	// 	district: '',
+	// 	country: '',
+	// 	city: '',
+	// 	number: '',
+	// 	street: '',
+	// });
 	const updateDirectionReference = (e: ChangeEvent<HTMLInputElement>) => {
 		setAddressReference(e.target.value);
 	};
@@ -150,9 +164,8 @@ const ContactPatientForm = ({
 		(values: ContactPatientValues, { setSubmitting }: { setSubmitting: Function; setFieldError: Function }) => {
 			onChangeStep(values);
 			setSubmitting(false);
-			console.log(formattedPlace);
 		},
-		[formattedPlace, onChangeStep],
+		[onChangeStep],
 	);
 
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
@@ -173,7 +186,7 @@ const ContactPatientForm = ({
 			if (place && mapInstance && currentPositionMarker) {
 				currentPositionMarker.setVisible(false);
 				setHumanActivePosition(place.address);
-				setFormattedPlace(place.formattedPlace);
+				// setFormattedPlace(place.formattedPlace);
 				setActivePosition(place.position);
 				currentPositionMarker.setPosition(place.position);
 				currentPositionMarker.setVisible(true);
@@ -193,36 +206,66 @@ const ContactPatientForm = ({
 		});
 	}, [mapInstance, mapsApi]);
 
-	const [isChecked, setChecked] = useState(false);
-	const handleChange = (event: any) => {
-		setChecked(event.target.checked);
-	};
-
 	return (
 		<Formik initialValues={contactData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-			{({ submitForm, isSubmitting }) => (
+			{({ submitForm, isSubmitting, values, setFieldValue }) => (
 				<Form className={classes.form}>
 					<div>
+						<FormControl className={classes.fieldWrapper} fullWidth>
+							<Field
+								component={TextField}
+								label={t('contact.fields.idType.label')}
+								name="identificationType"
+								variant="outlined"
+								select
+							>
+								<MenuItem value={'1'}>DNI</MenuItem>
+								<MenuItem value={'2'}>CE</MenuItem>
+							</Field>
+						</FormControl>
+
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={TextField}
 								name="identification"
-								label={t('contactPatient.fields.id.label')}
+								label={t('contact.fields.id')}
 								variant="outlined"
-								inputProps={{ maxLength: 12 }}
+								inputProps={{ maxLength: 11 }}
 								fullWidth
 							/>
 						</div>
+
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={TextField}
 								name="name"
-								label={t('contactPatient.fields.name.label')}
+								label={t('aboutme.fields.name.label')}
 								variant="outlined"
 								inputProps={{ maxLength: 75 }}
 								fullWidth
 							/>
 						</div>
+
+						<div className={classes.fieldWrapper}>
+							<Field
+								component={TextField}
+								name="lastName"
+								label={t('aboutme.fields.lastName.label')}
+								variant="outlined"
+								fullWidth
+							/>
+						</div>
+
+						<div className={classes.fieldWrapper}>
+							<Field
+								component={TextField}
+								name="secondSurname"
+								label={t('aboutme.fields.secondSurname.label')}
+								variant="outlined"
+								fullWidth
+							/>
+						</div>
+
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={TextField}
@@ -294,7 +337,11 @@ const ContactPatientForm = ({
 						<FormControlLabel
 							control={
 								<>
-									<GreenCheckbox name="isTerm" color="primary" checked={isChecked} onClick={handleChange} />
+									<GreenCheckbox
+										name="isTerm"
+										color="primary"
+										onChange={() => setFieldValue('isTerm', !values.isTerm)}
+									/>
 								</>
 							}
 							label={
@@ -330,7 +377,15 @@ const ContactPatientForm = ({
 					<div className={classes.fieldWrapper}>
 						<FormControlLabel
 							className={classes.checkbox}
-							control={<GreenCheckbox name="isClub" color="primary" />}
+							control={
+								<>
+									<GreenCheckbox
+										name="isClub"
+										color="primary"
+										onChange={() => setFieldValue('isClub', !values.isClub)}
+									/>
+								</>
+							}
 							label={
 								<>
 									<Typography className={classes.legalInformation} component="span">
@@ -350,7 +405,12 @@ const ContactPatientForm = ({
 					</div>
 
 					<div className={classes.fieldWrapper}>
-						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
+						<Button
+							variant="contained"
+							fullWidth
+							onClick={submitForm}
+							disabled={isSubmitting || values.isTerm === false}
+						>
 							{t('contactPatient.submit.text')}
 						</Button>
 					</div>

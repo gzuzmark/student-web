@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 
 import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import FormControl from '@material-ui/core/FormControl';
@@ -320,7 +320,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactFormProps) => {
 	const { t } = useTranslation('clinicalExamination');
 	const classes = useStyles();
-	const history = useHistory();
+	// const history = useHistory();
 
 	const [laboratories, setLaboratories] = useState<Laboratory[]>([]);
 
@@ -332,11 +332,11 @@ const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactF
 		[onChangeStep],
 	);
 
-	const handleContinueClick = () => {
-		history.push('/pago_laboratory');
-	};
+	// const handleContinueClick = () => {
+	// 	history.push('/pago_laboratory');
+	// };
 
-	// if (!previousData.contactData || !previousData.examData) return <Redirect to="/examenes/registrar" />;
+	// if (!previousData.contactData || !previousData.examData) return history.push("/examenes/register");
 
 	const checkLaboratoriesByDate = async (date: Date) => {
 		const result = await getLaboratoriesList({
@@ -425,6 +425,7 @@ const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactF
 							modalityId={Number(previousData.examData?.modality)}
 							laboratories={laboratories}
 							selectedLaboratory={values.selectedLaboratory}
+							previousData={previousData}
 							onChoose={(lab) => {
 								setFieldValue('selectedLaboratory', lab);
 							}}
@@ -435,7 +436,7 @@ const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactF
 					<div className={classes.form}></div>
 					<div className={classes.spacy}></div>
 					<div className={classes.form}>
-						<div className={classes.container}>
+						{/* <div className={classes.container}>
 							<FormControl className={classes.leftBottonAdentro}>
 								<Button
 									// className={classes.leftBottonAdentro}
@@ -447,7 +448,7 @@ const LaboratoryForm = ({ previousData, laboratoryData, onChangeStep }: ContactF
 									{t('left.button.continue')}
 								</Button>
 							</FormControl>
-						</div>
+						</div> */}
 						{/* <FormControl className={classes.rightBottonAdentro}>
 							<Button
 								className={classes.rightBottonAdentro}

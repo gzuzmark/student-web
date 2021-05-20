@@ -27,6 +27,29 @@ interface PaymentRequestBody {
 	reservationAccountID: string;
 }
 
+interface PaymentRequestBodyLab {
+	cost: number;
+	token: string;
+	email: string;
+	patient_dni: string;
+	payment_type: number;
+	reservation_date: string;
+	user_id: string;
+	exam_modality_id: number;
+	service_id: number;
+	student_id: string;
+	laboratory_id: number;
+	laboratory_name: string;
+	file: string;
+	laboratory_exams: LaboratoryExamen[];
+}
+
+interface LaboratoryExamen {
+	laboratory_exam_id: number;
+	available_time_id: number;
+	price: string;
+}
+
 interface FakeSessionBody {
 	reservation_account_id: string;
 	use_case_id: string;
@@ -78,6 +101,14 @@ const formatParams = (params: PaymentRequestBody) => ({
 export const createPayment = async (params: PaymentRequestBody): Promise<void> => {
 	try {
 		return await aliviaAxios.post('/payments', { ...formatParams(params) });
+	} catch (e) {
+		throw Error(e);
+	}
+};
+
+export const createPaymentLab = async (params: PaymentRequestBodyLab): Promise<void> => {
+	try {
+		return await aliviaAxios.post('/payments/laboratory-exams', { ...params });
 	} catch (e) {
 		throw Error(e);
 	}

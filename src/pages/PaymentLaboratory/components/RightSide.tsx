@@ -26,11 +26,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 				minHeight: 'calc(100vh - 80px)',
 			},
 		},
+		paddingLeft: '100px !important',
 	},
 	wrapper: {
 		padding: '11px 24px 0',
 		[breakpoints.up('lg')]: {
-			padding: '147px 0 0 9px',
+			padding: '109px 0 0 9px',
 		},
 	},
 	title: {
@@ -226,11 +227,11 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 }));
 
 interface RightSideProps {
-	totalCost: string | undefined;
-	isCounponDisabled: boolean;
-	sendDiscount: () => Promise<void>;
-	discountCode: string;
-	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
+	totalCost: string | number | undefined;
+	// isCounponDisabled: boolean;
+	// sendDiscount: () => Promise<void>;
+	// discountCode: string;
+	// onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
 	executePayment: (pm: number) => (e: MouseEvent) => void;
 	errorMessage: string;
 }
@@ -317,9 +318,9 @@ const RightSide = ({ executePayment, errorMessage }: RightSideProps) => {
 							addGAEvent({
 								category: 'Agendar cita - Paso 3',
 								action: 'Avance satisfactorio',
-								label: 'Depósitos y transferencias',
+								label: 'Pago Local',
 							});
-							executePayment(PE_PAYMENT_ID)(e);
+							executePayment(3)(e);
 						}}
 						variant="outlined"
 						style={{}}
@@ -329,12 +330,9 @@ const RightSide = ({ executePayment, errorMessage }: RightSideProps) => {
 								<PagoLocalSVG />
 							</div>
 							<Typography className={classes.optionLabel} variant="h3">
-								{/* {t('payment.right.pagoEfectivo1')} */}
 								Pago en Local
 							</Typography>
-							<div className={classes.optionBrandWrapper}>
-								{/* <img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />  */}
-							</div>
+							<div className={classes.optionBrandWrapper}></div>
 						</div>
 					</Button>
 				</div>

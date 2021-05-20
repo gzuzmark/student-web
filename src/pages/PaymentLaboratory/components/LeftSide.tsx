@@ -4,7 +4,8 @@ import { Theme } from '@material-ui/core/styles';
 import capitalize from 'lodash/capitalize';
 
 import { LeftLayout } from 'pages/common';
-import { Doctor, Schedule } from 'pages/api';
+// import { Doctor, Schedule } from 'pages/api';
+import { Laboratorys, Schedules } from 'pages/api/laboratories';
 import { stylesWithTheme, formatUTCDate } from 'utils';
 import { User } from 'AppContext';
 import { useTranslation } from 'react-i18next';
@@ -104,14 +105,20 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-interface LeftSideProps {
-	doctor: Doctor | null | undefined;
-	user: User | null | undefined;
-	schedule: Schedule | null | undefined;
-	channel: string | undefined;
+export interface LabExam {
+	modality: number;
+	typeExam: string[];
+	files: string[];
 }
 
-const LeftSide = ({ doctor, user, schedule, channel }: LeftSideProps) => {
+interface LeftSideProps {
+	lab: Laboratorys | null | undefined;
+	user: User | null | undefined;
+	schedule: Schedules | null | undefined;
+	labExamn: LabExam | null | undefined;
+}
+
+const LeftSide = ({ lab, user, schedule, labExamn }: LeftSideProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('paymentLaboratory');
 
@@ -126,33 +133,40 @@ const LeftSide = ({ doctor, user, schedule, channel }: LeftSideProps) => {
 				</Typography>
 				<div className={classes.infoWrapper}>
 					<div className={classes.appointmentSection}>
-						<Typography className={classes.infoTitle}>{t('payment.left.appointmentTitle')}</Typography>
+						<Typography className={classes.infoTitle}>
+							Modalidad: {labExamn?.modality === 1 ? 'A Domicilio' : 'Presencial'}
+						</Typography>
 						<div className={classes.appointmentInfo}>
 							<Typography>
-								{schedule?.startTime
-									? capitalize(formatUTCDate(schedule?.startTime, "EEEE dd 'de' MMMM 'del' yyyy"))
+								{schedule?.start_time
+									? capitalize(formatUTCDate(new Date(schedule?.start_time), "EEEE dd 'de' MMMM 'del' yyyy"))
 									: ''}
 							</Typography>
+
 							<Typography className={classes.separator}> - </Typography>
-							<Typography>{schedule?.startTime ? formatUTCDate(schedule?.startTime, 'h:mm aaa') : ''}</Typography>
-							<Typography className={classes.appointmentChannel}>{channel}</Typography>
+							<Typography>
+								{schedule?.start_time ? formatUTCDate(new Date(schedule?.start_time), 'h:mm aaa') : ''}
+							</Typography>
+							{/* <Typography className={classes.appointmentChannel}>{channel}</Typography> */}
 						</div>
 					</div>
+
 					<div className={classes.patientSection}>
 						<Typography className={classes.infoTitle}>{t('payment.left.pacientTitle')}</Typography>
-						<Typography className={classes.patientName}>{user?.name}</Typography>
+						<Typography className={classes.patientName}>{user?.name + ' ' + user?.lastName}</Typography>
 					</div>
+
 					<div className={classes.doctorSection}>
-						<Typography className={classes.infoTitle}>{t('payment.left.doctorTitle')}</Typography>
+						<Typography className={classes.infoTitle}>Laboratorio</Typography>
 						<div className={classes.doctorWrapper}>
 							<div className={classes.doctorImgWrapper}>
-								<img className={classes.doctorImg} src={doctor?.profilePicture} alt="doctor" />
+								<img className={classes.doctorImg} src={lab?.logo} alt="doctor" />
 							</div>
 							<div>
-								<Typography className={classes.doctorName}>{doctor?.name}</Typography>
+								<Typography className={classes.doctorName}>{lab?.name}</Typography>
 								<div>
-									<Typography component="span">{t('payment.left.cmp')} </Typography>
-									<Typography component="span">{doctor?.cmp}</Typography>
+									<Typography component="span">RUC </Typography>
+									<Typography component="span">{lab?.ruc}</Typography>
 								</div>
 							</div>
 						</div>

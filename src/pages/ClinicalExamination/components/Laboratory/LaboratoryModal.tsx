@@ -67,7 +67,6 @@ const LaboratoryModal = ({ laboratory, isOpen, onClose }: LaboratoryModalProps):
 	// const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
-
 	return (
 		<Modal open={isOpen} onClose={onClose} style={{ margin: '0 auto !important' }}>
 			<FloatCard className={classes.card} height={matches ? 450 : 365} width={matches ? 500 : 327} mobile>
@@ -87,11 +86,13 @@ const LaboratoryModal = ({ laboratory, isOpen, onClose }: LaboratoryModalProps):
 						<Divider className={classes.divider} />
 						<p style={{ display: 'flex' }}>
 							<span>Costo de servicio</span>
-							<span style={{ margin: '0 0 0 auto' }}>S/. 0</span>
+							<span style={{ margin: '0 0 0 auto' }}>S/. {laboratory?.delivery_cost}</span>
 						</p>
 						<p style={{ display: 'flex', fontWeight: 'bold' }}>
 							<span>Total:</span>
-							<span style={{ margin: '0 0 0 auto' }}>S/. {laboratory?.total_cost}</span>
+							<span style={{ margin: '0 0 0 auto' }}>
+								S/. {laboratory ? laboratory?.total_cost + laboratory?.delivery_cost : 0}
+							</span>
 						</p>
 					</div>
 					<div className={classes.actions}>
