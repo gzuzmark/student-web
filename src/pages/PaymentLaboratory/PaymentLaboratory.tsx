@@ -233,7 +233,6 @@ const PaymentLaboratory = () => {
 				}
 			}
 		},
-		// [schedule, makeKushkiLocalPayment, useCase, reservationAccountID, doctor],
 		[schedule, makeKushkiLocalPayment, useCase, reservationAccountID, doctor],
 	);
 
