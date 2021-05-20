@@ -12,8 +12,8 @@ import {
 	getHour,
 	stylesWithTheme,
 } from 'utils';
-import initCulqi from 'utils/culquiIntegration';
-import { CONFIRMATION_STEP, GUEST, EMPTY_TRACK_PARAMS } from 'AppContext';
+// import initCulqi from 'utils/culquiIntegration';
+import { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
