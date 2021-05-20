@@ -766,7 +766,7 @@ const Payment = () => {
 												</div>
 												<div className={classes.fieldWrapper}>
 													<Grid container spacing={3}>
-														<Grid item xs={4}>
+														<Grid item xs={7}>
 															<Field
 																component={TextField}
 																variant="outlined"
@@ -801,13 +801,13 @@ const Payment = () => {
 																}}
 															/>
 														</Grid>
-														<Grid item xs={8}>
+														<Grid item xs={5}>
 															<Field
 																component={TextField}
 																variant="outlined"
 																name="cardCvv"
 																value={values.cardCvv}
-																label="Código de Seguridad"
+																label="CVV"																
 																fullWidth
 																onChange={(e: any) => {
 																	if (e.target.validity.valid || !e.target.value) {
