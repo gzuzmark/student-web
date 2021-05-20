@@ -6,7 +6,6 @@ import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE_LABORATORY } from 'routes';
 import {
 	useAppointmentStepValidation,
-	getIntCurrency,
 	dateToUTCUnixTimestamp,
 	addGAEvent,
 	getHumanDay,
@@ -18,15 +17,7 @@ import { CONFIRMATION_STEP, GUEST, EMPTY_TRACK_PARAMS } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import {
-	createPaymentLab,
-	createAppointment,
-	applyDiscount,
-	Discount,
-	KUSHKI_PAYMENT_ID,
-	PE_PAYMENT_ID,
-	sendFakeSession,
-} from 'pages/api';
+import { createPaymentLab, Discount, KUSHKI_PAYMENT_ID, PE_PAYMENT_ID, sendFakeSession } from 'pages/api';
 import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
 import { Kushki } from '@kushki/js';
 import {
@@ -110,11 +101,7 @@ const PaymentLaboratory = () => {
 		user,
 		patientUser,
 		schedule,
-		channel,
 		useCase,
-		triage,
-		userFiles,
-		userToken,
 		reservationAccountID,
 		updateState: updateContextState,
 		appointmentOwner,

@@ -17,14 +17,6 @@ import {
 } from './components';
 import { SUB_ROUTES_EXAM, checkStepExam, findStepExam } from './utils';
 
-interface NewUserProps {
-	appointmentOwner: AppointmentOwner | undefined;
-	useCase: UseCase | null | undefined;
-	isUserLoggedIn: boolean;
-	commingFromAppointmentCreation: boolean;
-	currentUser: User | null | undefined;
-}
-
 const ClinicalExamination = () => {
 	const isUserLoggedIn = false;
 	const commingFromAppointmentCreation = true;
