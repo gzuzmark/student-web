@@ -1,4 +1,8 @@
 const clinicalExamination = {
+	'steps.mobile.firstStep.label': 'ELIGE EL EXÁMEN',
+	'steps.mobile.secondStep.label': 'ELIGE EL LABORATORIO',
+	'steps.mobile.thirdStep.label': 'CONFIRMAR AGENDAMIENTO',
+
 	'left.titlePrefix': 'AHORA,',
 	'left.title.firstLine': 'Tus exámenes clínicos',
 	'left.title.secondLine': 'desde Alivia',
@@ -35,6 +39,12 @@ const clinicalExamination = {
 	'contact.legalInformation.firstSection2': 'He leído y acepto el',
 	'contact.legalInformation.analysisData': 'tratamiento de mis datos personales para fines adicionales',
 	'contact.validation.isterm.required': 'Se requiere aceptar los términos y condiciones',
+
+	'contact.fields.id': 'Ingresa tu DNI o CE',
+	'contact.fields.idType.label': 'Tipo de documento del paciente',
+	'aboutme.fields.name.label': 'Nombre del paciente',
+	'aboutme.fields.lastName.label': 'Apellido paterno del paciente',
+	'aboutme.fields.secondSurname.label': 'Apellido materno del paciente',
 };
 
 export default clinicalExamination;

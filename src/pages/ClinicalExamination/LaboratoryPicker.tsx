@@ -1,20 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import AppContext from 'AppContext';
 import clsx from 'clsx';
-import { Laboratory } from 'types';
+import { AvailableTime, Laboratory } from 'types';
 
 import { Button, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
+import { useTranslation } from 'react-i18next';
 
-import { stylesWithTheme } from 'utils';
+import { stylesWithTheme, addGAEvent } from 'utils';
 import AvailableTimePicker from './components/AvailableTimes';
 import { modalityOptions } from './constants';
 import LaboratoryModal from './components/Laboratory/LaboratoryModal';
+
+import { ExamDataValues } from './components/ExamForm/ExamForm';
+import { ContactPatientValues } from './components/ContactPatient/ContactPatientForm';
+import { createGuestPatient } from 'pages/api/signup';
+import { useHistory } from 'react-router';
 
 interface LaboratoryPickerProps {
 	laboratories: Laboratory[];
 	modalityId: number;
 	onChoose: (value: Laboratory) => void;
 	selectedLaboratory: Laboratory | undefined;
+	previousData: {
+		contactData: ContactPatientValues | undefined;
+		examData: ExamDataValues | undefined;
+	};
 }
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -36,7 +47,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
 		[breakpoints.up('lg')]: {
 			borderRadius: '10px',
-			padding: '34px 0 23px 36px',
+			padding: '34px 34px 23px 36px',
 			marginBottom: '25px',
 			boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
 		},
@@ -350,10 +361,35 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			marginBottom: '0',
 		},
 	},
+	timesWrapper: {
+		[breakpoints.up('lg')]: {
+			display: 'flex',
+			alignItems: 'center',
+		},
+	},
+	continueButton: {
+		fontSize: '15px',
+		textTransform: 'unset',
+		[breakpoints.up('lg')]: {
+			width: '171px',
+			fontSize: '13px',
+			lineHeight: '18px',
+			padding: '11.5px 0',
+		},
+	},
 }));
 
-const LaboratoryPicker = ({ laboratories, modalityId, onChoose, selectedLaboratory }: LaboratoryPickerProps) => {
+const LaboratoryPicker = ({
+	laboratories,
+	modalityId,
+	onChoose,
+	selectedLaboratory,
+	previousData,
+}: LaboratoryPickerProps) => {
 	const classes = useStyles();
+	const { t } = useTranslation('clinicalExamination');
+	const { updateState: updateContextState } = useContext(AppContext);
+	const { push } = useHistory();
 
 	const [selectedLab, setSelectedLab] = useState<Laboratory | null>(null);
 	const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false);
@@ -365,6 +401,68 @@ const LaboratoryPicker = ({ laboratories, modalityId, onChoose, selectedLaborato
 	};
 	const openDetailedModal = () => {
 		setIsDetailModalOpen(true);
+	};
+
+	const [activeLabTime, setActiveLabTime] = useState<AvailableTime>();
+
+	const continueToPreRegister = React.useCallback(
+		async (laboratorio: Laboratory | undefined, schedules: AvailableTime | undefined) => {
+			try {
+				if (updateContextState) {
+					const cd = previousData.contactData;
+					const ContactData = {
+						name: cd?.name || '',
+						lastName: cd?.lastName || '',
+						secondSurname: cd?.secondSurname || '',
+						identification: cd?.identification || '',
+						identificationType: cd?.identificationType || '',
+						birthDate: new Date('01/01/1970') || '',
+						gender: 0,
+						phoneNumber: cd?.phoneNumber || '',
+						email: cd?.email || '',
+						address: cd?.address || '',
+						isTerm: cd?.isTerm || false,
+						isClub: cd?.isClub || false,
+					};
+					await createGuestPatient(ContactData);
+
+					updateContextState({
+						laboratorio,
+						schedules,
+						user: ContactData,
+						labExamn: {
+							modality: modalityId,
+							typeExam: previousData.examData?.typeExam,
+							files: previousData.examData?.files || [],
+						},
+						labFiles: previousData.examData?.files || [],
+						labAva: {
+							laboratory_exam_id: laboratorio?.id,
+							available_time_id: schedules?.id,
+							price: laboratorio
+								? modalityId === 1
+									? laboratorio?.total_cost + laboratorio?.delivery_cost
+									: laboratorio?.total_cost
+								: 0,
+						},
+					});
+
+					addGAEvent({ category: 'Agendar cita - Paso 2', action: 'Avance satisfactorio', label: '(not available) ' });
+					push('/pago_laboratory');
+				}
+				// console.log(previousData.examData)
+				// console.log(ed)
+				// console.log(laboratorio)
+				// console.log(schedules)
+			} catch (e) {
+				console.log(e);
+			}
+		},
+		[updateContextState, previousData.contactData, previousData.examData, modalityId, push],
+	);
+
+	const continueToPreRegister1 = () => {
+		continueToPreRegister(selectedLaboratory, activeLabTime);
 	};
 
 	const renderItem = (laboratory: Laboratory, index: number) => {
@@ -395,9 +493,11 @@ const LaboratoryPicker = ({ laboratories, modalityId, onChoose, selectedLaborato
 									</div>
 								</div>
 							</div>
-							<div style={{ flex: '1', paddingRight: '2rem' }}>
+							<div style={{ flex: '1' }}>
 								<div className={classes.right}>
-									<Typography className={classes.precio}>S/. {laboratory.total_cost}</Typography>
+									<Typography className={classes.precio}>
+										S/. {modalityId == 1 ? laboratory.total_cost + laboratory.delivery_cost : laboratory.total_cost}
+									</Typography>
 								</div>
 								<div style={{ paddingRight: '0' }}>
 									<Button
@@ -420,15 +520,21 @@ const LaboratoryPicker = ({ laboratories, modalityId, onChoose, selectedLaborato
 					</div>
 					<div className={classes.timesWrapper}>
 						<AvailableTimePicker
-							availableTimes={laboratory.available_times}
 							selectedLaboratory={selectedLaboratory}
+							availableTimes={laboratory.available_times}
 							onChoose={(aT) => {
 								onChoose({
 									...laboratory,
 									selected_time: aT,
 								});
+								setActiveLabTime(aT);
 							}}
 						/>
+						{selectedLaboratory?.ruc === laboratory.ruc ? (
+							<Button fullWidth className={classes.continueButton} variant="contained" onClick={continueToPreRegister1}>
+								{t('left.button.continue')}
+							</Button>
+						) : null}
 					</div>
 				</div>
 				<LaboratoryModal laboratory={selectedLab} isOpen={isDetailModalOpen} onClose={closeDetailModal} />

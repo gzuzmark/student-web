@@ -79,7 +79,6 @@ const ClinicalExamination = () => {
 			});
 		} else if (step === 1) {
 			setLaboratoryData(values as LaboratoryFormValues);
-
 			addGAEvent({
 				category: 'Agendar cita - Paso 2',
 				action: 'Avance satisfactorio',
