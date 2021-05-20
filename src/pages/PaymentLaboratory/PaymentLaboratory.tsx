@@ -12,8 +12,8 @@ import {
 	getHour,
 	stylesWithTheme,
 } from 'utils';
-import initCulqi from 'utils/culquiIntegration';
-import { CONFIRMATION_STEP, GUEST, EMPTY_TRACK_PARAMS } from 'AppContext';
+// import initCulqi from 'utils/culquiIntegration';
+import { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
@@ -52,9 +52,9 @@ import dinersClub from 'icons/diners_club.png';
 import { formatUTCDate } from 'utils';
 // import { Laboratory } from 'pages/ClinicalExamination/components';
 
-const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
-	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
-};
+// const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
+// 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
+// };
 
 const FAKE_SESSION_ERROR_MESSAGE =
 	'Lo sentimos. El horario que has elegido ya no se encuentra disponible. Un miembro de nuestro equipo se pondrá en contacto contigo para ayudarte';
@@ -104,21 +104,18 @@ const PaymentLaboratory = () => {
 		useCase,
 		reservationAccountID,
 		updateState: updateContextState,
-		appointmentOwner,
-		trackParams,
 		laboratorio,
 		schedules,
 		labExamn,
-		labAva,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE_LABORATORY);
 	const history = useHistory();
 	const classes = useStyles();
 	const activeUser = patientUser || user;
 	const { t } = useTranslation('paymentLaboratory');
-	const [discountCode, setDiscountCode] = useState('');
+	// const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
-	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
+	// const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
@@ -236,7 +233,7 @@ const PaymentLaboratory = () => {
 				}
 			}
 		},
-		[schedule, makeKushkiLocalPayment, useCase, reservationAccountID, doctor],
+		[laboratorio, schedules],
 	);
 
 	const makeKushkiPayment = (values: any) => {
