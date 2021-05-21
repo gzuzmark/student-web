@@ -18,7 +18,7 @@ import GoogleMapReact, { Maps } from 'google-map-react';
 import clsx from 'clsx';
 import * as yup from 'yup';
 import { Position } from 'pages/api';
-import { MapInstance, MapsApi, Place, Marker, FormattedPlace } from 'pages/AskAddress/types';
+import { MapInstance, MapsApi, Place, Marker } from 'pages/AskAddress/types';
 
 import SearchAddress from 'pages/LaboratoryExams/components/SearchAddress';
 

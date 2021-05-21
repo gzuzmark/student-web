@@ -1,4 +1,4 @@
-import React, { MouseEvent, ChangeEvent } from 'react';
+import React, { MouseEvent } from 'react';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';

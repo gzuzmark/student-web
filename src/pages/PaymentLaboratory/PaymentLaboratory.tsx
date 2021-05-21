@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent } from 'react';
+import React, { useCallback, useState, MouseEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +17,7 @@ import { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import { createPaymentLab, Discount, KUSHKI_PAYMENT_ID, PE_PAYMENT_ID, sendFakeSession } from 'pages/api';
+import { createPaymentLab, KUSHKI_PAYMENT_ID, PE_PAYMENT_ID, sendFakeSession } from 'pages/api';
 import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
 import { Kushki } from '@kushki/js';
 import {
@@ -233,7 +233,7 @@ const PaymentLaboratory = () => {
 				}
 			}
 		},
-		[laboratorio, schedules],
+		[doctor, makeKushkiLocalPayment, reservationAccountID, schedule, useCase],
 	);
 
 	const makeKushkiPayment = (values: any) => {
@@ -334,53 +334,6 @@ const PaymentLaboratory = () => {
 		}
 	};
 
-	const makeKushkiLocalPayment = async () => {
-		const totalCost = laboratorio
-			? labExamn?.modality === 1
-				? laboratorio?.total_cost + laboratorio?.delivery_cost
-				: laboratorio?.total_cost
-			: 0;
-		setIsPaymentLoading(true);
-		if (schedules && updateContextState && user && laboratorio && labExamn) {
-			const method = 3;
-
-			const data = {
-				cost: totalCost,
-				token: '',
-				email: user.email || '',
-				patient_dni: user.identification || '',
-				payment_type: method,
-				reservation_date: formatUTCDate(new Date(schedules.start_time), 'yyyy-MM-dd'),
-				user_id: '',
-				exam_modality_id: labExamn.modality,
-				service_id: 2,
-				student_id: '',
-				laboratory_id: laboratorio.id,
-				laboratory_name: laboratorio.name,
-				file: '',
-				laboratory_exams: [],
-			};
-			console.log(data);
-			try {
-				await createPaymentLab(data);
-
-				setIsPaymentLoading(false);
-
-				updateContextState({
-					// useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-					paymentURL: '',
-					appointmentCreationStep: CONFIRMATION_STEP,
-					// ticketNumber: link,
-				});
-				history.push('/confirmacion');
-			} catch (e) {
-				console.log(e);
-				setErrorMessage(t('payment.error.pe'));
-				setIsPaymentLoading(false);
-			}
-		}
-	};
-
 	const makeKushkiCashPayment = (values: any) => {
 		const totalCost = laboratorio
 			? labExamn?.modality === 1
@@ -458,6 +411,51 @@ const PaymentLaboratory = () => {
 		//performTransactionPayment(PE_PAYMENT_ID);
 	};
 
+	const makeKushkiLocalPayment = async () => {
+		const totalCost = laboratorio
+			? labExamn?.modality === 1
+				? laboratorio?.total_cost + laboratorio?.delivery_cost
+				: laboratorio?.total_cost
+			: 0;
+		setIsPaymentLoading(true);
+		if (schedules && updateContextState && user && laboratorio && labExamn) {
+			const method = 3;
+
+			const data = {
+				cost: totalCost,
+				token: '',
+				email: user.email || '',
+				patient_dni: user.identification || '',
+				payment_type: method,
+				reservation_date: formatUTCDate(new Date(schedules.start_time), 'yyyy-MM-dd'),
+				user_id: '',
+				exam_modality_id: labExamn.modality,
+				service_id: 2,
+				student_id: '',
+				laboratory_id: laboratorio.id,
+				laboratory_name: laboratorio.name,
+				file: '',
+				laboratory_exams: [],
+			};
+			try {
+				await createPaymentLab(data);
+
+				setIsPaymentLoading(false);
+
+				updateContextState({
+					// useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+					paymentURL: '',
+					appointmentCreationStep: CONFIRMATION_STEP,
+					// ticketNumber: link,
+				});
+				history.push('/confirmacion');
+			} catch (e) {
+				console.log(e);
+				setErrorMessage(t('payment.error.pe'));
+				setIsPaymentLoading(false);
+			}
+		}
+	};
 	return !isPaymentLoading ? (
 		<Container>
 			<LeftSide lab={laboratorio} user={activeUser} schedule={schedules} labExamn={labExamn} />
