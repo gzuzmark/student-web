@@ -481,13 +481,27 @@ const LaboratoryPicker = ({
 									<Typography component="span" className={classes.name}></Typography>
 								</div>
 
-								<div className={classes.flexWrapper}>
-									<div className={classes.specialityWrapper}>
-										<Typography className={classes.speciality}>Modalidad de Servicio:</Typography>
+								<div className={classes.flexWrapper} style={{ padding: 0 }}>
+									<div>
+										<Typography className={classes.speciality}>Modalidad de Servicio: </Typography>
 									</div>
 									<div>
 										<Typography className={classes.speciality}>
 											{modalityOptions.find((x) => x.value === modalityId)?.label || ''}
+										</Typography>
+									</div>
+								</div>
+
+								<div>
+									<div>
+										<Typography>Dirección: {laboratory.address} </Typography>
+									</div>
+								</div>
+
+								<div>
+									<div>
+										<Typography>
+											Teléfono / Celular: {laboratory.phone} - {laboratory.mobile_phone}
 										</Typography>
 									</div>
 								</div>
