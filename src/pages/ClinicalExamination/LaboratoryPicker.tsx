@@ -451,7 +451,6 @@ const LaboratoryPicker = ({
 					push('/pago_laboratory');
 				}
 				// console.log(previousData.examData)
-				// console.log(ed)
 				// console.log(laboratorio)
 				// console.log(schedules)
 			} catch (e) {
@@ -496,7 +495,7 @@ const LaboratoryPicker = ({
 							<div style={{ flex: '1' }}>
 								<div className={classes.right}>
 									<Typography className={classes.precio}>
-										S/. {modalityId == 1 ? laboratory.total_cost + laboratory.delivery_cost : laboratory.total_cost}
+										S/. {modalityId === 1 ? laboratory.total_cost + laboratory.delivery_cost : laboratory.total_cost}
 									</Typography>
 								</div>
 								<div style={{ paddingRight: '0' }}>

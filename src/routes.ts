@@ -30,6 +30,7 @@ export const PRE_SIGN_UP_ROUTE = 'pre_registro';
 export const PAYMENT_ROUTE = 'pago';
 export const PAYMENT_ROUTE_LABORATORY = 'pago_laboratory';
 export const CONFIRMATION_ROUTE = 'confirmacion';
+export const CONFIRMATION_ROUTE_LABORATORY = 'confirmacion';
 export const LOGIN_ROUTE = 'iniciar_sesion';
 export const SIGN_UP_ROUTE = 'registro';
 export const FORGORT_PASSWORD_ROUTE = 'reestablecer_contrasena';
@@ -43,6 +44,7 @@ export const routeToTitle: Record<string, string> = {
 	[PRE_SIGN_UP_ROUTE]: 'Pre Registro',
 	[PAYMENT_ROUTE]: 'Pago',
 	[CONFIRMATION_ROUTE]: 'Confirmacion',
+	[CONFIRMATION_ROUTE_LABORATORY]: 'Confirmacion',
 	[LOGIN_ROUTE]: 'Iniciar Sesion',
 	[`${SIGN_UP_ROUTE}_sobre_ti`]: 'Detalle Cita - Sobre el paciente',
 	[`${SIGN_UP_ROUTE}_datos_medicos`]: 'Detalle Cita - Datos medicos',
@@ -61,7 +63,8 @@ export type CreateAppointmentRoute =
 	| 'pre_registro'
 	| 'pago'
 	| 'pago_laboratory'
-	| 'confirmacion';
+	| 'confirmacion'
+	| 'confirmacionlab';
 
 interface Route {
 	id: string;

@@ -2,9 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import { Location } from 'history';
 import { Container, RightLayout } from 'pages/common';
-import { UseCase } from 'pages/api';
 import { usePageTitle, addGAEvent } from 'utils';
-import { AppointmentOwner, User } from 'AppContext';
 
 import {
 	LeftSide,

@@ -121,7 +121,6 @@ interface LeftSideProps {
 const LeftSide = ({ lab, user, schedule, labExamn }: LeftSideProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('paymentLaboratory');
-
 	return (
 		<LeftLayout>
 			<div className={classes.wrapper}>

@@ -1,10 +1,10 @@
-const confirmationL18n = {
+const confirmationLabL18n = {
 	'confirmation.left.prefix': '¡FELICITACIONES!',
 	'confirmation.left.title.firstSection': 'Tienes una cita el',
 	'confirmation.left.title.secondSection': 'el',
 	'confirmation.left.title.thirdSection': 'a las',
 	'confirmation.left.patient.title': 'PARA PACIENTE',
-	'confirmation.left.doctor.title': 'DOCTOR',
+	'confirmation.left.doctor.title': 'LABORATORIO',
 	'confirmation.left.doctor.cmp': 'CMP:',
 	'confirmation.right.title': 'TIPS PARA UNA CITA EXITOSA:',
 	'confirmation.right.before.title': 'ANTES',
@@ -49,6 +49,9 @@ const confirmationL18n = {
 		'Para confirmar su CITA pagar con el CÓDIGO DE PAGO que encontrará al descargar PDF en el siguiente link:',
 	'confirmation.right.before.downloadPdf': 'Descargar',
 	'confirmation.right.before.time': 'Recordar que el CÓDIGO DE PAGO expira en 12 Horas.',
+
+	'payment.left.pacientTitle': 'PARA PACIENTE',
+	'payment.left.doctorTitle': 'LABORATORIO:',
 };
 
-export default confirmationL18n;
+export default confirmationLabL18n;
