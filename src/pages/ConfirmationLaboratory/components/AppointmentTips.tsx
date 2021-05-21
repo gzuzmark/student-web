@@ -7,11 +7,11 @@ import AppContext from 'AppContext';
 
 import { stylesWithTheme } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
-import { ReactComponent as MailIcon } from 'icons/beforeSection.svg';
-import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
+// import { ReactComponent as MailIcon } from 'icons/beforeSection.svg';
+// import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
 import { ReactComponent as ChecklistIcon } from 'icons/afterSection.svg';
-import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
-import { ReactComponent as TimeSvg } from 'icons/clock1.svg';
+// import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
+// import { ReactComponent as TimeSvg } from 'icons/clock1.svg';
 
 // const ALIVIA_CONTACT_EMAIL = 'alivia@lavictoria.pe';
 // const ALIVIA_CONTACT_WHATSAPP_NUMBER = '947907184';
@@ -184,11 +184,11 @@ const AppointmentTips = ({
 				<div className={classes.separator}></div>
 			</div>
 
-			<div className={classes.beforeSection}>
+			{/* <div className={classes.beforeSection}>
 				<Typography className={classes.tipTitle} variant="h3">
 					{t('confirmation.right.before.title')}
-				</Typography>
-				{ticketNumber !== '' ? (
+				</Typography> */}
+			{/* {ticketNumber !== '' ? (
 					<>
 						<div className={classes.sectionContainer}>
 							<div>
@@ -236,27 +236,17 @@ const AppointmentTips = ({
 					</>
 				) : (
 					<div></div>
-				)}
-				<div className={classes.sectionContainer}>
+				)} */}
+			{/* <div className={classes.sectionContainer}>
 					<div>
 						<MailIcon />
 					</div>
 					<div className={classes.textContainer}>
 						<Typography>{t('confirmation.right.before.messageUnlogged')} </Typography>
 					</div>
-				</div>
-				<div className={classes.copyWrapper}>
-					<div className={classes.callLinkWrapper}>
-						<Typography className={classes.callLink} color="primary" onClick={copyTextToClipboard}>
-							{conferenceLink}
-						</Typography>
-					</div>
-					<Button className={classes.copyButton} variant="contained" onClick={copyTextToClipboard}>
-						{t('confirmation.right.before.copyLink')}
-					</Button>
-				</div>
-			</div>
-			<div className={classes.duringSection}>
+				</div> */}
+			{/* </div> */}
+			{/* <div className={classes.duringSection}>
 				<Typography className={classes.tipTitle} variant="h3">
 					{t('confirmation.right.during.title')}
 				</Typography>
@@ -268,19 +258,17 @@ const AppointmentTips = ({
 						<Typography component="span">{t('confirmation.right.during.message')}</Typography>
 					</div>
 				</div>
-			</div>
+			</div> */}
 			<div className={classes.afterSection}>
 				<Typography className={classes.tipTitle} variant="h3">
-					{t('confirmation.right.after.title')}
+					{/* {t('confirmation.right.after.title')} */}
 				</Typography>
 				<div className={classes.sectionContainer}>
 					<div>
 						<ChecklistIcon />
 					</div>
 					<div className={classes.textContainer}>
-						<Typography component="span">
-							{t('confirmation.right.after.message')} <span className={classes.profileLink}>{email}</span>.
-						</Typography>
+						<Typography component="p">El uso de la mascarilla es obligatorio.</Typography>
 					</div>
 				</div>
 			</div>
