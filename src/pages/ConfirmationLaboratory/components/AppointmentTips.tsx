@@ -3,12 +3,12 @@ import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-import AppContext from 'AppContext';
+// import AppContext from 'AppContext';
 
 import { stylesWithTheme } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
-// import { ReactComponent as MailIcon } from 'icons/beforeSection.svg';
-// import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
+import { ReactComponent as MailIcon } from 'icons/beforeSection.svg';
+import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
 import { ReactComponent as ChecklistIcon } from 'icons/afterSection.svg';
 // import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 // import { ReactComponent as TimeSvg } from 'icons/clock1.svg';
@@ -130,29 +130,29 @@ interface AppointmentTipsProps {
 	useDefaultBackground?: boolean;
 }
 
-const fallbackCopyTextToClipboard = (text: string) => {
-	const textArea = document.createElement('textarea');
-	textArea.value = text;
+// const fallbackCopyTextToClipboard = (text: string) => {
+// 	const textArea = document.createElement('textarea');
+// 	textArea.value = text;
 
-	// Avoid scrolling to bottom
-	textArea.style.top = '0';
-	textArea.style.left = '0';
-	textArea.style.position = 'fixed';
+// 	// Avoid scrolling to bottom
+// 	textArea.style.top = '0';
+// 	textArea.style.left = '0';
+// 	textArea.style.position = 'fixed';
 
-	document.body.appendChild(textArea);
-	textArea.focus();
-	textArea.select();
+// 	document.body.appendChild(textArea);
+// 	textArea.focus();
+// 	textArea.select();
 
-	try {
-		const successful = document.execCommand('copy');
-		const msg = successful ? 'successful' : 'unsuccessful';
-		console.log('Fallback: Copying text command was ' + msg);
-	} catch (err) {
-		console.error('Fallback: Oops, unable to copy', err);
-	}
+// 	try {
+// 		const successful = document.execCommand('copy');
+// 		const msg = successful ? 'successful' : 'unsuccessful';
+// 		console.log('Fallback: Copying text command was ' + msg);
+// 	} catch (err) {
+// 		console.error('Fallback: Oops, unable to copy', err);
+// 	}
 
-	document.body.removeChild(textArea);
-};
+// 	document.body.removeChild(textArea);
+// };
 
 const AppointmentTips = ({
 	isGuest,
@@ -163,122 +163,80 @@ const AppointmentTips = ({
 }: AppointmentTipsProps) => {
 	const classes = useStyles({ useDefaultBackground });
 	const { t } = useTranslation('confirmation');
-	const conferenceLink = `${process.env.REACT_APP_CONFERENCE_URL}?room=${scheduleID}&passcode=84381637551703`;
-	const copyTextToClipboard = () => {
-		if (!navigator.clipboard) {
-			fallbackCopyTextToClipboard(conferenceLink);
-			return;
-		}
-		navigator.clipboard.writeText(conferenceLink);
-	};
+	// const conferenceLink = `${process.env.REACT_APP_CONFERENCE_URL}?room=${scheduleID}&passcode=84381637551703`;
+	// const copyTextToClipboard = () => {
+	// 	if (!navigator.clipboard) {
+	// 		fallbackCopyTextToClipboard(conferenceLink);
+	// 		return;
+	// 	}
+	// 	navigator.clipboard.writeText(conferenceLink);
+	// };
 
-	const { ticketNumber } = useContext(AppContext);
-	const pdfLink = `${process.env.REACT_APP_KUSHKI_LINK_DOWNLOAD_PDF}/` + ticketNumber + '/receipt';
+	// const { ticketNumber } = useContext(AppContext);
+	// const pdfLink = `${process.env.REACT_APP_KUSHKI_LINK_DOWNLOAD_PDF}/` + ticketNumber + '/receipt';
 
 	return (
 		<div className={classes.tipsWrapper}>
 			<div className={classes.titleWrapper}>
 				<Typography className={classes.title} variant="h3">
-					{t('confirmation.right.title')}
+					Tips para un examen de laboratorio existo
 				</Typography>
 				<div className={classes.separator}></div>
 			</div>
 
-			{/* <div className={classes.beforeSection}>
-				<Typography className={classes.tipTitle} variant="h3">
-					{t('confirmation.right.before.title')}
-				</Typography> */}
-			{/* {ticketNumber !== '' ? (
-					<>
-						<div className={classes.sectionContainer}>
-							<div>
-								<CreditCardSvg style={{ width: '59px', height: '59px' }} />
-							</div>
-							<div className={classes.textContainer}>
-								<Typography>
-									<strong>Para confirmar su CITA</strong> pagar con el CÓDIGO DE PAGO que encontrará al descargar PDF en
-									el siguiente link:{' '}
-								</Typography>
-							</div>
+			<div className={classes.beforeSection}>
+				<div className={classes.duringSection}>
+					<Typography className={classes.tipTitle} variant="h3">
+						Seguir las recomendaciones del doctor:
+					</Typography>
+					<div className={classes.sectionContainer}>
+						<div>
+							<MailIcon />
 						</div>
-						<div className={classes.copyWrapper}>
-							<div className={classes.callLinkWrapper}>
-								<Typography className={classes.callLink} color="primary">
-									{pdfLink}
-								</Typography>
-							</div>
-							<Button
-								className={classes.copyButton}
-								variant="contained"
-								onClick={() => {
-									window.open(pdfLink, '_blank');
-									return null;
-								}}
-							>
-								{t('confirmation.right.before.downloadPdf')}
-							</Button>
+						<div className={classes.textContainer}>
+							<Typography component="span">No olvide a llevar la orden de doctor en caso emitido</Typography>
 						</div>
-						<br></br>
-						<br></br>
+					</div>
+				</div>
 
-						<div className={classes.sectionContainer}>
-							<div>
-								<TimeSvg style={{ width: '59px', height: '59px' }} />
-							</div>
-							<div className={classes.textContainer}>
-								<Typography>
-									Recordar que el CÓDIGO DE PAGO <strong>expira en 12 Horas</strong>{' '}
-								</Typography>
-							</div>
+				<div className={classes.duringSection}>
+					<Typography className={classes.tipTitle} variant="h3">
+						{t('confirmation.right.during.title')}
+					</Typography>
+					<div className={classes.sectionContainer}>
+						<div>
+							<VideocallIcon />
 						</div>
-						<br></br>
-						<br></br>
-					</>
-				) : (
-					<div></div>
-				)} */}
-			{/* <div className={classes.sectionContainer}>
-					<div>
-						<MailIcon />
-					</div>
-					<div className={classes.textContainer}>
-						<Typography>{t('confirmation.right.before.messageUnlogged')} </Typography>
-					</div>
-				</div> */}
-			{/* </div> */}
-			{/* <div className={classes.duringSection}>
-				<Typography className={classes.tipTitle} variant="h3">
-					{t('confirmation.right.during.title')}
-				</Typography>
-				<div className={classes.sectionContainer}>
-					<div>
-						<VideocallIcon />
-					</div>
-					<div className={classes.textContainer}>
-						<Typography component="span">{t('confirmation.right.during.message')}</Typography>
+						<div className={classes.textContainer}>
+							<Typography component="span">Utilice las medidas de precaución contra el Covid 19</Typography>
+						</div>
 					</div>
 				</div>
-			</div> */}
-			<div className={classes.afterSection}>
-				<Typography className={classes.tipTitle} variant="h3">
-					{/* {t('confirmation.right.after.title')} */}
-				</Typography>
-				<div className={classes.sectionContainer}>
-					<div>
-						<ChecklistIcon />
-					</div>
-					<div className={classes.textContainer}>
-						<Typography component="p">El uso de la mascarilla es obligatorio.</Typography>
+
+				<div className={classes.afterSection}>
+					<Typography className={classes.tipTitle} variant="h3">
+						{t('confirmation.right.after.title')}
+					</Typography>
+					<div className={classes.sectionContainer}>
+						<div>
+							<ChecklistIcon />
+						</div>
+						<div className={classes.textContainer}>
+							<Typography component="p">
+								Al finalizar el examen en transcurso de semana, recibirás un resumen de examen
+							</Typography>
+						</div>
 					</div>
 				</div>
+
+				{!isGuest && goToAppointments && (
+					<div className={classes.footerButtons}>
+						<Button className={classes.profileButton} variant="contained" onClick={goToAppointments} fullWidth>
+							{t('confirmation.right.profileButton')}
+						</Button>
+					</div>
+				)}
 			</div>
-			{!isGuest && goToAppointments && (
-				<div className={classes.footerButtons}>
-					<Button className={classes.profileButton} variant="contained" onClick={goToAppointments} fullWidth>
-						{t('confirmation.right.profileButton')}
-					</Button>
-				</div>
-			)}
 		</div>
 	);
 };
