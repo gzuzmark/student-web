@@ -2,12 +2,11 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 
-import { Doctor, Schedule } from 'pages/api/selectDoctor';
 import { LeftLayout } from 'pages/common';
 import { User } from 'AppContext';
 import { useTranslation } from 'react-i18next';
 import { formatUTCDate, stylesWithTheme } from 'utils';
-import AppointmentTips from './AppointmentTips';
+import { Laboratorys, Schedules } from 'pages/api/laboratories';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -94,14 +93,14 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface LeftSideProps {
 	user: User | null | undefined;
-	doctor: Doctor | null | undefined;
-	schedule: Schedule | null | undefined;
+	laboratorio: Laboratorys | null | undefined;
+	schedule: Schedules | null | undefined;
 	showExtraInfo: boolean;
 	isGuest: boolean;
 }
 
-const LeftSide = ({ user, doctor, schedule, showExtraInfo, isGuest }: LeftSideProps) => {
-	const { t } = useTranslation('confirmation');
+const LeftSide = ({ user, laboratorio, schedule, showExtraInfo, isGuest }: LeftSideProps) => {
+	const { t } = useTranslation('confirmationLab');
 	const classes = useStyles();
 
 	return (
@@ -117,7 +116,7 @@ const LeftSide = ({ user, doctor, schedule, showExtraInfo, isGuest }: LeftSidePr
 							{t('confirmation.left.title.secondSection')}{' '}
 						</Typography>
 						<Typography variant="h1" component="span" color="primary">
-							{schedule?.startTime ? formatUTCDate(schedule?.startTime, "EEEE dd 'de' MMMM") : ''}{' '}
+							{schedule?.start_time ? formatUTCDate(new Date(schedule?.start_time), "EEEE dd 'de' MMMM") : ''}{' '}
 						</Typography>
 					</div>
 					<div>
@@ -125,43 +124,32 @@ const LeftSide = ({ user, doctor, schedule, showExtraInfo, isGuest }: LeftSidePr
 							{t('confirmation.left.title.thirdSection')}{' '}
 						</Typography>
 						<Typography variant="h1" component="span" color="primary">
-							{schedule?.startTime ? formatUTCDate(schedule?.startTime, 'h:mm aaa') : ''}
+							{schedule?.start_time ? formatUTCDate(new Date(schedule?.start_time), 'h:mm aaa') : ''}
 						</Typography>
 					</div>
 				</div>
 				<div className={classes.patientSection}>
 					<Typography className={classes.patientTitle}>{t('confirmation.left.patient.title')}</Typography>
-					<Typography className={classes.patienName}>{user?.name}</Typography>
+					<Typography className={classes.patientName}>{user?.name + ' ' + user?.lastName}</Typography>
 				</div>
 				<div className={classes.doctorSection}>
 					<Typography className={classes.doctorTitle}>{t('confirmation.left.doctor.title')}</Typography>
 					<div className={classes.doctorWrapper}>
 						<div className={classes.doctorImgWrapper}>
-							<img className={classes.doctorImg} src={doctor?.profilePicture} alt="doctor" />
+							<img className={classes.doctorImg} src={laboratorio?.logo} alt="doctor" />
 						</div>
 						<div>
 							<div>
-								<Typography component="span">{doctor?.name} </Typography>
-								<Typography component="span">{doctor?.lastName}</Typography>
+								<Typography className={classes.doctorName}>{laboratorio?.name}</Typography>
 							</div>
 							<div className={classes.doctorCMP}>
-								<Typography component="span">{t('confirmation.left.doctor.cmp')} </Typography>
-								<Typography component="span">{doctor?.cmp}</Typography>
+								<Typography component="span">RUC </Typography>
+								<Typography component="span">{laboratorio?.ruc}</Typography>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			{showExtraInfo ? (
-				<div className={classes.tipsWrapper}>
-					<AppointmentTips
-						scheduleID={schedule?.id || ''}
-						isGuest={isGuest}
-						email={user?.email || ''}
-						useDefaultBackground
-					/>
-				</div>
-			) : null}
 		</LeftLayout>
 	);
 };

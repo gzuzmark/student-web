@@ -4,21 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE_LABORATORY } from 'routes';
-import {
-	useAppointmentStepValidation,
-	dateToUTCUnixTimestamp,
-	addGAEvent,
-	getHumanDay,
-	getHour,
-	stylesWithTheme,
-} from 'utils';
+import { useAppointmentStepValidation, addGAEvent, getHumanDay, getHour, stylesWithTheme } from 'utils';
 // import initCulqi from 'utils/culquiIntegration';
 import { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import { createPaymentLab, KUSHKI_PAYMENT_ID, PE_PAYMENT_ID, sendFakeSession } from 'pages/api';
-import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
+import { createPaymentLab, KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 import { Kushki } from '@kushki/js';
 import {
 	Button,
@@ -55,9 +47,6 @@ import { formatUTCDate } from 'utils';
 // const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 // 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
 // };
-
-const FAKE_SESSION_ERROR_MESSAGE =
-	'Lo sentimos. El horario que has elegido ya no se encuentra disponible. Un miembro de nuestro equipo se pondrá en contacto contigo para ayudarte';
 
 const useStyles = stylesWithTheme(({ breakpoints, spacing }: Theme) => ({
 	kushkiTitle: {
@@ -96,21 +85,11 @@ const useStyles = stylesWithTheme(({ breakpoints, spacing }: Theme) => ({
 }));
 
 const PaymentLaboratory = () => {
-	const {
-		doctor,
-		user,
-		patientUser,
-		schedule,
-		useCase,
-		reservationAccountID,
-		updateState: updateContextState,
-		laboratorio,
-		schedules,
-		labExamn,
-	} = useAppointmentStepValidation(PAYMENT_ROUTE_LABORATORY);
+	const { user, updateState: updateContextState, laboratorio, schedules, labExamn } = useAppointmentStepValidation(
+		PAYMENT_ROUTE_LABORATORY,
+	);
 	const history = useHistory();
 	const classes = useStyles();
-	const activeUser = patientUser || user;
 	const { t } = useTranslation('paymentLaboratory');
 	// const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
@@ -181,59 +160,24 @@ const PaymentLaboratory = () => {
 		}
 	};
 
-	React.useEffect(() => {
-		const { id = '', startTime, endTime } = schedule || {};
-		const { id: useCaseId = '' } = useCase || {};
-		if (id.includes(FAKE_SESSION_ID)) {
-			sendFakeSession({
-				reservation_account_id: reservationAccountID || '',
-				use_case_id: useCaseId,
-				doctor_id: (doctor && doctor.id) || '',
-				start_time: dateToUTCUnixTimestamp(startTime!),
-				end_time: dateToUTCUnixTimestamp(endTime!),
-			}).catch((err) => {
-				const { message = '' } = err || {};
-				setErrorMessage(message);
-			});
-		}
-		// eslint-disable-next-line
-	}, []);
-
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
 			console.log('tipo de pago: ' + paymentMethod);
-			const { id: scheduleId = '' } = schedule || {};
-			const isFakeSession = scheduleId.includes(FAKE_SESSION_ID);
-			if (!isFakeSession) {
-				if (paymentMethod === KUSHKI_PAYMENT_ID) {
-					e.preventDefault();
-					// window.Culqi.open();
-					openKushkiForm();
-				} else if (paymentMethod === 2) {
-					openKushkiCashForm();
-					//performTransactionPayment(paymentMethod);
-				} else {
-					makeKushkiLocalPayment();
-				}
+
+			if (paymentMethod === KUSHKI_PAYMENT_ID) {
+				e.preventDefault();
+				// window.Culqi.open();
+				openKushkiForm();
+			} else if (paymentMethod === 2) {
+				openKushkiCashForm();
+				//performTransactionPayment(paymentMethod);
 			} else {
-				const { id = '', startTime, endTime } = schedule || {};
-				const { id: useCaseId = '' } = useCase || {};
-				if (id.includes(FAKE_SESSION_ID)) {
-					window.alert(FAKE_SESSION_ERROR_MESSAGE);
-					sendFakeSession({
-						reservation_account_id: reservationAccountID || '',
-						use_case_id: useCaseId,
-						doctor_id: (doctor && doctor.id) || '',
-						start_time: dateToUTCUnixTimestamp(startTime!),
-						end_time: dateToUTCUnixTimestamp(endTime!),
-					}).catch((err) => {
-						const { message = '' } = err || {};
-						setErrorMessage(message);
-					});
-				}
+				e.preventDefault();
+				makeKushkiLocalPayment();
 			}
 		},
-		[doctor, makeKushkiLocalPayment, reservationAccountID, schedule, useCase],
+		// eslint-disable-next-line
+		[laboratorio, user],
 	);
 
 	const makeKushkiPayment = (values: any) => {
@@ -322,7 +266,7 @@ const PaymentLaboratory = () => {
 							appointmentCreationStep: CONFIRMATION_STEP,
 						});
 
-						history.push('/confirmacion');
+						history.push('/confirmacionlab');
 					} else {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
 						setErrorMessage('Error-' + response.code + ': ' + response.message);
@@ -382,7 +326,7 @@ const PaymentLaboratory = () => {
 							appointmentCreationStep: CONFIRMATION_STEP,
 							ticketNumber: link,
 						});
-						history.push('/confirmacion');
+						history.push('/confirmacionlab');
 					} catch (e) {
 						setErrorMessage(t('payment.error.pe'));
 						setIsPaymentLoading(false);
@@ -411,7 +355,7 @@ const PaymentLaboratory = () => {
 		//performTransactionPayment(PE_PAYMENT_ID);
 	};
 
-	const makeKushkiLocalPayment = async () => {
+	const makeKushkiLocalPayment = () => {
 		const totalCost = laboratorio
 			? labExamn?.modality === 1
 				? laboratorio?.total_cost + laboratorio?.delivery_cost
@@ -420,26 +364,25 @@ const PaymentLaboratory = () => {
 		setIsPaymentLoading(true);
 		if (schedules && updateContextState && user && laboratorio && labExamn) {
 			const method = 3;
-
-			const data = {
-				cost: totalCost,
-				token: '',
-				email: user.email || '',
-				patient_dni: user.identification || '',
-				payment_type: method,
-				reservation_date: formatUTCDate(new Date(schedules.start_time), 'yyyy-MM-dd'),
-				user_id: '',
-				exam_modality_id: labExamn.modality,
-				service_id: 2,
-				student_id: '',
-				laboratory_id: laboratorio.id,
-				laboratory_name: laboratorio.name,
-				file: '',
-				laboratory_exams: [],
-			};
 			try {
-				await createPaymentLab(data);
-
+				const data = {
+					cost: totalCost,
+					token: '',
+					email: user.email || '',
+					patient_dni: user.identification || '',
+					payment_type: method,
+					reservation_date: formatUTCDate(new Date(schedules.start_time), 'yyyy-MM-dd'),
+					user_id: '',
+					exam_modality_id: labExamn.modality,
+					service_id: 2,
+					student_id: '',
+					laboratory_id: laboratorio.id,
+					laboratory_name: laboratorio.name,
+					file: '',
+					laboratory_exams: [],
+				};
+				// await createPaymentLab(data);
+				createPaymentLab(data);
 				setIsPaymentLoading(false);
 
 				updateContextState({
@@ -448,7 +391,7 @@ const PaymentLaboratory = () => {
 					appointmentCreationStep: CONFIRMATION_STEP,
 					// ticketNumber: link,
 				});
-				history.push('/confirmacion');
+				history.push('/confirmacionlab');
 			} catch (e) {
 				console.log(e);
 				setErrorMessage(t('payment.error.pe'));
@@ -458,7 +401,7 @@ const PaymentLaboratory = () => {
 	};
 	return !isPaymentLoading ? (
 		<Container>
-			<LeftSide lab={laboratorio} user={activeUser} schedule={schedules} labExamn={labExamn} />
+			<LeftSide lab={laboratorio} user={user} schedule={schedules} labExamn={labExamn} />
 			<RightSide
 				totalCost={
 					laboratorio

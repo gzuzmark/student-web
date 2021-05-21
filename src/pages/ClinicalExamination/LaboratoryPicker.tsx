@@ -451,7 +451,6 @@ const LaboratoryPicker = ({
 					push('/pago_laboratory');
 				}
 				// console.log(previousData.examData)
-				// console.log(ed)
 				// console.log(laboratorio)
 				// console.log(schedules)
 			} catch (e) {
