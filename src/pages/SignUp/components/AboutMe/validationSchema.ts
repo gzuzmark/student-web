@@ -32,9 +32,15 @@ const messages = {
 };
 
 const validationSchema = object().shape({
-	name: string().required(messages.name.required),
-	lastName: string().required(messages.lastName.required),
-	secondSurname: string().required(messages.secondSurname.required),
+	name: string()
+		.required(messages.name.required)
+		.matches(/^[aA-zZ-ZÀ-ÿ\s]+$/, 'Ingrese solo letras'),
+	lastName: string()
+		.required(messages.lastName.required)
+		.matches(/^[aA-zZ-ZÀ-ÿ\s]+$/, 'Ingrese solo letras'),
+	secondSurname: string()
+		.required(messages.secondSurname.required)
+		.matches(/^[aA-zZ-ZÀ-ÿ\s]+$/, 'Ingrese solo letras'),
 	birthDate: date()
 		.required(messages.birthDate.required)
 		.min(new Date('1900-01-01'), messages.birthDate.required)
