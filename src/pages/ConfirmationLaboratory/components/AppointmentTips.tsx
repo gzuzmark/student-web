@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
-// import AppContext from 'AppContext';
 
 import { stylesWithTheme } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
