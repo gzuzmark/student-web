@@ -278,7 +278,7 @@ const RightSide = ({
 							Use el Cupón<noscript></noscript>:{' '}
 							<span style={{ background: '#ccc', padding: '3px' }}>
 								{' '}
-								<strong>SALUD200</strong>
+								<strong>SALUD20</strong>
 							</span>
 						</p>
 						<p style={{ color: 'red' }}>Expira: Mayo 30, 2021</p>
