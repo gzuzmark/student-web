@@ -1,4 +1,4 @@
-import React, { MouseEvent, useContext } from 'react';
+import React, { MouseEvent } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
