@@ -9,12 +9,7 @@ import { BACKGROUND_DEFAULT } from 'theme';
 import { ReactComponent as MailIcon } from 'icons/beforeSection.svg';
 import { ReactComponent as VideocallIcon } from 'icons/duringSection.svg';
 import { ReactComponent as ChecklistIcon } from 'icons/afterSection.svg';
-// import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
-// import { ReactComponent as TimeSvg } from 'icons/clock1.svg';
 
-// const ALIVIA_CONTACT_EMAIL = 'alivia@lavictoria.pe';
-// const ALIVIA_CONTACT_WHATSAPP_NUMBER = '947907184';
-// const ALIVIA_CONTACT_WHATSAPP_URL = 'https://api.whatsapp.com/send?phone=51947907184&text=Hola%20Alivia';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	tipsWrapper: {
