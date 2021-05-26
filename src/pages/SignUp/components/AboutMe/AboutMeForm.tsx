@@ -130,6 +130,7 @@ const AboutMeForm = ({
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={DatePickerField}
+								disableFuture
 								name="birthDate"
 								validationOnChange={validationOnChange}
 								TextFieldProps={{
