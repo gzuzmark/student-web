@@ -103,19 +103,18 @@ const initialValues: ContactPatientValues = {
 
 const validationSchema = yup.object().shape({
 	identificationType: yup.string().required(REQUIRED_FIELD),
-	identification: yup
-		.string()
-		.matches(/^[0-9]*$/, { message: 'Solo números' })
-		.required(REQUIRED_FIELD)
-		.min(8, 'Mínimo 8 caracteres'),
+	identification: yup.string().min(8, 'Mínimo 8 caracteres').max(12, 'Máximo 12 caracteres').required(REQUIRED_FIELD),
 	name: yup.string().required(REQUIRED_FIELD),
 	lastName: yup.string().required(REQUIRED_FIELD),
 	secondSurname: yup.string().required(REQUIRED_FIELD),
 	phoneNumber: yup
 		.string()
-		.matches(/^[0-9]*$/, { message: 'Solo números' })
-		.required(REQUIRED_FIELD)
-		.min(9, '9 caracteres'),
+		.min(9, '9 caracteres')
+		.max(9, '9 caracteres')
+		// eslint-disable-next-line
+		// @ts-ignore
+		.digits('9 caracteres')
+		.required(REQUIRED_FIELD),
 	email: yup.string().required(REQUIRED_FIELD).email('Correo inválido'),
 	address: yup.string().required(REQUIRED_FIELD),
 	// isTerm: yup.boolean().isTrue(),
@@ -229,6 +228,7 @@ const ContactPatientForm = ({
 								component={TextField}
 								name="identification"
 								label={t('contact.fields.id')}
+								type="number"
 								variant="outlined"
 								inputProps={{ maxLength: 11 }}
 								fullWidth
@@ -271,7 +271,7 @@ const ContactPatientForm = ({
 								component={TextField}
 								className={classes.fieldWithHelperText}
 								name="phoneNumber"
-								type="tel"
+								type="number"
 								label={t('contactPatient.fields.phoneNumber.label')}
 								variant="outlined"
 								inputProps={{ maxLength: 9 }}
