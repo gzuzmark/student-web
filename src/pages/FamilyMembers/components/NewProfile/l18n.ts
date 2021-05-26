@@ -1,5 +1,5 @@
 export default {
-	'aboutNewProfile.title.firstSection': 'Llena los datos de la persona que deseas',
+	'aboutNewProfile.title.firstSection': 'Completa los datos de la persona que deseas',
 	'aboutNewProfile.title.secondSection': 'vincular.',
 	'aboutNewProfile.subTitle': '1. INFORMACIÓN DEL PACIENTE',
 	'aboutNewProfile.fields.name.label': 'Nombre',
@@ -13,7 +13,7 @@ export default {
 	'aboutNewProfile.submit.text': 'Continuar',
 	//
 	'contactInfo.title.firstSection.minor': 'Datos de contacto del',
-	'contactInfo.title.firstSection.default': 'Llena los datos de la persona que deseas',
+	'contactInfo.title.firstSection.default': 'Completa los datos de la persona que deseas',
 	'contactInfo.title.secondSection.minor': 'padre o tutor del menor.',
 	'contactInfo.title.secondSection.default': 'vincular.',
 	'contactInfo.subTitle': '2. DATOS DE CONTACTO',
