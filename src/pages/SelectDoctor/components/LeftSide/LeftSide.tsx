@@ -5,6 +5,9 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from 'react-i18next';
 import { LeftLayout, Stepper } from 'pages/common';
 
+import Button from '@material-ui/core/Button';
+import { url } from 'inspector';
+
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		leftLayout: {
@@ -37,6 +40,18 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		},
 		title: {
 			fontWeight: 'bold',
+		},
+		continueButton: {
+			fontSize: '15px',
+			textTransform: 'unset',
+			zIndex: 1,
+			padding: '10px',
+			[breakpoints.up('lg')]: {
+				width: '50%',
+				fontSize: '13px',
+				lineHeight: '18px',
+				padding: '11.5px 0',
+			},
 		},
 	}),
 );
@@ -77,6 +92,11 @@ const LeftSide = ({ step = 0 }: LeftSideProps) => {
 				orientation={matches ? 'vertical' : 'horizontal'}
 				alternativeLabel={!matches}
 			/>
+			<div>
+				<Button fullWidth className={classes.continueButton} variant="contained" href="https://www.alivia.pe/">
+					{t('steps.firstStep.button')}
+				</Button>
+			</div>
 		</LeftLayout>
 	);
 };

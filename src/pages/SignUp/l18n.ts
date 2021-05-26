@@ -7,7 +7,7 @@ const signUp = {
 	'left.step.second.label': 'DATOS MÉDICOS',
 	'left.step.third.label': 'CONTACTO',
 	// About Me
-	'aboutme.title.firstSection': 'Llena los',
+	'aboutme.title.firstSection': 'Completa los',
 	'aboutme.title.secondSection': 'datos del paciente',
 	'aboutme.title.secondSection.minor': 'datos del menor de edad',
 	'aboutme.title.thirdSection': 'para continuar',
