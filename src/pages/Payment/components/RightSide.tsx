@@ -270,7 +270,7 @@ const RightSide = ({
 				>
 					<div style={{ padding: '2px 16px', backgroundColor: 'white' }}>
 						<h2>
-							<b>APROVECHA EL 30% DE DESCUENTO EN TU COMPRA</b>
+							<b>APROVECHA EL 20% DE DESCUENTO EN TU COMPRA</b>
 						</h2>
 					</div>
 					<div style={{ padding: '2px 16px', backgroundColor: '#f1f1f1' }}>
@@ -278,7 +278,7 @@ const RightSide = ({
 							Use el Cupón<noscript></noscript>:{' '}
 							<span style={{ background: '#ccc', padding: '3px' }}>
 								{' '}
-								<strong>SALUD30</strong>
+								<strong>SALUD200</strong>
 							</span>
 						</p>
 						<p style={{ color: 'red' }}>Expira: Mayo 30, 2021</p>
