@@ -250,6 +250,7 @@ const RightSide = ({ executePayment, errorMessage }: RightSideProps) => {
 				</Typography>
 				<div className={classes.buttonWrapper}>
 					<Button
+						style={{ display: 'none' }}
 						className={classes.option}
 						// onClick={(e) => {
 						// addGAEvent({
@@ -284,6 +285,7 @@ const RightSide = ({ executePayment, errorMessage }: RightSideProps) => {
 					</Button>
 					{isPagoEfectivoVisible && (
 						<Button
+							style={{ display: 'none' }}
 							className={classes.option}
 							onClick={(e) => {
 								addGAEvent({
@@ -294,7 +296,6 @@ const RightSide = ({ executePayment, errorMessage }: RightSideProps) => {
 								executePayment(PE_PAYMENT_ID)(e);
 							}}
 							variant="outlined"
-							style={{}}
 						>
 							<div className={classes.optionBody} style={{ width: 'inherit' }}>
 								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
