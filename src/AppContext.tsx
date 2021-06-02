@@ -2,6 +2,7 @@ import React, { ReactElement, useState, useCallback } from 'react';
 import { getLocalValue } from 'utils';
 import { UseCase } from 'pages/api/useCase';
 import { Doctor, Schedule } from 'pages/api/selectDoctor';
+import { Laboratorys, Schedules } from 'pages/api/laboratories';
 
 export const EMPTY_TRACK_PARAMS = {
 	utmSource: '',
@@ -72,6 +73,12 @@ export interface TriagePair {
 	answer: string;
 }
 
+export interface LabExam {
+	modality: number;
+	typeExam: string[];
+	files: string[];
+}
+
 interface ContextProps {
 	user: User | null;
 	patientUser: User | null;
@@ -93,6 +100,11 @@ interface ContextProps {
 	trackParams: TrackParams;
 	showSmallSignUp: boolean;
 	ticketNumber: string;
+	laboratorio: Laboratorys | null;
+	schedules: Schedules | null;
+	labExamn: LabExam | null;
+	labFiles: string[];
+	labAva: string[];
 }
 
 const defaultState: ContextProps = {
@@ -116,6 +128,11 @@ const defaultState: ContextProps = {
 	trackParams: {},
 	showSmallSignUp: false,
 	ticketNumber: '',
+	laboratorio: null,
+	schedules: null,
+	labExamn: null,
+	labFiles: [],
+	labAva: [],
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

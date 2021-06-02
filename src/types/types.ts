@@ -74,3 +74,54 @@ export interface GTagEvent {
 		purchase: EcommercePurchase;
 	};
 }
+
+export interface ExamByModality {
+	id: number;
+	name: string;
+	price: number;
+	laboratory_id: number;
+	types_laboratory_exam_id: number;
+	exam_modality_id: number;
+}
+
+export interface Laboratory {
+	id: number;
+	name: string;
+	business_name: string;
+	ruc: string;
+	description: string;
+	email: string;
+	phone: string;
+	mobile_phone: string;
+	address: string;
+	latitude: string;
+	longitude: string;
+	is_main: string;
+	district_id: number;
+	total_cost: number;
+	available_times: AvailableTime[];
+	selected_time: AvailableTime | undefined;
+	logo: string;
+	laboratory_exams: LaboratoryExamen[];
+	delivery_cost: number;
+}
+
+export interface LaboratoryExamen {
+	exam_modality_id: string;
+	laboratory_id: number;
+	id: number;
+	name: string;
+	price: number;
+	types_laboratory_exam_id: number;
+}
+
+export interface AvailableTime {
+	id: number;
+	start_time: string;
+	final_time: string;
+	status: boolean;
+	laboratory_id: number;
+	created_at: string;
+	updated_at: string;
+	deleted_at: string;
+}
