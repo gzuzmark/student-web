@@ -1,4 +1,8 @@
 const clinicalExamination = {
+	'steps.mobile.firstStep.label': 'ELIGE EL EXÁMEN',
+	'steps.mobile.secondStep.label': 'ELIGE EL LABORATORIO',
+	'steps.mobile.thirdStep.label': 'CONFIRMAR AGENDAMIENTO',
+
 	'left.titlePrefix': 'AHORA,',
 	'left.title.firstLine': 'Tus exámenes clínicos',
 	'left.title.secondLine': 'desde Alivia',
@@ -6,8 +10,8 @@ const clinicalExamination = {
 	'contactPatient.subTitle': 'Algunos datos Sobre el paciente',
 	'contactPatient.fields.id.label': 'DNI o CE del paciente',
 	'contactPatient.fields.name.label': 'Nombres y Apellidos del paciente',
-	'contactPatient.fields.phoneNumber.label': 'ingrese un número de celular de contacto',
-	'contactPatient.fields.email.label': 'ingrese un correo de contacto',
+	'contactPatient.fields.phoneNumber.label': 'Ingrese un número de celular de contacto',
+	'contactPatient.fields.email.label': 'Ingrese un correo de contacto',
 	'contactPatient.fields.adress.label': 'Dirección del cliente',
 	'contactPatient.addressReference.label': 'Piso, puerta, oficina o referencia',
 	'contactPatient.legalInformation.privacyPolicyLink': 'Autorizo transferir mi información al laboratorio',
@@ -20,12 +24,27 @@ const clinicalExamination = {
 	'steps.secondStep.label': 'ELIGE EL LABORATORIO',
 	'steps.thirdStep.label': 'CONFIRMAR AGENDAMIENTO',
 	'left.label.modalidad': 'Modalidad',
+	'left.label.address': 'Dirección',
 	'right.label.calle': 'Calle las almendras 261, La Molina',
 	'right.modality.edit': 'Editar',
-	'right.modality.Fecha': 'FECHA',
+	'right.modality.Fecha': 'FECHA:',
 	'aboutme.submit.text': 'Continuar',
 	'left.label.exams': 'LOS EXÁMENES A REALIZAR SON:',
 	'left.label.dateLaboratory': 'Selecciona la <strong>fecha</strong> y <strong>laboratorio</strong>',
+
+	'contact.legalInformation.firstSection1': 'He leído y acepto los',
+	'contact.legalInformation.termsAndConditionsLink1': 'Términos y Condiciones',
+	'contact.legalInformation.secondSection1': 'y las',
+	'contact.legalInformation.privacyPolicyLink1': 'Política de Privacidad',
+	'contact.legalInformation.firstSection2': 'He leído y acepto el',
+	'contact.legalInformation.analysisData': 'tratamiento de mis datos personales para fines adicionales',
+	'contact.validation.isterm.required': 'Se requiere aceptar los términos y condiciones',
+
+	'contact.fields.id': 'Ingresa tu DNI o CE',
+	'contact.fields.idType.label': 'Tipo de documento del paciente',
+	'aboutme.fields.name.label': 'Nombre del paciente',
+	'aboutme.fields.lastName.label': 'Apellido paterno del paciente',
+	'aboutme.fields.secondSurname.label': 'Apellido materno del paciente',
 };
 
 export default clinicalExamination;

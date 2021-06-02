@@ -68,4 +68,10 @@ export default stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		cursor: 'pointer',
 		textDecoration: 'underline',
 	},
+	termsConditions: {
+		marginLeft: '30px',
+		fontSize: '0.85rem',
+		fontWeight: '500',
+		color: '#FE6B6F',
+	},
 }));

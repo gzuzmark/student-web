@@ -2,9 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import { Location } from 'history';
 import { Container, RightLayout } from 'pages/common';
-import { UseCase } from 'pages/api';
 import { usePageTitle, addGAEvent } from 'utils';
-import { AppointmentOwner, User } from 'AppContext';
 
 import {
 	LeftSide,
@@ -16,14 +14,6 @@ import {
 	ContactPatient,
 } from './components';
 import { SUB_ROUTES_EXAM, checkStepExam, findStepExam } from './utils';
-
-interface NewUserProps {
-	appointmentOwner: AppointmentOwner | undefined;
-	useCase: UseCase | null | undefined;
-	isUserLoggedIn: boolean;
-	commingFromAppointmentCreation: boolean;
-	currentUser: User | null | undefined;
-}
 
 const ClinicalExamination = () => {
 	const isUserLoggedIn = false;
@@ -50,7 +40,7 @@ const ClinicalExamination = () => {
 	useEffect(() => {
 		const removeListener = listen((location: Location) => {
 			const index = findStepExam(location);
-			console.log({ index });
+			// console.log({ index });
 			if (index >= 0 && index < 3) {
 				setStep(index);
 			}
@@ -79,7 +69,6 @@ const ClinicalExamination = () => {
 			});
 		} else if (step === 1) {
 			setLaboratoryData(values as LaboratoryFormValues);
-
 			addGAEvent({
 				category: 'Agendar cita - Paso 2',
 				action: 'Avance satisfactorio',

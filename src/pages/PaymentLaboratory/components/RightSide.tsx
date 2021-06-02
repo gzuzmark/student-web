@@ -1,8 +1,7 @@
-import React, { MouseEvent, ChangeEvent } from 'react';
+import React, { MouseEvent } from 'react';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
@@ -14,6 +13,7 @@ import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
+import { ReactComponent as PagoLocalSVG } from 'icons/pago_local.svg';
 // import pagoEfectivo from 'icons/pagoefectivo.png';
 import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
@@ -25,11 +25,12 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 				minHeight: 'calc(100vh - 80px)',
 			},
 		},
+		paddingLeft: '100px !important',
 	},
 	wrapper: {
 		padding: '11px 24px 0',
 		[breakpoints.up('lg')]: {
-			padding: '147px 0 0 9px',
+			padding: '109px 0 0 9px',
 		},
 	},
 	title: {
@@ -225,77 +226,31 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 }));
 
 interface RightSideProps {
-	totalCost: string | undefined;
-	isCounponDisabled: boolean;
-	sendDiscount: () => Promise<void>;
-	discountCode: string;
-	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
+	totalCost: string | number | undefined;
+	// isCounponDisabled: boolean;
+	// sendDiscount: () => Promise<void>;
+	// discountCode: string;
+	// onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
 	executePayment: (pm: number) => (e: MouseEvent) => void;
 	errorMessage: string;
 }
 
-const RightSide = ({
-	totalCost,
-	isCounponDisabled,
-	sendDiscount,
-	discountCode,
-	onChangeDiscount,
-	executePayment,
-	errorMessage,
-}: RightSideProps) => {
+const RightSide = ({ executePayment, errorMessage }: RightSideProps) => {
 	const { t } = useTranslation('payment');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
-
-	const onClickSendDiscount = () => {
-		if (discountCode !== '') {
-			sendDiscount();
-		}
-	};
 
 	const isPagoEfectivoVisible = true; //isWeekDayLateNightOrSunday();
 
 	return (
 		<RightLayout className={classes.container}>
 			<div className={classes.wrapper}>
-				<Typography className={classes.title}>
-					{t('payment.right.payment')}{' '}
-					<Typography
-						className={clsx(classes.title, classes.amount)}
-						component="span"
-						variant={matches ? 'h3' : 'body1'}
-					>
-						S/{totalCost}
-					</Typography>
-				</Typography>
-				<div className={classes.discountWrapper}>
-					<TextField
-						value={discountCode}
-						onChange={onChangeDiscount}
-						className={classes.discountInputWrapper}
-						InputProps={{ className: classes.discountInput }}
-						variant="outlined"
-						disabled={isCounponDisabled}
-						label={t('payment.right.discountLabel')}
-						fullWidth
-					/>
-					<div className={classes.discountButtonWrapper}>
-						<Button
-							className={classes.discountButton}
-							onClick={onClickSendDiscount}
-							variant="outlined"
-							disabled={isCounponDisabled}
-							fullWidth
-						>
-							{t('payment.right.addDiscountLabel')}
-						</Button>
-					</div>
-				</div>
 				<Typography className={classes.subtitle} component="span" variant={matches ? 'h3' : 'body1'}>
 					{t('payment.right.method')}:
 				</Typography>
 				<div className={classes.buttonWrapper}>
 					<Button
+						style={{ display: 'none' }}
 						className={classes.option}
 						// onClick={(e) => {
 						// addGAEvent({
@@ -330,6 +285,7 @@ const RightSide = ({
 					</Button>
 					{isPagoEfectivoVisible && (
 						<Button
+							style={{ display: 'none' }}
 							className={classes.option}
 							onClick={(e) => {
 								addGAEvent({
@@ -340,7 +296,6 @@ const RightSide = ({
 								executePayment(PE_PAYMENT_ID)(e);
 							}}
 							variant="outlined"
-							style={{}}
 						>
 							<div className={classes.optionBody} style={{ width: 'inherit' }}>
 								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
@@ -355,6 +310,31 @@ const RightSide = ({
 							</div>
 						</Button>
 					)}
+				</div>
+				<div className={classes.buttonWrapper}>
+					<Button
+						className={classes.option}
+						onClick={(e) => {
+							addGAEvent({
+								category: 'Agendar cita - Paso 3',
+								action: 'Avance satisfactorio',
+								label: 'Pago Local',
+							});
+							executePayment(3)(e);
+						}}
+						variant="outlined"
+						style={{}}
+					>
+						<div className={classes.optionBody} style={{ width: 'inherit' }}>
+							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+								<PagoLocalSVG />
+							</div>
+							<Typography className={classes.optionLabel} variant="h3">
+								Pago en Local
+							</Typography>
+							<div className={classes.optionBrandWrapper}></div>
+						</div>
+					</Button>
 				</div>
 				{errorMessage ? (
 					<div className={classes.errorWrapper}>

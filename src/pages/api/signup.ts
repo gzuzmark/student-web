@@ -65,7 +65,31 @@ export const createGuestPatient = async (user: NewUser): Promise<string> => {
 		contact_email: user.email || '',
 		contact_phone: user.phoneNumber,
 		address: user.address || 'Sin dirección',
-		ubigeo: user.ubigeo,
+		ubigeo: user.ubigeo || '',
+		privacy_policies: user.isTerm ? 1 : 0,
+		terms_conditions: user.isClub ? 1 : 0,
+	});
+	const data = resp.data.data;
+
+	return data.id;
+};
+
+export const createGuestPatient1 = async (user: NewUser): Promise<string> => {
+	const resp = await aliviaAxios.post<CreatePatientResponse>('/patients-guest', {
+		name: user.name,
+		last_name: user.lastName,
+		second_last_name: user.secondSurname,
+		document_type: user.identificationType,
+		document_number: user.identification,
+		gender: user.gender,
+		birth_date: user.birthDate ? format(new Date(user.birthDate), 'dd/MM/yyyy') : '',
+		allergies: user.allergies || '',
+		meds: user.medicineList || '',
+		extra_info: user.moreInfo || '',
+		contact_email: user.email || '',
+		contact_phone: user.phoneNumber,
+		address: user.address || 'Sin dirección',
+		ubigeo: user.ubigeo || '',
 		privacy_policies: user.isTerm ? 1 : 0,
 		terms_conditions: user.isClub ? 1 : 0,
 	});

@@ -1,33 +1,16 @@
-import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent } from 'react';
+import React, { useCallback, useState, MouseEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Container, Loading } from 'pages/common';
 import { PAYMENT_ROUTE_LABORATORY } from 'routes';
-import {
-	useAppointmentStepValidation,
-	getIntCurrency,
-	dateToUTCUnixTimestamp,
-	addGAEvent,
-	getHumanDay,
-	getHour,
-	stylesWithTheme,
-} from 'utils';
-import initCulqi from 'utils/culquiIntegration';
-import { CONFIRMATION_STEP, GUEST, EMPTY_TRACK_PARAMS } from 'AppContext';
+import { useAppointmentStepValidation, addGAEvent, getHumanDay, getHour, stylesWithTheme } from 'utils';
+// import initCulqi from 'utils/culquiIntegration';
+import { CONFIRMATION_STEP } from 'AppContext';
 
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
-import {
-	createPayment,
-	createAppointment,
-	applyDiscount,
-	Discount,
-	KUSHKI_PAYMENT_ID,
-	PE_PAYMENT_ID,
-	sendFakeSession,
-} from 'pages/api';
-import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
+import { createPaymentLab, KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 import { Kushki } from '@kushki/js';
 import {
 	Button,
@@ -58,13 +41,12 @@ import LogoKsh from 'icons/logo_ksh.png';
 import LogoPci from 'icons/pci_logo.png';
 import amex from 'icons/amex.png';
 import dinersClub from 'icons/diners_club.png';
+import { formatUTCDate } from 'utils';
+// import { Laboratory } from 'pages/ClinicalExamination/components';
 
-const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
-	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
-};
-
-const FAKE_SESSION_ERROR_MESSAGE =
-	'Lo sentimos. El horario que has elegido ya no se encuentra disponible. Un miembro de nuestro equipo se pondrá en contacto contigo para ayudarte';
+// const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
+// 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
+// };
 
 const useStyles = stylesWithTheme(({ breakpoints, spacing }: Theme) => ({
 	kushkiTitle: {
@@ -103,29 +85,16 @@ const useStyles = stylesWithTheme(({ breakpoints, spacing }: Theme) => ({
 }));
 
 const PaymentLaboratory = () => {
-	const {
-		doctor,
-		user,
-		patientUser,
-		schedule,
-		channel,
-		useCase,
-		triage,
-		userFiles,
-		userToken,
-		reservationAccountID,
-		updateState: updateContextState,
-		appointmentOwner,
-		trackParams,
-	} = useAppointmentStepValidation(PAYMENT_ROUTE_LABORATORY);
+	const { user, updateState: updateContextState, laboratorio, schedules, labExamn } = useAppointmentStepValidation(
+		PAYMENT_ROUTE_LABORATORY,
+	);
 	const history = useHistory();
 	const classes = useStyles();
-	const activeUser = patientUser || user;
 	const { t } = useTranslation('paymentLaboratory');
-	const [discountCode, setDiscountCode] = useState('');
+	// const [discountCode, setDiscountCode] = useState('');
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
-	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
+	// const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
@@ -191,139 +160,34 @@ const PaymentLaboratory = () => {
 		}
 	};
 
-	React.useEffect(() => {
-		const { id = '', startTime, endTime } = schedule || {};
-		const { id: useCaseId = '' } = useCase || {};
-		if (id.includes(FAKE_SESSION_ID)) {
-			sendFakeSession({
-				reservation_account_id: reservationAccountID || '',
-				use_case_id: useCaseId,
-				doctor_id: (doctor && doctor.id) || '',
-				start_time: dateToUTCUnixTimestamp(startTime!),
-				end_time: dateToUTCUnixTimestamp(endTime!),
-			}).catch((err) => {
-				const { message = '' } = err || {};
-				setErrorMessage(message);
-			});
-		}
-		// eslint-disable-next-line
-	}, []);
-
-	// const performTransactionPayment = useCallback(
-	// 	async (method: number) => {
-	// 		if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
-	// 			console.log(initialValuesCash);
-	// 			try {
-	// 				setIsPaymentLoading(true);
-	// 				const userName = activeUser.name;
-	// 				const userPhone = activeUser.phoneNumber;
-	// 				const response: any = await createPayment({
-	// 					cost: useCase?.totalCost,
-	// 					appointmentTypeID: 'ugito',
-	// 					scheduleID: schedule.id,
-	// 					discountID: discount.id,
-	// 					email: activeUser.email || '',
-	// 					token: 'SnzVSB3cSA',
-	// 					dni: activeUser.identification || '',
-	// 					name: userName || '',
-	// 					lastName: activeUser.lastName,
-	// 					phone: userPhone || '',
-	// 					paymentType: method,
-	// 					trackParams: trackParams || EMPTY_TRACK_PARAMS,
-	// 					reservationAccountID: activeUser.id,
-	// 				});
-	// 				await createAppointment(
-	// 					{
-	// 						reservationAccountID: activeUser.id,
-	// 						appointmentTypeID: 'ugito',
-	// 						useCaseID: useCase.id,
-	// 						scheduleID: schedule.id,
-	// 						triage,
-	// 						media: userFiles || [],
-	// 						isGuest: appointmentOwner === GUEST,
-	// 					},
-	// 					userToken,
-	// 				);
-	// 				setIsPaymentLoading(false);
-	// 				let link = null;
-	// 				if (method === PE_PAYMENT_ID) {
-	// 					if (response?.data) {
-	// 						console.log('<<<<response.data>>>>');
-	// 						link = response?.data?.data?.reference_link as string;
-	// 					}
-	// 				} else {
-	// 					link = buildTransactionURL(doctor.name, doctor.lastName, userName || '', userPhone || '');
-	// 				}
-	// 				updateContextState({
-	// 					useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-	// 					paymentURL: link,
-	// 					appointmentCreationStep: CONFIRMATION_STEP,
-	// 				});
-	// 				history.push('/confirmacion');
-	// 			} catch (e) {
-	// 				setErrorMessage(t('payment.error.pe'));
-	// 				setIsPaymentLoading(false);
-	// 			}
-	// 		}
-	// 	},
-	// 	[
-	// 		schedule,
-	// 		updateContextState,
-	// 		useCase,
-	// 		triage,
-	// 		activeUser,
-	// 		doctor,
-	// 		initialValuesCash,
-	// 		discount.id,
-	// 		discount.totalCost,
-	// 		trackParams,
-	// 		userFiles,
-	// 		appointmentOwner,
-	// 		userToken,
-	// 		history,
-	// 		t,
-	// 	],
-	// );
-
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
 			console.log('tipo de pago: ' + paymentMethod);
-			const { id: scheduleId = '' } = schedule || {};
-			const isFakeSession = scheduleId.includes(FAKE_SESSION_ID);
-			if (!isFakeSession) {
-				if (paymentMethod === KUSHKI_PAYMENT_ID) {
-					e.preventDefault();
-					// window.Culqi.open();
-					openKushkiForm();
-				} else {
-					openKushkiCashForm();
-					//performTransactionPayment(paymentMethod);
-				}
+
+			if (paymentMethod === KUSHKI_PAYMENT_ID) {
+				e.preventDefault();
+				// window.Culqi.open();
+				openKushkiForm();
+			} else if (paymentMethod === 2) {
+				openKushkiCashForm();
+				//performTransactionPayment(paymentMethod);
 			} else {
-				const { id = '', startTime, endTime } = schedule || {};
-				const { id: useCaseId = '' } = useCase || {};
-				if (id.includes(FAKE_SESSION_ID)) {
-					window.alert(FAKE_SESSION_ERROR_MESSAGE);
-					sendFakeSession({
-						reservation_account_id: reservationAccountID || '',
-						use_case_id: useCaseId,
-						doctor_id: (doctor && doctor.id) || '',
-						start_time: dateToUTCUnixTimestamp(startTime!),
-						end_time: dateToUTCUnixTimestamp(endTime!),
-					}).catch((err) => {
-						const { message = '' } = err || {};
-						setErrorMessage(message);
-					});
-				}
+				e.preventDefault();
+				makeKushkiLocalPayment();
 			}
 		},
-		[schedule, reservationAccountID, doctor, useCase],
+		// eslint-disable-next-line
+		[laboratorio, user],
 	);
 
 	const makeKushkiPayment = (values: any) => {
-		const totalCost = discount.totalCost || useCase?.totalCost;
+		const totalCost = laboratorio
+			? labExamn?.modality === 1
+				? laboratorio?.total_cost + laboratorio?.delivery_cost
+				: laboratorio?.total_cost
+			: 0;
 		const amount = totalCost ? totalCost.toString() : '';
-		if (schedule && updateContextState && useCase && triage && activeUser) {
+		if (schedules && updateContextState && user && laboratorio && labExamn) {
 			setIsPaymentLoading(true);
 			kushki.requestToken(
 				{
@@ -338,46 +202,35 @@ const PaymentLaboratory = () => {
 					},
 				},
 				async (response: any) => {
-					if (!response.code) {
-						console.log(response);
-						await createPayment({
-							cost: amount,
-							appointmentTypeID: 'ugito',
-							scheduleID: schedule.id,
-							discountID: discount.id,
-							email: values.email,
-							token: response.token,
-							dni: activeUser.identification || '',
-							name: '',
-							lastName: '',
-							phone: '',
-							paymentType: KUSHKI_PAYMENT_ID,
-							trackParams: trackParams || EMPTY_TRACK_PARAMS,
-							reservationAccountID: activeUser.id,
-						});
+					console.log(response);
 
-						await createAppointment(
-							{
-								reservationAccountID: activeUser.id,
-								appointmentTypeID: 'ugito',
-								useCaseID: useCase.id,
-								scheduleID: schedule.id,
-								triage,
-								media: userFiles || [],
-								isGuest: appointmentOwner === GUEST,
-							},
-							userToken,
-						);
+					if (!response.code) {
+						await createPaymentLab({
+							cost: totalCost,
+							token: response.token,
+							email: values.email,
+							patient_dni: user.identification || '',
+							payment_type: KUSHKI_PAYMENT_ID,
+							reservation_date: formatUTCDate(new Date(schedules.start_time), 'yyyy-MM-dd'),
+							user_id: '',
+							exam_modality_id: labExamn.modality,
+							service_id: 2,
+							student_id: '',
+							laboratory_id: laboratorio.id,
+							laboratory_name: laboratorio.name,
+							file: '',
+							laboratory_exams: [],
+						});
 
 						addGAEvent({
 							event: 'virtualEvent',
 							category: 'Agendar cita - Gracias',
 							action: 'Avance satisfactorio',
-							label: doctor?.cmp || '',
-							dia: getHumanDay(schedule.startTime),
-							hora: getHour(schedule.startTime),
-							especialidad: doctor?.specialityName || '',
-							monto: discount.totalCost || useCase?.totalCost,
+							label: laboratorio.ruc || '',
+							dia: getHumanDay(new Date(schedules.start_time)),
+							hora: getHour(new Date(schedules.start_time)),
+							// especialidad: doctor?.specialityName || '',
+							monto: amount,
 							tipoPago: 'Tarjeta',
 						});
 
@@ -387,21 +240,21 @@ const PaymentLaboratory = () => {
 								currencyCode: 'PEN',
 								purchase: {
 									actionField: {
-										id: activeUser.id,
-										revenue: discount.totalCost || useCase?.totalCost,
+										id: laboratorio.id + '',
+										revenue: amount,
 										tax: '0',
 									},
 									products: [
 										{
-											name: doctor?.cmp || '',
-											id: doctor?.cmp || '',
-											price: discount.totalCost || useCase?.totalCost,
+											name: laboratorio.ruc || '',
+											id: laboratorio.id + '' || '',
+											price: amount,
 											brand: 'Alivia',
-											category: doctor?.specialityName || '',
-											variant: getHour(schedule.startTime),
+											category: laboratorio.name || '',
+											variant: getHour(new Date(schedules.start_time)),
 											quantity: '1',
 											dimension3: 'Tarjeta de crédito o débito',
-											dimension4: getHumanDay(schedule.startTime),
+											dimension4: getHumanDay(new Date(schedules.start_time)),
 										},
 									],
 								},
@@ -409,23 +262,14 @@ const PaymentLaboratory = () => {
 						});
 
 						updateContextState({
-							useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+							// useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
 							appointmentCreationStep: CONFIRMATION_STEP,
 						});
 
-						history.push('/confirmacion');
+						history.push('/confirmacionlab');
 					} else {
 						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
 						setErrorMessage('Error-' + response.code + ': ' + response.message);
-						/*if (response.code === KUSHKI_RESPONSE_K001) {
-							setErrorMessage('Error-K001: Ingresar correctamente datos de Tarjeta.');
-						} else if (response.code === KUSHKI_RESPONSE_K005) {
-							setErrorMessage('Error-K005: El número de tarjeta no es válido.');
-						} else if (response.code === KUSHKI_RESPONSE_K004) {
-							setErrorMessage('Error-K004: ID del comercio o credencial no válido.');
-						} else if (response.code === KUSHKI_RESPONSE_K017) {
-							setErrorMessage('Error-017: Transacción rechazada, ingresar correctamente datos de una tarjeta válida.');
-						}*/
 						setOpenKushkiModal(false);
 					}
 					setIsPaymentLoading(false);
@@ -435,45 +279,37 @@ const PaymentLaboratory = () => {
 	};
 
 	const makeKushkiCashPayment = (values: any) => {
-		const totalCost = discount.totalCost || useCase?.totalCost;
+		const totalCost = laboratorio
+			? labExamn?.modality === 1
+				? laboratorio?.total_cost + laboratorio?.delivery_cost
+				: laboratorio?.total_cost
+			: 0;
 		const amount = totalCost ? totalCost.toString() : '';
 		setIsPaymentLoading(true);
 		const callback = async function (response: any) {
 			if (!response.code) {
-				if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
+				if (schedules && updateContextState && user && laboratorio && labExamn) {
 					const method = 2;
 					const token = response.token;
 					try {
-						//setIsPaymentLoading(true);
-						//const userName = activeUser.name;
-						const userPhone = activeUser.phoneNumber;
-						const response: any = await createPayment({
-							cost: amount,
-							appointmentTypeID: 'ugito',
-							scheduleID: schedule.id,
-							discountID: discount.id,
-							email: values.email.toString() || '',
+						// setIsPaymentLoading(true);
+
+						await createPaymentLab({
+							cost: totalCost,
 							token: token,
-							dni: values.documentNumber.toString() || '',
-							name: values.name.toString() || '',
-							lastName: values.lastName.toString() || '',
-							phone: userPhone || '',
-							paymentType: method,
-							trackParams: trackParams || EMPTY_TRACK_PARAMS,
-							reservationAccountID: activeUser.id,
+							email: values.email,
+							patient_dni: user.identification || '',
+							payment_type: method,
+							reservation_date: formatUTCDate(new Date(schedules.start_time), 'yyyy-MM-dd'),
+							user_id: '',
+							exam_modality_id: labExamn.modality,
+							service_id: 2,
+							student_id: '',
+							laboratory_id: laboratorio.id,
+							laboratory_name: laboratorio.name,
+							file: '',
+							laboratory_exams: [],
 						});
-						await createAppointment(
-							{
-								reservationAccountID: activeUser.id,
-								appointmentTypeID: 'ugito',
-								useCaseID: useCase.id,
-								scheduleID: schedule.id,
-								triage,
-								media: userFiles || [],
-								isGuest: appointmentOwner === GUEST,
-							},
-							userToken,
-						);
 						setIsPaymentLoading(false);
 						let link = null;
 
@@ -482,15 +318,15 @@ const PaymentLaboratory = () => {
 								link = response?.data?.data?.reference_link as string;
 							}
 						} else {
-							link = buildTransactionURL(doctor.name, doctor.lastName, values.fullName || '', userPhone || '');
+							// link = buildTransactionURL(doctor.name, doctor.lastName, values.fullName || '', userPhone || '');
 						}
 						updateContextState({
-							useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+							// useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
 							paymentURL: '',
 							appointmentCreationStep: CONFIRMATION_STEP,
 							ticketNumber: link,
 						});
-						history.push('/confirmacion');
+						history.push('/confirmacionlab');
 					} catch (e) {
 						setErrorMessage(t('payment.error.pe'));
 						setIsPaymentLoading(false);
@@ -519,137 +355,61 @@ const PaymentLaboratory = () => {
 		//performTransactionPayment(PE_PAYMENT_ID);
 	};
 
-	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
-		if (e.target) {
-			setDiscountCode(e.target.value);
+	const makeKushkiLocalPayment = () => {
+		const totalCost = laboratorio
+			? labExamn?.modality === 1
+				? laboratorio?.total_cost + laboratorio?.delivery_cost
+				: laboratorio?.total_cost
+			: 0;
+		setIsPaymentLoading(true);
+		if (schedules && updateContextState && user && laboratorio && labExamn) {
+			const method = 3;
+			try {
+				const data = {
+					cost: totalCost,
+					token: '',
+					email: user.email || '',
+					patient_dni: user.identification || '',
+					payment_type: method,
+					reservation_date: formatUTCDate(new Date(schedules.start_time), 'yyyy-MM-dd'),
+					user_id: '',
+					exam_modality_id: labExamn.modality,
+					service_id: 2,
+					student_id: '',
+					laboratory_id: laboratorio.id,
+					laboratory_name: laboratorio.name,
+					file: '',
+					laboratory_exams: [],
+				};
+				// await createPaymentLab(data);
+				createPaymentLab(data);
+				setIsPaymentLoading(false);
+
+				updateContextState({
+					// useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+					paymentURL: '',
+					appointmentCreationStep: CONFIRMATION_STEP,
+					// ticketNumber: link,
+				});
+				history.push('/confirmacionlab');
+			} catch (e) {
+				console.log(e);
+				setErrorMessage(t('payment.error.pe'));
+				setIsPaymentLoading(false);
+			}
 		}
 	};
-	const sendDiscount = useCallback(async () => {
-		try {
-			if (activeUser && schedule) {
-				const reviewedDiscount = await applyDiscount({
-					couponCode: discountCode,
-					dni: activeUser.identification,
-					scheduleID: schedule.id,
-				});
-
-				addGAEvent({ category: 'Agendar cita - Paso 3', action: 'Aplicar descuento', label: reviewedDiscount.id });
-				window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedDiscount.totalCost) });
-				setDiscount(reviewedDiscount);
-			}
-		} catch (e) {}
-	}, [discountCode, schedule, activeUser]);
-
-	useEffect(() => {
-		if (useCase?.totalCost) {
-			initCulqi(useCase?.totalCost);
-		}
-		// eslint-disable-next-line
-	}, []);
-
-	useEffect(() => {
-		if (useCase?.totalCost) {
-			makePayment(1);
-			// window.culqi = async () => {
-			// 	try {
-			// 		setIsPaymentLoading(true);
-			// 		if (schedule && updateContextState && useCase && triage && activeUser) {
-			// 			if (!!window.Culqi.token) {
-			// 				const token = window.Culqi.token.id;
-			// 				const email = window.Culqi.token.email;
-			// 				console.log('useEffect', schedule);
-			// 				await createPayment({
-			// 					cost: useCase?.totalCost,
-			// 					appointmentTypeID: 'ugito',
-			// 					scheduleID: schedule.id,
-			// 					discountID: discount.id,
-			// 					email,
-			// 					token,
-			// 					dni: activeUser.identification || '',
-			// 					name: '',
-			// 					lastName: '',
-			// 					phone: '',
-			// 					paymentType: CULQI_PAYMENT_ID,
-			// 					trackParams: trackParams || EMPTY_TRACK_PARAMS,
-			// 					reservationAccountID: activeUser.id,
-			// 				});
-			// 				await createAppointment(
-			// 					{
-			// 						reservationAccountID: activeUser.id,
-			// 						appointmentTypeID: 'ugito',
-			// 						useCaseID: useCase.id,
-			// 						scheduleID: schedule.id,
-			// 						triage,
-			// 						media: userFiles || [],
-			// 						isGuest: appointmentOwner === GUEST,
-			// 					},
-			// 					userToken,
-			// 				);
-			// 				addGAEvent({
-			// 					event: 'virtualEvent',
-			// 					category: 'Agendar cita - Gracias',
-			// 					action: 'Avance satisfactorio',
-			// 					label: doctor?.cmp || '',
-			// 					dia: getHumanDay(schedule.startTime),
-			// 					hora: getHour(schedule.startTime),
-			// 					especialidad: doctor?.specialityName || '',
-			// 					monto: discount.totalCost || useCase?.totalCost,
-			// 					tipoPago: 'Tarjeta',
-			// 				});
-			// 				addGAEvent({
-			// 					event: 'Purchase',
-			// 					ecommerce: {
-			// 						currencyCode: 'PEN',
-			// 						purchase: {
-			// 							actionField: {
-			// 								id: activeUser.id,
-			// 								revenue: discount.totalCost || useCase?.totalCost,
-			// 								tax: '0',
-			// 							},
-			// 							products: [
-			// 								{
-			// 									name: doctor?.cmp || '',
-			// 									id: doctor?.cmp || '',
-			// 									price: discount.totalCost || useCase?.totalCost,
-			// 									brand: 'Alivia',
-			// 									category: doctor?.specialityName || '',
-			// 									variant: getHour(schedule.startTime),
-			// 									quantity: '1',
-			// 									dimension3: 'Tarjeta de crédito o débito',
-			// 									dimension4: getHumanDay(schedule.startTime),
-			// 								},
-			// 							],
-			// 						},
-			// 					},
-			// 				});
-			// 				updateContextState({
-			// 					useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-			// 					appointmentCreationStep: CONFIRMATION_STEP,
-			// 				});
-			// 				history.push('/confirmacion');
-			// 			} else if (!!window.Culqi.error) {
-			// 				setErrorMessage(window.Culqi.error.user_message);
-			// 			}
-			// 		}
-			// 		setIsPaymentLoading(false);
-			// 	} catch (e) {
-			// 		setErrorMessage(t('payment.error.culqi'));
-			// 		setIsPaymentLoading(false);
-			// 	}
-			// };
-		}
-		// eslint-disable-next-line
-	}, [discount]);
-
 	return !isPaymentLoading ? (
 		<Container>
-			<LeftSide doctor={doctor} user={activeUser} schedule={schedule} channel={channel} />
+			<LeftSide lab={laboratorio} user={user} schedule={schedules} labExamn={labExamn} />
 			<RightSide
-				totalCost={discount.totalCost || useCase?.totalCost}
-				isCounponDisabled={!!discount.totalCost}
-				sendDiscount={sendDiscount}
-				discountCode={discountCode}
-				onChangeDiscount={onChangeDiscount}
+				totalCost={
+					laboratorio
+						? labExamn?.modality === 1
+							? laboratorio?.total_cost + laboratorio?.delivery_cost
+							: laboratorio?.total_cost
+						: 0
+				}
 				executePayment={makePayment}
 				errorMessage={errorMessage}
 			/>
@@ -895,7 +655,12 @@ const PaymentLaboratory = () => {
 													>
 														{/* {tFamily('familyMembers.editProfile.complete')} */}
 														<LockIcon />
-														PAGAR S/{discount.totalCost || useCase?.totalCost}
+														PAGAR S/{' '}
+														{laboratorio
+															? labExamn?.modality === 1
+																? laboratorio?.total_cost + laboratorio?.delivery_cost
+																: laboratorio?.total_cost
+															: 0}
 													</Button>
 												</div>
 											</div>
@@ -1146,7 +911,12 @@ const PaymentLaboratory = () => {
 									>
 										<LockIcon />
 										{t('Generar Orden de pago de ')}
-										S/{discount.totalCost || useCase?.totalCost}
+										S/{' '}
+										{laboratorio
+											? labExamn?.modality === 1
+												? laboratorio?.total_cost + laboratorio?.delivery_cost
+												: laboratorio?.total_cost
+											: 0}
 									</Button>
 								</div>
 							</Form>

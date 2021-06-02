@@ -101,6 +101,18 @@ export interface Laboratory {
 	total_cost: number;
 	available_times: AvailableTime[];
 	selected_time: AvailableTime | undefined;
+	logo: string;
+	laboratory_exams: LaboratoryExamen[];
+	delivery_cost: number;
+}
+
+export interface LaboratoryExamen {
+	exam_modality_id: string;
+	laboratory_id: number;
+	id: number;
+	name: string;
+	price: number;
+	types_laboratory_exam_id: number;
 }
 
 export interface AvailableTime {

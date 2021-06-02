@@ -2,6 +2,7 @@
 
 import selectDoctorL18n from 'pages/SelectDoctor/l18n';
 import clinicalExaminationL18n from 'pages/ClinicalExamination/l18n';
+import paymentLaboratoryL18n from 'pages/PaymentLaboratory/l18n';
 import preSignUpL18n from 'pages/PreSignUp/l18n';
 import loginL18n from 'pages/Login/l18n';
 import signUpL18n from 'pages/SignUp/l18n';
@@ -10,6 +11,7 @@ import appointmentDetailL18n from 'pages/Appointment/l18n';
 import triageL18n from 'pages/Triage/l18n';
 import paymentL18n from 'pages/Payment/l18n';
 import confirmationL18n from 'pages/Confirmation/l18n';
+import confirmationLabL18n from 'pages/ConfirmationLaboratory/l18n';
 import forgotPasswordL18n from 'pages/ForgotPassword/l18n';
 import selectProfileL18n from 'pages/SelectProfile/l18n';
 import createProfileL18n from 'pages/CreateProfile/l18n';
@@ -49,6 +51,7 @@ export default {
 	},
 	selectDoctor: { ...selectDoctorL18n },
 	clinicalExamination: { ...clinicalExaminationL18n },
+	paymentLaboratory: { ...paymentLaboratoryL18n },
 	preSignUp: { ...preSignUpL18n },
 	login: { ...loginL18n },
 	signUp: { ...signUpL18n },
@@ -57,6 +60,7 @@ export default {
 	triage: { ...triageL18n },
 	payment: { ...paymentL18n },
 	confirmation: { ...confirmationL18n },
+	confirmationLab: { ...confirmationLabL18n },
 	forgotPassword: { ...forgotPasswordL18n },
 	selectProfile: { ...selectProfileL18n },
 	createProfile: { ...createProfileL18n },
