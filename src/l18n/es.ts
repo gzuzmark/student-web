@@ -1,6 +1,7 @@
 // TODO implement dynamic import from pages directories
 
 import selectDoctorL18n from 'pages/SelectDoctor/l18n';
+import clinicalExaminationL18n from 'pages/ClinicalExamination/l18n';
 import preSignUpL18n from 'pages/PreSignUp/l18n';
 import loginL18n from 'pages/Login/l18n';
 import signUpL18n from 'pages/SignUp/l18n';
@@ -47,6 +48,7 @@ export default {
 		...createPasswordL18n,
 	},
 	selectDoctor: { ...selectDoctorL18n },
+	clinicalExamination: { ...clinicalExaminationL18n },
 	preSignUp: { ...preSignUpL18n },
 	login: { ...loginL18n },
 	signUp: { ...signUpL18n },
