@@ -258,7 +258,7 @@ const RightSide = ({
 	return (
 		<RightLayout className={classes.container}>
 			<div className={classes.wrapper}>
-				<div
+				{/* <div
 					style={{
 						border: '3px dotted #bbb',
 						borderRadius: '5px',
@@ -283,7 +283,7 @@ const RightSide = ({
 						</p>
 						<p style={{ color: 'red' }}>Expira: Mayo 30, 2021</p>
 					</div>
-				</div>
+				</div> */}
 				<Typography className={classes.title}>
 					{t('payment.right.payment')}{' '}
 					<Typography
