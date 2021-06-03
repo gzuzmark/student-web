@@ -258,6 +258,32 @@ const RightSide = ({
 	return (
 		<RightLayout className={classes.container}>
 			<div className={classes.wrapper}>
+				{/* <div
+					style={{
+						border: '3px dotted #bbb',
+						borderRadius: '5px',
+						margin: '0 auto',
+						marginRight: '15px',
+						marginBottom: '15px',
+						color: '#535B6C',
+					}}
+				>
+					<div style={{ padding: '2px 16px', backgroundColor: 'white' }}>
+						<h2>
+							<b>APROVECHA EL 20% DE DESCUENTO EN TU COMPRA</b>
+						</h2>
+					</div>
+					<div style={{ padding: '2px 16px', backgroundColor: '#f1f1f1' }}>
+						<p>
+							Use el Cupón<noscript></noscript>:{' '}
+							<span style={{ background: '#ccc', padding: '3px' }}>
+								{' '}
+								<strong>SALUD20</strong>
+							</span>
+						</p>
+						<p style={{ color: 'red' }}>Expira: Mayo 30, 2021</p>
+					</div>
+				</div> */}
 				<Typography className={classes.title}>
 					{t('payment.right.payment')}{' '}
 					<Typography

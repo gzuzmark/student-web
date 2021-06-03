@@ -134,10 +134,10 @@ const Payment = () => {
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
 		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
 	});
-	/*const kushki = new Kushki({
-		merchantId: '5f2c989bea794296bd461c39f9932368', // Your public merchant id
-		inTestEnvironment: false,
-	});*/
+	// const kushki = new Kushki({
+	// 	merchantId: '5f2c989bea794296bd461c39f9932368', // Your public merchant id
+	// 	inTestEnvironment: false,
+	// });
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
 	const [openKushkiCashModal, setOpenKushkiCashModal] = React.useState(false);

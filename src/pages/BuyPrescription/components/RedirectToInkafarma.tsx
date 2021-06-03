@@ -9,6 +9,8 @@ import { PrescribedMedicine, SelectedMedicines, getRedirectUrl } from 'pages/api
 import { stylesWithTheme } from 'utils';
 import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { parse } from 'query-string';
+import { useLocation } from 'react-router';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -120,9 +122,10 @@ const createRedirectUrl = async (
 	selectedMedicines: SelectedMedicines,
 	setIsLoading: Function,
 	setRedirectUrl: Function,
+	userId: string,
 ) => {
 	try {
-		const redirectUrl = await getRedirectUrl(selectedMedicines);
+		const redirectUrl = await getRedirectUrl(userId, selectedMedicines);
 
 		setIsLoading(false);
 		setRedirectUrl(redirectUrl);
@@ -141,8 +144,11 @@ export interface RedirectToInkafarmaProps {
 const RedirectToInkafarma = ({ medicines, selectedMedicines }: RedirectToInkafarmaProps): ReactElement | null => {
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
+	const location = useLocation();
+	const params = parse(location.search);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [redirectUrl, setRedirectUrl] = useState();
+	const sessionId = (params.sessionId as string) || '';
 	const parsedSelectedMedicines: SelectedMedicines = selectedMedicines
 		.map((index) => medicines[index])
 		.map(({ skuInkafarma, totalQuantity, pharmaceuticalForm, hasStock, alternativeMedicine }) =>
@@ -159,7 +165,7 @@ const RedirectToInkafarma = ({ medicines, selectedMedicines }: RedirectToInkafar
 	};
 
 	useEffect(() => {
-		createRedirectUrl(parsedSelectedMedicines, setIsLoading, setRedirectUrl);
+		createRedirectUrl(parsedSelectedMedicines, setIsLoading, setRedirectUrl, sessionId);
 		// eslint-disable-next-line
 	}, []);
 

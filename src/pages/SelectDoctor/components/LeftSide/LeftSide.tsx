@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { LeftLayout, Stepper } from 'pages/common';
 
 import Button from '@material-ui/core/Button';
-// import { url } from 'inspector';
 
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
