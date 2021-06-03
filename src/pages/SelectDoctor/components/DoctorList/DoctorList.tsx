@@ -5,12 +5,14 @@ import Rating from '@material-ui/lab/Rating';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
-import { DoctorAvailability } from 'pages/api';
+import { DoctorAvailability, Schedule } from 'pages/api';
 import { addGAEvent, getHumanDay, getHour } from 'utils';
 
 import AvailableTimes from '../AvailableTimes';
 import useStyles from './styles';
 import DetailedDoctorModal from './DetailedDoctorModal';
+import { validSelectTimeWithNow } from '../FunctionsHelper';
+import { ModalErrorTime } from '../ModalErrorTime';
 
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
@@ -44,6 +46,9 @@ const DoctorList = ({
 	});
 	const [selectedDoctor, setSelectedDoctor] = useState<DoctorAvailability | null>(null);
 	const [isDetailDoctorModalOpen, setIsDetailDoctorModalOpen] = useState<boolean>(false);
+	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [messageError, setMessageError] = useState('');
+
 	const selectDoctorForModal = (index: number) => {
 		setSelectedDoctor(doctors[index]);
 	};
@@ -65,17 +70,24 @@ const DoctorList = ({
 		}
 	};
 	const continueToPreRegister = () => {
-		const doctor = doctors[activeDoctorTime.doctorIndex];
+		try {
+			const doctor = doctors[activeDoctorTime.doctorIndex];
+			const schedule: Schedule = doctor.schedules[activeDoctorTime.scheduleIndex];
+			validSelectTimeWithNow(schedule);
 
-		addGAEvent({
-			category: 'Agendar cita - Paso 1',
-			action: 'Avance satisfactorio',
-			label: doctor.cmp,
-			dia: getHumanDay(doctor.schedules[activeDoctorTime.scheduleIndex].startTime),
-			hora: getHour(doctor.schedules[activeDoctorTime.scheduleIndex].startTime),
-			especialidad: doctor.specialityName,
-		});
-		selectDoctorCallback();
+			addGAEvent({
+				category: 'Agendar cita - Paso 1',
+				action: 'Avance satisfactorio',
+				label: doctor.cmp,
+				dia: getHumanDay(doctor.schedules[activeDoctorTime.scheduleIndex].startTime),
+				hora: getHour(doctor.schedules[activeDoctorTime.scheduleIndex].startTime),
+				especialidad: doctor.specialityName,
+			});
+			selectDoctorCallback();
+		} catch (error) {
+			setMessageError(error.message);
+			setIsOpenModal(true);
+		}
 	};
 
 	return (
@@ -173,6 +185,7 @@ const DoctorList = ({
 						closeModal={closeDetailDoctorModal}
 					/>
 				) : null}
+				<ModalErrorTime isOpen={isOpenModal} setIsOpen={setIsOpenModal} message={messageError} />
 			</div>
 		</>
 	);

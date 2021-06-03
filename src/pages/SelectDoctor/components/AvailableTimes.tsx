@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Theme } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
@@ -7,6 +7,8 @@ import { Schedule } from 'pages/api';
 
 import { ActiveDoctorTime } from './DoctorList/DoctorList';
 import TimeOption from './TimeOption';
+import { validSelectTimeWithNow } from './FunctionsHelper';
+import ModalErrorTime from './ModalErrorTime/ModalErrorTime';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -75,17 +77,33 @@ interface AvailableTimesProps {
 const AvailableTimes = ({ availableDates, name, doctorCmp, selectTime, activeDoctorTime }: AvailableTimesProps) => {
 	const classes = useStyles();
 	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [messageError, setMessageError] = useState('');
+
 	const activateAll = () => {
 		selectTime('', -1);
 	};
+
 	const onClick = (scheduleId: string, scheduleIndex: number) => () => {
-		selectTime(scheduleId, scheduleIndex);
+		try {
+			const schedule: Schedule = availableDates[scheduleIndex];
+			validSelectTimeWithNow(schedule);
+			selectTime(scheduleId, scheduleIndex);
+		} catch (error) {
+			setMessageError(error.message);
+			setIsOpenModal(true);
+		}
 	};
-	const format = matches ? 'k:mm' : undefined;
+
+	const format = matches ? 'hh:mm a' : undefined;
+
 	const isSelectedDoctor = activeDoctorTime.doctorCmp === doctorCmp;
+
 	const isEmptyTime = activeDoctorTime.scheduleID === '';
+
 	const isButtonDisabled = (scheduleID: string) =>
 		isEmptyTime ? false : activeDoctorTime.scheduleID !== scheduleID || !isSelectedDoctor;
+
 	const isButtonActive = (scheduleID: string) =>
 		isEmptyTime ? false : activeDoctorTime.scheduleID === scheduleID && isSelectedDoctor;
 
@@ -95,6 +113,7 @@ const AvailableTimes = ({ availableDates, name, doctorCmp, selectTime, activeDoc
 			<div className={classes.times}>
 				{availableDates.map(({ id, startTime }: Schedule, scheduleIndex: number) => (
 					<TimeOption
+						scheduleId={id}
 						date={startTime}
 						onClick={onClick(id, scheduleIndex)}
 						disabled={isButtonDisabled(id)}
@@ -104,6 +123,7 @@ const AvailableTimes = ({ availableDates, name, doctorCmp, selectTime, activeDoc
 					/>
 				))}
 			</div>
+			<ModalErrorTime isOpen={isOpenModal} setIsOpen={setIsOpenModal} message={messageError} />
 		</div>
 	);
 };

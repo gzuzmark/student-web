@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { Trans, useTranslation } from 'react-i18next';
-
-import { RightLayout } from 'pages/common';
-import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
+import Typography from '@material-ui/core/Typography';
 import isToday from 'date-fns/isToday';
-
+import { DoctorAvailability, getMedicalSpecialities, getNextAvailableSchedules, Schedule, UseCase } from 'pages/api';
+import { Loading, RightLayout } from 'pages/common';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
 import { DoctorList } from '../DoctorList';
 import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
-import { UseCase, getMedicalSpecialities, DoctorAvailability, getNextAvailableSchedules, Schedule } from 'pages/api';
 
 export const FAKE_SESSION_ID = 'fake';
 const DERMA_ID = 'fake';
@@ -202,24 +200,26 @@ const RightSide = ({
 	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 	const [minDate, setMinDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
+	const [isLoadData, setIsLoadData] = useState<boolean>(true);
+
 	const updateDate = useCallback(
 		(newDate: Date | null) => {
 			setSelectedDate(newDate);
-			getDoctors(newDate, useCase, setDoctors, minutes, numSessions);
+			setIsLoadData(true);
+			getDoctors(newDate, useCase, setDoctors, minutes, numSessions).finally(() => setIsLoadData(false));
 		},
 		[minutes, numSessions, useCase],
 	);
 
 	useEffect(() => {
 		if (useCase) {
-			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate);
+			setIsLoadData(true);
+			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate).finally(() => setIsLoadData(false));
 		}
 	}, [useCase]);
 
 	const sectionWithSpecialty = () => (
 		<>
-			<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
-			<Divider className={classes.divider} />
 			{doctors.length > 0 ? (
 				<DoctorList
 					doctors={doctors}
@@ -246,7 +246,9 @@ const RightSide = ({
 						<Trans i18nKey={`selectDoctor:${'right.title'}`} />
 					</Typography>
 				</div>
-				{sectionWithSpecialty()}
+				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
+				<Divider className={classes.divider} />
+				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>
 		</RightLayout>
 	);
