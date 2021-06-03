@@ -25,7 +25,7 @@ const ClinicalExamination = () => {
 	const [examData, setExamData] = useState<ExamDataValues>();
 	const [laboratoryData, setLaboratoryData] = useState<LaboratoryFormValues>();
 
-	usePageTitle('Examenes');
+	usePageTitle('Labs');
 
 	useLayoutEffect(() => {
 		if (!commingFromAppointmentCreation) {
@@ -76,7 +76,7 @@ const ClinicalExamination = () => {
 			});
 		}
 
-		push(`/examenes/${SUB_ROUTES_EXAM[step + 1]}`);
+		push(`/labs/${SUB_ROUTES_EXAM[step + 1]}`);
 	};
 
 	return (
@@ -84,13 +84,13 @@ const ClinicalExamination = () => {
 			<LeftSide step={step} />
 			<RightLayout>
 				<Switch>
-					<Route exact path="/examenes/register">
+					<Route exact path="/labs/register">
 						<ContactPatient contactData={contactData} onChangeStep={onChangeStep} />
 					</Route>
-					<Route exact path="/examenes/exam">
+					<Route exact path="/labs/exam">
 						<Exam examData={examData} onChangeStep={onChangeStep} />
 					</Route>
-					<Route exact path="/examenes/laboratory">
+					<Route exact path="/labs/laboratory">
 						<Laboratory
 							previousData={{
 								contactData,
@@ -100,14 +100,14 @@ const ClinicalExamination = () => {
 							onChangeStep={onChangeStep}
 						/>
 					</Route>
-					<Route exact path="/examenes/patient">
+					<Route exact path="/labs/patient">
 						{/* <ProfileList onUserCardClick={onUserClick} redirectNewAccountCallback={redirectNewAccountCallback} /> */}
 					</Route>
-					<Route exact path="/examenes/scheduling">
+					<Route exact path="/labs/scheduling">
 						{/* <Laboratory submitSignUp={submitSignUp} onChangeStep={onChangeStep} isGuest={isGuest} /> */}
 					</Route>
-					<Route path="/examenes/*">
-						<Redirect to="/examenes/exam" />
+					<Route path="/labs/*">
+						<Redirect to="/labs/exam" />
 					</Route>
 				</Switch>
 				{/* <PreferPediatrics isModalOpen={isAgeRestrictioModalOpen} closeModal={closeAgeRestrictionModal} /> */}
