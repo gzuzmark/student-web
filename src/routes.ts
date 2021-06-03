@@ -79,7 +79,7 @@ type RoutesType = Route[];
 export const routes: RoutesType = [
 	// { id: 'Triage', path: '/triaje', component: Triage }, // Dev note: Not in use, for now at least
 	{ id: 'SelectDoctor', path: '/seleccionar_doctor', component: SelectDoctor },
-	{ id: 'ClinicalExamination', path: '/examenes/*', component: ClinicalExamination },
+	{ id: 'ClinicalExamination', path: '/labs/*', component: ClinicalExamination },
 	{ id: 'PreSignUp', path: '/pre_registro', component: PreSignUp },
 	{ id: 'SignUp', path: '/registro/*', component: SignUp },
 	{ id: 'SmallSignUp', path: '/informacion_paciente', component: SmallSignUp },

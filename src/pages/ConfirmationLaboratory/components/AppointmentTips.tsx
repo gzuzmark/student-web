@@ -172,7 +172,7 @@ const AppointmentTips = ({
 		<div className={classes.tipsWrapper}>
 			<div className={classes.titleWrapper}>
 				<Typography className={classes.title} variant="h3">
-					Tips para un examen de laboratorio existo
+					Tips para un exámen de laboratorio exitoso
 				</Typography>
 				<div className={classes.separator}></div>
 			</div>
@@ -187,7 +187,7 @@ const AppointmentTips = ({
 							<MailIcon />
 						</div>
 						<div className={classes.textContainer}>
-							<Typography component="span">No olvide a llevar la orden de doctor en caso emitido</Typography>
+							<Typography component="span">No olvide llevar la orden del doctor en caso sea necesario.</Typography>
 						</div>
 					</div>
 				</div>
@@ -201,7 +201,7 @@ const AppointmentTips = ({
 							<VideocallIcon />
 						</div>
 						<div className={classes.textContainer}>
-							<Typography component="span">Utilice las medidas de precaución contra el Covid 19</Typography>
+							<Typography component="span">Utilice las medidas de precaución contra el Covid 19.</Typography>
 						</div>
 					</div>
 				</div>
@@ -216,7 +216,8 @@ const AppointmentTips = ({
 						</div>
 						<div className={classes.textContainer}>
 							<Typography component="p">
-								Al finalizar el examen en transcurso de semana, recibirás un resumen de examen
+								Al finalizar el exámen en el transcurso de la semana, recibirás un resúmen de su(s) examen(es) de
+								laboratorio.
 							</Typography>
 						</div>
 					</div>
