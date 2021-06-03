@@ -22,8 +22,8 @@ const RightSide = () => {
 					</Typography>
 				</div>
 				<div className={classes.cards}>
-					{skills?.map((skill) => (
-						<DashboardCard path={`/seleccionar_doctor?malestar=${skill.id}`} key={skill.id}>
+					{skills?.map((skill, i) => (
+						<DashboardCard path={`/seleccionar_doctor?malestar=${skill.id}`} key={i}>
 							<div className={classes.iconWrapper}>
 								<img className={classes.img} src={skill.image} alt={skill.label} />
 							</div>
