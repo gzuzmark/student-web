@@ -21,11 +21,11 @@ export const formatDoctor = (doctor: DoctorAvailability | null): Doctor | null =
 
 export const SUB_ROUTES_EXAM = ['exam', 'laboratory', 'scheduling'];
 export const findStepExam = (location: Location) =>
-	SUB_ROUTES_EXAM.findIndex((route: string) => location && location.pathname === `/examenes/${route}`);
+	SUB_ROUTES_EXAM.findIndex((route: string) => location && location.pathname === `/labs/${route}`);
 
 export const checkStepExam = (location: Location, examData: ExamDataValues | undefined, push: Function) => {
 	const index = findStepExam(location);
 	if (index === 0) {
-		push('examenes/exam');
+		push('labs/exam');
 	}
 };
