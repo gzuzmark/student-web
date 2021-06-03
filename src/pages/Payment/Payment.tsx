@@ -194,13 +194,12 @@ const Payment = () => {
 		}
 	};
 
-	const validFechaCita = useCallback(() => {
+	const validHourReservation = useCallback(() => {
 		try {
-			validSelectTimeWithNow(schedule, true);
+			validSelectTimeWithNow(schedule);
 			return true;
 		} catch (error) {
 			setErrorTimeMessage(error.message);
-			console.log(error);
 			return false;
 		}
 	}, [schedule]);
@@ -302,7 +301,7 @@ const Payment = () => {
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
 			console.log('tipo de pago:', paymentMethod, schedule);
-			const isValidaDate = validFechaCita();
+			const isValidaDate = validHourReservation();
 			if (!isValidaDate) return;
 			const { id: scheduleId = '' } = schedule || {};
 			const isFakeSession = scheduleId.includes(FAKE_SESSION_ID);
@@ -333,11 +332,11 @@ const Payment = () => {
 				}
 			}
 		},
-		[schedule, validFechaCita, useCase, reservationAccountID, doctor],
+		[schedule, validHourReservation, useCase, reservationAccountID, doctor],
 	);
 
 	const makeKushkiPayment = (values: any) => {
-		const isValidaDate = validFechaCita();
+		const isValidaDate = validHourReservation();
 		if (!isValidaDate) return;
 		const totalCost = discount.totalCost || useCase?.totalCost;
 		const amount = totalCost ? totalCost.toString() : '';
