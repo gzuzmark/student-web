@@ -411,6 +411,7 @@ const LaboratoryPicker = ({
 				if (updateContextState) {
 					const cd = previousData.contactData;
 					const ContactData = {
+						id: '',
 						name: cd?.name || '',
 						lastName: cd?.lastName || '',
 						secondSurname: cd?.secondSurname || '',
@@ -424,8 +425,8 @@ const LaboratoryPicker = ({
 						isTerm: cd?.isTerm || false,
 						isClub: cd?.isClub || false,
 					};
-					await createGuestPatient(ContactData);
-
+					const patientID = await createGuestPatient(ContactData);
+					ContactData.id = patientID;
 					updateContextState({
 						laboratorio,
 						schedules,
@@ -434,11 +435,12 @@ const LaboratoryPicker = ({
 							modality: modalityId,
 							typeExam: previousData.examData?.typeExam,
 							files: previousData.examData?.files || [],
+							available_time_id: schedules?.id || 0,
 						},
 						labFiles: previousData.examData?.files || [],
 						labAva: {
 							laboratory_exam_id: laboratorio?.id,
-							available_time_id: schedules?.id,
+							available_time_id: schedules?.id || 0,
 							price: laboratorio
 								? modalityId === 1
 									? laboratorio?.total_cost + laboratorio?.delivery_cost
