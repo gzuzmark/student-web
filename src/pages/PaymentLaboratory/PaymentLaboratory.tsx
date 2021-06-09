@@ -85,9 +85,14 @@ const useStyles = stylesWithTheme(({ breakpoints, spacing }: Theme) => ({
 }));
 
 const PaymentLaboratory = () => {
-	const { user, updateState: updateContextState, laboratorio, schedules, labExamn } = useAppointmentStepValidation(
-		PAYMENT_ROUTE_LABORATORY,
-	);
+	const {
+		user,
+		updateState: updateContextState,
+		laboratorio,
+		schedules,
+		labExamn,
+		labAva,
+	} = useAppointmentStepValidation(PAYMENT_ROUTE_LABORATORY);
 	const history = useHistory();
 	const classes = useStyles();
 	const { t } = useTranslation('paymentLaboratory');
@@ -187,7 +192,7 @@ const PaymentLaboratory = () => {
 				: laboratorio?.total_cost
 			: 0;
 		const amount = totalCost ? totalCost.toString() : '';
-		if (schedules && updateContextState && user && laboratorio && labExamn) {
+		if (schedules && updateContextState && user && laboratorio && labExamn && labAva) {
 			setIsPaymentLoading(true);
 			kushki.requestToken(
 				{
@@ -203,7 +208,15 @@ const PaymentLaboratory = () => {
 				},
 				async (response: any) => {
 					console.log(response);
-
+					const laboratoryExams: any = [];
+					labExamn.typeExam.map((item: any) => {
+						const examItem = {
+							laboratory_exam_id: item.id,
+							available_time_id: labExamn.available_time_id,
+						};
+						laboratoryExams.push(examItem);
+						return true;
+					});
 					if (!response.code) {
 						await createPaymentLab({
 							cost: totalCost,
@@ -215,11 +228,11 @@ const PaymentLaboratory = () => {
 							user_id: '',
 							exam_modality_id: labExamn.modality,
 							service_id: 2,
-							student_id: '',
+							student_id: user.id,
 							laboratory_id: laboratorio.id,
 							laboratory_name: laboratorio.name,
 							file: '',
-							laboratory_exams: [],
+							laboratory_exams: laboratoryExams,
 						});
 
 						addGAEvent({
@@ -288,9 +301,18 @@ const PaymentLaboratory = () => {
 		setIsPaymentLoading(true);
 		const callback = async function (response: any) {
 			if (!response.code) {
-				if (schedules && updateContextState && user && laboratorio && labExamn) {
+				if (schedules && updateContextState && user && laboratorio && labExamn && labAva) {
 					const method = 2;
 					const token = response.token;
+					const laboratoryExams: any = [];
+					labExamn.typeExam.map((item: any) => {
+						const examItem = {
+							laboratory_exam_id: item.id,
+							available_time_id: labExamn.available_time_id,
+						};
+						laboratoryExams.push(examItem);
+						return true;
+					});
 					try {
 						// setIsPaymentLoading(true);
 
@@ -304,11 +326,11 @@ const PaymentLaboratory = () => {
 							user_id: '',
 							exam_modality_id: labExamn.modality,
 							service_id: 2,
-							student_id: '',
+							student_id: user.id,
 							laboratory_id: laboratorio.id,
 							laboratory_name: laboratorio.name,
 							file: '',
-							laboratory_exams: [],
+							laboratory_exams: laboratoryExams,
 						});
 						setIsPaymentLoading(false);
 						let link = null;
@@ -362,8 +384,18 @@ const PaymentLaboratory = () => {
 				: laboratorio?.total_cost
 			: 0;
 		setIsPaymentLoading(true);
-		if (schedules && updateContextState && user && laboratorio && labExamn) {
+		if (schedules && updateContextState && user && laboratorio && labExamn && labAva) {
 			const method = 3;
+			const laboratoryExams: any = [];
+			labExamn.typeExam.map((item: any) => {
+				const examItem = {
+					laboratory_exam_id: item.id,
+					available_time_id: labExamn.available_time_id,
+				};
+				laboratoryExams.push(examItem);
+				return true;
+			});
+
 			try {
 				const data = {
 					cost: totalCost,
@@ -375,12 +407,13 @@ const PaymentLaboratory = () => {
 					user_id: '',
 					exam_modality_id: labExamn.modality,
 					service_id: 2,
-					student_id: '',
+					student_id: user.id,
 					laboratory_id: laboratorio.id,
 					laboratory_name: laboratorio.name,
 					file: '',
-					laboratory_exams: [],
+					laboratory_exams: laboratoryExams,
 				};
+
 				// await createPaymentLab(data);
 				createPaymentLab(data);
 				setIsPaymentLoading(false);
