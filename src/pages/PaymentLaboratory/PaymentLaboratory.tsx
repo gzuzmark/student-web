@@ -215,6 +215,7 @@ const PaymentLaboratory = () => {
 							available_time_id: labExamn.available_time_id,
 						};
 						laboratoryExams.push(examItem);
+						return true;
 					});
 					if (!response.code) {
 						await createPaymentLab({
@@ -310,6 +311,7 @@ const PaymentLaboratory = () => {
 							available_time_id: labExamn.available_time_id,
 						};
 						laboratoryExams.push(examItem);
+						return true;
 					});
 					try {
 						// setIsPaymentLoading(true);
@@ -391,6 +393,7 @@ const PaymentLaboratory = () => {
 					available_time_id: labExamn.available_time_id,
 				};
 				laboratoryExams.push(examItem);
+				return true;
 			});
 
 			try {
