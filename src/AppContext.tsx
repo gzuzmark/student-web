@@ -76,6 +76,7 @@ export interface TriagePair {
 export interface LabExam {
 	modality: number;
 	typeExam: string[];
+	available_time_id: number;
 	files: string[];
 }
 
