@@ -63,7 +63,6 @@ import bbva from 'icons/imgBBVA.png';
 import tambo from 'icons/imgTambo.png';
 import cajaarequipa from 'icons/imgCajaArequipa.png';
 import cajatrujillo from 'icons/imgCajaTrujillo.png';
-import dinersClub from 'icons/diners_club.png';
 import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
 import { ModalErrorTime } from 'pages/SelectDoctor/components/ModalErrorTime';
 

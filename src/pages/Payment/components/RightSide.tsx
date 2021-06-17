@@ -1,7 +1,6 @@
 import React, { MouseEvent, ChangeEvent } from 'react';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -21,11 +20,6 @@ import bcp from 'icons/imgBCP.png';
 import bbva from 'icons/imgBBVA.png';
 import tambo from 'icons/imgTambo.png';
 import cajaarequipa from 'icons/imgCajaArequipa.png';
-import cajatrujillo from 'icons/imgCajaTrujillo.png';
-
-import stepone from 'icons/stepone.png';
-import steptwo from 'icons/steptwo.png';
-import stepthree from 'icons/stepthree.png';
 
 import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
