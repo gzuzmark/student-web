@@ -57,7 +57,12 @@ import { Formik, Form, Field } from 'formik';
 import LogoKsh from 'icons/logo_ksh.png';
 import LogoPci from 'icons/pci_logo.png';
 import amex from 'icons/amex.png';
-import dinersClub from 'icons/diners_club.png';
+import interbank from 'icons/imgInterbank.png';
+import bcp from 'icons/imgBCP.png';
+import bbva from 'icons/imgBBVA.png';
+import tambo from 'icons/imgTambo.png';
+import cajaarequipa from 'icons/imgCajaArequipa.png';
+import cajatrujillo from 'icons/imgCajaTrujillo.png';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -671,6 +676,7 @@ const Payment = () => {
 						</Grid>
 					</Grid>
 				</DialogTitle>
+
 				{paymentOption && (
 					<DialogContent style={{ overflow: 'none' }}>
 						<Grid container spacing={3}>
@@ -687,21 +693,25 @@ const Payment = () => {
 				)}
 				{card && (
 					<DialogContent style={{ overflow: 'none' }}>
+						<DialogContentText style={{ color: '#848181' }}>
+							<Grid container spacing={3}>
+								<Grid item xs={12}>
+									Este pago es procesado de forma segura por Kushki, un proovedor de pagos PCI de nivel 1.{' '}
+								</Grid>
+							</Grid>
+						</DialogContentText>
 						<Grid container spacing={3}>
 							<Grid item xs={12}>
 								<Grid item xs={12}>
 									<Grid container spacing={2} style={{ justifyContent: 'center', marginBottom: '25px' }}>
 										<Grid item xs={2} style={{ textAlign: 'center' }}>
-											<img src={amex} width={28} height={18} alt="Brand Mastercard" />
-										</Grid>
-										<Grid item xs={2} style={{ textAlign: 'center' }}>
 											<img src={visa} width={35} height={12} alt="Brand Visa" />
 										</Grid>
 										<Grid item xs={2} style={{ textAlign: 'center' }}>
-											<img src={dinersClub} width={30} height={18} alt="Brand Diners Club" />
+											<img src={mastercard} width={28} height={18} alt="Brand Mastercard" />
 										</Grid>
 										<Grid item xs={2} style={{ textAlign: 'center' }}>
-											<img src={mastercard} width={28} height={18} alt="Brand Mastercard" />
+											<img src={amex} width={28} height={18} alt="Brand Amex" />
 										</Grid>
 									</Grid>
 								</Grid>
@@ -807,7 +817,7 @@ const Payment = () => {
 																variant="outlined"
 																name="cardCvv"
 																value={values.cardCvv}
-																label="CVV"																
+																label="CVV"
 																fullWidth
 																onChange={(e: any) => {
 																	if (e.target.validity.valid || !e.target.value) {
@@ -903,25 +913,18 @@ const Payment = () => {
 									)}
 								</Formik>
 							</Grid>
-							<Grid item xs={12} style={{ textAlign: 'center' }}>
-								<div style={{ textAlign: 'center', display: 'inline' }}>
-									<div style={{ fontWeight: 'bold', fontSize: '9px' }}>POWERED BY</div>
-									<div style={{}}>
-										<img src={LogoKsh} width={'15%'} alt="Kushki" />
-									</div>
-								</div>
+							<Grid item xs={12}>
+								<Grid container spacing={2} style={{ justifyContent: 'center' }}>
+									<Grid item xs={4} style={{ textAlign: 'center' }}>
+										<img src={LogoPci} width={'75px'} alt="Kushki" />
+									</Grid>
+									<Grid item xs={4} style={{ textAlign: 'center' }}>
+										<div style={{ fontWeight: 'bold', fontSize: '9px' }}>POWERED BY</div>
+										<img src={LogoKsh} width={'75px'} alt="Kushki" />
+									</Grid>
+								</Grid>
 							</Grid>
 						</Grid>
-						<DialogContentText style={{ color: '#848181' }}>
-							<Grid container spacing={2}>
-								<Grid item xs={2}>
-									<img src={LogoPci} width={'70px'} alt="Kushki" />
-								</Grid>
-								<Grid item xs={10}>
-									Este pago es procesado de forma segura por Kushki, un proovedor de pagos PCI de nivel 1.{' '}
-								</Grid>
-							</Grid>
-						</DialogContentText>
 					</DialogContent>
 				)}
 			</Dialog>
@@ -960,6 +963,35 @@ const Payment = () => {
 					)}
 				</DialogTitle>
 				<DialogContent style={{ overflow: 'none', marginTop: '7px' }}>
+					<DialogContentText style={{ color: '#848181' }}>
+						<Grid container spacing={2}>
+							<Grid item xs={10}>
+								Este pago es procesado de forma segura por Kushki, un proovedor de pagos PCI de nivel 1.{' '}
+							</Grid>
+						</Grid>
+					</DialogContentText>
+					<Grid item xs={12}>
+						<Grid container spacing={2} style={{ justifyContent: 'center', marginBottom: '25px' }}>
+							<Grid item xs={2} style={{ textAlign: 'center' }}>
+								<img src={interbank} width={40} height={20} alt="Brand Interbank" />
+							</Grid>
+							<Grid item xs={2} style={{ textAlign: 'center' }}>
+								<img src={bcp} width={40} height={20} alt="Brand BCP" />
+							</Grid>
+							<Grid item xs={2} style={{ textAlign: 'center' }}>
+								<img src={bbva} width={40} height={20} alt="Brand BBVA" />
+							</Grid>
+							<Grid item xs={2} style={{ textAlign: 'center' }}>
+								<img src={tambo} width={40} height={20} alt="Brand Tambo" />
+							</Grid>
+							<Grid item xs={2} style={{ textAlign: 'center' }}>
+								<img src={cajaarequipa} width={40} height={20} alt="Brand Caja Arequipa" />
+							</Grid>
+							<Grid item xs={2} style={{ textAlign: 'center' }}>
+								<img src={cajatrujillo} width={40} height={20} alt="Brand Caja Trujillo" />
+							</Grid>
+						</Grid>
+					</Grid>
 					<Formik initialValues={initialValuesCash} onSubmit={makeKushkiCashPayment}>
 						{({ submitForm, values, isSubmitting, setFieldValue }) => (
 							<Form className={classes.form}>
@@ -1152,26 +1184,17 @@ const Payment = () => {
 							</Form>
 						)}
 					</Formik>
-					<Grid container spacing={3}>
-						<Grid item xs={12} style={{ textAlign: 'center', margin: '5px 0px' }}>
-							<div style={{ textAlign: 'center', display: 'inline' }}>
+					<Grid item xs={12}>
+						<Grid container spacing={2} style={{ justifyContent: 'center' }}>
+							<Grid item xs={4} style={{ textAlign: 'center' }}>
+								<img src={LogoPci} width={'75px'} alt="Kushki" />
+							</Grid>
+							<Grid item xs={4} style={{ textAlign: 'center' }}>
 								<div style={{ fontWeight: 'bold', fontSize: '9px' }}>POWERED BY</div>
-								<div style={{}}>
-									<img src={LogoKsh} width={'15%'} alt="Kushki" />
-								</div>
-							</div>
+								<img src={LogoKsh} width={'75px'} alt="Kushki" />
+							</Grid>
 						</Grid>
 					</Grid>
-					<DialogContentText style={{ margin: '5px 0px', color: '#848181' }}>
-						<Grid container spacing={2}>
-							<Grid item xs={2}>
-								<img src={LogoPci} width={'70px'} alt="Kushki" />
-							</Grid>
-							<Grid item xs={10}>
-								Este pago es procesado de forma segura por Kushki, un proovedor de pagos PCI de nivel 1.{' '}
-							</Grid>
-						</Grid>
-					</DialogContentText>
 				</DialogContent>
 			</Dialog>
 		</Container>

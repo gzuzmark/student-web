@@ -1,6 +1,7 @@
 import React, { MouseEvent, ChangeEvent } from 'react';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -9,12 +10,23 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
-import { stylesWithTheme, addGAEvent } from 'utils';
+import { stylesWithTheme, addGAEvent, redirectToURL } from 'utils';
 import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
 import visa from 'icons/visa.png';
-// import pagoEfectivo from 'icons/pagoefectivo.png';
+import amex from 'icons/amex.png';
+import interbank from 'icons/imgInterbank.png';
+import bcp from 'icons/imgBCP.png';
+import bbva from 'icons/imgBBVA.png';
+import tambo from 'icons/imgTambo.png';
+import cajaarequipa from 'icons/imgCajaArequipa.png';
+import cajatrujillo from 'icons/imgCajaTrujillo.png';
+
+import stepone from 'icons/stepone.png';
+import steptwo from 'icons/steptwo.png';
+import stepthree from 'icons/stepthree.png';
+
 import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
@@ -32,10 +44,28 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 			padding: '147px 0 0 9px',
 		},
 	},
+	containerstepswrapper: {
+		padding: '11px 24px 0',
+		[breakpoints.up('lg')]: {
+			padding: '30px 0 0 9px',
+		},
+	},
 	title: {
 		fontSize: '15px',
 		lineHeight: '18px',
 		fontWeight: '400',
+		paddingBottom: '16px',
+		[breakpoints.up('lg')]: {
+			fontSize: '25px',
+			lineHeight: '35px',
+			fontWeight: '500',
+			paddingBottom: '7px',
+		},
+	},
+	titlestep: {
+		fontSize: '20px',
+		lineHeight: '18px',
+		fontWeight: '500',
 		paddingBottom: '16px',
 		[breakpoints.up('lg')]: {
 			fontSize: '25px',
@@ -55,12 +85,44 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 			fontSize: '17px',
 		},
 	},
+	link: {
+		fontSize: '13px',
+		paddingBottom: '5px',
+		cursor: 'pointer',
+		[breakpoints.up('lg')]: {
+			fontSize: '17px',
+		},
+	},
+	description: {
+		fontSize: '13px',
+		paddingBottom: '5px',
+		[breakpoints.up('lg')]: {
+			fontSize: '17px',
+		},
+	},
+	descriptionwpp: {
+		marginTop: '18px',
+		fontSize: '13px',
+		paddingBottom: '5px',
+		[breakpoints.up('lg')]: {
+			fontSize: '17px',
+		},
+	},
 	discountWrapper: {
 		paddingBottom: '30px',
 		[breakpoints.up('lg')]: {
 			marginTop: '28px',
 			paddingBottom: '50px',
 			width: '399px',
+		},
+	},
+	stepsWrapper: {
+		paddingBottom: '30px',
+		marginTop: '50px',
+		[breakpoints.up('lg')]: {
+			marginTop: '50px',
+			paddingBottom: '50px',
+			width: '600px',
 		},
 	},
 	discountInputWrapper: {
@@ -184,6 +246,13 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 			fontSize: '15px',
 		},
 	},
+	andmore: {
+		color: palette.primary.main,
+		fontSize: '10px',
+		fontWeight: '500',
+		letterSpacing: '0px',
+		textTransform: 'none',
+	},
 	optionBrandWrapper: {
 		display: 'block',
 		marginTop: '10px',
@@ -193,18 +262,74 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 			display: 'flex',
 		},
 	},
+	optionstepsWrapper: {
+		display: 'block',
+		marginTop: '15px',
+		minHeight: '40px',
+		[breakpoints.up('lg')]: {
+			display: 'flex',
+		},
+	},
+	visaImage: {
+		width: '35px',
+		height: '12px',
+		paddingRight: '5px',
+	},
 	masterCardImage: {
 		width: '28px',
 		height: '18px',
 		paddingRight: '5px',
 	},
-	visaImage: {
-		width: '35px',
-		height: '12px',
+	amexImage: {
+		width: '28px',
+		height: '18px',
+		paddingRight: '5px',
 	},
 	pagoEfectivoImage: {
 		width: '80px',
 		height: '30px',
+	},
+	interbankImage: {
+		width: '35px',
+		height: '18px',
+		paddingRight: '5px',
+	},
+	bcpImage: {
+		width: '35px',
+		height: '18px',
+		paddingRight: '5px',
+	},
+	bbvaImage: {
+		width: '35px',
+		height: '18px',
+		paddingRight: '5px',
+	},
+	tamboImage: {
+		width: '35px',
+		height: '18px',
+		paddingRight: '5px',
+	},
+	arequipaImage: {
+		width: '35px',
+		height: '18px',
+		paddingRight: '5px',
+	},
+	trujilloImage: {
+		width: '35px',
+		height: '18px',
+	},
+	steponeImage: {
+		width: '100px',
+		paddingRight: '20px',
+	},
+	steptwoImage: {
+		width: '100px',
+		paddingRight: '20px',
+	},
+	stepthreeImage: {
+		width: '100px',
+		height: '57px',
+		paddingRight: '20px',
 	},
 	banksImage: {
 		width: '35px',
@@ -254,6 +379,16 @@ const RightSide = ({
 	};
 
 	const isPagoEfectivoVisible = true; //isWeekDayLateNightOrSunday();
+
+	const gotToYoutubeSteps = () => {
+		redirectToURL('https://www.youtube.com/watch?v=n-Gg8ar0IkI', true);
+	};
+	const gotToWpp = () => {
+		redirectToURL(
+			'https://api.whatsapp.com/send?phone=51947907184&text=%5BVengo%20de%20la%20web%5D%20Hola%20Alivia!%20Tengo%20una%20duda,%20me%20podr%C3%ADan%20ayudar?&source=&data=&app_absent',
+			true,
+		);
+	};
 
 	return (
 		<RightLayout className={classes.container}>
@@ -323,9 +458,13 @@ const RightSide = ({
 								{t('payment.right.payCulqiButton')}
 							</Typography>
 							<div className={classes.optionBrandWrapper}>
-								<img src={mastercard} className={classes.masterCardImage} alt="Brand Mastercard" />
 								<img src={visa} className={classes.visaImage} alt="Brand Visa" />
+								<img src={mastercard} className={classes.masterCardImage} alt="Brand Mastercard" />
+								<img src={amex} className={classes.amexImage} alt="Brand Amex" />
 							</div>
+							<Typography className={classes.andmore} variant="h3">
+								{t('y más')}
+							</Typography>
 						</div>
 					</Button>
 					{isPagoEfectivoVisible && (
@@ -350,8 +489,15 @@ const RightSide = ({
 									{t('payment.right.pagoEfectivo')}
 								</Typography>
 								<div className={classes.optionBrandWrapper}>
-									{/* <img src={pagoEfectivo} title="PagoEfectivo" className={classes.peImage} alt="Brand Pago Efectivo" />  */}
+									<img src={interbank} className={classes.interbankImage} alt="Brand Interbank" />
+									<img src={bcp} className={classes.bcpImage} alt="Brand BCP" />
+									<img src={bbva} className={classes.bbvaImage} alt="Brand BBVA" />
+									<img src={tambo} className={classes.tamboImage} alt="Brand Tambo" />
+									<img src={cajaarequipa} className={classes.arequipaImage} alt="Brand Caja Arequipa" />
 								</div>
+								<Typography className={classes.andmore} variant="h3">
+									{t('y más')}
+								</Typography>
 							</div>
 						</Button>
 					)}
@@ -361,6 +507,18 @@ const RightSide = ({
 						<FormHelperText error>{errorMessage}</FormHelperText>
 					</div>
 				) : null}
+
+				<div className={classes.stepsWrapper}>
+					<Typography className={classes.link} color="primary" onClick={gotToYoutubeSteps} component="span">
+						{t('*¿Cómo pago de manera presencial?')}
+					</Typography>
+					<Typography className={classes.descriptionwpp}>
+						{t('payment.right.steps.wpp')}
+						<Typography className={classes.link} color="primary" onClick={gotToWpp} component="span">
+							{t('+51 947 907 184')}
+						</Typography>
+					</Typography>
+				</div>
 			</div>
 		</RightLayout>
 	);
