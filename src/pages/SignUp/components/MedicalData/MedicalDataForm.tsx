@@ -119,7 +119,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 }));
 
 function especialidad(speciality = '') {
-	if (speciality === 'Derman') {
+	if (speciality === 'Dermatología') {
 		return 'Adjunta al menos dos fotos del problema en piel, una a 10 cm y otra a 30 cm de distancia. (Obligatorio)';
 	} else {
 		return 'Adjunta fotos o exámenes realizados. (Opcional)';
@@ -127,7 +127,7 @@ function especialidad(speciality = '') {
 }
 
 function mejorefotos(speciality = '') {
-	if (speciality === 'Derman') {
+	if (speciality === 'Dermatología') {
 		return 'Mejores fotos para un diagnóstico más preciso.';
 	} else {
 		return '';
@@ -135,7 +135,7 @@ function mejorefotos(speciality = '') {
 }
 
 function indicaciones(speciality = '') {
-	if (speciality === 'Derman') {
+	if (speciality === 'Dermatología') {
 		return 'Indicaciones';
 	} else {
 		return '';
@@ -175,7 +175,7 @@ const MedicalDataForm = ({
 	}, []);
 
 	const { useCase } = useContext(AppContext);
-	initialValues.isDermatology = useCase?.name === 'Derman';
+	initialValues.isDermatology = useCase?.name === 'Dermatología';
 
 	return (
 		<Formik initialValues={medicalData || initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -261,7 +261,7 @@ const MedicalDataForm = ({
 							/>
 						</div>
 						<div className={classes.fieldWrapper}>
-							<input name="isDermatology" value={String(useCase?.name === 'Derman')} type="hidden" />
+							<input name="isDermatology" value={String(useCase?.name === 'Dermatología')} type="hidden" />
 
 							<Field
 								component={FilesGroupField}
@@ -269,8 +269,6 @@ const MedicalDataForm = ({
 								name="files"
 								//labelText ={t('medicalData.dropzone.label')}
 								labelText={especialidad(useCase?.name)}
-								//--------------------------
-								//--------------------------
 							/>
 
 							<Typography component="span">{mejorefotos(useCase?.name)} </Typography>

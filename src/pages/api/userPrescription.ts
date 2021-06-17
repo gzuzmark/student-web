@@ -181,9 +181,10 @@ interface RedirectUrlResponse {
 
 export type SelectedMedicines = SelectedMedicine[];
 
-export const getRedirectUrl = async (selectedItems: SelectedMedicines): Promise<string> => {
+export const getRedirectUrl = async (sessionId: string, selectedItems: SelectedMedicines): Promise<string> => {
 	try {
 		const resp = await ugoConsoleAxios.post<RedirectUrlResponse>('/alivia/ecommerce_url', {
+			sessionId,
 			items: selectedItems,
 		});
 

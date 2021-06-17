@@ -1,6 +1,6 @@
 const confirmationLabL18n = {
 	'confirmation.left.prefix': '¡FELICITACIONES!',
-	'confirmation.left.title.firstSection': 'Tienes un examen de Laboratorio el',
+	'confirmation.left.title.firstSection': 'Tienes un exámen de Laboratorio el',
 	'confirmation.left.title.secondSection': 'el',
 	'confirmation.left.title.thirdSection': 'a las',
 	'confirmation.left.patient.title': 'PARA PACIENTE',

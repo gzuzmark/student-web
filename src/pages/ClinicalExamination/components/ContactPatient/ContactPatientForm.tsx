@@ -103,7 +103,12 @@ const initialValues: ContactPatientValues = {
 
 const validationSchema = yup.object().shape({
 	identificationType: yup.string().required(REQUIRED_FIELD),
-	identification: yup.string().min(8, 'Mínimo 8 caracteres').max(12, 'Máximo 12 caracteres').required(REQUIRED_FIELD),
+	identification: yup
+		.string()
+		.min(8, 'Mínimo 8 caracteres')
+		.max(12, 'Máximo 12 caracteres')
+		.nullable()
+		.required(REQUIRED_FIELD),
 	name: yup.string().required(REQUIRED_FIELD),
 	lastName: yup.string().required(REQUIRED_FIELD),
 	secondSurname: yup.string().required(REQUIRED_FIELD),
@@ -228,7 +233,7 @@ const ContactPatientForm = ({
 								component={TextField}
 								name="identification"
 								label={t('contact.fields.id')}
-								type="number"
+								type="text"
 								variant="outlined"
 								inputProps={{ maxLength: 11 }}
 								fullWidth

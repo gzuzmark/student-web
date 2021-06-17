@@ -63,6 +63,9 @@ import bbva from 'icons/imgBBVA.png';
 import tambo from 'icons/imgTambo.png';
 import cajaarequipa from 'icons/imgCajaArequipa.png';
 import cajatrujillo from 'icons/imgCajaTrujillo.png';
+import dinersClub from 'icons/diners_club.png';
+import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
+import { ModalErrorTime } from 'pages/SelectDoctor/components/ModalErrorTime';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -131,15 +134,16 @@ const Payment = () => {
 	const [isPaymentLoading, setIsPaymentLoading] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
+	const [errorTimeMessage, setErrorTimeMessage] = useState<string | null>(null);
 
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
 		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
 	});
-	/*const kushki = new Kushki({
-		merchantId: '5f2c989bea794296bd461c39f9932368', // Your public merchant id
-		inTestEnvironment: false,
-	});*/
+	// const kushki = new Kushki({
+	// 	merchantId: '5f2c989bea794296bd461c39f9932368', // Your public merchant id
+	// 	inTestEnvironment: false,
+	// });
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
 	const [openKushkiCashModal, setOpenKushkiCashModal] = React.useState(false);
@@ -195,6 +199,16 @@ const Payment = () => {
 				break;
 		}
 	};
+
+	const validHourReservation = useCallback(() => {
+		try {
+			validSelectTimeWithNow(schedule);
+			return true;
+		} catch (error) {
+			setErrorTimeMessage(error.message);
+			return false;
+		}
+	}, [schedule]);
 
 	React.useEffect(() => {
 		const { id = '', startTime, endTime } = schedule || {};
@@ -292,7 +306,9 @@ const Payment = () => {
 
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
-			console.log('tipo de pago: ' + paymentMethod);
+			console.log('tipo de pago:', paymentMethod, schedule);
+			const isValidaDate = validHourReservation();
+			if (!isValidaDate) return;
 			const { id: scheduleId = '' } = schedule || {};
 			const isFakeSession = scheduleId.includes(FAKE_SESSION_ID);
 			if (!isFakeSession) {
@@ -322,10 +338,12 @@ const Payment = () => {
 				}
 			}
 		},
-		[schedule, reservationAccountID, doctor, useCase],
+		[schedule, validHourReservation, useCase, reservationAccountID, doctor],
 	);
 
 	const makeKushkiPayment = (values: any) => {
+		const isValidaDate = validHourReservation();
+		if (!isValidaDate) return;
 		const totalCost = discount.totalCost || useCase?.totalCost;
 		const amount = totalCost ? totalCost.toString() : '';
 		if (schedule && updateContextState && useCase && triage && activeUser) {
@@ -901,7 +919,6 @@ const Payment = () => {
 															!values.email ||
 															!validEmail
 														}
-														// disabled={isSubmitting}
 													>
 														{/* {tFamily('familyMembers.editProfile.complete')} */}
 														<LockIcon />
@@ -1197,6 +1214,9 @@ const Payment = () => {
 					</Grid>
 				</DialogContent>
 			</Dialog>
+			{errorTimeMessage && (
+				<ModalErrorTime isOpen={true} setIsOpen={() => null} message={errorTimeMessage} redirect={true} />
+			)}
 		</Container>
 	) : (
 		<Loading fullScreen loadingMessage={t('payment.wait.message')} />
