@@ -530,7 +530,7 @@ const RightSide = ({
 
 				<div className={classes.stepsWrapper}>
 					<Typography className={classes.link} color="primary" onClick={gotToYoutubeSteps} component="span">
-						{t('*¿Cómo pago de manera presencial?')}
+						{t('*¿Cómo Pago en Efectivo?')}
 					</Typography>
 					<Typography className={classes.descriptionwpp}>
 						{t('payment.right.steps.wpp')}
