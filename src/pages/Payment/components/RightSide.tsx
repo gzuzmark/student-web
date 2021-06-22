@@ -9,7 +9,7 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
-import { stylesWithTheme, addGAEvent, redirectToURL } from 'utils';
+import { stylesWithTheme, addGAEvent, redirectToURL, isLessThanTheDate } from 'utils';
 import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
@@ -372,7 +372,7 @@ const RightSide = ({
 		}
 	};
 
-	const isPagoEfectivoVisible = true; //isWeekDayLateNightOrSunday();
+	const isPagoEfectivoVisible = !isLessThanTheDate(); //isWeekDayLateNightOrSunday();
 
 	const gotToYoutubeSteps = () => {
 		redirectToURL('https://www.youtube.com/watch?v=n-Gg8ar0IkI', true);
@@ -447,7 +447,7 @@ const RightSide = ({
 					</div>
 				</div>
 				<Typography className={classes.subtitle} component="span" variant={matches ? 'h3' : 'body1'}>
-					{t('payment.right.method')}:
+					{isPagoEfectivoVisible ? t('payment.right.method') : t('payment.right.method-only')}:
 				</Typography>
 				<div className={classes.buttonWrapper}>
 					<Button
@@ -529,9 +529,11 @@ const RightSide = ({
 				) : null}
 
 				<div className={classes.stepsWrapper}>
-					<Typography className={classes.link} color="primary" onClick={gotToYoutubeSteps} component="span">
-						{t('*¿Cómo Pago en Efectivo?')}
-					</Typography>
+					{isPagoEfectivoVisible && (
+						<Typography className={classes.link} color="primary" onClick={gotToYoutubeSteps} component="span">
+							{t('*¿Cómo Pago en Efectivo?')}
+						</Typography>
+					)}
 					<Typography className={classes.descriptionwpp}>
 						{t('payment.right.steps.wpp')}
 						<Typography className={classes.link} color="primary" onClick={gotToWpp} component="span">
