@@ -9,7 +9,7 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
 import { RightLayout } from 'pages/common';
-import { stylesWithTheme, addGAEvent, redirectToURL, isLessThanTheDate } from 'utils';
+import { stylesWithTheme, addGAEvent, redirectToURL } from 'utils';
 import { ReactComponent as CreditCardSvg } from 'icons/creditCard.svg';
 import { ReactComponent as CashierIcon } from 'icons/cashier.svg';
 import mastercard from 'icons/mastercard.png';
@@ -372,7 +372,7 @@ const RightSide = ({
 		}
 	};
 
-	const isPagoEfectivoVisible = !isLessThanTheDate(); //isWeekDayLateNightOrSunday();
+	const isPagoEfectivoVisible = true; //isWeekDayLateNightOrSunday();
 
 	const gotToYoutubeSteps = () => {
 		redirectToURL('https://www.youtube.com/watch?v=n-Gg8ar0IkI', true);
