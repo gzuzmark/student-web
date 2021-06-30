@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { Card } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 
@@ -28,6 +28,7 @@ import { useLocation } from 'react-router';
 import { parse } from 'query-string';
 
 import { sendLogs } from 'pages/api';
+import { SocketContext } from 'pages/Socket/socket';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -220,6 +221,8 @@ const SelectPrescriptionType = ({
 	const location = useLocation();
 	const params = parse(location.search);
 
+	const socket: WebSocket = useContext(SocketContext);
+
 	// BUTTON COPY
 	const urlShare = window.location + '';
 	const copyShare = () => {
@@ -264,6 +267,7 @@ const SelectPrescriptionType = ({
 			openEPrescription();
 			onSubmit(1);
 		} else if (_param === 2) {
+			socket.send('click opcion ');
 			showQuotedPrescription();
 			onSubmit(2);
 		} else if (_param === 3) {
@@ -309,7 +313,7 @@ const SelectPrescriptionType = ({
 							</div>
 						</div>
 
-						<div className={classes.containerCard} onClick={() => pressKey(3)}>
+						<div className={classes.containerCard} id="option-1" onClick={() => pressKey(3)}>
 							<div className={classes.containerIMG}>
 								<img className={classes.img} src={callMedic} alt="working" />
 							</div>

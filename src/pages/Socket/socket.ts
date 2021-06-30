@@ -1,19 +1,5 @@
 import React from 'react';
 
-// import socketIO from 'socket.io-client';
-
-// export const socket = socketIO('http://localhost:8080/socket.io/', {
-// 	transports: ['polling', 'websocket'],
-// });
-
-// socket.on('connect', () => {
-// 	console.log('conectado');
-// });
-
-// socket.on('error', (err) => {
-// 	console.log(err);
-// });
-
 const BASE_URL = String(process.env.REACT_APP_BASE_URL);
 let url = null;
 if (BASE_URL.startsWith('https')) {
@@ -25,3 +11,6 @@ if (BASE_URL.startsWith('https')) {
 export const socket: WebSocket = new WebSocket(`${url}/ws`);
 
 export const SocketContext = React.createContext(socket);
+
+export const ON_OPEN = 'open';
+export const ON_CLOSE = 'close';

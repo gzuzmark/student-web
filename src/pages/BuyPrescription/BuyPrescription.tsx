@@ -1,22 +1,21 @@
-import React, { ReactElement, useState, useEffect, useCallback } from 'react';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
-import { useLocation } from 'react-router';
-import { parse } from 'query-string';
-
+import Typography from '@material-ui/core/Typography';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { getPrescription, Position } from 'pages/api';
 import { PrescribedMedicine } from 'pages/api/userPrescription';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
-import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
-
-import Medicines from './components/Medicines';
+import { SocketContext } from 'pages/Socket/socket';
+import { parse } from 'query-string';
+import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
+import { redirectToBaseAlivia, stylesWithTheme } from 'utils';
+import AskAddress from '../AskAddress/AskAddress';
 import CheckoutInformation from './components/CheckoutInformation';
-import SelectPrescriptionType from './components/SelectPrescriptionType';
+import Medicines from './components/Medicines';
 import NotAvailableNearYou from './components/NotAvailableNearYour';
 import RedirectToInkafarma from './components/RedirectToInkafarma';
-import AskAddress from '../AskAddress/AskAddress';
+import SelectPrescriptionType from './components/SelectPrescriptionType';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -100,6 +99,7 @@ const requestPrescription = async ({
 		}
 
 		setFolioNumber(newFolioNumber);
+		console.log(medicines);
 		setMedicines(medicines);
 		setNotAvailableNearYou(notAvailableNearYou);
 		setPrescriptionPath(prescriptionPath);
@@ -124,6 +124,9 @@ const BuyPrescription = (): ReactElement => {
 	const outOfStock =
 		medicines.filter(({ hasStock, isAvailableForECommerce }) => hasStock && isAvailableForECommerce).length < 1;
 	const sessionId = (params.sessionId as string) || '';
+
+	const socket = useContext(SocketContext);
+
 	const toggleMedicine = useCallback(
 		(index: number) => () => {
 			const positionIndex = selectedMedicines.indexOf(index);
@@ -182,6 +185,34 @@ const BuyPrescription = (): ReactElement => {
 	if (!sessionId) {
 		redirectToBaseAlivia();
 	}
+
+	useEffect(() => {
+		const message = JSON.stringify({
+			type: 'tracking',
+			name: 'David',
+			message: 'Otro',
+		});
+
+		if (socket.readyState === socket.OPEN) {
+			socket.send(message);
+		}
+
+		socket.onopen = (e: Event) => {
+			console.log('Open socket', e);
+		};
+		socket.onclose = (e: Event) => {
+			console.log('Close socket', e);
+		};
+		socket.onerror = (e: Event) => {
+			console.log('Error socket', e);
+		};
+
+		console.log('estado de socket', socket.readyState);
+
+		return () => {
+			socket.removeEventListener('open', () => null);
+		};
+	}, [socket, socket.readyState]);
 
 	useEffect(() => {
 		requestPrescription({
