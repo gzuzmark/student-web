@@ -1,4 +1,4 @@
-import React, { ReactElement, useMemo } from 'react';
+import React, { ReactElement, useEffect, useMemo } from 'react';
 import { PrescribedMedicine } from 'pages/api';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -8,6 +8,12 @@ import { stylesWithTheme } from 'utils';
 
 import Medicine from './Medicine';
 import ElectronicPrescription from './ElectronicPrescription';
+import useTracking from 'pages/Tracking/useTracking';
+import {
+	createTrackingAvilablesMedicines,
+	createTrackingDetailMedicinesNotEcommerce,
+	createTrackingOutstockMedicines,
+} from 'pages/api/tracking';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	medicines: {
@@ -51,6 +57,8 @@ const Medicines = ({
 }: MedicinesProps): ReactElement => {
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
+	const tracking = useTracking();
+
 	const availableMedicines = useMemo(
 		() => medicines.filter(({ hasStock, isAvailableForECommerce }) => isAvailableForECommerce && hasStock),
 		[medicines],
@@ -63,6 +71,27 @@ const Medicines = ({
 		() => medicines.filter(({ isAvailableForECommerce }) => !isAvailableForECommerce),
 		[medicines],
 	);
+
+	useEffect(() => {
+		if (tracking != null) {
+			const payload = JSON.stringify(availableMedicines);
+			createTrackingAvilablesMedicines(tracking.trackingId, availableMedicines.length, payload);
+		}
+	}, [availableMedicines, tracking]);
+
+	useEffect(() => {
+		if (tracking != null) {
+			const payload = JSON.stringify(outOfStockMedicines);
+			createTrackingOutstockMedicines(tracking.trackingId, outOfStockMedicines.length, payload);
+		}
+	}, [outOfStockMedicines, tracking]);
+
+	useEffect(() => {
+		if (tracking != null) {
+			const payload = JSON.stringify(notAvailableMedicines);
+			createTrackingDetailMedicinesNotEcommerce(tracking.trackingId, notAvailableMedicines.length, payload);
+		}
+	}, [notAvailableMedicines, tracking]);
 
 	return (
 		<div className={classes.medicines}>
