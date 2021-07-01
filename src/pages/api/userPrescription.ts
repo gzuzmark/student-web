@@ -108,7 +108,7 @@ const formatPrescription = ({
 	address,
 	folioNumber,
 	prescriptionPath,
-	notAvailableNearYou: false, // !hasCoverage
+	notAvailableNearYou: !hasCoverage,
 	medicines: (availableProducts || []).map(
 		({
 			skuInkafarma,
@@ -213,8 +213,8 @@ export const sendLogs = async (fields: UserLog): Promise<string | void> => {
 		// setLocalValue('userToken', data.token);
 		// setLocalValue('refreshToken', data.refresh_token);
 		// return data.token;
-		console.log(fields);
-		console.log(data);
+		// console.log(fields);
+		// console.log(data);
 	} catch (e) {
 		console.log(e);
 		throw Error(e);

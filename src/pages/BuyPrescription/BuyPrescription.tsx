@@ -17,6 +17,7 @@ import Medicines from './components/Medicines';
 import NotAvailableNearYou from './components/NotAvailableNearYour';
 import RedirectToInkafarma from './components/RedirectToInkafarma';
 import SelectPrescriptionType from './components/SelectPrescriptionType';
+import TitleStock from './components/TitleStock';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -39,19 +40,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			fontSize: '38px',
 			padding: '0 0 15px 0',
-		},
-	},
-	subTitle: {
-		textTransform: 'none',
-		paddingBottom: '20px',
-		fontSize: '13px',
-		lineHeight: '18px',
-		[breakpoints.up('lg')]: {
-			fontSize: '20px',
-			lineHeight: '25px',
-			paddingBottom: '30px',
-			width: '575px',
-			fontWeight: 400,
 		},
 	},
 	body: {
@@ -122,8 +110,6 @@ const BuyPrescription = (): ReactElement => {
 	const [showingRedirectPage, setShowingRedirectPage] = useState<boolean>(false);
 	const [updatedPosition, setUpdatedPosition] = useState<Position>();
 	const classes = useStyles();
-	const outOfStock =
-		medicines.filter(({ hasStock, isAvailableForECommerce }) => hasStock && isAvailableForECommerce).length < 1;
 	const sessionId = (params.sessionId as string) || '';
 	const tracking: TrackingLocalStorage | null = useTracking();
 
@@ -232,9 +218,7 @@ const BuyPrescription = (): ReactElement => {
 			<Typography className={classes.title} variant="h1">
 				{t('buyPrescription.title')}
 			</Typography>
-			<Typography className={classes.subTitle}>
-				{t(outOfStock ? 'buyPrescription.subTitle.outOfStock' : 'buyPrescription.subTitle')}
-			</Typography>
+			<TitleStock medicines={medicines} />
 			<div className={classes.body}>
 				<Medicines
 					medicines={medicines}

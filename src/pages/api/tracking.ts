@@ -76,6 +76,7 @@ export interface TrackingDetailLogRequest {
 	type_action: string;
 	description: string;
 	value_description: string | null;
+	payload: string | null;
 	value_type: string;
 	value_number: number | null;
 	value_text: string | null;
@@ -89,6 +90,7 @@ export const trackingDetailAddressNoCoverage = {
 	description: 'Para la dirección indicada no se tiene cobertura',
 	value_description: null,
 	value_type: 'string',
+	payload: null,
 	value_number: null,
 	value_text: null,
 };
@@ -110,6 +112,7 @@ export const trackingDetailTwoOptionEcommerce = {
 	description: 'El usuario da click a la segunda opción: ecommerce inkafarma',
 	value_description: 'acceso a la cotización de su medicina',
 	value_type: 'string',
+	payload: null,
 	value_number: null,
 	value_text: 'click',
 };
@@ -118,6 +121,73 @@ export const createTrackingDetailOptionEcommerce = (trackingId: string | undefin
 	const request: TrackingDetailLogRequest = {
 		...trackingDetailTwoOptionEcommerce,
 		tracking_id: trackingId || '',
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
+ * Data for medicines with stock
+ */
+export const trackingDetailAvailablesMedicines = {
+	type_action: 'medicinas-con-stock',
+	description: 'La cantidad de medicinas que tienen stock',
+	value_description: 'medicinas con stock',
+	value_type: 'number',
+	value_text: null,
+};
+
+export const createTrackingAvilablesMedicines = (trackingId: string | undefined, total: number, payload: string) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingDetailAvailablesMedicines,
+		tracking_id: trackingId || '',
+		value_number: total,
+		payload: payload,
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
+ * Data for medicines without stock
+ */
+export const trackingDetailOutstockMedicines = {
+	type_action: 'medicinas-sin-stock',
+	description: 'La cantidad de medicinas que no tienen stock',
+	value_description: 'medicinas sin stock',
+	value_type: 'number',
+	value_text: null,
+};
+
+export const createTrackingOutstockMedicines = (trackingId: string | undefined, total: number, payload: string) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingDetailOutstockMedicines,
+		tracking_id: trackingId || '',
+		value_number: total,
+		payload: payload,
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
+ * Data for medicines not ecommerce
+ */
+export const trackingDetailMedicinesNotEcommerce = {
+	type_action: 'medicinas-no-ecommerce',
+	description: 'La cantidad de medicinas que no están disponibles para ecommerce',
+	value_description: 'medicinas no disponibles para ecommerce',
+	value_type: 'number',
+	value_text: null,
+};
+
+export const createTrackingDetailMedicinesNotEcommerce = (
+	trackingId: string | undefined,
+	total: number,
+	payload: string,
+) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingDetailMedicinesNotEcommerce,
+		tracking_id: trackingId || '',
+		value_number: total,
+		payload: payload,
 	};
 	createTrackingDetailLog(request);
 };

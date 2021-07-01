@@ -121,7 +121,7 @@ const NotAvailableNearYour = ({ address, showEditAddressScreen }: NotAvailableNe
 
 	useEffect(() => {
 		if (tracking != null) {
-			createTrackingDetailLogAddressNoCoverage(tracking?.trackingId, address);
+			createTrackingDetailLogAddressNoCoverage(tracking.trackingId, address);
 		}
 	}, [address, tracking]);
 

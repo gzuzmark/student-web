@@ -1,19 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 import 'l18n/index';
 import { SnackbarProvider } from 'notistack';
-import { socket, SocketContext } from './pages/Socket/socket';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<SocketContext.Provider value={socket}>
-			<SnackbarProvider maxSnack={1}>
-				<App />
-			</SnackbarProvider>
-		</SocketContext.Provider>
+		<SnackbarProvider maxSnack={1}>
+			<App />
+		</SnackbarProvider>
 	</React.StrictMode>,
 	document.getElementById('root'),
 );

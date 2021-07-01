@@ -42,10 +42,12 @@ const useTracking = () => {
 			} else {
 				if (tracking.sesssionId === sessionId) {
 					setTracking(tracking);
+				} else {
+					createAccessLog();
 				}
 			}
 		}
-	}, [createAccessLog, sessionId]);
+	}, [sessionId, createAccessLog]);
 
 	return tracking;
 };
