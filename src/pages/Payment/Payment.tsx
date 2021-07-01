@@ -1,33 +1,3 @@
-import React, { useCallback, useState, useEffect, MouseEvent, ChangeEvent } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-
-import { Container, Loading } from 'pages/common';
-import { PAYMENT_ROUTE } from 'routes';
-import {
-	useAppointmentStepValidation,
-	getIntCurrency,
-	dateToUTCUnixTimestamp,
-	addGAEvent,
-	getHumanDay,
-	getHour,
-	stylesWithTheme,
-} from 'utils';
-import initCulqi from 'utils/culquiIntegration';
-import { CONFIRMATION_STEP, GUEST, EMPTY_TRACK_PARAMS } from 'AppContext';
-
-import LeftSide from './components/LeftSide';
-import RightSide from './components/RightSide';
-import {
-	createPayment,
-	createAppointment,
-	applyDiscount,
-	Discount,
-	KUSHKI_PAYMENT_ID,
-	PE_PAYMENT_ID,
-	sendFakeSession,
-} from 'pages/api';
-import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
 import { Kushki } from '@kushki/js';
 import {
 	Button,
@@ -39,32 +9,60 @@ import {
 	InputAdornment,
 	TextField,
 } from '@material-ui/core';
-import CreditCardIcon from '@material-ui/icons/CreditCard';
-import PersonIcon from '@material-ui/icons/Person';
-import LockIcon from '@material-ui/icons/Lock';
-import EmailIcon from '@material-ui/icons/Email';
-import DescriptionIcon from '@material-ui/icons/Description';
-import LocalAtmIcon from '@material-ui/icons/LocalAtm';
-import ListItem from '@material-ui/core/ListItem';
 import List from '@material-ui/core/List';
-import { Theme } from '@material-ui/core/styles';
+import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import MenuItem from '@material-ui/core/MenuItem';
-import mastercard from 'icons/mastercard.png';
-import visa from 'icons/visa.png';
-import { Formik, Form, Field } from 'formik';
-import LogoKsh from 'icons/logo_ksh.png';
-import LogoPci from 'icons/pci_logo.png';
+import { Theme } from '@material-ui/core/styles';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import DescriptionIcon from '@material-ui/icons/Description';
+import EmailIcon from '@material-ui/icons/Email';
+import LocalAtmIcon from '@material-ui/icons/LocalAtm';
+import LockIcon from '@material-ui/icons/Lock';
+import PersonIcon from '@material-ui/icons/Person';
+import { CONFIRMATION_STEP, EMPTY_TRACK_PARAMS, GUEST } from 'AppContext';
+import { Field, Form, Formik } from 'formik';
 import amex from 'icons/amex.png';
-import interbank from 'icons/imgInterbank.png';
-import bcp from 'icons/imgBCP.png';
 import bbva from 'icons/imgBBVA.png';
-import tambo from 'icons/imgTambo.png';
+import bcp from 'icons/imgBCP.png';
 import cajaarequipa from 'icons/imgCajaArequipa.png';
 import cajatrujillo from 'icons/imgCajaTrujillo.png';
+import interbank from 'icons/imgInterbank.png';
+import tambo from 'icons/imgTambo.png';
+import LogoKsh from 'icons/logo_ksh.png';
+import mastercard from 'icons/mastercard.png';
+import LogoPci from 'icons/pci_logo.png';
+import visa from 'icons/visa.png';
+import {
+	applyDiscount,
+	createAppointment,
+	createPayment,
+	Discount,
+	KUSHKI_PAYMENT_ID,
+	PE_PAYMENT_ID,
+	sendFakeSession,
+} from 'pages/api';
+import { Container, Loading } from 'pages/common';
 import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
 import { ModalErrorTime } from 'pages/SelectDoctor/components/ModalErrorTime';
+import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
+import React, { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+import { PAYMENT_ROUTE } from 'routes';
+import {
+	addGAEvent,
+	dateToUTCUnixTimestamp,
+	getHour,
+	getHumanDay,
+	getIntCurrency,
+	stylesWithTheme,
+	useAppointmentStepValidation,
+} from 'utils';
+import initCulqi from 'utils/culquiIntegration';
+import LeftSide from './components/LeftSide';
+import RightSide from './components/RightSide';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -135,14 +133,14 @@ const Payment = () => {
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 	const [errorTimeMessage, setErrorTimeMessage] = useState<string | null>(null);
 
-	const kushki = new Kushki({
-		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
-		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
-	});
 	// const kushki = new Kushki({
-	// 	merchantId: '5f2c989bea794296bd461c39f9932368', // Your public merchant id
-	// 	inTestEnvironment: false,
+	// 	merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
+	// 	inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
 	// });
+	const kushki = new Kushki({
+		merchantId: '5f2c989bea794296bd461c39f9932368', // Your public merchant id
+		inTestEnvironment: false,
+	});
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
 	const [openKushkiCashModal, setOpenKushkiCashModal] = React.useState(false);

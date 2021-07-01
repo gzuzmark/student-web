@@ -5,6 +5,7 @@ const paymentL18n = {
 	'payment.left.pacientTitle': 'PARA PACIENTE',
 	'payment.left.doctorTitle': 'DOCTOR:',
 	'payment.right.method': 'Elige un método de pago',
+	'payment.right.method-only': 'Paga aquí',
 	'payment.right.payment': 'El precio de tu consulta es de',
 	'payment.right.payCulqiButton': 'Tarjeta de crédito o débito',
 	'payment.right.payTransaction': 'Yape o Tunki',
