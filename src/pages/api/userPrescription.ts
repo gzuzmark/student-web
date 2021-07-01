@@ -1,6 +1,5 @@
-import { ugoConsoleAxios } from 'utils/customAxios';
+import aliviaAxios, { ugoConsoleAxios } from 'utils/customAxios';
 import { Position } from './laboratories';
-import aliviaAxios from 'utils/customAxios';
 
 export interface StoreMedicine {
 	totalPrice: number;
@@ -202,13 +201,13 @@ interface UserLog {
 
 export const sendLogs = async (fields: UserLog): Promise<string | void> => {
 	try {
-		const resp = await aliviaAxios.post('/logs-prescriptions', {
+		await aliviaAxios.post('/logs-prescriptions', {
 			action_date: fields.action_date,
 			type_action_id: fields.type_action_id,
 			student_id: fields.student_id,
 		});
 
-		const data = resp.data;
+		// const data = resp.data;
 
 		// setLocalValue('userToken', data.token);
 		// setLocalValue('refreshToken', data.refresh_token);
