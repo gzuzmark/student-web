@@ -3,10 +3,11 @@ import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { getPrescription, Position } from 'pages/api';
+import { TrackingLocalStorage } from 'pages/api/tracking';
 import { PrescribedMedicine } from 'pages/api/userPrescription';
-import { SocketContext } from 'pages/Socket/socket';
+import useTracking from 'pages/Tracking/useTracking';
 import { parse } from 'query-string';
-import React, { ReactElement, useCallback, useContext, useEffect, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { redirectToBaseAlivia, stylesWithTheme } from 'utils';
@@ -124,8 +125,7 @@ const BuyPrescription = (): ReactElement => {
 	const outOfStock =
 		medicines.filter(({ hasStock, isAvailableForECommerce }) => hasStock && isAvailableForECommerce).length < 1;
 	const sessionId = (params.sessionId as string) || '';
-
-	const socket = useContext(SocketContext);
+	const tracking: TrackingLocalStorage | null = useTracking();
 
 	const toggleMedicine = useCallback(
 		(index: number) => () => {
@@ -187,34 +187,11 @@ const BuyPrescription = (): ReactElement => {
 	}
 
 	useEffect(() => {
-		const message = JSON.stringify({
-			type: 'tracking',
-			name: 'David',
-			message: 'Otro',
-		});
-
-		if (socket.readyState === socket.OPEN) {
-			socket.send(message);
-		}
-
-		socket.onopen = (e: Event) => {
-			console.log('Open socket', e);
-		};
-		socket.onclose = (e: Event) => {
-			console.log('Close socket', e);
-		};
-		socket.onerror = (e: Event) => {
-			console.log('Error socket', e);
-		};
-
-		console.log('estado de socket', socket.readyState);
-
-		return () => {
-			socket.removeEventListener('open', () => null);
-		};
-	}, [socket, socket.readyState]);
+		console.log(tracking);
+	}, [tracking]);
 
 	useEffect(() => {
+		console.log('Prescription request');
 		requestPrescription({
 			setMedicines,
 			setUserAddress,
