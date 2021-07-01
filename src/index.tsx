@@ -1,14 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
 import 'l18n/index';
 import { SnackbarProvider } from 'notistack';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import './index.css';
+import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
 	<React.StrictMode>
-		<SnackbarProvider  maxSnack={1}>
+		<SnackbarProvider maxSnack={1}>
 			<App />
 		</SnackbarProvider>
 	</React.StrictMode>,

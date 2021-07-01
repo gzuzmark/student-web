@@ -1,22 +1,23 @@
-import React, { ReactElement, useState, useEffect, useCallback } from 'react';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
-import { useLocation } from 'react-router';
-import { parse } from 'query-string';
-
-import { getPrescription, Position } from 'pages/api';
-import { PrescribedMedicine } from 'pages/api/userPrescription';
+import Typography from '@material-ui/core/Typography';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
-import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
-
-import Medicines from './components/Medicines';
+import { getPrescription, Position } from 'pages/api';
+import { TrackingLocalStorage } from 'pages/api/tracking';
+import { PrescribedMedicine } from 'pages/api/userPrescription';
+import useTracking from 'pages/Tracking/useTracking';
+import { parse } from 'query-string';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
+import { redirectToBaseAlivia, stylesWithTheme } from 'utils';
+import AskAddress from '../AskAddress/AskAddress';
 import CheckoutInformation from './components/CheckoutInformation';
-import SelectPrescriptionType from './components/SelectPrescriptionType';
+import Medicines from './components/Medicines';
 import NotAvailableNearYou from './components/NotAvailableNearYour';
 import RedirectToInkafarma from './components/RedirectToInkafarma';
-import AskAddress from '../AskAddress/AskAddress';
+import SelectPrescriptionType from './components/SelectPrescriptionType';
+import TitleStock from './components/TitleStock';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -39,19 +40,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			fontSize: '38px',
 			padding: '0 0 15px 0',
-		},
-	},
-	subTitle: {
-		textTransform: 'none',
-		paddingBottom: '20px',
-		fontSize: '13px',
-		lineHeight: '18px',
-		[breakpoints.up('lg')]: {
-			fontSize: '20px',
-			lineHeight: '25px',
-			paddingBottom: '30px',
-			width: '575px',
-			fontWeight: 400,
 		},
 	},
 	body: {
@@ -100,6 +88,7 @@ const requestPrescription = async ({
 		}
 
 		setFolioNumber(newFolioNumber);
+		console.log(medicines);
 		setMedicines(medicines);
 		setNotAvailableNearYou(notAvailableNearYou);
 		setPrescriptionPath(prescriptionPath);
@@ -121,9 +110,9 @@ const BuyPrescription = (): ReactElement => {
 	const [showingRedirectPage, setShowingRedirectPage] = useState<boolean>(false);
 	const [updatedPosition, setUpdatedPosition] = useState<Position>();
 	const classes = useStyles();
-	const outOfStock =
-		medicines.filter(({ hasStock, isAvailableForECommerce }) => hasStock && isAvailableForECommerce).length < 1;
 	const sessionId = (params.sessionId as string) || '';
+	const tracking: TrackingLocalStorage | null = useTracking();
+
 	const toggleMedicine = useCallback(
 		(index: number) => () => {
 			const positionIndex = selectedMedicines.indexOf(index);
@@ -184,6 +173,11 @@ const BuyPrescription = (): ReactElement => {
 	}
 
 	useEffect(() => {
+		console.log(tracking);
+	}, [tracking]);
+
+	useEffect(() => {
+		console.log('Prescription request');
 		requestPrescription({
 			setMedicines,
 			setUserAddress,
@@ -224,9 +218,7 @@ const BuyPrescription = (): ReactElement => {
 			<Typography className={classes.title} variant="h1">
 				{t('buyPrescription.title')}
 			</Typography>
-			<Typography className={classes.subTitle}>
-				{t(outOfStock ? 'buyPrescription.subTitle.outOfStock' : 'buyPrescription.subTitle')}
-			</Typography>
+			<TitleStock medicines={medicines} />
 			<div className={classes.body}>
 				<Medicines
 					medicines={medicines}

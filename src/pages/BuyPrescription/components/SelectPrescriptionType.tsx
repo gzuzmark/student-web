@@ -1,33 +1,28 @@
-import React, { ReactElement } from 'react';
 import { Card } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-
-import Typography from '@material-ui/core/Typography';
-import { useTranslation } from 'react-i18next';
-import { Theme } from '@material-ui/core/styles';
-
-import { stylesWithTheme } from 'utils';
-import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
-import callMedic from 'icons/call_medic.svg';
-import recieptMedic from 'icons/reciept_medic.svg';
-import cartMedic from 'icons/cart_medic.svg';
-import cartMedicB from 'icons/cart_back_medic.svg';
-
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
-
-import { useSnackbar } from 'notistack';
 import Button from '@material-ui/core/Button';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-import { useLocation } from 'react-router';
-import { parse } from 'query-string';
-
+import Grid from '@material-ui/core/Grid';
+import { Theme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import callMedic from 'icons/call_medic.svg';
+import cartMedicB from 'icons/cart_back_medic.svg';
+import cartMedic from 'icons/cart_medic.svg';
+import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
+import recieptMedic from 'icons/reciept_medic.svg';
+import { useSnackbar } from 'notistack';
 import { sendLogs } from 'pages/api';
+import { createTrackingDetailOptionEcommerce } from 'pages/api/tracking';
+import useTracking from 'pages/Tracking/useTracking';
+import { parse } from 'query-string';
+import React, { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
+import { stylesWithTheme } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -220,6 +215,8 @@ const SelectPrescriptionType = ({
 	const location = useLocation();
 	const params = parse(location.search);
 
+	const tracking = useTracking();
+
 	// BUTTON COPY
 	const urlShare = window.location + '';
 	const copyShare = () => {
@@ -264,6 +261,7 @@ const SelectPrescriptionType = ({
 			openEPrescription();
 			onSubmit(1);
 		} else if (_param === 2) {
+			createTrackingDetailOptionEcommerce(tracking?.trackingId);
 			showQuotedPrescription();
 			onSubmit(2);
 		} else if (_param === 3) {
@@ -309,7 +307,7 @@ const SelectPrescriptionType = ({
 							</div>
 						</div>
 
-						<div className={classes.containerCard} onClick={() => pressKey(3)}>
+						<div className={classes.containerCard} id="option-1" onClick={() => pressKey(3)}>
 							<div className={classes.containerIMG}>
 								<img className={classes.img} src={callMedic} alt="working" />
 							</div>

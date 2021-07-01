@@ -1,13 +1,14 @@
-import React, { ReactElement } from 'react';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
-
-import { stylesWithTheme } from 'utils';
+import Typography from '@material-ui/core/Typography';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { ReactComponent as CryingIcon } from 'icons/crying.svg';
 import { ReactComponent as PrescriptionIcon } from 'icons/prescription.svg';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { createTrackingDetailLogAddressNoCoverage, TrackingLocalStorage } from 'pages/api/tracking';
+import useTracking from 'pages/Tracking/useTracking';
+import React, { ReactElement, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { stylesWithTheme } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -115,6 +116,14 @@ export interface NotAvailableNearYourProps {
 const NotAvailableNearYour = ({ address, showEditAddressScreen }: NotAvailableNearYourProps): ReactElement | null => {
 	const classes = useStyles();
 	const { t } = useTranslation('buyPrescription');
+
+	const tracking: TrackingLocalStorage | null = useTracking();
+
+	useEffect(() => {
+		if (tracking != null) {
+			createTrackingDetailLogAddressNoCoverage(tracking.trackingId, address);
+		}
+	}, [address, tracking]);
 
 	return (
 		<div className={classes.container}>
