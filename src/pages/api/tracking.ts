@@ -193,6 +193,56 @@ export const createTrackingDetailMedicinesNotEcommerce = (
 };
 
 /**
+ * Data selected medicines for ecommerce
+ */
+export const trackingDetailSelectMedicinesToEcommerce = {
+	type_action: 'medicinas-seleccionadas-ecommerce',
+	description: 'La cantidad de medicinas que fueron seleccionadas para la comprar por ecommerce',
+	value_description: 'total de medicinas',
+	value_type: 'number',
+	value_text: null,
+};
+
+export const createTrackingDetailSelectMedicinesToEcommerce = (
+	trackingId: string | undefined,
+	total: number,
+	payload: string,
+) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingDetailSelectMedicinesToEcommerce,
+		tracking_id: trackingId || '',
+		value_number: total,
+		payload: payload,
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
+ * Data selected medicines for ecommerce
+ */
+const trackingErrorRedirectToEcommerce = {
+	type_action: 'error-redirect-ecommerce',
+	description: 'Error al rediccionar al ecommer de inkafarma',
+	value_description: 'El error es por una validación de parte de inkafarma',
+	value_type: 'string',
+	value_number: null,
+};
+
+export const createTrackingErrorRedirectToEcommerce = (
+	trackingId: string | undefined,
+	error: string,
+	payload: string,
+) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingErrorRedirectToEcommerce,
+		tracking_id: trackingId || '',
+		value_text: error,
+		payload: payload,
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
  * Method master to post detail log
  * @param request data send detail
  */

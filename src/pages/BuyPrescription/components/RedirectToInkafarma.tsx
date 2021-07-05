@@ -1,16 +1,20 @@
-import React, { ReactElement, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { useTranslation } from 'react-i18next';
 import { Theme } from '@material-ui/core/styles';
-
-import { PrescribedMedicine, SelectedMedicines, getRedirectUrl } from 'pages/api/userPrescription';
-import { stylesWithTheme } from 'utils';
-import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
+import Typography from '@material-ui/core/Typography';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
+import {
+	createTrackingDetailSelectMedicinesToEcommerce,
+	createTrackingErrorRedirectToEcommerce,
+} from 'pages/api/tracking';
+import { getRedirectUrl, PrescribedMedicine, SelectedMedicines } from 'pages/api/userPrescription';
+import useTracking from 'pages/Tracking/useTracking';
 import { parse } from 'query-string';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
+import { stylesWithTheme } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -123,17 +127,26 @@ const createRedirectUrl = async (
 	setIsLoading: Function,
 	setRedirectUrl: Function,
 	userId: string,
+	trackingId: string | undefined,
 ) => {
 	try {
 		const redirectUrl = await getRedirectUrl(userId, selectedMedicines);
 
+		if (redirectUrl === null || redirectUrl === undefined) {
+			const payload = JSON.stringify(selectedMedicines);
+			createTrackingErrorRedirectToEcommerce(trackingId, redirectUrl || 'undefined', payload);
+			return;
+		}
 		setIsLoading(false);
 		setRedirectUrl(redirectUrl);
 
 		setTimeout(() => {
 			window.open(redirectUrl, '_blank');
 		}, 2000);
-	} catch (e) {}
+	} catch (e) {
+		const payload = JSON.stringify(selectedMedicines);
+		createTrackingErrorRedirectToEcommerce(trackingId, e.message, payload);
+	}
 };
 
 export interface RedirectToInkafarmaProps {
@@ -149,6 +162,8 @@ const RedirectToInkafarma = ({ medicines, selectedMedicines }: RedirectToInkafar
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [redirectUrl, setRedirectUrl] = useState();
 	const sessionId = (params.sessionId as string) || '';
+	const tracking = useTracking();
+
 	const parsedSelectedMedicines: SelectedMedicines = selectedMedicines
 		.map((index) => medicines[index])
 		.map(({ skuInkafarma, totalQuantity, pharmaceuticalForm, hasStock, alternativeMedicine }) =>
@@ -165,9 +180,27 @@ const RedirectToInkafarma = ({ medicines, selectedMedicines }: RedirectToInkafar
 	};
 
 	useEffect(() => {
-		createRedirectUrl(parsedSelectedMedicines, setIsLoading, setRedirectUrl, sessionId);
-		// eslint-disable-next-line
-	}, []);
+		if (tracking?.trackingId) {
+			createRedirectUrl(parsedSelectedMedicines, setIsLoading, setRedirectUrl, sessionId, tracking?.trackingId);
+		}
+	}, [parsedSelectedMedicines, sessionId, tracking]);
+
+	const sendTracking = useCallback(() => {
+		if (medicines.length > 0) {
+			const total = parsedSelectedMedicines.length;
+			if (total > 0) {
+				console.log('create log', parsedSelectedMedicines, tracking, medicines);
+				const payload = JSON.stringify(parsedSelectedMedicines);
+				createTrackingDetailSelectMedicinesToEcommerce(tracking?.trackingId, total, payload);
+			}
+		}
+	}, [medicines, parsedSelectedMedicines, tracking]);
+
+	useEffect(() => {
+		if (tracking != null) {
+			sendTracking();
+		}
+	}, [parsedSelectedMedicines, tracking, medicines, sendTracking]);
 
 	return (
 		<div className={classes.container}>

@@ -74,24 +74,24 @@ const Medicines = ({
 
 	useEffect(() => {
 		if (tracking != null) {
-			const payload = JSON.stringify(availableMedicines);
-			createTrackingAvilablesMedicines(tracking.trackingId, availableMedicines.length, payload);
-		}
-	}, [availableMedicines, tracking]);
+			const totalAvailables = availableMedicines.length;
+			const totalOutStock = outOfStockMedicines.length;
+			const totalNotAvailables = notAvailableMedicines.length;
 
-	useEffect(() => {
-		if (tracking != null) {
-			const payload = JSON.stringify(outOfStockMedicines);
-			createTrackingOutstockMedicines(tracking.trackingId, outOfStockMedicines.length, payload);
-		}
-	}, [outOfStockMedicines, tracking]);
+			const totalFilters = totalAvailables + totalOutStock + totalNotAvailables;
 
-	useEffect(() => {
-		if (tracking != null) {
-			const payload = JSON.stringify(notAvailableMedicines);
-			createTrackingDetailMedicinesNotEcommerce(tracking.trackingId, notAvailableMedicines.length, payload);
+			if (totalFilters > 0) {
+				const payloadAvailables = JSON.stringify(availableMedicines);
+				createTrackingAvilablesMedicines(tracking.trackingId, totalAvailables, payloadAvailables);
+
+				const payloadOutStock = JSON.stringify(outOfStockMedicines);
+				createTrackingOutstockMedicines(tracking.trackingId, totalOutStock, payloadOutStock);
+
+				const payloadNotAvailables = JSON.stringify(notAvailableMedicines);
+				createTrackingDetailMedicinesNotEcommerce(tracking.trackingId, totalNotAvailables, payloadNotAvailables);
+			}
 		}
-	}, [notAvailableMedicines, tracking]);
+	}, [availableMedicines, outOfStockMedicines, notAvailableMedicines, tracking]);
 
 	return (
 		<div className={classes.medicines}>

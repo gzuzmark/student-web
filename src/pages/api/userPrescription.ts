@@ -176,6 +176,9 @@ interface RedirectUrlResponse {
 	code: string;
 	error: string;
 	object: string;
+	exception?: string | undefined;
+	message?: string | undefined;
+	path?: string | undefined;
 }
 
 export type SelectedMedicines = SelectedMedicine[];
@@ -186,6 +189,10 @@ export const getRedirectUrl = async (sessionId: string, selectedItems: SelectedM
 			sessionId,
 			items: selectedItems,
 		});
+
+		if (resp.data.exception) {
+			throw Error(resp.data.message);
+		}
 
 		return resp.data.object;
 	} catch (e) {
