@@ -150,6 +150,8 @@ export const createTrackingAvailablesMedicines = (
 	};
 	if (isAlternative) {
 		request.type_action = `alternativo-${request.type_action}`;
+	} else {
+		request.type_action = `sugerido-${request.type_action}`;
 	}
 	createTrackingDetailLog(request);
 };
@@ -179,6 +181,8 @@ export const createTrackingOutstockMedicines = (
 	};
 	if (isAlternative) {
 		request.type_action = `alternativo-${request.type_action}`;
+	} else {
+		request.type_action = `sugerido-${request.type_action}`;
 	}
 	createTrackingDetailLog(request);
 };
@@ -208,6 +212,8 @@ export const createTrackingMedicinesNotEcommerce = (
 	};
 	if (isAlternative) {
 		request.type_action = `alternativo-${request.type_action}`;
+	} else {
+		request.type_action = `sugerido-${request.type_action}`;
 	}
 	createTrackingDetailLog(request);
 };
