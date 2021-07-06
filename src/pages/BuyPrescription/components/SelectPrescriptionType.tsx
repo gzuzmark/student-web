@@ -268,7 +268,6 @@ const SelectPrescriptionType = ({
 			handleClickOpen();
 			onSubmit(3);
 		}
-		console.log(_param);
 	};
 
 	return (
