@@ -71,9 +71,9 @@ const Medicines = ({
 	);
 
 	const filterMedicinesAndAlternatives = (medicines: PrescribedMedicine[]) => {
-		const withAlternatives = medicines.filter(({ alternativeMedicine }) => alternativeMedicine !== null);
-		const withoutAtlernatives = medicines.filter(({ alternativeMedicine }) => alternativeMedicine === null);
-		return { withAlternatives, withoutAtlernatives };
+		const withSuggested = medicines.filter(({ alternativeMedicine }) => alternativeMedicine === null);
+		const withAtlernatives = medicines.filter(({ alternativeMedicine }) => alternativeMedicine !== null);
+		return { withSuggested, withAtlernatives };
 	};
 
 	const saveTrackingListMedicine = useCallback(
@@ -82,16 +82,16 @@ const Medicines = ({
 			medicines: PrescribedMedicine[],
 			callbackTracking: (id: string, total: number, payload: string, isAlternative: boolean) => void,
 		) => {
-			const { withAlternatives, withoutAtlernatives } = filterMedicinesAndAlternatives(medicines);
+			const { withSuggested, withAtlernatives } = filterMedicinesAndAlternatives(medicines);
 
-			if (withAlternatives.length > 0) {
-				const payloadWithAlternatives = JSON.stringify(withAlternatives);
-				callbackTracking(trackingId, withAlternatives.length, payloadWithAlternatives, true);
+			if (withAtlernatives.length > 0) {
+				const payloadAlternatives = JSON.stringify(withAtlernatives);
+				callbackTracking(trackingId, withAtlernatives.length, payloadAlternatives, true);
 			}
 
-			if (withoutAtlernatives.length > 0) {
-				const payloadWithoutAlternatives = JSON.stringify(withoutAtlernatives);
-				callbackTracking(trackingId, withoutAtlernatives.length, payloadWithoutAlternatives, false);
+			if (withSuggested.length > 0) {
+				const payloadSuggested = JSON.stringify(withSuggested);
+				callbackTracking(trackingId, withSuggested.length, payloadSuggested, false);
 			}
 		},
 		[],
