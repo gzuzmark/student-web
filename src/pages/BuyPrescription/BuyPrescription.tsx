@@ -3,9 +3,7 @@ import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { getPrescription, Position } from 'pages/api';
-import { TrackingLocalStorage } from 'pages/api/tracking';
 import { PrescribedMedicine } from 'pages/api/userPrescription';
-import useTracking from 'pages/Tracking/useTracking';
 import { parse } from 'query-string';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -111,7 +109,7 @@ const BuyPrescription = (): ReactElement => {
 	const [updatedPosition, setUpdatedPosition] = useState<Position>();
 	const classes = useStyles();
 	const sessionId = (params.sessionId as string) || '';
-	const tracking: TrackingLocalStorage | null = useTracking();
+	// const tracking: TrackingLocalStorage | null = useTracking();
 
 	const toggleMedicine = useCallback(
 		(index: number) => () => {
@@ -172,12 +170,11 @@ const BuyPrescription = (): ReactElement => {
 		redirectToBaseAlivia();
 	}
 
-	useEffect(() => {
-		console.log(tracking);
-	}, [tracking]);
+	// useEffect(() => {
+	// 	console.log(tracking);
+	// }, [tracking]);
 
 	useEffect(() => {
-		console.log('Prescription request');
 		requestPrescription({
 			setMedicines,
 			setUserAddress,

@@ -1,19 +1,17 @@
-import React, { ReactElement, useEffect, useMemo } from 'react';
-import { PrescribedMedicine } from 'pages/api';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { useTranslation } from 'react-i18next';
-
-import { stylesWithTheme } from 'utils';
-
-import Medicine from './Medicine';
-import ElectronicPrescription from './ElectronicPrescription';
-import useTracking from 'pages/Tracking/useTracking';
+import { PrescribedMedicine } from 'pages/api';
 import {
-	createTrackingAvilablesMedicines,
-	createTrackingDetailMedicinesNotEcommerce,
+	createTrackingAvailablesMedicines,
+	createTrackingMedicinesNotEcommerce,
 	createTrackingOutstockMedicines,
 } from 'pages/api/tracking';
+import useTracking from 'pages/Tracking/useTracking';
+import React, { ReactElement, useCallback, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { stylesWithTheme } from 'utils';
+import ElectronicPrescription from './ElectronicPrescription';
+import Medicine from './Medicine';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	medicines: {
@@ -72,26 +70,48 @@ const Medicines = ({
 		[medicines],
 	);
 
-	useEffect(() => {
-		if (tracking != null) {
-			const payload = JSON.stringify(availableMedicines);
-			createTrackingAvilablesMedicines(tracking.trackingId, availableMedicines.length, payload);
-		}
-	}, [availableMedicines, tracking]);
+	const filterMedicinesAndAlternatives = (medicines: PrescribedMedicine[]) => {
+		const withSuggested = medicines.filter(({ alternativeMedicine }) => alternativeMedicine === null);
+		const withAtlernatives = medicines.filter(({ alternativeMedicine }) => alternativeMedicine !== null);
+		return { withSuggested, withAtlernatives };
+	};
+
+	const saveTrackingListMedicine = useCallback(
+		(
+			trackingId: string,
+			medicines: PrescribedMedicine[],
+			callbackTracking: (id: string, total: number, payload: string, isAlternative: boolean) => void,
+		) => {
+			const { withSuggested, withAtlernatives } = filterMedicinesAndAlternatives(medicines);
+
+			if (withAtlernatives.length > 0) {
+				const payloadAlternatives = JSON.stringify(withAtlernatives);
+				callbackTracking(trackingId, withAtlernatives.length, payloadAlternatives, true);
+			}
+
+			if (withSuggested.length > 0) {
+				const payloadSuggested = JSON.stringify(withSuggested);
+				callbackTracking(trackingId, withSuggested.length, payloadSuggested, false);
+			}
+		},
+		[],
+	);
 
 	useEffect(() => {
 		if (tracking != null) {
-			const payload = JSON.stringify(outOfStockMedicines);
-			createTrackingOutstockMedicines(tracking.trackingId, outOfStockMedicines.length, payload);
-		}
-	}, [outOfStockMedicines, tracking]);
+			const totalAvailables = availableMedicines.length;
+			const totalOutStock = outOfStockMedicines.length;
+			const totalNotAvailables = notAvailableMedicines.length;
 
-	useEffect(() => {
-		if (tracking != null) {
-			const payload = JSON.stringify(notAvailableMedicines);
-			createTrackingDetailMedicinesNotEcommerce(tracking.trackingId, notAvailableMedicines.length, payload);
+			const totalFilters = totalAvailables + totalOutStock + totalNotAvailables;
+
+			if (totalFilters > 0) {
+				saveTrackingListMedicine(tracking.trackingId, availableMedicines, createTrackingAvailablesMedicines);
+				saveTrackingListMedicine(tracking.trackingId, outOfStockMedicines, createTrackingOutstockMedicines);
+				saveTrackingListMedicine(tracking.trackingId, notAvailableMedicines, createTrackingMedicinesNotEcommerce);
+			}
 		}
-	}, [notAvailableMedicines, tracking]);
+	}, [availableMedicines, outOfStockMedicines, notAvailableMedicines, tracking, saveTrackingListMedicine]);
 
 	return (
 		<div className={classes.medicines}>
