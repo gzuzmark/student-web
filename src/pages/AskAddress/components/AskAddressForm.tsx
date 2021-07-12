@@ -1,22 +1,24 @@
-import React, { useCallback, useState, useEffect, ReactElement, ChangeEvent } from 'react';
+import Button from '@material-ui/core/Button';
+import { Theme } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import { useTranslation } from 'react-i18next';
-import GoogleMapReact, { Maps } from 'google-map-react';
 import clsx from 'clsx';
-
-import { stylesWithTheme } from 'utils';
-
-import AddressBenefits from './AddressBenefits';
+import GoogleMapReact, { Maps } from 'google-map-react';
 import { Position, postAddress } from 'pages/api';
-import { defaultCenter, getUserCurrentPosition } from 'utils';
+import {
+	createTrackingAddressPatientAttempt,
+	createTrackingErrorAddress,
+	createTrackingErrorAddressReference,
+} from 'pages/api/tracking';
 import SearchAddress from 'pages/LaboratoryExams/components/SearchAddress';
-
-import { MapInstance, MapsApi, Place, Marker } from '../types';
 import { FormattedPlace } from 'pages/LaboratoryExams/components/types';
+import useTracking from 'pages/Tracking/useTracking';
+import React, { ChangeEvent, ReactElement, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { defaultCenter, getUserCurrentPosition, stylesWithTheme } from 'utils';
+import { MapInstance, MapsApi, Marker, Place } from '../types';
+import AddressBenefits from './AddressBenefits';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	form: {
@@ -111,6 +113,8 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 	const [hasAddressError, setHasAddressError] = useState<boolean>(false);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
+	const tracking = useTracking();
+
 	const updateDirectionReference = (e: ChangeEvent<HTMLInputElement>) => {
 		setAddressReference(e.target.value);
 	};
@@ -118,8 +122,17 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 	const classes = useStyles();
 	const onSubmit = useCallback(async () => {
 		try {
+			const data = {
+				latitude: String(activePosition?.lat) || '',
+				longitude: String(activePosition?.lng) || '',
+				address: humanActivePosition,
+				reference: addressReference,
+			};
+
 			if (!addressReference) {
 				setReferenceError(t('askAddress.addressReference.error'));
+				const payload = JSON.stringify(data);
+				createTrackingErrorAddressReference(tracking?.trackingId, humanActivePosition, payload);
 				return;
 			} else {
 				setReferenceError('');
@@ -127,6 +140,8 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 
 			if (!humanActivePosition) {
 				setReferenceError(t('askAddress.address.error'));
+				const payload = JSON.stringify(data);
+				createTrackingErrorAddress(tracking?.trackingId, humanActivePosition, payload);
 				setHasAddressError(true);
 				return;
 			} else {
@@ -143,19 +158,15 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			}
 
 			if (activePosition) {
-				await postAddress(sessionId, {
-					latitude: String(activePosition.lat) || '',
-					longitude: String(activePosition.lng) || '',
-					address: humanActivePosition,
-					reference: addressReference,
-				});
+				await postAddress(sessionId, data);
 				openSuccesModal();
 			}
 		} catch (e) {
 			setReferenceError('Hubo un problema al enviar la cita, vuelva a intentarlo');
 			setIsSubmitting(false);
 		}
-	}, [addressReference, humanActivePosition, submitCallback, t, sessionId, activePosition, openSuccesModal]);
+	}, [activePosition, humanActivePosition, addressReference, submitCallback, t, tracking, sessionId, openSuccesModal]);
+
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
 		const addressInputWrapper = document.querySelector<HTMLElement>('.address-input-wrapper');
 
@@ -169,9 +180,11 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 		setMapApi(maps);
 		setMapInstance(map);
 	};
+
 	const isValidAddress = (address: FormattedPlace): boolean => {
 		return Boolean(address.street && address.district && address.city && address.country);
 	};
+
 	const updatePosition = useCallback(
 		(place: Place | null) => {
 			if (place && mapInstance && currentPositionMarker) {
@@ -183,6 +196,9 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 							...place.formattedPlace,
 						}),
 					);
+				} else {
+					const payload = JSON.stringify(place);
+					createTrackingAddressPatientAttempt(tracking?.trackingId, place.address, payload);
 				}
 				setActivePosition(place.position);
 				currentPositionMarker.setPosition(place.position);
@@ -191,7 +207,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 				mapInstance.setZoom(17);
 			}
 		},
-		[currentPositionMarker, mapInstance],
+		[currentPositionMarker, mapInstance, tracking],
 	);
 
 	useEffect(() => {
