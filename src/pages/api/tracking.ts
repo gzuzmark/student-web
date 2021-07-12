@@ -269,6 +269,73 @@ export const createTrackingErrorRedirectToEcommerce = (
 };
 
 /**
+ * Data error address
+ */
+const trackingErrorAddress = {
+	type_action: 'error-address',
+	description: 'Error en la dirección del paciente',
+	value_description: 'El paciente no escribió una dirección correcta',
+	value_type: 'string',
+	value_number: null,
+};
+
+export const createTrackingErrorAddress = (trackingId: string | undefined, error: string, payload: string) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingErrorAddress,
+		tracking_id: trackingId || '',
+		value_text: error,
+		payload: payload,
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
+ * Data error address reference
+ */
+const trackingErrorAddressReference = {
+	type_action: 'error-address-reference',
+	description: 'Error en la referencia de la dirección del paciente',
+	value_description: 'El paciente no escribió una referencia para su dirección',
+	value_type: 'string',
+	value_number: null,
+};
+
+export const createTrackingErrorAddressReference = (trackingId: string | undefined, error: string, payload: string) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingErrorAddressReference,
+		tracking_id: trackingId || '',
+		value_text: error,
+		payload: payload,
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
+ * Data error address reference
+ */
+const trackingAddressPatientAttempt = {
+	type_action: 'intento-direccion-paciente',
+	description: 'Lo que el paciente escribe como dirección',
+	value_description: 'El paciente escribe una dirección',
+	value_type: 'string',
+	value_number: null,
+};
+
+export const createTrackingAddressPatientAttempt = (
+	trackingId: string | undefined,
+	address: string,
+	payload: string,
+) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingAddressPatientAttempt,
+		tracking_id: trackingId || '',
+		value_text: address,
+		payload: payload,
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
  * Method master to post detail log
  * @param request data send detail
  */
