@@ -447,7 +447,7 @@ const RightSide = ({
 					</div>
 				</div>
 				<Typography className={classes.subtitle} component="span" variant={matches ? 'h3' : 'body1'}>
-					{t('payment.right.method')}:
+					{isPagoEfectivoVisible ? t('payment.right.method') : t('payment.right.method-only')}:
 				</Typography>
 				<div className={classes.buttonWrapper}>
 					<Button
@@ -529,9 +529,11 @@ const RightSide = ({
 				) : null}
 
 				<div className={classes.stepsWrapper}>
-					<Typography className={classes.link} color="primary" onClick={gotToYoutubeSteps} component="span">
-						{t('*¿Cómo Pago en Efectivo?')}
-					</Typography>
+					{isPagoEfectivoVisible && (
+						<Typography className={classes.link} color="primary" onClick={gotToYoutubeSteps} component="span">
+							{t('*¿Cómo Pago en Efectivo?')}
+						</Typography>
+					)}
 					<Typography className={classes.descriptionwpp}>
 						{t('payment.right.steps.wpp')}
 						<Typography className={classes.link} color="primary" onClick={gotToWpp} component="span">
