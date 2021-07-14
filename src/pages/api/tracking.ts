@@ -126,6 +126,48 @@ export const createTrackingDetailOptionEcommerce = (trackingId: string | undefin
 };
 
 /**
+ * Model click primera opcion
+ */
+const trackingClickFirstOption = {
+	type_action: 'click-descarga-receta',
+	description: 'El usuario da click a la primera opción: descargar receta',
+	value_description: 'acceso al pdf de la receta médica',
+	value_type: 'string',
+	payload: null,
+	value_number: null,
+	value_text: 'click',
+};
+
+export const createTrackingClickFirstOption = (trackingId: string | undefined) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingClickFirstOption,
+		tracking_id: trackingId || '',
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
+ * Model click primera opcion
+ */
+const trackingClickThirdOption = {
+	type_action: 'click-contacto-inkafarma',
+	description: 'El usuario da click a la tecerra opción: quiero que me contacte inkafarma',
+	value_description: 'contacto con inkafarma',
+	value_type: 'string',
+	payload: null,
+	value_number: null,
+	value_text: 'click',
+};
+
+export const createTrackingClickThirdOption = (trackingId: string | undefined) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingClickThirdOption,
+		tracking_id: trackingId || '',
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
  * Data for medicines with stock
  */
 const trackingDetailAvailablesMedicines = {
@@ -311,7 +353,7 @@ export const createTrackingErrorAddressReference = (trackingId: string | undefin
 };
 
 /**
- * Data error address reference
+ * Data error address attempt
  */
 const trackingAddressPatientAttempt = {
 	type_action: 'intento-direccion-paciente',
@@ -331,6 +373,27 @@ export const createTrackingAddressPatientAttempt = (
 		tracking_id: trackingId || '',
 		value_text: address,
 		payload: payload,
+	};
+	createTrackingDetailLog(request);
+};
+
+/**
+ * Data error address attempt
+ */
+const trackingPatientPrescriptionBlank = {
+	type_action: 'paciente-sin-receta',
+	description: 'El paciente abre el enlace de una receta no emitida',
+	value_description: 'No se ha generado aun una receta',
+	value_type: 'string',
+	value_text: 'click',
+	value_number: null,
+	payload: null,
+};
+
+export const createTrackingPatientPrescriptionBlank = (trackingId: string | undefined) => {
+	const request: TrackingDetailLogRequest = {
+		...trackingPatientPrescriptionBlank,
+		tracking_id: trackingId || '',
 	};
 	createTrackingDetailLog(request);
 };
