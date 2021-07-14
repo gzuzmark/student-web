@@ -16,7 +16,11 @@ import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
 import recieptMedic from 'icons/reciept_medic.svg';
 import { useSnackbar } from 'notistack';
 import { sendLogs } from 'pages/api';
-import { createTrackingDetailOptionEcommerce } from 'pages/api/tracking';
+import {
+	createTrackingClickFirstOption,
+	createTrackingClickThirdOption,
+	createTrackingDetailOptionEcommerce,
+} from 'pages/api/tracking';
 import useTracking from 'pages/Tracking/useTracking';
 import { parse } from 'query-string';
 import React, { ReactElement } from 'react';
@@ -132,6 +136,9 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		justifyContent: 'center',
 		marginTop: '40px',
 		marginBottom: '40px',
+		[breakpoints.down('xs')]: {
+			flexWrap: 'wrap',
+		},
 	},
 	containerButtonCompartir: {
 		display: 'flex',
@@ -191,6 +198,9 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		flexDirection: 'column',
 		'&:hover': {
 			boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
+		},
+		[breakpoints.down('md')]: {
+			flex: '100%',
 		},
 	},
 	containerIMG: {
@@ -258,6 +268,7 @@ const SelectPrescriptionType = ({
 
 	const pressKey = (_param: number) => {
 		if (_param === 1) {
+			createTrackingClickFirstOption(tracking?.trackingId);
 			openEPrescription();
 			onSubmit(1);
 		} else if (_param === 2) {
@@ -265,6 +276,7 @@ const SelectPrescriptionType = ({
 			showQuotedPrescription();
 			onSubmit(2);
 		} else if (_param === 3) {
+			createTrackingClickThirdOption(tracking?.trackingId);
 			handleClickOpen();
 			onSubmit(3);
 		}
