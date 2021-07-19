@@ -32,7 +32,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		width: 'calc(100% - 30px)',
 	},
 	mapWrapper: {
-		height: '206px',
+		height: '400px',
 	},
 	addressReferenceLabel: {
 		fontSize: '15px',
@@ -132,7 +132,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			if (!addressReference) {
 				setReferenceError(t('askAddress.addressReference.error'));
 				const payload = JSON.stringify(data);
-				createTrackingErrorAddressReference(tracking?.trackingId, humanActivePosition, payload);
+				createTrackingErrorAddressReference(tracking?.trackingId, addressReference, payload);
 				return;
 			} else {
 				setReferenceError('');
