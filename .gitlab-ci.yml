@@ -18,6 +18,7 @@ install_stage:
     - node_modules/
   only:
     - dev
+    - staging
     - master
 
 build_stage_dev:
