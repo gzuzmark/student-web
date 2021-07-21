@@ -20,10 +20,12 @@ interface StylesProps {
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
-		height: 'calc(100vh - 34px)',
-		position: 'relative',
+		// height: 'calc(100vh - 34px)',
+		// position: 'relative',
 		display: 'flex',
 		flexDirection: 'column',
+		marginTop: '10px',
+		marginBottom: '10px',
 		padding: '34px 15px 0 15px',
 		[breakpoints.up('lg')]: {
 			justifyContent: 'center',
