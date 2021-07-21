@@ -3,7 +3,7 @@ import { Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 import GoogleMapReact, { Maps } from 'google-map-react';
 import { Position, postAddress } from 'pages/api';
 import {
@@ -32,11 +32,20 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		width: 'calc(100% - 30px)',
 	},
 	mapWrapper: {
-		height: '400px',
+		height: '350px',
+		marginBottom: '20px',
 	},
 	addressReferenceLabel: {
 		fontSize: '15px',
 		paddingBottom: '10px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '8px',
+		},
+	},
+	locationLabel: {
+		fontSize: '13px',
+		paddingBottom: '10px',
+		fontWeight: 'bold',
 		[breakpoints.up('lg')]: {
 			paddingBottom: '8px',
 		},
@@ -105,8 +114,13 @@ interface AskAddressFormProps {
 const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddressFormProps): ReactElement | null => {
 	const { t } = useTranslation('askAddress');
 	const [currentPositionMarker, setCurrentPositionMarker] = useState<Marker>();
+	const [addressCountry] = useState<string>('Perú');
+	const [addressProvince, setAddressProvince] = useState<string>('');
+	const [addressDistrict, setAddressDistrict] = useState<string>('');
+	const [addressNumber, setAddressNumber] = useState<string>('');
 	const [addressReference, setAddressReference] = useState<string>('');
 	const [referenceError, setReferenceError] = useState<string>('');
+	const [numberError, setNumberError] = useState<string>('');
 	const [mapsApi, setMapApi] = useState<MapsApi>();
 	const [mapInstance, setMapInstance] = useState<MapInstance>();
 	const [humanActivePosition, setHumanActivePosition] = useState<string>('');
@@ -115,6 +129,27 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
 	const tracking = useTracking();
 
+	const updateProvince = (e: ChangeEvent<HTMLInputElement>) => {
+		setAddressProvince(e.target.value);
+	};
+	const updateDistrict = (e: ChangeEvent<HTMLInputElement>) => {
+		setAddressDistrict(e.target.value);
+	};
+	const updateNumberAddress = (e: ChangeEvent<HTMLInputElement>) => {
+		try {
+			const number = e.target.value;
+			setAddressNumber(number);
+			if (humanActivePosition != null) {
+				const formattedPlace: FormattedPlace = JSON.parse(humanActivePosition);
+				if (formattedPlace.street) {
+					formattedPlace.number = number;
+					setHumanActivePosition(JSON.stringify(formattedPlace));
+				}
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
 	const updateDirectionReference = (e: ChangeEvent<HTMLInputElement>) => {
 		setAddressReference(e.target.value);
 	};
@@ -129,6 +164,22 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 				reference: addressReference,
 			};
 
+			if (!humanActivePosition) {
+				setHasAddressError(true);
+				const payload = JSON.stringify(data);
+				createTrackingErrorAddress(tracking?.trackingId, humanActivePosition, payload);
+				return;
+			} else {
+				setHasAddressError(false);
+			}
+
+			if (addressNumber.trim().length === 0) {
+				setNumberError('Debe ingresar un número de dirección');
+				return;
+			} else {
+				setNumberError('');
+			}
+
 			if (!addressReference) {
 				setReferenceError(t('askAddress.addressReference.error'));
 				const payload = JSON.stringify(data);
@@ -136,16 +187,6 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 				return;
 			} else {
 				setReferenceError('');
-			}
-
-			if (!humanActivePosition) {
-				setReferenceError(t('askAddress.address.error'));
-				const payload = JSON.stringify(data);
-				createTrackingErrorAddress(tracking?.trackingId, humanActivePosition, payload);
-				setHasAddressError(true);
-				return;
-			} else {
-				setHasAddressError(false);
 			}
 
 			setIsSubmitting(true);
@@ -165,7 +206,17 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			setReferenceError('Hubo un problema al enviar la cita, vuelva a intentarlo');
 			setIsSubmitting(false);
 		}
-	}, [activePosition, humanActivePosition, addressReference, submitCallback, t, tracking, sessionId, openSuccesModal]);
+	}, [
+		activePosition,
+		humanActivePosition,
+		addressReference,
+		addressNumber,
+		submitCallback,
+		t,
+		tracking,
+		sessionId,
+		openSuccesModal,
+	]);
 
 	const onGoogleApiLoaded = ({ maps, map }: { maps: MapsApi; map: MapInstance }) => {
 		const addressInputWrapper = document.querySelector<HTMLElement>('.address-input-wrapper');
@@ -219,26 +270,66 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 		});
 	}, [mapInstance, mapsApi]);
 
+	const clickPosition = (value: GoogleMapReact.ClickEventValue) => {
+		const { lat, lng } = value;
+		const position: Position = {
+			lat: lat,
+			lng: lng,
+		};
+		if (currentPositionMarker && mapInstance) {
+			setActivePosition(position);
+			currentPositionMarker.setPosition(position);
+			currentPositionMarker.setVisible(true);
+		}
+		console.log(position);
+	};
+
 	return (
 		<div className={classes.form}>
+			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressProvince.label')}</Typography>
+			<TextField
+				className={classes.addressReferenceInput}
+				value={addressProvince}
+				onChange={updateProvince}
+				name="address-province"
+				placeholder={t('askAddress.addressProvince.placeholder')}
+				variant="outlined"
+				fullWidth
+			/>
+			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDistrict.label')}</Typography>
+			<TextField
+				className={classes.addressReferenceInput}
+				value={addressDistrict}
+				onChange={updateDistrict}
+				name="address-district"
+				placeholder={t('askAddress.addressDistrict.placeholder')}
+				variant="outlined"
+				fullWidth
+			/>
+			<Typography className={classes.addressReferenceLabel}>{t('askAddress.address.label')}</Typography>
 			<SearchAddress
-				className={clsx(classes.addressInput, 'address-input-wrapper')}
+				className={classes.addressReferenceLabel}
 				defaultValue={humanActivePosition}
 				defaultPosition={activePosition}
 				mapsApi={mapsApi}
 				updatePosition={updatePosition}
 				hasError={hasAddressError}
+				country={addressCountry}
+				province={addressProvince}
+				district={addressDistrict}
 			/>
-			<div className={classes.mapWrapper}>
-				<GoogleMapReact
-					bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY || '', libraries: 'places' }}
-					defaultCenter={defaultCenter}
-					defaultZoom={17}
-					options={mapOptionsCreator}
-					yesIWantToUseGoogleMapApiInternals
-					onGoogleApiLoaded={onGoogleApiLoaded}
-				></GoogleMapReact>
-			</div>
+			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressNumber.label')}</Typography>
+			<TextField
+				className={classes.addressReferenceInput}
+				value={addressNumber}
+				onChange={updateNumberAddress}
+				name="address-district"
+				placeholder={t('askAddress.addressNumber.placeholder')}
+				variant="outlined"
+				fullWidth
+				error={!!numberError}
+				helperText={numberError}
+			/>
 			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressReference.label')}</Typography>
 			<TextField
 				className={classes.addressReferenceInput}
@@ -251,6 +342,18 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 				helperText={referenceError}
 				fullWidth
 			/>
+			<Typography className={classes.locationLabel}>{t('askAddress.addressLocation.label')}</Typography>
+			<div className={classes.mapWrapper}>
+				<GoogleMapReact
+					bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY || '', libraries: 'places' }}
+					defaultCenter={defaultCenter}
+					defaultZoom={17}
+					options={mapOptionsCreator}
+					yesIWantToUseGoogleMapApiInternals
+					onGoogleApiLoaded={onGoogleApiLoaded}
+					onClick={clickPosition}
+				></GoogleMapReact>
+			</div>
 			{!isDesktop && <AddressBenefits />}
 			<Button className={classes.submitButton} onClick={onSubmit} variant="contained" disabled={isSubmitting} fullWidth>
 				{t('askAddress.submitAddress')}
