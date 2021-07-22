@@ -13,6 +13,7 @@ import AskAddressForm from './components/AskAddressForm';
 import AddressBenefits from './components/AddressBenefits';
 import SuccessModal from './components/SuccessModal';
 import { Position } from 'pages/api';
+import { ReactComponent as InkafarmaIcon } from '../../icons/inkafarma.svg';
 
 interface StylesProps {
 	isAlternativeActive: boolean;
@@ -50,6 +51,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	subTitle: {
 		textTransform: 'none',
 		paddingBottom: '20px',
+		margin: 'auto',
+	},
+	subTitleIcon: {
+		display: 'inline-block',
+		verticalAlign: 'middle',
+		lineHeight: 'normal',
 	},
 	contentContainer: {
 		display: 'flex',
@@ -57,6 +64,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			flexDirection: 'row',
 		},
+	},
+	inkafarmaIcon: {
+		height: '28px',
+		marginBottom: '-10px',
 	},
 }));
 
@@ -96,7 +107,8 @@ const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElemen
 				</Typography>
 				{!sessionId && (
 					<Typography className={classes.subTitle} variant="button">
-						{t('askAddress.subTitle')}
+						<span className={classes.subTitleIcon}>{t('askAddress.subTitle')}</span>
+						<InkafarmaIcon className={classes.inkafarmaIcon} />
 					</Typography>
 				)}
 			</div>
