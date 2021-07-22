@@ -1,6 +1,6 @@
 import React, { useState, ReactElement } from 'react';
 import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+// import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router';
@@ -68,7 +68,7 @@ interface AskAddressProps {
 const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElement => {
 	const { t } = useTranslation('askAddress');
 	const classes = useStyles({ isAlternativeActive: !!sessionId });
-	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	// const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const location = useLocation();
 	const history = useHistory();
 	const params = parse(location.search);
@@ -102,7 +102,7 @@ const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElemen
 			</div>
 			<div className={classes.contentContainer}>
 				<AskAddressForm sessionId={activeSessionId} openSuccesModal={openSuccesModal} submitCallback={submitCallback} />
-				{isDesktop && <AddressBenefits />}
+				{false && <AddressBenefits />}
 			</div>
 			<SuccessModal isOpen={isSuccessModalOpen} onClose={redirectToAccount} />
 		</div>

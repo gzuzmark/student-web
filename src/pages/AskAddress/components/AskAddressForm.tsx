@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+// import useMediaQuery from '@material-ui/core/useMediaQuery';
 // import clsx from 'clsx';
 import GoogleMapReact, { Maps } from 'google-map-react';
 import { Departamento, Distrito, Position, postAddress, Provincia } from 'pages/api';
@@ -167,7 +167,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 		setAddressDistrict(name ? name : '');
 	};
 
-	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	// const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
 	const onSubmit = useCallback(async () => {
 		try {
@@ -295,7 +295,6 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			currentPositionMarker.setPosition(position);
 			currentPositionMarker.setVisible(true);
 		}
-		console.log(position);
 	};
 
 	return (
@@ -358,7 +357,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 					onClick={clickPosition}
 				></GoogleMapReact>
 			</div>
-			{!isDesktop && <AddressBenefits />}
+			{false && <AddressBenefits />}
 			<Button className={classes.submitButton} onClick={onSubmit} variant="contained" disabled={isSubmitting} fullWidth>
 				{t('askAddress.submitAddress')}
 			</Button>
