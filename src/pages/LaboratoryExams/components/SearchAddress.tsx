@@ -152,7 +152,7 @@ const SearchAddress = ({
 	return (
 		<Autocomplete
 			id={id}
-			// className={className}
+			className={className}
 			options={options}
 			getOptionLabel={(option) => (typeof option === 'string' ? option : option.address)}
 			filterOptions={(x) => x}
@@ -170,6 +170,7 @@ const SearchAddress = ({
 					variant="outlined"
 					error={hasError}
 					{...params}
+					placeholder={t('askAddress.address.placeholder')}
 					helperText={hasError ? t('askAddress.address.error') : ''}
 				/>
 			)}

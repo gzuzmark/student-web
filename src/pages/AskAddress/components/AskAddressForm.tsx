@@ -1,3 +1,4 @@
+import { Box, Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -26,7 +27,8 @@ import ProvinciaSearch from './ProvinciaSearch';
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
-			paddingRight: '68px',
+			//paddingRight: '68px',
+			maxWidth: '951px',
 		},
 	},
 	addressInput: {
@@ -45,6 +47,13 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			paddingBottom: '8px',
 		},
 	},
+	addressSearch: {
+		fontSize: '15px',
+		paddingBottom: '15px',
+		[breakpoints.up('xs')]: {
+			paddingBottom: '5px',
+		},
+	},
 	locationLabel: {
 		fontSize: '13px',
 		paddingBottom: '10px',
@@ -60,6 +69,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	submitButton: {
+		fontWeight: 'bold',
 		marginTop: '18px',
 		fontSize: '15px',
 		[breakpoints.up('lg')]: {
@@ -299,68 +309,90 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 
 	return (
 		<div className={classes.form}>
-			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDepartament.label')}</Typography>
-			<DepartamentoSearch className={classes.addressReferenceInput} onChange={onSelectDepartament} />
-			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressProvince.label')}</Typography>
-			<ProvinciaSearch
-				className={classes.addressReferenceInput}
-				departament={departamento}
-				onChange={onSelectProvince}
-			/>
-			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDistrict.label')}</Typography>
-			<DistritoSearch className={classes.addressReferenceLabel} province={provincia} onChange={onSelectDistrite} />
-			<Typography className={classes.addressReferenceLabel}>{t('askAddress.address.label')}</Typography>
-			<SearchAddress
-				className={classes.addressReferenceLabel}
-				defaultValue={humanActivePosition}
-				defaultPosition={activePosition}
-				mapsApi={mapsApi}
-				updatePosition={updatePosition}
-				hasError={hasAddressError}
-				country={addressCountry}
-				province={addressProvince}
-				district={addressDistrict}
-			/>
-			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressNumber.label')}</Typography>
-			<TextField
-				className={classes.addressReferenceInput}
-				value={addressNumber}
-				onChange={updateNumberAddress}
-				name="address-district"
-				placeholder={t('askAddress.addressNumber.placeholder')}
-				variant="outlined"
-				fullWidth
-				error={!!numberError}
-				helperText={numberError}
-			/>
-			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressReference.label')}</Typography>
-			<TextField
-				className={classes.addressReferenceInput}
-				value={addressReference}
-				onChange={updateDirectionReference}
-				name="address-reference"
-				placeholder={t('askAddress.addressReference.placeholder')}
-				variant="outlined"
-				error={!!referenceError}
-				helperText={referenceError}
-				fullWidth
-			/>
-			<Typography className={classes.locationLabel}>{t('askAddress.addressLocation.label')}</Typography>
-			<div className={classes.mapWrapper}>
-				<GoogleMapReact
-					bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY || '', libraries: 'places' }}
-					defaultCenter={defaultCenter}
-					defaultZoom={17}
-					options={mapOptionsCreator}
-					yesIWantToUseGoogleMapApiInternals
-					onGoogleApiLoaded={onGoogleApiLoaded}
-					onClick={clickPosition}
-				></GoogleMapReact>
-			</div>
-			{false && <AddressBenefits />}
-			<Button className={classes.submitButton} onClick={onSubmit} variant="contained" disabled={isSubmitting} fullWidth>
-				{t('askAddress.submitAddress')}
-			</Button>
+			<Grid container spacing={2} xl={12}>
+				<Grid item xs={12} md={6} xl={4}>
+					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDepartament.label')}</Typography>
+					<DepartamentoSearch className={classes.addressReferenceInput} onChange={onSelectDepartament} />
+				</Grid>
+				<Grid item xs={12} md={6} xl={4}>
+					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressProvince.label')}</Typography>
+					<ProvinciaSearch
+						className={classes.addressReferenceInput}
+						departament={departamento}
+						onChange={onSelectProvince}
+					/>
+				</Grid>
+				<Grid item xs={12} md={6} xl={4}>
+					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDistrict.label')}</Typography>
+					<DistritoSearch className={classes.addressReferenceLabel} province={provincia} onChange={onSelectDistrite} />
+				</Grid>
+				<Grid item xs={12}>
+					<Typography className={classes.addressReferenceLabel}>{t('askAddress.address.label')}</Typography>
+					<SearchAddress
+						className={classes.addressSearch}
+						defaultValue={humanActivePosition}
+						defaultPosition={activePosition}
+						mapsApi={mapsApi}
+						updatePosition={updatePosition}
+						hasError={hasAddressError}
+						country={addressCountry}
+						province={addressProvince}
+						district={addressDistrict}
+					/>
+				</Grid>
+				<Grid item xs={12} md={6} xl={6}>
+					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressNumber.label')}</Typography>
+					<TextField
+						className={classes.addressReferenceInput}
+						value={addressNumber}
+						onChange={updateNumberAddress}
+						name="address-district"
+						placeholder={t('askAddress.addressNumber.placeholder')}
+						variant="outlined"
+						fullWidth
+						error={!!numberError}
+						helperText={numberError}
+					/>
+				</Grid>
+				<Grid item xs={12} md={6} xl={6}>
+					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressReference.label')}</Typography>
+					<TextField
+						className={classes.addressReferenceInput}
+						value={addressReference}
+						onChange={updateDirectionReference}
+						name="address-reference"
+						placeholder={t('askAddress.addressReference.placeholder')}
+						variant="outlined"
+						error={!!referenceError}
+						helperText={referenceError}
+						fullWidth
+					/>
+				</Grid>
+				<Grid item xs={12}>
+					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressLocation.label')}</Typography>
+					<div className={classes.mapWrapper}>
+						<GoogleMapReact
+							bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY || '', libraries: 'places' }}
+							defaultCenter={defaultCenter}
+							defaultZoom={17}
+							options={mapOptionsCreator}
+							yesIWantToUseGoogleMapApiInternals
+							onGoogleApiLoaded={onGoogleApiLoaded}
+							onClick={clickPosition}
+						></GoogleMapReact>
+					</div>
+					{false && <AddressBenefits />}
+					<Button
+						className={classes.submitButton}
+						onClick={onSubmit}
+						variant="contained"
+						disabled={isSubmitting}
+						fullWidth
+					>
+						{t('askAddress.submitAddress')}
+					</Button>
+				</Grid>
+			</Grid>
 		</div>
 	);
 };
