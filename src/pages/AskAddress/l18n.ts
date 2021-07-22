@@ -1,16 +1,17 @@
 export default {
-	'askAddress.title': 'Necesitamos tu dirección para emitir tu receta médica.',
+	'askAddress.title': 'Necesitamos tu ubicación para validar la disponibilidad de tus medicamentos.',
 	'askAddress.title.alternative': 'Necesitamos la dirección para validar si está dentro del área de cobertura.',
-	'askAddress.subTitle':
-		'Según lo dispuesto por el MINSA, toda receta médica debe tener registrada la dirección del paciente.',
+	'askAddress.subTitle': 'Con esto podrás visualizar la lista de productos de tu receta y su cotización con',
 	'askAddress.address.label': 'Ingrese el nombre de Avenida/Calle/Jirón/Pasaje, y seleccione de la lista',
 	'askAddress.address.placeholder': 'Ingresa una dirección',
 	'askAddress.addressReference.label': 'Piso, interior, puerta, oficina o referencia',
 	'askAddress.addressReference.placeholder': 'Ejemplo: puerta 4, oficina 501',
+	'askAddress.addressDepartament.label': 'Departamento',
+	'askAddress.addressDepartament.placeholder': 'Seleccione un departamento',
 	'askAddress.addressProvince.label': 'Provincia',
-	'askAddress.addressProvince.placeholder': 'Ejemplo: Lima',
+	'askAddress.addressProvince.placeholder': 'Seleccione una provincia',
 	'askAddress.addressDistrict.label': 'Distrito',
-	'askAddress.addressDistrict.placeholder': 'Ejemplo: Breña',
+	'askAddress.addressDistrict.placeholder': 'Seleccione un distrito',
 	'askAddress.addressNumber.label': 'Número, Lote',
 	'askAddress.addressNumber.placeholder': 'Ejemplo: 666',
 	'askAddress.addressLocation.label':
@@ -28,4 +29,5 @@ export default {
 	'askAddress.successModal.body.secondLine': 'tu receta médica cotizada.',
 	'askAddress.successModal.continue': 'Ver mi receta digital',
 	'askAddress.successModal.close': 'Cerrar',
+	'askAddress.noOptionsAutocomplete': 'No se encontraron coincidencias',
 };

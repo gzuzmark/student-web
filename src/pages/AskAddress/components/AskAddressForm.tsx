@@ -2,10 +2,10 @@ import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+// import useMediaQuery from '@material-ui/core/useMediaQuery';
 // import clsx from 'clsx';
 import GoogleMapReact, { Maps } from 'google-map-react';
-import { Position, postAddress } from 'pages/api';
+import { Departamento, Distrito, Position, postAddress, Provincia } from 'pages/api';
 import {
 	createTrackingAddressPatientAttempt,
 	createTrackingErrorAddress,
@@ -19,6 +19,9 @@ import { useTranslation } from 'react-i18next';
 import { defaultCenter, getUserCurrentPosition, stylesWithTheme } from 'utils';
 import { MapInstance, MapsApi, Marker, Place } from '../types';
 import AddressBenefits from './AddressBenefits';
+import DepartamentoSearch from './DepartamentoSearch';
+import DistritoSearch from './DistritoSearch';
+import ProvinciaSearch from './ProvinciaSearch';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	form: {
@@ -127,14 +130,12 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 	const [hasAddressError, setHasAddressError] = useState<boolean>(false);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
+
+	const [departamento, setDepartamento] = useState<Departamento | null>(null);
+	const [provincia, setProvincia] = useState<Provincia | null>(null);
+
 	const tracking = useTracking();
 
-	const updateProvince = (e: ChangeEvent<HTMLInputElement>) => {
-		setAddressProvince(e.target.value);
-	};
-	const updateDistrict = (e: ChangeEvent<HTMLInputElement>) => {
-		setAddressDistrict(e.target.value);
-	};
 	const updateNumberAddress = (e: ChangeEvent<HTMLInputElement>) => {
 		try {
 			const number = e.target.value;
@@ -153,7 +154,20 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 	const updateDirectionReference = (e: ChangeEvent<HTMLInputElement>) => {
 		setAddressReference(e.target.value);
 	};
-	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	const onSelectDepartament = (value: Departamento | null) => {
+		setDepartamento(value);
+	};
+	const onSelectProvince = (value: Provincia | null) => {
+		setProvincia(value);
+		const name = value?.name;
+		setAddressProvince(name ? name : '');
+	};
+	const onSelectDistrite = (value: Distrito | null) => {
+		const name = value?.name;
+		setAddressDistrict(name ? name : '');
+	};
+
+	// const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
 	const onSubmit = useCallback(async () => {
 		try {
@@ -281,31 +295,20 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			currentPositionMarker.setPosition(position);
 			currentPositionMarker.setVisible(true);
 		}
-		console.log(position);
 	};
 
 	return (
 		<div className={classes.form}>
+			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDepartament.label')}</Typography>
+			<DepartamentoSearch className={classes.addressReferenceInput} onChange={onSelectDepartament} />
 			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressProvince.label')}</Typography>
-			<TextField
+			<ProvinciaSearch
 				className={classes.addressReferenceInput}
-				value={addressProvince}
-				onChange={updateProvince}
-				name="address-province"
-				placeholder={t('askAddress.addressProvince.placeholder')}
-				variant="outlined"
-				fullWidth
+				departament={departamento}
+				onChange={onSelectProvince}
 			/>
 			<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDistrict.label')}</Typography>
-			<TextField
-				className={classes.addressReferenceInput}
-				value={addressDistrict}
-				onChange={updateDistrict}
-				name="address-district"
-				placeholder={t('askAddress.addressDistrict.placeholder')}
-				variant="outlined"
-				fullWidth
-			/>
+			<DistritoSearch className={classes.addressReferenceLabel} province={provincia} onChange={onSelectDistrite} />
 			<Typography className={classes.addressReferenceLabel}>{t('askAddress.address.label')}</Typography>
 			<SearchAddress
 				className={classes.addressReferenceLabel}
@@ -354,7 +357,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 					onClick={clickPosition}
 				></GoogleMapReact>
 			</div>
-			{!isDesktop && <AddressBenefits />}
+			{false && <AddressBenefits />}
 			<Button className={classes.submitButton} onClick={onSubmit} variant="contained" disabled={isSubmitting} fullWidth>
 				{t('askAddress.submitAddress')}
 			</Button>

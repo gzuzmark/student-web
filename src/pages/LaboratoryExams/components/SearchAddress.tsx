@@ -27,19 +27,12 @@ const findAddressItem = (addressComponents: AddressComponent[], key: string): Ad
 	return addressComponents.find((item) => item.types.find((type) => type === key));
 };
 
-const getFormattedAddress = (
-	addressComponents: AddressComponent[],
-	country: string | undefined,
-	city: string | undefined,
-): string | null => {
+const getFormattedAddress = (addressComponents: AddressComponent[], country: string | undefined): string | null => {
 	const street = findAddressItem(addressComponents, AddressTypesEnum.street)?.long_name;
 	const districtValue = findAddressItem(addressComponents, AddressTypesEnum.district)?.long_name;
 	const cityValue = findAddressItem(addressComponents, AddressTypesEnum.city)?.long_name;
 	const countryValue = findAddressItem(addressComponents, AddressTypesEnum.country)?.long_name;
 	if (countryValue !== undefined && String(countryValue) !== country) {
-		return null;
-	}
-	if (cityValue !== undefined && String(cityValue) !== city) {
 		return null;
 	}
 	return `${street}, ${districtValue}, ${cityValue}, ${countryValue}`;
@@ -106,21 +99,18 @@ const SearchAddress = ({
 						{ address: search, region: `${province}, ${country}` },
 						(results: google.maps.GeocoderResult[], responseStatus: google.maps.GeocoderStatus) => {
 							if (responseStatus === 'OK') {
-								callback(
-									results
-										.map(({ address_components, geometry: { location } }) => {
-											const formatAddress = getFormattedAddress(address_components, country, province);
-											return {
-												address: formatAddress || '',
-												position: {
-													lat: Number.parseFloat(location.lat().toFixed(7)) || location.lat(),
-													lng: Number.parseFloat(location.lng().toFixed(7)) || location.lng(),
-												},
-												formattedPlace: getFormattedPlace(address_components),
-											};
-										})
-										.filter((address) => address.address !== ''),
-								);
+								const listResults = results.map(({ address_components, geometry: { location } }) => {
+									const formatAddress = getFormattedAddress(address_components, country);
+									return {
+										address: formatAddress || '',
+										position: {
+											lat: Number.parseFloat(location.lat().toFixed(7)) || location.lat(),
+											lng: Number.parseFloat(location.lng().toFixed(7)) || location.lng(),
+										},
+										formattedPlace: getFormattedPlace(address_components),
+									};
+								});
+								callback(listResults);
 							}
 						},
 					);
