@@ -166,7 +166,6 @@ const SearchAddress = ({
 			}}
 			renderInput={(params) => (
 				<TextField
-					className={className}
 					variant="outlined"
 					error={hasError}
 					{...params}

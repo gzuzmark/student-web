@@ -27,6 +27,7 @@ import ProvinciaSearch from './ProvinciaSearch';
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
+			marginTop: '10px',
 			//paddingRight: '68px',
 			maxWidth: '951px',
 		},
@@ -47,25 +48,32 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			paddingBottom: '8px',
 		},
 	},
+	addressAutocomplete: {
+		fontSize: '15px',
+		paddingBottom: '10px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '8px',
+		},
+	},
 	addressSearch: {
 		fontSize: '15px',
-		paddingBottom: '15px',
+		paddingBottom: '0px',
 		[breakpoints.up('xs')]: {
-			paddingBottom: '5px',
+			paddingBottom: '8px',
 		},
 	},
 	locationLabel: {
-		fontSize: '13px',
+		fontSize: '15px',
+		paddingTop: '5px',
 		paddingBottom: '10px',
-		fontWeight: 'bold',
 		[breakpoints.up('lg')]: {
 			paddingBottom: '8px',
 		},
 	},
 	addressReferenceInput: {
-		marginBottom: '18px',
+		marginBottom: '10px',
 		[breakpoints.up('lg')]: {
-			marginBottom: '33px',
+			marginBottom: '8px',
 		},
 	},
 	submitButton: {
@@ -312,19 +320,15 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			<Grid container spacing={2} xl={12}>
 				<Grid item xs={12} md={6} xl={4}>
 					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDepartament.label')}</Typography>
-					<DepartamentoSearch className={classes.addressReferenceInput} onChange={onSelectDepartament} />
+					<DepartamentoSearch onChange={onSelectDepartament} />
 				</Grid>
 				<Grid item xs={12} md={6} xl={4}>
 					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressProvince.label')}</Typography>
-					<ProvinciaSearch
-						className={classes.addressReferenceInput}
-						departament={departamento}
-						onChange={onSelectProvince}
-					/>
+					<ProvinciaSearch departament={departamento} onChange={onSelectProvince} />
 				</Grid>
 				<Grid item xs={12} md={6} xl={4}>
 					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDistrict.label')}</Typography>
-					<DistritoSearch className={classes.addressReferenceLabel} province={provincia} onChange={onSelectDistrite} />
+					<DistritoSearch className={classes.addressAutocomplete} province={provincia} onChange={onSelectDistrite} />
 				</Grid>
 				<Grid item xs={12}>
 					<Typography className={classes.addressReferenceLabel}>{t('askAddress.address.label')}</Typography>
@@ -343,7 +347,6 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 				<Grid item xs={12} md={6} xl={6}>
 					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressNumber.label')}</Typography>
 					<TextField
-						className={classes.addressReferenceInput}
 						value={addressNumber}
 						onChange={updateNumberAddress}
 						name="address-district"
@@ -357,7 +360,6 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 				<Grid item xs={12} md={6} xl={6}>
 					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressReference.label')}</Typography>
 					<TextField
-						className={classes.addressReferenceInput}
 						value={addressReference}
 						onChange={updateDirectionReference}
 						name="address-reference"
@@ -369,7 +371,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 					/>
 				</Grid>
 				<Grid item xs={12}>
-					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressLocation.label')}</Typography>
+					<Typography className={classes.locationLabel}>{t('askAddress.addressLocation.label')}</Typography>
 					<div className={classes.mapWrapper}>
 						<GoogleMapReact
 							bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_KEY || '', libraries: 'places' }}
