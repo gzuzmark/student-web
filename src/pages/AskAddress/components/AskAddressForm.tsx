@@ -76,6 +76,16 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			marginBottom: '8px',
 		},
 	},
+	labelErrorSave: {
+		color: '#FE6B6F',
+		fontSize: '13px',
+		textAlign: 'center',
+		lineHeight: '18px',
+		marginBottom: '8px',
+		[breakpoints.down('xs')]: {
+			textAlign: 'justify',
+		},
+	},
 	submitButton: {
 		fontWeight: 'bold',
 		marginTop: '18px',
@@ -148,7 +158,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 	const [hasAddressError, setHasAddressError] = useState<boolean>(false);
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const [activePosition, setActivePosition] = useState<Position | null>(null);
-
+	const [hasErrorOnSave, setHasErrorOnSave] = useState<boolean>(false);
 	const [departamento, setDepartamento] = useState<Departamento | null>(null);
 	const [provincia, setProvincia] = useState<Provincia | null>(null);
 
@@ -222,6 +232,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 			}
 
 			setIsSubmitting(true);
+			setHasErrorOnSave(false);
 
 			if (submitCallback) {
 				if (activePosition && humanActivePosition) {
@@ -235,7 +246,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 				openSuccesModal();
 			}
 		} catch (e) {
-			setReferenceError('Hubo un problema al enviar la cita, vuelva a intentarlo');
+			setHasErrorOnSave(true);
 			setIsSubmitting(false);
 		}
 	}, [
@@ -330,7 +341,7 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 					<Typography className={classes.addressReferenceLabel}>{t('askAddress.addressDistrict.label')}</Typography>
 					<DistritoSearch className={classes.addressAutocomplete} province={provincia} onChange={onSelectDistrite} />
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item xs={12} md={6} xl={12}>
 					<Typography className={classes.addressReferenceLabel}>{t('askAddress.address.label')}</Typography>
 					<SearchAddress
 						className={classes.addressSearch}
@@ -384,6 +395,11 @@ const AskAddressForm = ({ sessionId, submitCallback, openSuccesModal }: AskAddre
 						></GoogleMapReact>
 					</div>
 					{false && <AddressBenefits />}
+					{hasErrorOnSave && (
+						<Grid item xs={12}>
+							<Typography className={classes.labelErrorSave}>{t('askAddress.errorOnSave.label')}</Typography>
+						</Grid>
+					)}
 					<Button
 						className={classes.submitButton}
 						onClick={onSubmit}

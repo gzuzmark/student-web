@@ -35,6 +35,9 @@ const getFormattedAddress = (addressComponents: AddressComponent[], country: str
 	if (countryValue !== undefined && String(countryValue) !== country) {
 		return null;
 	}
+	if (street === undefined) {
+		return null;
+	}
 	return `${street}, ${districtValue}, ${cityValue}, ${countryValue}`;
 };
 
@@ -99,17 +102,19 @@ const SearchAddress = ({
 						{ address: search, region: `${province}, ${country}` },
 						(results: google.maps.GeocoderResult[], responseStatus: google.maps.GeocoderStatus) => {
 							if (responseStatus === 'OK') {
-								const listResults = results.map(({ address_components, geometry: { location } }) => {
-									const formatAddress = getFormattedAddress(address_components, country);
-									return {
-										address: formatAddress || '',
-										position: {
-											lat: Number.parseFloat(location.lat().toFixed(7)) || location.lat(),
-											lng: Number.parseFloat(location.lng().toFixed(7)) || location.lng(),
-										},
-										formattedPlace: getFormattedPlace(address_components),
-									};
-								});
+								const listResults = results
+									.map(({ address_components, geometry: { location } }) => {
+										const formatAddress = getFormattedAddress(address_components, country);
+										return {
+											address: formatAddress || '',
+											position: {
+												lat: Number.parseFloat(location.lat().toFixed(7)) || location.lat(),
+												lng: Number.parseFloat(location.lng().toFixed(7)) || location.lng(),
+											},
+											formattedPlace: getFormattedPlace(address_components),
+										};
+									})
+									.filter(({ address }) => address !== '');
 								callback(listResults);
 							}
 						},
@@ -158,6 +163,7 @@ const SearchAddress = ({
 			filterOptions={(x) => x}
 			value={value}
 			autoComplete
+			noOptionsText={t('askAddress.noOptionsAutocomplete')}
 			filterSelectedOptions
 			includeInputInList
 			onChange={(_, newValue: Place | null) => {
