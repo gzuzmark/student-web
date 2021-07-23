@@ -1,6 +1,6 @@
 import React, { useState, ReactElement } from 'react';
 import Typography from '@material-ui/core/Typography';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+// import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router';
@@ -13,6 +13,7 @@ import AskAddressForm from './components/AskAddressForm';
 import AddressBenefits from './components/AddressBenefits';
 import SuccessModal from './components/SuccessModal';
 import { Position } from 'pages/api';
+import { ReactComponent as InkafarmaIcon } from '../../icons/inkafarma.svg';
 
 interface StylesProps {
 	isAlternativeActive: boolean;
@@ -20,10 +21,12 @@ interface StylesProps {
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
-		height: 'calc(100vh - 34px)',
-		position: 'relative',
+		// height: 'calc(100vh - 34px)',
+		// position: 'relative',
 		display: 'flex',
 		flexDirection: 'column',
+		marginTop: '10px',
+		marginBottom: '10px',
 		padding: '34px 15px 0 15px',
 		[breakpoints.up('lg')]: {
 			justifyContent: 'center',
@@ -48,6 +51,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	subTitle: {
 		textTransform: 'none',
 		paddingBottom: '20px',
+		margin: 'auto',
+	},
+	subTitleIcon: {
+		display: 'inline-block',
+		verticalAlign: 'middle',
+		lineHeight: 'normal',
 	},
 	contentContainer: {
 		display: 'flex',
@@ -55,6 +64,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			flexDirection: 'row',
 		},
+	},
+	inkafarmaIcon: {
+		height: '28px',
+		marginBottom: '-10px',
 	},
 }));
 
@@ -66,7 +79,7 @@ interface AskAddressProps {
 const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElement => {
 	const { t } = useTranslation('askAddress');
 	const classes = useStyles({ isAlternativeActive: !!sessionId });
-	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	// const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const location = useLocation();
 	const history = useHistory();
 	const params = parse(location.search);
@@ -94,13 +107,14 @@ const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElemen
 				</Typography>
 				{!sessionId && (
 					<Typography className={classes.subTitle} variant="button">
-						{t('askAddress.subTitle')}
+						<span className={classes.subTitleIcon}>{t('askAddress.subTitle')}</span>
+						<InkafarmaIcon className={classes.inkafarmaIcon} />
 					</Typography>
 				)}
 			</div>
 			<div className={classes.contentContainer}>
 				<AskAddressForm sessionId={activeSessionId} openSuccesModal={openSuccesModal} submitCallback={submitCallback} />
-				{isDesktop && <AddressBenefits />}
+				{false && <AddressBenefits />}
 			</div>
 			<SuccessModal isOpen={isSuccessModalOpen} onClose={redirectToAccount} />
 		</div>
