@@ -25,6 +25,50 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <!-- Google Tag Manager -->
+
+    <!-- Styles WhatsApp Buttom -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    
+    <style>
+      /* for desktop */
+      .whatsapp_float {
+          position: fixed;
+          width: 60px;
+          height: 60px;
+          bottom: 40px;
+          right: 40px;
+          background-color: #25d366;
+          color: #FFF;
+          border-radius: 50px;
+          text-align: center;
+          font-size: 30px;
+          box-shadow: 2px 2px 3px #999;
+          z-index: 100;
+      }
+
+      .whatsapp-icon {
+          margin-top: 16px;
+      }
+
+      /* for mobile */
+      @media screen and (max-width: 767px) {
+          .whatsapp-icon {
+              margin-top: 10px;
+          }
+
+          .whatsapp_float {
+              width: 40px;
+              height: 40px;
+              bottom: 20px;
+              right: 10px;
+              font-size: 22px;
+          }
+      }
+
+    </style>
+    <!-- END Styles WhatsApp Buttom -->
+
     <script>
       const token = localStorage.getItem('userToken');
 
@@ -62,20 +106,7 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <!-- Twakto sdk --> 
-    <script type="text/javascript">
-      if ("%NODE_ENV%" === "production") {
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-          var s1=document.createElement("script"), s0=document.getElementsByTagName("script")[0];
-          s1.async=true;
-          s1.src='https://embed.tawk.to/5ef28df99e5f694422912d9a/default';
-          s1.charset='UTF-8';
-          s1.setAttribute('crossorigin','*');
-          s0.parentNode.insertBefore(s1,s0);
-        })();
-      }
-    </script>
+
     <!-- Culqi sdk -->
     <script src="https://checkout.culqi.com/js/v3" async></script>
     <!-- HotJar sdk -->
@@ -147,5 +178,18 @@
     height="0" width="0"
     style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+
+    <!-- WhatsApp Buttom -->
+
+      <a
+        href="https://api.whatsapp.com/send?phone=51965698337&text=%5BVengo%20de%20la%20web%5D%20Hola%20Alivia!%20Tengo%20una%20duda,%20me%20podr%C3%ADan%20ayudar?&source=&data=&app_absent"
+        class="whatsapp_float"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="fa fa-whatsapp whatsapp-icon"></i>
+      </a>
+      <!-- END WhatsApp Buttom -->
+
   </body>
 </html>

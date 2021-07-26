@@ -37,3 +37,15 @@ export const isWeekDayLateNightOrSunday = () => {
 
 	return isAfter11PM || isBefore8AM;
 };
+
+export const isLessThanTheDate = () => {
+	const currentDate = new Date();
+
+	// menor a 26 junio 2021 - 4am
+	const dateLimit = new Date(1624698000 * 1000);
+
+	if (currentDate < dateLimit) {
+		return true;
+	}
+	return false;
+};
