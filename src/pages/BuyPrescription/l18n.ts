@@ -50,4 +50,9 @@ export default {
 	'buyPrescription.selectPrescriptionType.compartir': '¿Necesitas compartir tu tratamiento con alguien más?',
 	'buyPrescription.selectPrescriptionType.buttomCompartir': 'Compartir',
 	'buyPrescription.selectPrescriptionType.contactcall': 'En breve un(a) ejecutivo(a) se contactará con usted.',
+	'buyPrescription.errorPrescriptionNotFound.title':
+		'¡Lo sentimos! Su receta médica aún no ha sido cargada en el sistema.',
+	'buyPrescription.errorPrescriptionNotFound.description':
+		'Intente nuevamente en unos minutos o entre en contacto con nuestro equipo de soporte vía ',
+	'buyPrescription.errorPrescriptionNotFound.nroFolio': 'Identificador de receta médica',
 };
