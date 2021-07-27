@@ -13,10 +13,8 @@ import { useLocation } from 'react-router';
 import { redirectToBaseAlivia, stylesWithTheme } from 'utils';
 import AskAddress from '../AskAddress/AskAddress';
 import CheckoutInformation from './components/CheckoutInformation';
-import LoadLanding from './components/LoadLanding';
 import Medicines from './components/Medicines';
 import NotAvailableNearYou from './components/NotAvailableNearYour';
-import PrescriptionNotFound from './components/PrescriptionNotFound';
 import RedirectToInkafarma from './components/RedirectToInkafarma';
 import SelectPrescriptionType from './components/SelectPrescriptionType';
 import TitleStock from './components/TitleStock';
@@ -50,8 +48,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 }));
-
-const MIN_LENGTH_FOLIO = 8;
 
 const requestPrescription = async ({
 	setMedicines,
@@ -115,7 +111,6 @@ const BuyPrescription = (): ReactElement => {
 	const classes = useStyles();
 	const sessionId = (params.sessionId as string) || '';
 	const tracking: TrackingLocalStorage | null = useTracking();
-	const [verifyPrescription, setVerifyPrescription] = useState<boolean>(false);
 
 	const toggleMedicine = useCallback(
 		(index: number) => () => {
@@ -190,19 +185,9 @@ const BuyPrescription = (): ReactElement => {
 			updatedPosition,
 			folioNumber,
 			savedAddress: userAddress,
-		}).then(() => {
-			setVerifyPrescription(true);
 		});
 		//eslint-disable-next-line
 	}, []);
-
-	if (!verifyPrescription) {
-		return <LoadLanding />;
-	}
-
-	if (folioNumber.length < MIN_LENGTH_FOLIO || !prescriptionPath.startsWith('http')) {
-		return <PrescriptionNotFound folioNumber={folioNumber} prescriptionPath={prescriptionPath} />;
-	}
 
 	if (showingRedirectPage) {
 		return <RedirectToInkafarma medicines={medicines} selectedMedicines={selectedMedicines} />;

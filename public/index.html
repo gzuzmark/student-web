@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="%PUBLIC_URL%/icon-alivia.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Pediatras, Nutricionistas, Médicos en línea" />
-  <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon-alivia.png" />
-  <!--
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/icon-alivia.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Pediatras, Nutricionistas, Médicos en línea"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon-alivia.png" />
+    <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-  <!--
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -22,78 +24,35 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-  <!-- Google Tag Manager -->
+    <!-- Google Tag Manager -->
+    <script>
+      const token = localStorage.getItem('userToken');
 
-  <!-- Styles WhatsApp Buttom -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+      dataLayer =[token ? {
+        'loginStatus': 'Sesión iniciada',
+        'userID': token,
+      } : { 'loginStatus': 'Sesión no iniciada' }];
+    </script>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KRPX9LQ');
+    </script>
+    <!-- End Google Tag Manager -->
 
-  <style>
-    /* for desktop */
-    .whatsapp_float {
-      position: fixed;
-      width: 60px;
-      height: 60px;
-      bottom: 40px;
-      right: 40px;
-      background-color: #25d366;
-      color: #FFF;
-      border-radius: 50px;
-      text-align: center;
-      font-size: 30px;
-      box-shadow: 2px 2px 3px #999;
-      z-index: 100;
-    }
+    <!-- Global site tag (gtag.js) - Google Ads: 426088685 --> 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-426088685">
+    </script> 
+    <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-426088685'); 
+    </script>
 
-    .whatsapp-icon {
-      margin-top: 16px;
-    }
+    <!-- Event snippet for Compra en Sitio Web conversion page --> 
+    <script> gtag('event', 'conversion', { 'send_to': 'AW-426088685/gXvtCO7gjP0BEO2xlssB', 'transaction_id': '' }); </script>
 
-    /* for mobile */
-    @media screen and (max-width: 767px) {
-      .whatsapp-icon {
-        margin-top: 10px;
-      }
-
-      .whatsapp_float {
-        width: 40px;
-        height: 40px;
-        bottom: 20px;
-        right: 10px;
-        font-size: 22px;
-      }
-    }
-  </style>
-  <!-- END Styles WhatsApp Buttom -->
-
-  <script>
-    const token = localStorage.getItem('userToken');
-
-    dataLayer = [token ? {
-      'loginStatus': 'Sesión iniciada',
-      'userID': token,
-    } : { 'loginStatus': 'Sesión no iniciada' }];
-  </script>
-  <script>
-    (function (w, d, s, l, i) { w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'dataLayer', 'GTM-KRPX9LQ');
-  </script>
-  <!-- End Google Tag Manager -->
-
-  <!-- Global site tag (gtag.js) - Google Ads: 426088685 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-426088685">
-  </script>
-  <script> window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'AW-426088685');
-  </script>
-
-  <!-- Event snippet for Compra en Sitio Web conversion page -->
-  <script> gtag('event', 'conversion', { 'send_to': 'AW-426088685/gXvtCO7gjP0BEO2xlssB', 'transaction_id': '' });</script>
-
-  <title>Alivia</title>
-</head>
-
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-  <!--
+    <title>Alivia</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -103,89 +62,90 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <!-- Twakto sdk --> 
+    <script type="text/javascript">
+      if ("%NODE_ENV%" === "production") {
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+          var s1=document.createElement("script"), s0=document.getElementsByTagName("script")[0];
+          s1.async=true;
+          s1.src='https://embed.tawk.to/5ef28df99e5f694422912d9a/default';
+          s1.charset='UTF-8';
+          s1.setAttribute('crossorigin','*');
+          s0.parentNode.insertBefore(s1,s0);
+        })();
+      }
+    </script>
+    <!-- Culqi sdk -->
+    <script src="https://checkout.culqi.com/js/v3" async></script>
+    <!-- HotJar sdk -->
+    <script>
+      if ("%NODE_ENV%" === "production") {                    
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:1859709,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+      }
+    </script>
 
-  <!-- Culqi sdk -->
-  <script src="https://checkout.culqi.com/js/v3" async></script>
-  <!-- HotJar sdk -->
-  <script>
-    if ("%NODE_ENV%" === "production") {
-      (function (h, o, t, j, a, r) {
-        h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
-        h._hjSettings = { hjid: 1859709, hjsv: 6 };
-        a = o.getElementsByTagName('head')[0];
-        r = o.createElement('script'); r.async = 1;
-        r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-        a.appendChild(r);
-      })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-    }
-  </script>
-
-  <!-- Facebook Pixel Code -->
-  <script>
-    if ("%NODE_ENV%" === "production") {
-      !function (f, b, e, v, n, t, s) {
-        if (f.fbq) return; n = f.fbq = function () {
-          n.callMethod ?
-            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-        };
-        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-        n.queue = []; t = b.createElement(e); t.async = !0;
-        t.src = v; s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s)
-      }(window, document, 'script',
+    <!-- Facebook Pixel Code -->
+    <script>
+      if ("%NODE_ENV%" === "production") {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1074769069601687');
-      fbq('track', 'PageView');
-    }
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1074769069601687&ev=PageView&noscript=1" /></noscript>
-  <!-- End Facebook Pixel Code -->
+        fbq('init', '1074769069601687');
+        fbq('track', 'PageView');
+      }
+    </script>   
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1074769069601687&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
 
-  <!-- Facebook Pixel Code -->
-  <script>
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return; n = f.fbq = function () {
-        n.callMethod ?
-          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-      };
-      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-      n.queue = []; t = b.createElement(e); t.async = !0;
-      t.src = v; s = b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t, s)
-    }(window, document, 'script',
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '808437196653924');
-    fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=808437196653924&ev=PageView&noscript=1" /></noscript>
-  <!-- End Facebook Pixel Code -->
+      fbq('init', '808437196653924');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=808437196653924&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
 
-  <!-- Handle Nutritionist Use Case Id -->
-  <script>
-    if ("%NODE_ENV%" === "production") {
-      window.nutritionistUseCaseId = 'c78cf27f-2059-4823-bdb8-8bd22126b671';
-      window.gastroUseCaseId = '3775b414-c3de-40c1-9eb9-3c2b9c8f6997';
-    } else {
-      window.nutritionistUseCaseId = 'b919c69a-c4fd-4def-bb3d-69786de10e0a';
-      window.gastroUseCaseId = '3775b414-c3de-40c1-9eb9-3c2b9c8f6997';
-    }
-  </script>
-  <!-- End  Handle Nutritionist Use Case Id -->
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRPX9LQ" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-
-  <!-- WhatsApp Buttom -->
-
-  <a href="https://api.whatsapp.com/send?phone=51965698337&text=%5BVengo%20de%20la%20web%5D%20Hola%20Alivia!%20Tengo%20una%20duda,%20me%20podr%C3%ADan%20ayudar?&source=&data=&app_absent"
-    id="whatsapp-icon-float" class="whatsapp_float" target="_blank" rel="noopener noreferrer">
-    <i class="fa fa-whatsapp whatsapp-icon"></i>
-  </a>
-  <!-- END WhatsApp Buttom -->
-
-</body>
-
+    <!-- Handle Nutritionist Use Case Id -->
+    <script>
+      if ("%NODE_ENV%" === "production") {
+        window.nutritionistUseCaseId = 'c78cf27f-2059-4823-bdb8-8bd22126b671';
+        window.gastroUseCaseId = '3775b414-c3de-40c1-9eb9-3c2b9c8f6997';
+      } else {
+        window.nutritionistUseCaseId = 'b919c69a-c4fd-4def-bb3d-69786de10e0a';
+        window.gastroUseCaseId = '3775b414-c3de-40c1-9eb9-3c2b9c8f6997';
+      }
+    </script>
+    <!-- End  Handle Nutritionist Use Case Id -->
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe
+    src="https://www.googletagmanager.com/ns.html?id=GTM-KRPX9LQ"
+    height="0" width="0"
+    style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+  </body>
 </html>
