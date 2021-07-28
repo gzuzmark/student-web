@@ -133,10 +133,6 @@ const Payment = () => {
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 	const [errorTimeMessage, setErrorTimeMessage] = useState<string | null>(null);
 
-	// const kushki = new Kushki({
-	// 	merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
-	// 	inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
-	// });
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
 		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
