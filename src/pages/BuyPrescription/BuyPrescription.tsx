@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { getPrescription, Position } from 'pages/api';
 import { createTrackingPatientPrescriptionBlank, TrackingLocalStorage } from 'pages/api/tracking';
-import { PrescribedMedicine } from 'pages/api/userPrescription';
+import { PrescribedMedicine, Prescription } from 'pages/api/userPrescription';
 import useTracking from 'pages/Tracking/useTracking';
 import { parse } from 'query-string';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
@@ -75,13 +75,8 @@ const requestPrescription = async ({
 	savedAddress: string | undefined;
 }) => {
 	try {
-		const {
-			address,
-			medicines,
-			prescriptionPath,
-			notAvailableNearYou,
-			folioNumber: newFolioNumber,
-		} = await getPrescription(sessionId, updatedPosition, folioNumber);
+		const resp: Prescription = await getPrescription(sessionId, updatedPosition, folioNumber);
+		const { address, medicines, prescriptionPath, notAvailableNearYou, folioNumber: newFolioNumber } = resp;
 
 		const addressObject = JSON.parse(address);
 		const newAddress = `${addressObject.street || ''} , ${addressObject.number || ''}, ${
@@ -200,7 +195,7 @@ const BuyPrescription = (): ReactElement => {
 		return <LoadLanding />;
 	}
 
-	if (folioNumber.length < MIN_LENGTH_FOLIO || !prescriptionPath.startsWith('http')) {
+	if (folioNumber?.length < MIN_LENGTH_FOLIO || !prescriptionPath?.startsWith('http')) {
 		return <PrescriptionNotFound folioNumber={folioNumber} prescriptionPath={prescriptionPath} />;
 	}
 

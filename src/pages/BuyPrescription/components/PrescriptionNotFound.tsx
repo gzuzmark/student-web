@@ -118,7 +118,7 @@ const PrescriptionNotFound = ({ folioNumber, prescriptionPath }: PrescriptionNot
 						.
 					</Typography>
 					<div className="whapp_link" id="whapp_link"></div>
-					{folioNumber.length > 8 && (
+					{folioNumber?.length > 8 && (
 						<Card>
 							<CardContent>
 								<Typography>
@@ -127,7 +127,7 @@ const PrescriptionNotFound = ({ folioNumber, prescriptionPath }: PrescriptionNot
 							</CardContent>
 						</Card>
 					)}
-					{prescriptionPath.startsWith('http') && (
+					{prescriptionPath?.startsWith('http') && (
 						<Card>
 							<CardContent>
 								<Typography>Error encontrado: Su receta médica no ha generado un identificador</Typography>
