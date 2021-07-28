@@ -55,11 +55,14 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	brandLogoWrapper: {
-		display: 'none',
+		display: 'block',
 		[breakpoints.up('lg')]: {
 			display: 'block',
 			marginBottom: '15px',
 			textAlign: 'center',
+		},
+		[breakpoints.down('xs')]: {
+			marginBottom: '15px',
 		},
 	},
 	brandLogo: {
