@@ -61,7 +61,7 @@ const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpeci
 					<img alt="close" src={closeIcon} className={classes.closeIcon} />
 				</span>
 			) : (
-				<DropdownSpecialties specialityId={selectedSkill?.id} onlyView={true} />
+				<DropdownSpecialties specialityId={defaultSpecialty?.id} onlyView={true} onClick={() => onClose()} />
 			)}
 			<div className={classes.card}>
 				{isDesktop && <Typography className={classes.cardTitle}>Elige una especialidad</Typography>}
