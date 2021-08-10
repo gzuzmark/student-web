@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React, { useEffect, useState } from 'react';
 import DownImage from 'icons/down.png';
+import React, { useEffect, useState } from 'react';
 import { DEV_IMAGES, isDevelopment, PROD_IMAGES, SpecialtyType } from 'utils/skillImages';
 import ModalSpecialties from '../ModalSpecialties/ModalSpecialties';
 
@@ -9,7 +9,6 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		divContainer: {
 			display: 'flex',
-			height: '48px',
 			flexDirection: 'column',
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -21,7 +20,11 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			display: 'flex',
 			alignItems: 'center',
 			padding: '0px 80px',
+			margin: '16px 0px',
 			cursor: 'pointer',
+			[breakpoints.down('md')]: {
+				padding: '0px 20px',
+			},
 		},
 		label: {
 			fontFamily: 'Mulish, sans-serif',
@@ -30,6 +33,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			fontSize: '20px',
 			lineHeight: '24px',
 			color: '#676F8F',
+			textAlign: 'center',
 		},
 		image: {
 			marginRight: '36px',
@@ -46,13 +50,13 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 );
 
 interface DropdownSpecialtiesProps {
+	onlyView?: boolean;
 	specialityId: string | null | undefined;
 	onChange?: (specialityId: string) => void;
 }
 
-const DropdownSpecialties = ({ specialityId }: DropdownSpecialtiesProps) => {
+const DropdownSpecialties = ({ specialityId, onlyView = false }: DropdownSpecialtiesProps) => {
 	const classes = useStyles();
-
 	const [isOpen, setIsOpen] = useState(false);
 	const [speciality, setSpeciality] = useState<SpecialtyType | null | undefined>(null);
 
@@ -81,14 +85,14 @@ const DropdownSpecialties = ({ specialityId }: DropdownSpecialtiesProps) => {
 		<div className={classes.divContainer}>
 			<div className={classes.dropdown} onClick={clickMenu}>
 				<span>
-					<img alt="" className={classes.image} src={speciality?.image} />
+					<img alt={speciality?.label} className={classes.image} src={speciality?.image} />
 				</span>
-				<span className={classes.label}>{speciality?.label}</span>{' '}
+				<div className={classes.label}>{speciality?.label}</div>
 				<span>
 					<img alt="" className={classes.downUpImage} src={DownImage} />
 				</span>
 			</div>
-			<ModalSpecialties isOpen={isOpen} defaultSpecialty={speciality} onCloseModal={onCloseModal} />
+			{!onlyView && <ModalSpecialties isOpen={isOpen} defaultSpecialty={speciality} onCloseModal={onCloseModal} />}
 		</div>
 	);
 };

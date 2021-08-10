@@ -7,6 +7,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			justifyContent: 'center',
 			justifyItems: 'center',
 			alignContent: 'center',
+			[breakpoints.down('md')]: {
+				width: '100%',
+			},
 		},
 		close: {
 			position: 'absolute',
@@ -21,9 +24,12 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		card: {
 			display: 'flex',
 			flexDirection: 'column',
-			marginTop: '80px',
+			marginTop: '20px',
 			backgroundColor: '#FFFFFF',
 			borderColor: '#FFFFFF',
+			[breakpoints.up('md')]: {
+				marginTop: '80px',
+			},
 		},
 		cardTitle: {
 			fontFamily: 'Montserrat, sans-serif',
@@ -43,8 +49,13 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		},
 		container: {
 			margin: '0px 50px',
-			minWidth: '756px',
-			maxWidth: '756px',
+			[breakpoints.up('lg')]: {
+				minWidth: '756px',
+				maxWidth: '756px',
+			},
+			[breakpoints.down('xs')]: {
+				margin: '0px 10px',
+			},
 		},
 		cardItem: {
 			width: '148px',
@@ -56,6 +67,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			flexDirection: 'column',
 			alignItems: 'flex-start',
 			padding: '21px 60px 37px',
+			[breakpoints.down('xs')]: {
+				padding: '20px 25px 30px',
+			},
 		},
 		button: {
 			height: '54px',

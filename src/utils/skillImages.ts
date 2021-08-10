@@ -28,7 +28,7 @@ export const DEV_IMAGES: SpecialtyType[] = [
 	},
 	{
 		id: 'b919c69a-c4fd-4def-bb3d-69786de10e0a',
-		label: 'Dolor de cabeza',
+		label: 'Medicina interna',
 		image: general,
 		cost: 35,
 	},

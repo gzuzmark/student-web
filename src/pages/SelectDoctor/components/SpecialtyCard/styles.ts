@@ -14,6 +14,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			cursor: 'pointer',
 			marginLeft: '8px',
 			marginRight: '8px',
+			[breakpoints.down('xs')]: {
+				minWidth: 'none',
+			},
 		},
 		active: {
 			border: '2px solid #1ECD96',

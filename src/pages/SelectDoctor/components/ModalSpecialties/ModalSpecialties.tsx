@@ -3,6 +3,7 @@ import closeIcon from 'icons/close.png';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { DEV_IMAGES, isDevelopment, PROD_IMAGES, SpecialtyType } from 'utils/skillImages';
+import DropdownSpecialties from '../DropdownSpecialties/DropdownSpecialties';
 import SpecialtyCard from '../SpecialtyCard/SpecialtyCard';
 import useStyles from './styles';
 
@@ -14,7 +15,7 @@ interface ModalSpecialtiesProps {
 
 const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpecialtiesProps) => {
 	const classes = useStyles();
-	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('md'));
 	const history = useHistory();
 	const [skills, setSkills] = useState<SpecialtyType[]>([]);
 	const [selectedSkill, setSelectedSkill] = useState<SpecialtyType | null>(null);
@@ -47,16 +48,27 @@ const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpeci
 	}, [defaultSpecialty]);
 
 	return (
-		<Dialog open={isOpen} className={classes.modal} onClose={onClose} fullWidth maxWidth={'xl'} hideBackdrop={false}>
-			<span className={classes.close} onClick={onClose}>
-				<img alt="close" src={closeIcon} className={classes.closeIcon} />
-			</span>
+		<Dialog
+			open={isOpen}
+			className={classes.modal}
+			onClose={onClose}
+			hideBackdrop={false}
+			maxWidth={'lg'}
+			{...(!isDesktop && { fullScreen: true })}
+		>
+			{isDesktop ? (
+				<span className={classes.close} onClick={onClose}>
+					<img alt="close" src={closeIcon} className={classes.closeIcon} />
+				</span>
+			) : (
+				<DropdownSpecialties specialityId={selectedSkill?.id} onlyView={true} />
+			)}
 			<div className={classes.card}>
-				<Typography className={classes.cardTitle}>Elige una especialidad</Typography>
+				{isDesktop && <Typography className={classes.cardTitle}>Elige una especialidad</Typography>}
 				<div className={classes.container}>
 					<Grid container spacing={0}>
 						{skills?.map((skill: SpecialtyType, i) => (
-							<Grid item xs={isDesktop ? 3 : 6} key={i} className={classes.cardItem}>
+							<Grid item xs={6} md={4} lg={4} xl={3} key={i} className={classes.cardItem}>
 								<SpecialtyCard
 									skill={skill}
 									isActive={skill.id === selectedSkill?.id}
