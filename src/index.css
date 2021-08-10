@@ -68,6 +68,17 @@
          url(./fonts/PlayfairDisplay-Bold.woff) format('woff');
 }
 
+/*  Mulish fonts */
+
+@font-face {
+  font-family: "Mulish";
+  font-weight: 700;
+  font-style: normal;
+  src: url(./fonts/Mulish-ExtraLight.ttf);
+  src: local('Mulish-ExtraLight'),
+       url(./fonts/Mulish-ExtraLight.ttf) format('ttf');
+}
+
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
