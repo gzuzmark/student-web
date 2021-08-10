@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -69,6 +69,17 @@ const LeftSide = ({ step = 0 }: LeftSideProps) => {
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
 	const steps = createSteps(t, !matches);
+
+	useEffect(() => {
+		console.log(matches);
+	}, [matches]);
+
+	/***
+	 * Ya no se mostrará para mobile view
+	 */
+	if (!matches) {
+		return <></>;
+	}
 
 	return (
 		<LeftLayout className={classes.leftLayout}>
