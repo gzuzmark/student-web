@@ -68,7 +68,7 @@ const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpeci
 				<div className={classes.container}>
 					<Grid container spacing={0}>
 						{skills?.map((skill: SpecialtyType, i) => (
-							<Grid item xs={6} md={4} lg={4} xl={3} key={i} className={classes.cardItem}>
+							<Grid item xs={6} md={6} lg={3} xl={3} key={i} className={classes.cardItem}>
 								<SpecialtyCard
 									skill={skill}
 									isActive={skill.id === selectedSkill?.id}
