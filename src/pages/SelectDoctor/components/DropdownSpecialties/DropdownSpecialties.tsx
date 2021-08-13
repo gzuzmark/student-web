@@ -68,7 +68,7 @@ interface DropdownSpecialtiesProps {
 	onClick?: () => void; // used only view in header menu
 }
 
-const DropdownSpecialties = ({ specialityId, onlyView = false, onClick }: DropdownSpecialtiesProps) => {
+const DropdownSpecialties = ({ specialityId, onlyView = false, onClick, onChange }: DropdownSpecialtiesProps) => {
 	const classes = useStyles();
 	const [isOpen, setIsOpen] = useState(onlyView);
 	const [speciality, setSpeciality] = useState<SpecialtyType | null | undefined>(null);
@@ -84,6 +84,9 @@ const DropdownSpecialties = ({ specialityId, onlyView = false, onClick }: Dropdo
 	const onCloseModal = (skill: SpecialtyType | null) => {
 		if (skill !== null) {
 			setSpeciality(skill);
+			if (onChange) {
+				onChange(skill.id);
+			}
 		}
 		setIsOpen(false);
 	};
