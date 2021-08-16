@@ -6,6 +6,7 @@ import { Loading, RightLayout } from 'pages/common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
+import Carrousel from '../Carrousel/Carrousel';
 import { DoctorList } from '../DoctorList';
 import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
@@ -239,7 +240,7 @@ const RightSide = ({
 	);
 
 	return (
-		<RightLayout>
+		<RightLayout className={classes.rightLayout}>
 			<div className={classes.wrapper}>
 				<div className={classes.titleContainer}>
 					<Typography component="span" className={classes.title}>
@@ -247,6 +248,7 @@ const RightSide = ({
 					</Typography>
 				</div>
 				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
+				<Carrousel />
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>
