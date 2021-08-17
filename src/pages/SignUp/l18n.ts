@@ -130,6 +130,11 @@ const signUp = {
 	'smallSignUp.title': 'Estás a un paso de agendar una cita',
 	'smallSignUp.submit.text': 'De acuerdo, deseo continuar',
 	'smallSignUp.lastName.label': 'Apellidos del paciente',
+	// Information Benefit
+	'informationBenefit.title': '¡Eres parte de Teoma!',
+	'informationBenefit.description':
+		'Por ser colaborador de Teoma puedes usar este servicio gratis para ti o para un familiar tuyo hasta el ',
+	'informationBenefit.acceptLabel': 'Gracias',
 };
 
 export default signUp;
