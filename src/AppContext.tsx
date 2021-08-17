@@ -3,6 +3,7 @@ import { getLocalValue } from 'utils';
 import { UseCase } from 'pages/api/useCase';
 import { Doctor, Schedule } from 'pages/api/selectDoctor';
 import { Laboratorys, Schedules } from 'pages/api/laboratories';
+import { Benefit } from 'pages/api';
 
 export const EMPTY_TRACK_PARAMS = {
 	utmSource: '',
@@ -106,6 +107,8 @@ interface ContextProps {
 	labExamn: LabExam | null;
 	labFiles: string[];
 	labAva: string[];
+	benefit: Benefit | null;
+	useBenefit: boolean;
 }
 
 const defaultState: ContextProps = {
@@ -134,6 +137,8 @@ const defaultState: ContextProps = {
 	labExamn: null,
 	labFiles: [],
 	labAva: [],
+	benefit: null,
+	useBenefit: true,
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

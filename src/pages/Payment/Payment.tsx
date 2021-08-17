@@ -36,11 +36,13 @@ import LogoPci from 'icons/pci_logo.png';
 import visa from 'icons/visa.png';
 import {
 	applyDiscount,
+	applyBenefit,
 	createAppointment,
 	createPayment,
 	Discount,
 	KUSHKI_PAYMENT_ID,
 	PE_PAYMENT_ID,
+	B2B_PAYMENT_ID,
 	sendFakeSession,
 } from 'pages/api';
 import { Container, Loading } from 'pages/common';
@@ -122,6 +124,8 @@ const Payment = () => {
 		updateState: updateContextState,
 		appointmentOwner,
 		trackParams,
+		benefit,
+		useBenefit,
 	} = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const history = useHistory();
 	const classes = useStyles();
@@ -221,81 +225,84 @@ const Payment = () => {
 		// eslint-disable-next-line
 	}, []);
 
-	// const performTransactionPayment = useCallback(
-	// 	async (method: number) => {
-	// 		if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
-	// 			console.log(initialValuesCash);
-	// 			try {
-	// 				setIsPaymentLoading(true);
-	// 				const userName = activeUser.name;
-	// 				const userPhone = activeUser.phoneNumber;
-	// 				const response: any = await createPayment({
-	// 					cost: useCase?.totalCost,
-	// 					appointmentTypeID: 'ugito',
-	// 					scheduleID: schedule.id,
-	// 					discountID: discount.id,
-	// 					email: activeUser.email || '',
-	// 					token: 'SnzVSB3cSA',
-	// 					dni: activeUser.identification || '',
-	// 					name: userName || '',
-	// 					lastName: activeUser.lastName,
-	// 					phone: userPhone || '',
-	// 					paymentType: method,
-	// 					trackParams: trackParams || EMPTY_TRACK_PARAMS,
-	// 					reservationAccountID: activeUser.id,
-	// 				});
-	// 				await createAppointment(
-	// 					{
-	// 						reservationAccountID: activeUser.id,
-	// 						appointmentTypeID: 'ugito',
-	// 						useCaseID: useCase.id,
-	// 						scheduleID: schedule.id,
-	// 						triage,
-	// 						media: userFiles || [],
-	// 						isGuest: appointmentOwner === GUEST,
-	// 					},
-	// 					userToken,
-	// 				);
-	// 				setIsPaymentLoading(false);
-	// 				let link = null;
-	// 				if (method === PE_PAYMENT_ID) {
-	// 					if (response?.data) {
-	// 						console.log('<<<<response.data>>>>');
-	// 						link = response?.data?.data?.reference_link as string;
-	// 					}
-	// 				} else {
-	// 					link = buildTransactionURL(doctor.name, doctor.lastName, userName || '', userPhone || '');
-	// 				}
-	// 				updateContextState({
-	// 					useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-	// 					paymentURL: link,
-	// 					appointmentCreationStep: CONFIRMATION_STEP,
-	// 				});
-	// 				history.push('/confirmacion');
-	// 			} catch (e) {
-	// 				setErrorMessage(t('payment.error.pe'));
-	// 				setIsPaymentLoading(false);
-	// 			}
-	// 		}
-	// 	},
-	// 	[
-	// 		schedule,
-	// 		updateContextState,
-	// 		useCase,
-	// 		triage,
-	// 		activeUser,
-	// 		doctor,
-	// 		initialValuesCash,
-	// 		discount.id,
-	// 		discount.totalCost,
-	// 		trackParams,
-	// 		userFiles,
-	// 		appointmentOwner,
-	// 		userToken,
-	// 		history,
-	// 		t,
-	// 	],
-	// );
+	const performTransactionB2BPayment = useCallback(
+		async (method: number) => {
+			if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
+				console.log(initialValuesCash);
+				try {
+					setIsPaymentLoading(true);
+					const userName = activeUser.name;
+					const userPhone = activeUser.phoneNumber;
+					const response: any = await createPayment({
+						cost: useCase?.totalCost,
+						appointmentTypeID: 'ugito',
+						scheduleID: schedule.id,
+						discountID: discount.id,
+						email: activeUser.email || '',
+						token: 'SnzVSB3cSA',
+						dni: activeUser.identification || '',
+						name: userName || '',
+						lastName: activeUser.lastName,
+						phone: userPhone || '',
+						paymentType: B2B_PAYMENT_ID,
+						trackParams: trackParams || EMPTY_TRACK_PARAMS,
+						reservationAccountID: activeUser.id,
+						benefitID: benefit && useBenefit ? benefit.id : '',
+					});
+					await createAppointment(
+						{
+							reservationAccountID: activeUser.id,
+							appointmentTypeID: 'b2b',
+							useCaseID: useCase.id,
+							scheduleID: schedule.id,
+							triage,
+							media: userFiles || [],
+							isGuest: appointmentOwner === GUEST,
+						},
+						userToken,
+					);
+					setIsPaymentLoading(false);
+					let link = null;
+					if (method === PE_PAYMENT_ID) {
+						if (response?.data) {
+							console.log('<<<<response.data>>>>');
+							link = response?.data?.data?.reference_link as string;
+						}
+					} else {
+						link = buildTransactionURL(doctor.name, doctor.lastName, userName || '', userPhone || '');
+					}
+					updateContextState({
+						useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+						paymentURL: link,
+						appointmentCreationStep: CONFIRMATION_STEP,
+					});
+					history.push('/confirmacion');
+				} catch (e) {
+					setErrorMessage(t('payment.error.pe'));
+					setIsPaymentLoading(false);
+				}
+			}
+		},
+		[
+			schedule,
+			updateContextState,
+			useCase,
+			triage,
+			activeUser,
+			doctor,
+			initialValuesCash,
+			discount.id,
+			discount.totalCost,
+			trackParams,
+			userFiles,
+			appointmentOwner,
+			userToken,
+			history,
+			t,
+			benefit,
+			useBenefit,
+		],
+	);
 
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
@@ -309,6 +316,8 @@ const Payment = () => {
 					e.preventDefault();
 					// window.Culqi.open();
 					openKushkiForm();
+				} else if (paymentMethod === B2B_PAYMENT_ID) {
+					performTransactionB2BPayment(paymentMethod);
 				} else {
 					openKushkiCashForm();
 					//performTransactionPayment(paymentMethod);
@@ -331,7 +340,7 @@ const Payment = () => {
 				}
 			}
 		},
-		[schedule, validHourReservation, useCase, reservationAccountID, doctor],
+		[schedule, validHourReservation, useCase, reservationAccountID, doctor, performTransactionB2BPayment],
 	);
 
 	const makeKushkiPayment = (values: any) => {
@@ -355,7 +364,6 @@ const Payment = () => {
 				},
 				async (response: any) => {
 					if (!response.code) {
-						console.log(response);
 						await createPayment({
 							cost: amount,
 							appointmentTypeID: 'ugito',
@@ -370,6 +378,7 @@ const Payment = () => {
 							paymentType: KUSHKI_PAYMENT_ID,
 							trackParams: trackParams || EMPTY_TRACK_PARAMS,
 							reservationAccountID: activeUser.id,
+							benefitID: benefit ? benefit.id : '',
 						});
 
 						await createAppointment(
@@ -477,6 +486,7 @@ const Payment = () => {
 							paymentType: method,
 							trackParams: trackParams || EMPTY_TRACK_PARAMS,
 							reservationAccountID: activeUser.id,
+							benefitID: benefit ? benefit.id : '',
 						});
 						await createAppointment(
 							{
@@ -542,19 +552,49 @@ const Payment = () => {
 	};
 	const sendDiscount = useCallback(async () => {
 		try {
-			if (activeUser && schedule) {
-				const reviewedDiscount = await applyDiscount({
-					couponCode: discountCode,
-					dni: activeUser.identification,
-					scheduleID: schedule.id,
-				});
+			const reviewedBenefit = await applyBenefit({
+				benefitID: benefit?.id,
+				dni: 'fasdafasd',
+				scheduleID: 'fadsfdafads',
+			});
 
-				addGAEvent({ category: 'Agendar cita - Paso 3', action: 'Aplicar descuento', label: reviewedDiscount.id });
-				window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedDiscount.totalCost) });
-				setDiscount(reviewedDiscount);
+			addGAEvent({
+				category: 'Agendar cita - Paso 3',
+				action: 'Aplicar descuento en beneficio',
+				label: reviewedBenefit.id,
+			});
+			window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedBenefit.totalCost) });
+			setDiscount(reviewedBenefit);
+
+			if (activeUser && schedule) {
+				if (discountCode) {
+					const reviewedDiscount = await applyDiscount({
+						couponCode: discountCode,
+						dni: activeUser.identification,
+						scheduleID: schedule.id,
+					});
+
+					addGAEvent({ category: 'Agendar cita - Paso 3', action: 'Aplicar descuento', label: reviewedDiscount.id });
+					window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedDiscount.totalCost) });
+					setDiscount(reviewedDiscount);
+				} else {
+					const reviewedBenefit = await applyBenefit({
+						benefitID: benefit?.id,
+						dni: activeUser.identification,
+						scheduleID: schedule.id,
+					});
+
+					addGAEvent({
+						category: 'Agendar cita - Paso 3',
+						action: 'Aplicar descuento en beneficio',
+						label: reviewedBenefit.id,
+					});
+					window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedBenefit.totalCost) });
+					setDiscount(reviewedBenefit);
+				}
 			}
 		} catch (e) {}
-	}, [discountCode, schedule, activeUser]);
+	}, [discountCode, schedule, activeUser, benefit]);
 
 	useEffect(() => {
 		if (useCase?.totalCost) {
@@ -668,6 +708,7 @@ const Payment = () => {
 				onChangeDiscount={onChangeDiscount}
 				executePayment={makePayment}
 				errorMessage={errorMessage}
+				useBenefit={useBenefit}
 			/>
 			<Dialog
 				open={openKushkiModal}

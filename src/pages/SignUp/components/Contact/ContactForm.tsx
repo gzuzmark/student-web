@@ -127,7 +127,7 @@ const ContactForm = ({
 	isGuest,
 }: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
-	const { isUbigeoEnabled } = useContext(AppContext);
+	const { isUbigeoEnabled, updateState: updateContextState } = useContext(AppContext);
 	const [ubigeos, setUbigeos] = useState<string[]>([]);
 	const [hasBenefitModalOpen, setHasBenefitModalOpen] = useState<boolean>(false);
 	const [benefit, setBenefit] = useState<Benefit>({
@@ -185,11 +185,23 @@ const ContactForm = ({
 		if (value) {
 			const response = await getBenefit(value);
 			const benefit = response;
-			if (benefit.id !== '') {
+			if (benefit.id !== '' && updateContextState) {
 				setBenefit(benefit);
 				setHasBenefitModalOpen(true);
+				updateContextState({
+					useBenefit: true,
+				});
 			}
 		} else {
+			setHasBenefitModalOpen(false);
+		}
+	};
+
+	const acceptBenefit = () => {
+		if (updateContextState) {
+			updateContextState({
+				useBenefit: true,
+			});
 			setHasBenefitModalOpen(false);
 		}
 	};
@@ -364,7 +376,12 @@ const ContactForm = ({
 					</Form>
 				)}
 			</Formik>
-			<InformBenefit isModalOpen={hasBenefitModalOpen} closeModal={closeHasBenefitModal} benefit={benefit} />
+			<InformBenefit
+				isModalOpen={hasBenefitModalOpen}
+				closeModal={closeHasBenefitModal}
+				benefit={benefit}
+				acceptBenefit={acceptBenefit}
+			/>
 		</div>
 	);
 };

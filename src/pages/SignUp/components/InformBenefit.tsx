@@ -36,22 +36,21 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	actions: {
 		display: 'flex',
 		flexDirection: 'column-reverse',
-		justifyContent: 'center',
 		[breakpoints.up('lg')]: {
 			flexDirection: 'row',
 			justifyContent: 'center',
 		},
 	},
-	omitAction: {
+	rejectAction: {
 		textTransform: 'none',
 		textDecoration: 'none',
 		[breakpoints.up('lg')]: {
 			marginRight: '38px',
-			width: '174px',
+			width: '292px',
 		},
 	},
 	acceptAction: {
-		marginBottom: '10px',
+		marginBottom: '21px',
 		[breakpoints.up('lg')]: {
 			marginBottom: '0px',
 			width: '292px',
@@ -66,9 +65,10 @@ interface InformBenefitProps {
 	isModalOpen: boolean;
 	closeModal: () => void;
 	benefit: Benefit;
+	acceptBenefit: () => void;
 }
 
-const InformBenefit = ({ isModalOpen, closeModal, benefit }: InformBenefitProps) => {
+const InformBenefit = ({ isModalOpen, closeModal, benefit, acceptBenefit }: InformBenefitProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
@@ -82,8 +82,15 @@ const InformBenefit = ({ isModalOpen, closeModal, benefit }: InformBenefitProps)
 					<p className={classes.description}>
 						{benefit.description} <span className={classes.boldText}> {benefit.expirationDate}</span> .
 					</p>
+					<p className={classes.description}> {t('informationBenefit.warning')} </p>
+					<p className={classes.description}>
+						{t('informationBenefit.question')} <span className={classes.boldText}></span> .
+					</p>
 					<div className={classes.actions}>
-						<Button className={classes.acceptAction} variant="contained" onClick={closeModal}>
+						<Button className={classes.rejectAction} variant={matches ? 'outlined' : 'text'} onClick={closeModal}>
+							{t('informationBenefit.rejectLabel')}
+						</Button>
+						<Button className={classes.acceptAction} variant="contained" onClick={acceptBenefit}>
 							{t('informationBenefit.acceptLabel')}
 						</Button>
 					</div>
