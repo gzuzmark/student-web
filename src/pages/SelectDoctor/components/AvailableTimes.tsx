@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
 import { Theme, Typography } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-
-import { stylesWithTheme } from 'utils';
 import { Schedule } from 'pages/api';
-
+import React, { useState } from 'react';
+import { stylesWithTheme } from 'utils';
 import { ActiveDoctorTime } from './DoctorList/DoctorList';
-import TimeOption from './TimeOption';
 import { validSelectTimeWithNow } from './FunctionsHelper';
 import ModalErrorTime from './ModalErrorTime/ModalErrorTime';
+import TimeOption from './TimeOption';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {

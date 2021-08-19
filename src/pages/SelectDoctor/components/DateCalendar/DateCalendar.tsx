@@ -16,7 +16,7 @@ const DateCalendar = ({ date, onClick }: DateCalendarProps) => {
 	const classes = useStyles();
 	const [dayText, setDayText] = useState<string | null>(null);
 	const [dateMonthText, setDateMonthText] = useState<string | null>(null);
-	const [status, setStatus] = useState<StatusType>('default');
+	// const [status, setStatus] = useState<StatusType>('default');
 
 	const clickDateCalendar = () => {
 		if (onClick) {

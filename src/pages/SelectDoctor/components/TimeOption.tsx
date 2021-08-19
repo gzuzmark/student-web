@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import Button from '@material-ui/core/Button';
 import { Theme, Typography } from '@material-ui/core';
-import { formatApiDate, stylesWithTheme } from 'utils';
 import clsx from 'clsx';
+import React from 'react';
+import { formatApiDate, stylesWithTheme } from 'utils';
 interface StylesProps {
 	active: boolean;
 }
@@ -107,7 +106,7 @@ interface TimeOptionProps {
 	status?: StatusType;
 }
 
-const TimeOption = ({ date, onClick, disabled, format, active = false, status }: TimeOptionProps) => {
+const TimeOption = ({ date, onClick, format, active = false, status }: TimeOptionProps) => {
 	const classes = useStyles({ active });
 
 	return (

@@ -76,6 +76,7 @@ const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 				id: `${FAKE_SESSION_ID}-${i}`,
 				startTime: currentStartTime,
 				endTime: endTime,
+				isDisabled: true,
 			} as Schedule;
 			newSchedules.push(schedule);
 			// updating the next schedule startTime as the previous schedule endTime
@@ -146,8 +147,9 @@ const getClosestSchedules = async (
 	setSelectedDate: Function,
 	setDoctors: Function,
 	setMinDate: Function,
+	setListDates: Function,
 ) => {
-	const { nextAvailableDate, doctors } = await getNextAvailableSchedules(useCase);
+	const { nextAvailableDate, doctors, dates } = await getNextAvailableSchedules(useCase);
 	const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
 	const newDoctors = isTargetUseCase
 		? doctors.map((doc: DoctorAvailability) => {
@@ -174,6 +176,7 @@ const getClosestSchedules = async (
 	setDoctors(newDoctors);
 	setSelectedDate(nextAvailableDate);
 	setMinDate(nextAvailableDate);
+	setListDates(dates);
 };
 
 interface RightSideProps {
@@ -202,6 +205,7 @@ const RightSide = ({
 	const [minDate, setMinDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
+	const [listDates, setListDates] = useState<Date[]>([]);
 
 	const updateDate = useCallback(
 		(newDate: Date | null) => {
@@ -215,7 +219,9 @@ const RightSide = ({
 	useEffect(() => {
 		if (useCase) {
 			setIsLoadData(true);
-			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate).finally(() => setIsLoadData(false));
+			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate, setListDates).finally(() =>
+				setIsLoadData(false),
+			);
 		}
 	}, [useCase]);
 
@@ -247,8 +253,8 @@ const RightSide = ({
 						<Trans i18nKey={`selectDoctor:${'right.title'}`} />
 					</Typography>
 				</div>
-				{/* <DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} /> */}
-				<Carrousel />
+				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
+				<Carrousel dates={listDates} />
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>
