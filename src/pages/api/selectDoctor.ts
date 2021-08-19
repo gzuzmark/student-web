@@ -1,6 +1,7 @@
 import aliviaAxios from 'utils/customAxios';
 import { transformToSnakeCase } from 'utils';
 import { parseUTCDate } from 'utils';
+import { format } from 'date-fns';
 
 // API Types
 
@@ -13,6 +14,7 @@ interface ScheduleAPI {
 	id: string;
 	start_time: number;
 	end_time: number;
+	student_id: string | null;
 }
 
 interface DiseaseAPI {
@@ -53,6 +55,7 @@ interface NextAvailableSchedulesAPI {
 	data: {
 		next_available_date: number;
 		doctors: DoctorAvailabilityAPI[];
+		dates: string[];
 	};
 }
 
@@ -62,6 +65,7 @@ export interface Schedule {
 	id: string;
 	startTime: Date;
 	endTime: Date;
+	isDisabled: boolean;
 }
 
 export interface PatientOpinion {
@@ -104,7 +108,18 @@ interface RequestProps {
 interface NextAvailableSchedules {
 	nextAvailableDate: Date;
 	doctors: DoctorAvailability[];
+	dates: Date[];
 }
+
+const isDisabled = (studentId: string | null): boolean => {
+	if (studentId === null) {
+		return false;
+	}
+	if (studentId.length === 0) {
+		return false;
+	}
+	return true;
+};
 
 const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] =>
 	doctors.map(
@@ -130,10 +145,11 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 			speciality: title,
 			specialityName: specialty_name,
 			profilePicture: photo,
-			schedules: schedules.map(({ id, start_time, end_time }: ScheduleAPI) => ({
+			schedules: schedules.map(({ id, start_time, end_time, student_id }: ScheduleAPI) => ({
 				id,
 				startTime: parseUTCDate(start_time),
 				endTime: parseUTCDate(end_time),
+				isDisabled: isDisabled(student_id),
 			})),
 			rating,
 			aboutMe: about_me,
@@ -161,14 +177,21 @@ export const getMedicalSpecialities = async (data: RequestProps): Promise<Doctor
 };
 
 export const getNextAvailableSchedules = async (useCaseID: string): Promise<NextAvailableSchedules> => {
+	const date = new Date();
 	const response = await aliviaAxios.get<NextAvailableSchedulesAPI>('/doctors/next-available-schedule', {
-		params: { use_case: useCaseID },
+		params: { use_case: useCaseID, from: format(date, 'yyyy-MM-dd') },
 	});
 	const { data } = response;
 	const parsedDoctorsData = parseResponseData(data.data.doctors);
+	const dates = parseDates(data.data.dates);
 
 	return {
 		nextAvailableDate: parseUTCDate(data.data.next_available_date),
 		doctors: parsedDoctorsData,
+		dates: dates,
 	};
+};
+
+const parseDates = (dates: string[]) => {
+	return dates.map((date) => new Date(date));
 };

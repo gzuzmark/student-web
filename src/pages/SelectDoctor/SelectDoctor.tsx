@@ -7,7 +7,7 @@ import { getUseCase, DoctorAvailability, Schedule } from 'pages/api';
 import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
 
 import { Container } from '../common';
-import { LeftSide } from './components/LeftSide';
+// import { LeftSide } from './components/LeftSide';
 import { RightSide } from './components/RightSide';
 import WarningModal from './components/WarningModal/WarningModal';
 import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
@@ -114,6 +114,10 @@ const SelectDoctor = () => {
 	const onAcceptWarning = () => toggleWarningModal(false);
 	usePageTitle('Seleccion doctor');
 
+	const onChangeDropdown = (id: string) => {
+		requestUseCaseID(id, updateState, toggleWarningModal);
+	};
+
 	useEffect(() => {
 		const useCaseParam = params.malestar as string;
 
@@ -145,9 +149,9 @@ const SelectDoctor = () => {
 
 	return (
 		<>
-			<DropdownSpecialties specialityId={specialityId} />
+			<DropdownSpecialties specialityId={specialityId} onChange={onChangeDropdown} />
 			<Container>
-				<LeftSide step={!params.malestar ? -1 : 0} />
+				{/* <LeftSide step={!params.malestar ? -1 : 0} /> */}
 				{!params.malestar ? (
 					<Skills />
 				) : (

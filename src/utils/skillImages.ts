@@ -27,10 +27,10 @@ export const DEV_IMAGES: SpecialtyType[] = [
 		cost: 35,
 	},
 	{
-		id: 'b919c69a-c4fd-4def-bb3d-69786de10e0a',
+		id: 'c78cf27f-2059-4823-bdb8-8bd22126b671',
 		label: 'Medicina interna',
 		image: general,
-		cost: 35,
+		cost: 25,
 	},
 	{
 		id: 'e6d9a4aa-4307-4ca2-b4e4-d10208fdf87d',

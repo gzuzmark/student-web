@@ -36,6 +36,7 @@ const DoctorList = ({
 	setSchedule,
 	shouldShowMoreDoctorInfo,
 }: DoctorListProps) => {
+	console.log(doctors);
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({
@@ -91,7 +92,7 @@ const DoctorList = ({
 	};
 
 	return (
-		<>
+		<div className={classes.container}>
 			<div className={classes.counter}>
 				<Typography className={classes.counterFirstPart} component="span">
 					{t('right.foundDoctors', { doctors: doctors.length })}{' '}
@@ -106,7 +107,7 @@ const DoctorList = ({
 						{ name, lastName, cmp, profilePicture, speciality, rating, schedules, patientOpinions }: DoctorAvailability,
 						doctorIndex: number,
 					) => (
-						<div className={classes.doctorWrapper} key={cmp}>
+						<div className={classes.doctorWrapper} key={doctorIndex}>
 							<div className={classes.doctor}>
 								<div className={classes.photoWrapper}>
 									<img className={classes.photo} src={profilePicture} alt="doctor" />
@@ -120,42 +121,46 @@ const DoctorList = ({
 											{name} {lastName}
 										</Typography>
 									</div>
-									<div className={classes.flexWrapper}>
+									{/* <div className={classes.flexWrapper}>
 										<div className={classes.specialityWrapper}>
 											<Typography className={classes.speciality}>{speciality}</Typography>
 										</div>
 										<div>
 											<Typography className={classes.cmp}>CMP: {cmp}</Typography>
 										</div>
-									</div>
-									{shouldShowMoreDoctorInfo ? (
-										<>
-											{patientOpinions.length >= 5 ? (
-												<div className={classes.ratingWrapper}>
-													<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
-													<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
-												</div>
-											) : null}
-											<div>
-												<Button
-													className={classes.doctorMoreInfo}
-													onClick={() => {
-														selectDoctorForModal(doctorIndex);
-														openDetailedDoctorModal();
-													}}
-												>
-													{t('right.doctor.moreInformation')}
-												</Button>
+									</div> */}
+									<div className={classes.doctorInfoWrapper}>
+										<div>
+											<Button
+												className={classes.doctorMoreInfo}
+												onClick={() => {
+													selectDoctorForModal(doctorIndex);
+													openDetailedDoctorModal();
+												}}
+											>
+												{t('right.doctor.moreInformation')}
+											</Button>
+										</div>
+										{true && patientOpinions.length >= 1 && (
+											<div className={classes.ratingWrapper}>
+												<Rating
+													className={classes.doctorRating}
+													value={rating}
+													precision={0.5}
+													readOnly
+													size={'small'}
+												/>
+												<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
 											</div>
-										</>
-									) : null}
+										)}
+									</div>
 								</div>
 							</div>
-							<div className={classes.availableTitleWrapper}>
+							{/* <div className={classes.availableTitleWrapper}>
 								<Typography className={classes.availableTitle} component="span">
 									{t('right.availableDoctors.title')}
 								</Typography>
-							</div>
+							</div> */}
 							<div className={classes.timesWrapper}>
 								<AvailableTimes
 									doctorCmp={cmp}
@@ -164,6 +169,8 @@ const DoctorList = ({
 									selectTime={selectDoctor(cmp, doctorIndex)}
 									activeDoctorTime={activeDoctorTime}
 								/>
+							</div>
+							<div>
 								{activeDoctorTime.doctorCmp === cmp ? (
 									<Button
 										fullWidth
@@ -187,7 +194,7 @@ const DoctorList = ({
 				) : null}
 				<ModalErrorTime isOpen={isOpenModal} setIsOpen={setIsOpenModal} message={messageError} />
 			</div>
-		</>
+		</div>
 	);
 };
 

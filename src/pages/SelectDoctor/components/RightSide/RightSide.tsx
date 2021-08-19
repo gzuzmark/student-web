@@ -6,6 +6,7 @@ import { Loading, RightLayout } from 'pages/common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
+import Carrousel from '../Carrousel/Carrousel';
 import { DoctorList } from '../DoctorList';
 import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
@@ -75,6 +76,7 @@ const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 				id: `${FAKE_SESSION_ID}-${i}`,
 				startTime: currentStartTime,
 				endTime: endTime,
+				isDisabled: true,
 			} as Schedule;
 			newSchedules.push(schedule);
 			// updating the next schedule startTime as the previous schedule endTime
@@ -145,8 +147,9 @@ const getClosestSchedules = async (
 	setSelectedDate: Function,
 	setDoctors: Function,
 	setMinDate: Function,
+	setListDates: Function,
 ) => {
-	const { nextAvailableDate, doctors } = await getNextAvailableSchedules(useCase);
+	const { nextAvailableDate, doctors, dates } = await getNextAvailableSchedules(useCase);
 	const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
 	const newDoctors = isTargetUseCase
 		? doctors.map((doc: DoctorAvailability) => {
@@ -173,6 +176,7 @@ const getClosestSchedules = async (
 	setDoctors(newDoctors);
 	setSelectedDate(nextAvailableDate);
 	setMinDate(nextAvailableDate);
+	setListDates(dates);
 };
 
 interface RightSideProps {
@@ -201,6 +205,7 @@ const RightSide = ({
 	const [minDate, setMinDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
+	const [listDates, setListDates] = useState<Date[]>([]);
 
 	const updateDate = useCallback(
 		(newDate: Date | null) => {
@@ -214,7 +219,9 @@ const RightSide = ({
 	useEffect(() => {
 		if (useCase) {
 			setIsLoadData(true);
-			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate).finally(() => setIsLoadData(false));
+			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate, setListDates).finally(() =>
+				setIsLoadData(false),
+			);
 		}
 	}, [useCase]);
 
@@ -239,7 +246,7 @@ const RightSide = ({
 	);
 
 	return (
-		<RightLayout>
+		<RightLayout className={classes.rightLayout}>
 			<div className={classes.wrapper}>
 				<div className={classes.titleContainer}>
 					<Typography component="span" className={classes.title}>
@@ -247,6 +254,7 @@ const RightSide = ({
 					</Typography>
 				</div>
 				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
+				<Carrousel dates={listDates} />
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>
