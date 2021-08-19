@@ -1,7 +1,7 @@
 import aliviaAxios from 'utils/customAxios';
 import { transformToSnakeCase } from 'utils';
 import { parseUTCDate } from 'utils';
-import { format } from 'date-fns';
+import { addDays, addMinutes, format, isSameDay } from 'date-fns';
 
 // API Types
 
@@ -56,6 +56,7 @@ interface NextAvailableSchedulesAPI {
 		next_available_date: number;
 		doctors: DoctorAvailabilityAPI[];
 		dates: string[];
+		status: boolean;
 	};
 }
 
@@ -105,10 +106,16 @@ interface RequestProps {
 	window?: number;
 }
 
+export interface DateSchedule {
+	date: Date;
+	isEmpty: boolean;
+}
+
 interface NextAvailableSchedules {
 	nextAvailableDate: Date;
 	doctors: DoctorAvailability[];
-	dates: Date[];
+	dates: DateSchedule[];
+	isNextDays: boolean;
 }
 
 const isDisabled = (studentId: string | null): boolean => {
@@ -176,22 +183,46 @@ export const getMedicalSpecialities = async (data: RequestProps): Promise<Doctor
 	return parsedData;
 };
 
-export const getNextAvailableSchedules = async (useCaseID: string): Promise<NextAvailableSchedules> => {
-	const date = new Date();
+export const getNextAvailableSchedules = async (
+	useCaseID: string,
+	startDate: Date,
+): Promise<NextAvailableSchedules> => {
 	const response = await aliviaAxios.get<NextAvailableSchedulesAPI>('/doctors/next-available-schedule', {
-		params: { use_case: useCaseID, from: format(date, 'yyyy-MM-dd') },
+		params: { use_case: useCaseID, from: format(startDate, 'yyyy-MM-dd') },
 	});
 	const { data } = response;
 	const parsedDoctorsData = parseResponseData(data.data.doctors);
-	const dates = parseDates(data.data.dates);
+	const dates = validWeek(data.data.dates, startDate);
+	const { status } = data.data;
 
 	return {
 		nextAvailableDate: parseUTCDate(data.data.next_available_date),
 		doctors: parsedDoctorsData,
 		dates: dates,
+		isNextDays: status,
 	};
 };
 
-const parseDates = (dates: string[]) => {
-	return dates.map((date) => new Date(date)).filter((_, i) => i > 0);
+const validWeek = (dates: string[], startDate: Date) => {
+	const listDates: Date[] = parseToDates(dates);
+	const listWeek = completeWeek(startDate);
+	return listWeek.map<DateSchedule>((dateWeek: Date) => {
+		const hasSessions = listDates.filter((date: Date) => isSameDay(dateWeek, date));
+		return {
+			date: dateWeek,
+			isEmpty: hasSessions.length === 0,
+		};
+	});
+};
+
+const completeWeek = (startDate: Date) => {
+	return [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(startDate, i));
+};
+
+const parseToDates = (dates: string[]): Date[] => {
+	const offset = new Date().getTimezoneOffset();
+	const datesToDatesObjects: Date[] = dates.map((date: string) => {
+		return addMinutes(new Date(date), offset);
+	});
+	return datesToDatesObjects;
 };
