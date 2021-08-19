@@ -1,14 +1,20 @@
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import isToday from 'date-fns/isToday';
-import { DoctorAvailability, getMedicalSpecialities, getNextAvailableSchedules, Schedule, UseCase } from 'pages/api';
+import {
+	DateSchedule,
+	DoctorAvailability,
+	getMedicalSpecialities,
+	getNextAvailableSchedules,
+	Schedule,
+	UseCase,
+} from 'pages/api';
 import { Loading, RightLayout } from 'pages/common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
 import Carrousel from '../Carrousel/Carrousel';
 import { DoctorList } from '../DoctorList';
-import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
 
 export const FAKE_SESSION_ID = 'fake';
@@ -144,12 +150,13 @@ const getDoctors = async (
 
 const getClosestSchedules = async (
 	useCase: string,
+	selectedDate: Date,
 	setSelectedDate: Function,
 	setDoctors: Function,
 	setMinDate: Function,
 	setListDates: Function,
 ) => {
-	const { nextAvailableDate, doctors, dates } = await getNextAvailableSchedules(useCase);
+	const { nextAvailableDate, doctors, dates } = await getNextAvailableSchedules(useCase, selectedDate);
 	// const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
 	// const newDoctors = isTargetUseCase
 	// 	? doctors.map((doc: DoctorAvailability) => {
@@ -206,7 +213,7 @@ const RightSide = ({
 	const [minDate, setMinDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
-	const [listDates, setListDates] = useState<Date[]>([]);
+	const [listDates, setListDates] = useState<DateSchedule[]>([]);
 
 	const updateDate = useCallback(
 		(newDate: Date | null) => {
@@ -218,12 +225,13 @@ const RightSide = ({
 	);
 
 	useEffect(() => {
-		if (useCase) {
+		if (useCase && selectedDate) {
 			setIsLoadData(true);
-			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate, setListDates).finally(() =>
+			getClosestSchedules(useCase.id, selectedDate, setSelectedDate, setDoctors, setMinDate, setListDates).finally(() =>
 				setIsLoadData(false),
 			);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [useCase]);
 
 	const sectionWithSpecialty = () => (
