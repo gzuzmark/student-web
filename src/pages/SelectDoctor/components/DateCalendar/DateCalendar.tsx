@@ -1,26 +1,27 @@
-import { format, isToday, isTomorrow } from 'date-fns';
+import clsx from 'clsx';
+import { format, isSameDay, isToday, isTomorrow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import _ from 'lodash';
+import { DateSchedule } from 'pages/api';
 import React, { useEffect, useState } from 'react';
 import useStyles from './styles';
-import clsx from 'clsx';
-import { DateSchedule } from 'pages/api';
 
 type StatusType = 'default' | 'selected' | 'disabled';
 
 interface DateCalendarProps {
 	dateSchedule: DateSchedule;
+	selectedDate: Date | null;
 	onClick?: (date: Date) => void;
 }
 
-const DateCalendar = ({ dateSchedule, onClick }: DateCalendarProps) => {
+const DateCalendar = ({ dateSchedule, selectedDate, onClick }: DateCalendarProps) => {
 	const classes = useStyles();
 	const [dayText, setDayText] = useState<string | null>(null);
 	const [dateMonthText, setDateMonthText] = useState<string | null>(null);
 	const [status, setStatus] = useState<StatusType>('disabled');
 
 	const clickDateCalendar = () => {
-		if (onClick) {
+		if (onClick && status != 'disabled') {
 			onClick(dateSchedule.date);
 		}
 	};
@@ -37,16 +38,31 @@ const DateCalendar = ({ dateSchedule, onClick }: DateCalendarProps) => {
 		}
 		setDateMonthText(format(date, 'dd MMMM', { locale: es }));
 		setStatus(() => {
-			return isEmpty ? 'disabled' : 'default';
+			return isEmpty
+				? 'disabled'
+				: selectedDate == null
+				? 'default'
+				: isSameDay(selectedDate, date)
+				? 'selected'
+				: 'default';
 		});
-	}, [dateSchedule]);
+	}, [dateSchedule, selectedDate]);
 
 	return (
-		<div className={clsx(classes.container, classes.pointer)} onClick={clickDateCalendar}>
+		<div
+			className={clsx(
+				classes.container,
+				status === 'disabled'
+					? [classes.containerDisabled]
+					: status === 'selected'
+					? [classes.containerSelected, classes.pointer]
+					: [classes.pointer],
+			)}
+			onClick={clickDateCalendar}
+		>
 			<div className={classes.div}>
 				<div className={classes.dayDiv}>{dayText}</div>
 				<div className={classes.dateDiv}>{dateMonthText}</div>
-				<div>{status}</div>
 			</div>
 		</div>
 	);

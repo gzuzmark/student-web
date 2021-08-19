@@ -182,7 +182,7 @@ const getClosestSchedules = async (
 
 	console.log(dates);
 	setDoctors(doctors);
-	setSelectedDate(nextAvailableDate);
+	setSelectedDate(selectedDate);
 	setMinDate(nextAvailableDate);
 	setListDates(dates);
 };
@@ -209,14 +209,14 @@ const RightSide = ({
 }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
-	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	const [minDate, setMinDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
 
 	const updateDate = useCallback(
-		(newDate: Date | null) => {
+		(newDate: Date) => {
 			setSelectedDate(newDate);
 			setIsLoadData(true);
 			getDoctors(newDate, useCase, setDoctors, minutes, numSessions).finally(() => setIsLoadData(false));
@@ -225,13 +225,12 @@ const RightSide = ({
 	);
 
 	useEffect(() => {
-		if (useCase && selectedDate) {
+		if (useCase) {
 			setIsLoadData(true);
-			getClosestSchedules(useCase.id, selectedDate, setSelectedDate, setDoctors, setMinDate, setListDates).finally(() =>
+			getClosestSchedules(useCase.id, new Date(), setSelectedDate, setDoctors, setMinDate, setListDates).finally(() =>
 				setIsLoadData(false),
 			);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [useCase]);
 
 	const sectionWithSpecialty = () => (
@@ -263,7 +262,7 @@ const RightSide = ({
 					</Typography>
 				</div>
 				{/* <DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} /> */}
-				<Carrousel dates={listDates} />
+				<Carrousel dates={listDates} selectedDate={selectedDate} onSelectDate={(date: Date) => setSelectedDate(date)} />
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>

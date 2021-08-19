@@ -10,22 +10,28 @@ import { DateSchedule } from 'pages/api';
 
 interface CarrouselProps {
 	dates: DateSchedule[];
+	selectedDate: Date | null;
+	onSelectDate?: (date: Date) => void;
 }
 
-const Carrousel = ({ dates }: CarrouselProps) => {
+const Carrousel = ({ dates, selectedDate, onSelectDate }: CarrouselProps) => {
 	const classes = useStyles();
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
 
+	const onClickDay = (date: Date) => {
+		if (onSelectDate) {
+			onSelectDate(date);
+		}
+	};
+
 	useEffect(() => {
-		console.log(isDesktop);
 		if (isDesktop) {
 			setListDates(dates);
 		} else {
 			setListDates(dates.slice(0, 3));
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dates]);
+	}, [dates, isDesktop]);
 
 	return (
 		<div className={classes.container}>
@@ -34,7 +40,7 @@ const Carrousel = ({ dates }: CarrouselProps) => {
 					<img alt="left" src={LeftDisabled} />
 				</div>
 				{listDates.map((dateSchedule: DateSchedule, i: number) => (
-					<DateCalendar dateSchedule={dateSchedule} key={i} />
+					<DateCalendar key={i} dateSchedule={dateSchedule} selectedDate={selectedDate} onClick={onClickDay} />
 				))}
 				<div className={clsx(classes.pointer)}>
 					<img alt="right" src={RightEnabled} />
