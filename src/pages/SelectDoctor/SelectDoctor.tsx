@@ -166,7 +166,6 @@ const SelectDoctor = () => {
 						shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
 					/>
 				)}
-
 				<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
 				<SelectAppointmentOwner
 					isOpen={isSelectOwnerOpen}
