@@ -254,7 +254,7 @@ const RightSide = ({
 						<Trans i18nKey={`selectDoctor:${'right.title'}`} />
 					</Typography>
 				</div>
-				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
+				{/* <DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} /> */}
 				<Carrousel dates={listDates} />
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
