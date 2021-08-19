@@ -150,30 +150,31 @@ const getClosestSchedules = async (
 	setListDates: Function,
 ) => {
 	const { nextAvailableDate, doctors, dates } = await getNextAvailableSchedules(useCase);
-	const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
-	const newDoctors = isTargetUseCase
-		? doctors.map((doc: DoctorAvailability) => {
-				const realSchedules = doc.schedules;
-				const fakeSchedules = buildFakeSessions(realSchedules);
-				const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
-					const searchSession = realSchedules.find(
-						(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
-					);
-					return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
-				});
-				if (newSchedules.length > 0) {
-					const lastInd = newSchedules.length - 1;
-					newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
-					newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
-				}
-				return {
-					...doc,
-					schedules: newSchedules,
-				};
-		  })
-		: doctors;
+	// const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
+	// const newDoctors = isTargetUseCase
+	// 	? doctors.map((doc: DoctorAvailability) => {
+	// 			const realSchedules = doc.schedules;
+	// 			const fakeSchedules = buildFakeSessions(realSchedules);
+	// 			const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
+	// 				const searchSession = realSchedules.find(
+	// 					(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
+	// 				);
+	// 				return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
+	// 			});
+	// 			if (newSchedules.length > 0) {
+	// 				const lastInd = newSchedules.length - 1;
+	// 				newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
+	// 				newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
+	// 			}
+	// 			return {
+	// 				...doc,
+	// 				schedules: newSchedules,
+	// 			};
+	// 	  })
+	// 	: doctors;
 
-	setDoctors(newDoctors);
+	console.log(dates);
+	setDoctors(doctors);
 	setSelectedDate(nextAvailableDate);
 	setMinDate(nextAvailableDate);
 	setListDates(dates);

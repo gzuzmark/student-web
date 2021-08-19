@@ -193,5 +193,5 @@ export const getNextAvailableSchedules = async (useCaseID: string): Promise<Next
 };
 
 const parseDates = (dates: string[]) => {
-	return dates.map((date) => new Date(date));
+	return dates.map((date) => new Date(date)).filter((_, i) => i > 0);
 };
