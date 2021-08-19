@@ -10,10 +10,20 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			justifyContent: 'center',
 			alignItems: 'center',
 			// padding: '3px 5px',
-			border: '2px solid #1ECD96',
-			boxShadow: '0.72px 0.72px 3px rgba(0, 0, 0, 0.1)',
+			border: '1px solid #E5EFFF',
+			boxShadow: '0.8px 0.8px 3px rgba(103, 111, 143, 0.1)',
+			boxSizing: 'border-box',
 			borderRadius: '8px',
 			margin: '0px 5px',
+		},
+		containerDisabled: {
+			border: '1px solid #F0F2FA',
+			backgroundColor: '#F0F2FA',
+			boxShadow: '0.8px 0.8px 3px rgba(103, 111, 143, 0.1)',
+		},
+		containerSelected: {
+			border: '2px solid #1ECD96',
+			boxShadow: '0.72px 0.72px 3px rgba(0, 0, 0, 0.1)',
 		},
 		pointer: {
 			cursor: 'pointer',
