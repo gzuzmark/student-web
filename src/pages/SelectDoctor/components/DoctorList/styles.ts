@@ -9,7 +9,8 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 		},
 		doctorList: {
 			[breakpoints.up('lg')]: {
-				maxWidth: '711px',
+				width: '1100px',
+				display: 'flex',
 			},
 		},
 		counter: {
@@ -36,6 +37,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 				// borderRadius: '10px',
 				padding: '20px 24px',
 				margin: '28px',
+				width: '50%',
 				// boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
 			},
 		},
