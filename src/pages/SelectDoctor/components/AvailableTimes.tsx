@@ -89,7 +89,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 type ModeType = 'short' | 'large';
-const MAX_IN_SHORT = 4;
+// const MAX_IN_SHORT = 4;
 
 interface AvailableTimesProps {
 	availableDates: Schedule[];

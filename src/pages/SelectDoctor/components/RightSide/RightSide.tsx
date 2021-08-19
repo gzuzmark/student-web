@@ -10,7 +10,7 @@ import {
 	UseCase,
 } from 'pages/api';
 import { Loading, RightLayout } from 'pages/common';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
 import Carrousel from '../Carrousel/Carrousel';
@@ -98,6 +98,7 @@ const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 	return schedules;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getDoctors = async (
 	selectedDate: Date | null,
 	useCase: UseCase | null | undefined,
@@ -210,19 +211,19 @@ const RightSide = ({
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-	const [minDate, setMinDate] = useState<Date | null>(new Date());
+	const [, setMinDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
 
-	const updateDate = useCallback(
-		(newDate: Date) => {
-			setSelectedDate(newDate);
-			setIsLoadData(true);
-			getDoctors(newDate, useCase, setDoctors, minutes, numSessions).finally(() => setIsLoadData(false));
-		},
-		[minutes, numSessions, useCase],
-	);
+	// const updateDate = useCallback(
+	// 	(newDate: Date) => {
+	// 		setSelectedDate(newDate);
+	// 		setIsLoadData(true);
+	// 		getDoctors(newDate, useCase, setDoctors, minutes, numSessions).finally(() => setIsLoadData(false));
+	// 	},
+	// 	[minutes, numSessions, useCase],
+	// );
 
 	useEffect(() => {
 		if (useCase) {

@@ -21,7 +21,7 @@ const DateCalendar = ({ dateSchedule, selectedDate, onClick }: DateCalendarProps
 	const [status, setStatus] = useState<StatusType>('disabled');
 
 	const clickDateCalendar = () => {
-		if (onClick && status != 'disabled') {
+		if (onClick && status !== 'disabled') {
 			onClick(dateSchedule.date);
 		}
 	};
@@ -40,7 +40,7 @@ const DateCalendar = ({ dateSchedule, selectedDate, onClick }: DateCalendarProps
 		setStatus(() => {
 			return isEmpty
 				? 'disabled'
-				: selectedDate == null
+				: selectedDate === null
 				? 'default'
 				: isSameDay(selectedDate, date)
 				? 'selected'
