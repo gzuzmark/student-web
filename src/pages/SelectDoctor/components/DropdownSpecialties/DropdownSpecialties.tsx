@@ -8,6 +8,8 @@ import clsx from 'clsx';
 const useStyles = makeStyles(({ breakpoints, transitions }: Theme) =>
 	createStyles({
 		divContainer: {
+			// position: 'fixed',
+			width: '100%',
 			display: 'flex',
 			flexDirection: 'column',
 			justifyContent: 'center',

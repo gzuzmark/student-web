@@ -9,7 +9,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 		wrapper: {
 			paddingTop: '26px',
 			[breakpoints.up('lg')]: {
-				paddingTop: '65px',
+				paddingTop: '50px',
 				// paddingRight: '104px',
 			},
 		},

@@ -3,15 +3,26 @@ import { es } from 'date-fns/locale';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import useStyles from './styles';
+import clsx from 'clsx';
+
+type StatusType = 'default' | 'selected' | 'disabled';
 
 interface DateCalendarProps {
-	date?: Date;
+	date: Date;
+	onClick?: (date: Date) => void;
 }
 
-const DateCalendar = ({ date }: DateCalendarProps) => {
+const DateCalendar = ({ date, onClick }: DateCalendarProps) => {
 	const classes = useStyles();
 	const [dayText, setDayText] = useState<string | null>(null);
 	const [dateMonthText, setDateMonthText] = useState<string | null>(null);
+	const [status, setStatus] = useState<StatusType>('default');
+
+	const clickDateCalendar = () => {
+		if (onClick) {
+			onClick(date);
+		}
+	};
 
 	useEffect(() => {
 		if (date !== undefined) {
@@ -21,7 +32,7 @@ const DateCalendar = ({ date }: DateCalendarProps) => {
 			} else if (isTomorrow(date)) {
 				setDayText('Mañana');
 			} else {
-				const day = format(date, 'eeee', { locale: es });
+				const day = format(date, 'eee', { locale: es });
 				setDayText(_.upperFirst(day));
 			}
 			setDateMonthText(format(date, 'dd MMMM', { locale: es }));
@@ -29,10 +40,10 @@ const DateCalendar = ({ date }: DateCalendarProps) => {
 	}, [date]);
 
 	return (
-		<div className={classes.container}>
+		<div className={clsx(classes.container, classes.pointer)} onClick={clickDateCalendar}>
 			<div className={classes.div}>
 				<div className={classes.dayDiv}>{dayText}</div>
-				<div>{dateMonthText}</div>
+				<div className={classes.dateDiv}>{dateMonthText}</div>
 			</div>
 		</div>
 	);
