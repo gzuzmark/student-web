@@ -89,7 +89,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 type ModeType = 'short' | 'large';
-const MAX_IN_SHORT = 4;
+// const MAX_IN_SHORT = 4;
 
 interface AvailableTimesProps {
 	availableDates: Schedule[];
@@ -147,7 +147,7 @@ const AvailableTimes = ({
 			{!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null}
 			<div className={classes.times}>
 				{availableDates
-					.slice(0, mode === 'short' ? MAX_IN_SHORT : availableDates.length)
+					//.slice(0, mode === 'short' ? MAX_IN_SHORT : availableDates.length)
 					.map(({ id, startTime }: Schedule, scheduleIndex: number) => (
 						<TimeOption
 							scheduleId={id}

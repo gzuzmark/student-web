@@ -133,7 +133,7 @@ const TimeOption = ({ date, onClick, format, active = false, status }: TimeOptio
 						: classes.textSelected,
 				)}
 			>
-				{formatApiDate(date, format)}
+				{formatApiDate(date, 'h:mm a / dd-MMM' || format)}
 			</Typography>
 			{/* </Button> */}
 		</div>
