@@ -61,8 +61,20 @@ const DateCalendar = ({ dateSchedule, selectedDate, onClick }: DateCalendarProps
 			onClick={clickDateCalendar}
 		>
 			<div className={classes.div}>
-				<div className={classes.dayDiv}>{dayText}</div>
-				<div className={classes.dateDiv}>{dateMonthText}</div>
+				<div
+					className={clsx(
+						status === 'disabled'
+							? classes.dayDivDisabled
+							: status === 'default'
+							? classes.dayDivDefaul
+							: classes.dayDivSelected,
+					)}
+				>
+					{dayText}
+				</div>
+				<div className={clsx(status === 'selected' ? classes.dateDivSelected : classes.dateDivDefault)}>
+					{dateMonthText}
+				</div>
 			</div>
 		</div>
 	);
