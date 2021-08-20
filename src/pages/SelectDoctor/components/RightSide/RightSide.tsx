@@ -11,7 +11,7 @@ import {
 	UseCase,
 } from 'pages/api';
 import { Loading, RightLayout } from 'pages/common';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
 import Carrousel from '../Carrousel/Carrousel';
@@ -229,6 +229,7 @@ const RightSide = ({
 	// 	},
 	// 	[minutes, numSessions, useCase],
 	// );
+
 	useEffect(() => {
 		if (selectedDate != null) {
 			setDoctorsForDay(
@@ -247,20 +248,27 @@ const RightSide = ({
 		}
 	}, [selectedDate, doctors]);
 
+	const callApiSchedules = useCallback(
+		(startDate: Date) => {
+			if (useCase) {
+				setIsLoadData(true);
+				getClosestSchedules(
+					useCase.id,
+					startDate,
+					setSelectedDate,
+					setDoctors,
+					setMinDate,
+					setListDates,
+					setIsNextWeek,
+				).finally(() => setIsLoadData(false));
+			}
+		},
+		[useCase],
+	);
+
 	useEffect(() => {
-		if (useCase) {
-			setIsLoadData(true);
-			getClosestSchedules(
-				useCase.id,
-				new Date(),
-				setSelectedDate,
-				setDoctors,
-				setMinDate,
-				setListDates,
-				setIsNextWeek,
-			).finally(() => setIsLoadData(false));
-		}
-	}, [useCase]);
+		callApiSchedules(new Date());
+	}, [callApiSchedules]);
 
 	const sectionWithSpecialty = () => (
 		<>
@@ -296,6 +304,8 @@ const RightSide = ({
 					selectedDate={selectedDate}
 					isNextAvailableDate={isNextWeek}
 					onSelectDate={(date: Date) => setSelectedDate(date)}
+					onBackWeek={callApiSchedules}
+					onNextWeek={callApiSchedules}
 				/>
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}

@@ -8,17 +8,25 @@ import { Theme, useMediaQuery } from '@material-ui/core';
 import { useEffect } from 'react';
 import { DateSchedule } from 'pages/api';
 import { Skeleton } from '@material-ui/lab';
+import { addDays } from 'date-fns/esm';
 
 interface CarrouselProps {
 	dates: DateSchedule[] | null;
 	selectedDate: Date | null;
-	isNextAvailableDate?: boolean;
+	isNextAvailableDate: boolean;
 	onSelectDate?: (date: Date) => void;
 	onNextWeek?: (firstDate: Date) => void;
 	onBackWeek?: (firstDate: Date) => void;
 }
 
-const Carrousel = ({ dates, selectedDate, isNextAvailableDate, onSelectDate }: CarrouselProps) => {
+const Carrousel = ({
+	dates,
+	selectedDate,
+	isNextAvailableDate,
+	onSelectDate,
+	onBackWeek,
+	onNextWeek,
+}: CarrouselProps) => {
 	const classes = useStyles();
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
@@ -33,24 +41,40 @@ const Carrousel = ({ dates, selectedDate, isNextAvailableDate, onSelectDate }: C
 	};
 
 	const onBackCarrousel = () => {
-		setAllowBackWeek(false);
-		setAllowNextWeek(false);
+		if (weekCount > 0) {
+			setWeekCount((currentWeek) => currentWeek - 1);
+			setAllowBackWeek(false);
+			setAllowNextWeek(false);
+			if (onBackWeek) {
+				const firstSchedule: DateSchedule = listDates[0];
+				const { date } = firstSchedule;
+				onBackWeek(addDays(date, -6));
+			}
+		}
 	};
 
 	const onNextCarrousel = () => {
-		setAllowBackWeek(false);
-		setAllowNextWeek(false);
+		if (isNextAvailableDate) {
+			setWeekCount((currentWeek) => currentWeek + 1);
+			setAllowBackWeek(false);
+			setAllowNextWeek(false);
+			const lastIndex = listDates.length - 1;
+			if (onNextWeek) {
+				onNextWeek(listDates[lastIndex].date);
+			}
+		}
 	};
 
 	useEffect(() => {
 		if (dates != null) {
 			setListDates(dates);
-			setAllowNextWeek(true);
+			setAllowBackWeek(weekCount > 0);
+			setAllowNextWeek(isNextAvailableDate && true);
 		} else {
 			setAllowBackWeek(false);
 			setAllowNextWeek(false);
 		}
-	}, [dates, isNextAvailableDate]);
+	}, [dates, isNextAvailableDate, weekCount]);
 
 	return (
 		<div className={classes.container}>
