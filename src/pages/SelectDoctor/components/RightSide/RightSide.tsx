@@ -1,5 +1,6 @@
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import { isSameDay } from 'date-fns/esm';
 import isToday from 'date-fns/isToday';
 import {
 	DateSchedule,
@@ -215,6 +216,7 @@ const RightSide = ({
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
+	const [doctorsForDay, setDoctorsForDay] = useState<DoctorAvailability[]>([]);
 
 	// const updateDate = useCallback(
 	// 	(newDate: Date) => {
@@ -224,6 +226,23 @@ const RightSide = ({
 	// 	},
 	// 	[minutes, numSessions, useCase],
 	// );
+	useEffect(() => {
+		if (selectedDate != null) {
+			setDoctorsForDay(
+				doctors
+					.map((doctor: DoctorAvailability) => {
+						const schedulesSelectedDay = [...doctor.schedules].filter((schedule: Schedule) => {
+							const { startTime } = schedule;
+							return isSameDay(selectedDate, startTime);
+						});
+						const doctorCopy = { ...doctor };
+						doctorCopy.schedules = schedulesSelectedDay;
+						return doctorCopy;
+					})
+					.filter((doctor) => doctor.schedules.length > 0),
+			);
+		}
+	}, [selectedDate, doctors]);
 
 	useEffect(() => {
 		if (useCase) {
@@ -236,9 +255,9 @@ const RightSide = ({
 
 	const sectionWithSpecialty = () => (
 		<>
-			{doctors.length > 0 ? (
+			{doctorsForDay.length > 0 ? (
 				<DoctorList
-					doctors={doctors}
+					doctors={doctorsForDay}
 					selectDoctorCallback={selectDoctorCallback}
 					setDoctor={setDoctor}
 					setSchedule={setSchedule}

@@ -187,8 +187,9 @@ export const getNextAvailableSchedules = async (
 	useCaseID: string,
 	startDate: Date,
 ): Promise<NextAvailableSchedules> => {
+	startDate.setHours(0, 0, 0, 0);
 	const response = await aliviaAxios.get<NextAvailableSchedulesAPI>('/doctors/next-available-schedule', {
-		params: { use_case: useCaseID, from: format(startDate, 'yyyy-MM-dd') },
+		params: { use_case: useCaseID, from: startDate.getTime() },
 	});
 	const { data } = response;
 	const parsedDoctorsData = parseResponseData(data.data.doctors);
