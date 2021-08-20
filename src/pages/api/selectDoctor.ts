@@ -1,7 +1,6 @@
+import { addDays, addMinutes, isSameDay } from 'date-fns';
+import { parseUTCDate, transformToSnakeCase } from 'utils';
 import aliviaAxios from 'utils/customAxios';
-import { transformToSnakeCase } from 'utils';
-import { parseUTCDate } from 'utils';
-import { addDays, addMinutes, format, isSameDay } from 'date-fns';
 
 // API Types
 
