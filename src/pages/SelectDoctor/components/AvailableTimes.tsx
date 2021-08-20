@@ -160,7 +160,7 @@ const AvailableTimes = ({
 							key={`${name}-${doctorCmp}-${id}`}
 						/>
 					))}
-				{mode === 'short' && (
+				{false && (
 					<div className={classes.verMasButton} onClick={onClickVerMas}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más
