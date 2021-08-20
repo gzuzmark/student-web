@@ -19,8 +19,19 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			// width: '582px',
 			// height: '68px',
 		},
+		arrow: {
+			display: 'flex',
+			justifyContent: 'center',
+		},
 		pointer: {
 			cursor: 'pointer',
+		},
+		rotate: {
+			transform: 'rotate(180deg)',
+		},
+		skeleton: {
+			margin: '0px 5px',
+			borderRadius: '8px',
 		},
 	}),
 );

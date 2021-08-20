@@ -1,5 +1,6 @@
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import { isSameDay } from 'date-fns/esm';
 import isToday from 'date-fns/isToday';
 import {
 	DateSchedule,
@@ -10,7 +11,7 @@ import {
 	UseCase,
 } from 'pages/api';
 import { Loading, RightLayout } from 'pages/common';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
 import Carrousel from '../Carrousel/Carrousel';
@@ -156,8 +157,9 @@ const getClosestSchedules = async (
 	setDoctors: Function,
 	setMinDate: Function,
 	setListDates: Function,
+	setIsNextWeek: Function,
 ) => {
-	const { nextAvailableDate, doctors, dates } = await getNextAvailableSchedules(useCase, selectedDate);
+	const { nextAvailableDate, doctors, dates, isNextDays } = await getNextAvailableSchedules(useCase, selectedDate);
 	// const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
 	// const newDoctors = isTargetUseCase
 	// 	? doctors.map((doc: DoctorAvailability) => {
@@ -186,6 +188,7 @@ const getClosestSchedules = async (
 	setSelectedDate(selectedDate);
 	setMinDate(nextAvailableDate);
 	setListDates(dates);
+	setIsNextWeek(isNextDays);
 };
 
 interface RightSideProps {
@@ -215,6 +218,8 @@ const RightSide = ({
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
+	const [doctorsForDay, setDoctorsForDay] = useState<DoctorAvailability[]>([]);
+	const [isNextWeek, setIsNextWeek] = useState<boolean>(false);
 
 	// const updateDate = useCallback(
 	// 	(newDate: Date) => {
@@ -226,19 +231,50 @@ const RightSide = ({
 	// );
 
 	useEffect(() => {
-		if (useCase) {
-			setIsLoadData(true);
-			getClosestSchedules(useCase.id, new Date(), setSelectedDate, setDoctors, setMinDate, setListDates).finally(() =>
-				setIsLoadData(false),
+		if (selectedDate != null) {
+			setDoctorsForDay(
+				doctors
+					.map((doctor: DoctorAvailability) => {
+						const schedulesSelectedDay = [...doctor.schedules].filter((schedule: Schedule) => {
+							const { startTime } = schedule;
+							return isSameDay(selectedDate, startTime);
+						});
+						const doctorCopy = { ...doctor };
+						doctorCopy.schedules = schedulesSelectedDay;
+						return doctorCopy;
+					})
+					.filter((doctor) => doctor.schedules.length > 0),
 			);
 		}
-	}, [useCase]);
+	}, [selectedDate, doctors]);
+
+	const callApiSchedules = useCallback(
+		(startDate: Date) => {
+			if (useCase) {
+				setIsLoadData(true);
+				getClosestSchedules(
+					useCase.id,
+					startDate,
+					setSelectedDate,
+					setDoctors,
+					setMinDate,
+					setListDates,
+					setIsNextWeek,
+				).finally(() => setIsLoadData(false));
+			}
+		},
+		[useCase],
+	);
+
+	useEffect(() => {
+		callApiSchedules(new Date());
+	}, [callApiSchedules]);
 
 	const sectionWithSpecialty = () => (
 		<>
-			{doctors.length > 0 ? (
+			{doctorsForDay.length > 0 ? (
 				<DoctorList
-					doctors={doctors}
+					doctors={doctorsForDay}
 					selectDoctorCallback={selectDoctorCallback}
 					setDoctor={setDoctor}
 					setSchedule={setSchedule}
@@ -263,7 +299,14 @@ const RightSide = ({
 					</Typography>
 				</div>
 				{/* <DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} /> */}
-				<Carrousel dates={listDates} selectedDate={selectedDate} onSelectDate={(date: Date) => setSelectedDate(date)} />
+				<Carrousel
+					dates={isLoadData ? null : listDates}
+					selectedDate={selectedDate}
+					isNextAvailableDate={isNextWeek}
+					onSelectDate={(date: Date) => setSelectedDate(date)}
+					onBackWeek={callApiSchedules}
+					onNextWeek={callApiSchedules}
+				/>
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>

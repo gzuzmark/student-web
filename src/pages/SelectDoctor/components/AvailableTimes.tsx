@@ -7,7 +7,6 @@ import { ActiveDoctorTime } from './DoctorList/DoctorList';
 import { validSelectTimeWithNow } from './FunctionsHelper';
 import ModalErrorTime from './ModalErrorTime/ModalErrorTime';
 import TimeOption from './TimeOption';
-
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
 		flex: '1',
@@ -69,7 +68,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		padding: '12px 7px',
+		// padding: '12px 7px',
 		boxSizing: 'border-box',
 		borderRadius: '8px',
 		margin: '0px',
@@ -77,7 +76,15 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		background: '#E9FAF5',
 		border: '1.5px solid #E9FAF5',
 		cursor: 'pointer',
+		width: '24%',
+		height: '45px',
+
+		[breakpoints.up('lg')]: {
+			width: '16%',
+			height: '40px',
+		},
 	},
+
 	textVerMas: {
 		fontFamily: 'Montserrat, sans-serif',
 		fontStyle: 'normal',
@@ -99,7 +106,7 @@ interface AvailableTimesProps {
 	activeDoctorTime: ActiveDoctorTime;
 	mode?: ModeType;
 }
-
+const MAX_IN_SHORT = 4;
 const AvailableTimes = ({
 	availableDates,
 	name,
@@ -147,7 +154,7 @@ const AvailableTimes = ({
 			{!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null}
 			<div className={classes.times}>
 				{availableDates
-					//.slice(0, mode === 'short' ? MAX_IN_SHORT : availableDates.length)
+					.slice(0, mode === 'short' ? MAX_IN_SHORT : availableDates.length)
 					.map(({ id, startTime }: Schedule, scheduleIndex: number) => (
 						<TimeOption
 							scheduleId={id}
@@ -160,13 +167,13 @@ const AvailableTimes = ({
 							key={`${name}-${doctorCmp}-${id}`}
 						/>
 					))}
-				{mode === 'short' && (
+				{
 					<div className={classes.verMasButton} onClick={onClickVerMas}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más
 						</Typography>
 					</div>
-				)}
+				}
 			</div>
 			<ModalErrorTime isOpen={isOpenModal} setIsOpen={setIsOpenModal} message={messageError} />
 		</div>

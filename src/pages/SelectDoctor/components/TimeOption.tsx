@@ -9,16 +9,19 @@ interface StylesProps {
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	dateButtonWrapper: {
 		display: 'flex',
+
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		padding: '12px 7px',
+
 		boxSizing: 'border-box',
 		borderRadius: '8px',
 		margin: '0px 7.5px',
+		marginBottom: '10px',
+		padding: '12px 14px',
+
 		// width: '98px',
 		// marginRight: '7px',
-		// marginBottom: '11px',
 
 		// '&:nth-child(3n)': {
 		// 	marginRight: '0',
@@ -27,28 +30,27 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		// 	},
 		// },
 
-		// [breakpoints.up('lg')]: {
-		// 	'&:nth-last-child(-n + 4)': {
-		// 		marginBottom: '0',
-		// 	},
-		// },
+		[breakpoints.up('lg')]: {
+			width: '16%',
+			padding: '10px 0',
+		},
 		'&:first-child': {
-			marginLeft: '0px',
-			marginRight: '7.5px',
+			// marginLeft: '0px',
+			// marginRight: '7.5px',
 			[breakpoints.up('lg')]: {
-				marginRight: '7.5px',
+				// marginRight: '7.5px',
 			},
 		},
 		'&:last-child': {
-			marginRight: '0px',
-			marginLeft: '7.5px',
-			[breakpoints.up('lg')]: {
-				marginLeft: '7.5px',
-			},
+			// marginRight: '0px',
+			// marginLeft: '7.5px',
+			// [breakpoints.up('lg')]: {
+			// 	marginLeft: '7.5px',
+			// },
 		},
 	},
 	buttonDefault: {
-		border: '1.5px solid #84E4C6',
+		border: '2px solid #84E4C6',
 		backgroundColor: '#FFFFFF',
 		color: '#52575C',
 		cursor: 'pointer',
@@ -133,7 +135,7 @@ const TimeOption = ({ date, onClick, format, active = false, status }: TimeOptio
 						: classes.textSelected,
 				)}
 			>
-				{formatApiDate(date, 'h:mm a / dd-MMM' || format)}
+				{formatApiDate(date, 'h:mm a' || format)}
 			</Typography>
 			{/* </Button> */}
 		</div>
