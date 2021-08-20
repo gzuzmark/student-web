@@ -157,8 +157,9 @@ const getClosestSchedules = async (
 	setDoctors: Function,
 	setMinDate: Function,
 	setListDates: Function,
+	setIsNextWeek: Function,
 ) => {
-	const { nextAvailableDate, doctors, dates } = await getNextAvailableSchedules(useCase, selectedDate);
+	const { nextAvailableDate, doctors, dates, isNextDays } = await getNextAvailableSchedules(useCase, selectedDate);
 	// const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
 	// const newDoctors = isTargetUseCase
 	// 	? doctors.map((doc: DoctorAvailability) => {
@@ -187,6 +188,7 @@ const getClosestSchedules = async (
 	setSelectedDate(selectedDate);
 	setMinDate(nextAvailableDate);
 	setListDates(dates);
+	setIsNextWeek(isNextDays);
 };
 
 interface RightSideProps {
@@ -217,6 +219,7 @@ const RightSide = ({
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
 	const [doctorsForDay, setDoctorsForDay] = useState<DoctorAvailability[]>([]);
+	const [isNextWeek, setIsNextWeek] = useState<boolean>(false);
 
 	// const updateDate = useCallback(
 	// 	(newDate: Date) => {
@@ -247,9 +250,15 @@ const RightSide = ({
 	useEffect(() => {
 		if (useCase) {
 			setIsLoadData(true);
-			getClosestSchedules(useCase.id, new Date(), setSelectedDate, setDoctors, setMinDate, setListDates).finally(() =>
-				setIsLoadData(false),
-			);
+			getClosestSchedules(
+				useCase.id,
+				new Date(),
+				setSelectedDate,
+				setDoctors,
+				setMinDate,
+				setListDates,
+				setIsNextWeek,
+			).finally(() => setIsLoadData(false));
 		}
 	}, [useCase]);
 
@@ -282,7 +291,12 @@ const RightSide = ({
 					</Typography>
 				</div>
 				{/* <DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} /> */}
-				<Carrousel dates={listDates} selectedDate={selectedDate} onSelectDate={(date: Date) => setSelectedDate(date)} />
+				<Carrousel
+					dates={isLoadData ? null : listDates}
+					selectedDate={selectedDate}
+					isNextAvailableDate={isNextWeek}
+					onSelectDate={(date: Date) => setSelectedDate(date)}
+				/>
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>
