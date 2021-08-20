@@ -11,6 +11,9 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			[breakpoints.up('lg')]: {
 				width: '1100px',
 				display: 'flex',
+				justifyContent: 'space-between',
+				alignItems: 'center',
+				flexWrap: 'wrap',
 			},
 		},
 		counter: {
@@ -35,9 +38,9 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			//boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
 			[breakpoints.up('lg')]: {
 				// borderRadius: '10px',
-				padding: '20px 24px',
-				margin: '28px',
-				width: '50%',
+				// padding: '20px 24px',
+				margin: '10px',
+				width: '44%',
 				// boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
 			},
 		},
