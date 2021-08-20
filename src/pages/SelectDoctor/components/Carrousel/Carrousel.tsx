@@ -87,7 +87,7 @@ const Carrousel = ({
 				</div>
 				{dates === null
 					? [0, 1, 2, 3, 4, 5, 6].map((n, i) => (
-							<Skeleton key={i} variant="rect" width={76} height={64} className={classes.skeleton} />
+							<Skeleton key={i} variant="rect" width={82} height={64} className={classes.skeleton} />
 					  ))
 					: (isDesktop ? listDates : listDates.slice(0, 3)).map((dateSchedule: DateSchedule, i: number) => (
 							<DateCalendar key={i} dateSchedule={dateSchedule} selectedDate={selectedDate} onClick={onClickDay} />
