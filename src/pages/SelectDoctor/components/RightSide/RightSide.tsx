@@ -150,6 +150,14 @@ const getDoctors = async (
 	}
 };
 
+const getSelectedDay = (dates: DateSchedule[]): Date | null => {
+	const datesWithSessions = dates.filter((date) => !date.isEmpty);
+	if (datesWithSessions.length > 0) {
+		return datesWithSessions[0].date;
+	}
+	return null;
+};
+
 const getClosestSchedules = async (
 	useCase: string,
 	selectedDate: Date,
@@ -183,9 +191,8 @@ const getClosestSchedules = async (
 	// 	  })
 	// 	: doctors;
 
-	console.log(dates);
 	setDoctors(doctors);
-	setSelectedDate(selectedDate);
+	setSelectedDate(getSelectedDay(dates));
 	setMinDate(nextAvailableDate);
 	setListDates(dates);
 	setIsNextWeek(isNextDays);
@@ -194,8 +201,8 @@ const getClosestSchedules = async (
 interface RightSideProps {
 	useCase: UseCase | null | undefined;
 	isUserLoggedIn: boolean;
-	minutes: string;
-	numSessions: string;
+	minutes?: string;
+	numSessions?: string;
 	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
@@ -204,8 +211,6 @@ interface RightSideProps {
 
 const RightSide = ({
 	useCase,
-	minutes,
-	numSessions,
 	selectDoctorCallback,
 	setDoctor,
 	setSchedule,

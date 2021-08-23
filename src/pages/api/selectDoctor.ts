@@ -192,22 +192,23 @@ export const getNextAvailableSchedules = async (
 	});
 	const { data } = response;
 	const parsedDoctorsData = parseResponseData(data.data.doctors);
-	const dates = validWeek(data.data.dates, startDate);
-	const { status } = data.data;
+	const dates = validWeek(parsedDoctorsData, startDate);
 
 	return {
 		nextAvailableDate: parseUTCDate(data.data.next_available_date),
 		doctors: parsedDoctorsData,
 		dates: dates,
-		isNextDays: status,
+		isNextDays: data.data.dates.length > 7,
 	};
 };
 
-const validWeek = (dates: string[], startDate: Date) => {
-	const listDates: Date[] = parseToDates(dates);
+const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
 	const listWeek = completeWeek(startDate);
 	return listWeek.map<DateSchedule>((dateWeek: Date) => {
-		const hasSessions = listDates.filter((date: Date) => isSameDay(dateWeek, date));
+		const hasSessions = doctors.filter((doctor: DoctorAvailability) => {
+			const days = doctor.schedules.filter((schedule) => isSameDay(schedule.startTime, dateWeek));
+			return days.length > 0;
+		});
 		return {
 			date: dateWeek,
 			isEmpty: hasSessions.length === 0,
@@ -219,6 +220,7 @@ const completeWeek = (startDate: Date) => {
 	return [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(startDate, i));
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const parseToDates = (dates: string[]): Date[] => {
 	const offset = new Date().getTimezoneOffset();
 	const datesToDatesObjects: Date[] = dates.map((date: string) => {
