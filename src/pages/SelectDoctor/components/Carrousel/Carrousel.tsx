@@ -8,7 +8,7 @@ import { Theme, useMediaQuery } from '@material-ui/core';
 import { useEffect } from 'react';
 import { DateSchedule } from 'pages/api';
 import { Skeleton } from '@material-ui/lab';
-import { addDays, isSameDay } from 'date-fns/esm';
+import { addDays, isAfter, isSameDay } from 'date-fns/esm';
 import { useCallback } from 'react';
 
 type ModeCarrouselType = 'short' | 'large';
@@ -75,7 +75,7 @@ const Carrousel = ({
 		}
 	};
 
-	const isBackDay = useCallback((): boolean => {
+	const isBackWeek = useCallback((): boolean => {
 		if (dates != null) {
 			const firstDay = dates[0].date;
 			const today = new Date();
@@ -84,23 +84,34 @@ const Carrousel = ({
 		return false;
 	}, [dates]);
 
-	useEffect(() => {
-		if (mode === 'large') {
-			isDesktop ? setMaxItems(NUM_ITEMS_LARGE) : setMaxItems(NUM_ITEMS_SHORT);
-		} else {
-			setMaxItems(NUM_ITEMS_SHORT);
-		}
-	}, [mode, isDesktop]);
+	const isNextWeek = useCallback(
+		(totalItems: number): boolean => {
+			if (dates != null) {
+				if (totalItems === NUM_ITEMS_SHORT) {
+					const flagDate = dates[NUM_ITEMS_SHORT];
+					const hasDayWithSessions = dates.filter((dateSchedule) =>
+						isAfter(dateSchedule.date, flagDate.date) ? !dateSchedule.isEmpty : false,
+					);
+					return hasDayWithSessions.length > 0;
+				}
+				return isNextAvailableDate;
+			}
+			return false;
+		},
+		[dates, isNextAvailableDate],
+	);
 
 	useEffect(() => {
+		const totalItems = mode === 'large' ? (isDesktop ? NUM_ITEMS_LARGE : NUM_ITEMS_SHORT) : NUM_ITEMS_SHORT;
+		setMaxItems(totalItems);
 		if (dates != null) {
-			setAllowBackWeek(isBackDay());
-			setAllowNextWeek(isNextAvailableDate);
+			setAllowBackWeek(isBackWeek());
+			setAllowNextWeek(isNextWeek(totalItems));
 		} else {
 			setAllowBackWeek(false);
 			setAllowNextWeek(false);
 		}
-	}, [dates, isBackDay, isNextAvailableDate]);
+	}, [mode, isDesktop, dates, isNextAvailableDate, isBackWeek, isNextWeek]);
 
 	return (
 		<div className={classes.container}>
