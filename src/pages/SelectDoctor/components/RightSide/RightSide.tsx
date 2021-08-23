@@ -183,7 +183,6 @@ const getClosestSchedules = async (
 	// 	  })
 	// 	: doctors;
 
-	console.log(dates);
 	setDoctors(doctors);
 	setSelectedDate(selectedDate);
 	setMinDate(nextAvailableDate);

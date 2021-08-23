@@ -36,7 +36,6 @@ const DoctorList = ({
 	setSchedule,
 	shouldShowMoreDoctorInfo,
 }: DoctorListProps) => {
-	console.log(doctors);
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({
