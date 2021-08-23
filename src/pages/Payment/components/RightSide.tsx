@@ -418,7 +418,7 @@ const RightSide = ({
 
 	const isPagoEfectivoVisible = true; //isWeekDayLateNightOrSunday();
 
-	// const useFreeBenefit = totalCost && parseInt(totalCost) === 0;
+	const useFreeBenefit = totalCost && parseInt(totalCost) === 0;
 
 	const gotToYoutubeSteps = () => {
 		redirectToURL('https://www.youtube.com/watch?v=n-Gg8ar0IkI', true);
@@ -474,7 +474,7 @@ const RightSide = ({
 					</Typography>
 					<Typography className={classes.description}> {t('payment.right.adviceInformation')} </Typography>
 				</Typography>
-				{!useBenefit && (
+				{!useFreeBenefit && (
 					<div className={classes.discountWrapper}>
 						<TextField
 							value={discountCode}
@@ -499,13 +499,13 @@ const RightSide = ({
 						</div>
 					</div>
 				)}
-				{!useBenefit && (
+				{!useFreeBenefit && (
 					<Typography className={classes.subtitle} component="span" variant={matches ? 'h3' : 'body1'}>
 						{isPagoEfectivoVisible ? t('payment.right.method') : t('payment.right.method-only')}:
 					</Typography>
 				)}
 				<div className={classes.buttonWrapper}>
-					{!useBenefit && (
+					{!useFreeBenefit && (
 						<Button
 							className={classes.option}
 							// onClick={(e) => {
@@ -544,7 +544,7 @@ const RightSide = ({
 							</div>
 						</Button>
 					)}
-					{isPagoEfectivoVisible && !useBenefit && (
+					{isPagoEfectivoVisible && !useFreeBenefit && (
 						<Button
 							className={classes.option}
 							onClick={(e) => {
@@ -578,7 +578,7 @@ const RightSide = ({
 							</div>
 						</Button>
 					)}
-					{useBenefit && (
+					{useFreeBenefit && (
 						<Button
 							className={classes.confirmButton}
 							onClick={(e) => {
