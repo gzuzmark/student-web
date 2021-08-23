@@ -1,7 +1,7 @@
 import { Theme, Typography } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Schedule } from 'pages/api';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { stylesWithTheme } from 'utils';
 import { ActiveDoctorTime } from './DoctorList/DoctorList';
 import { validSelectTimeWithNow } from './FunctionsHelper';
@@ -95,7 +95,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-type ModeType = 'short' | 'large';
+type ModeType = 'short' | 'extended';
 // const MAX_IN_SHORT = 4;
 
 interface AvailableTimesProps {
@@ -106,7 +106,7 @@ interface AvailableTimesProps {
 	activeDoctorTime: ActiveDoctorTime;
 	mode?: ModeType;
 }
-const MAX_IN_SHORT = 4;
+
 const AvailableTimes = ({
 	availableDates,
 	name,
@@ -116,8 +116,9 @@ const AvailableTimes = ({
 	mode = 'short',
 }: AvailableTimesProps) => {
 	const classes = useStyles();
-	const matches = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
+	const isDesktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 	const [isOpenModal, setIsOpenModal] = useState(false);
+	const [maxItems, setMaxItems] = useState<number>(0);
 	const [messageError, setMessageError] = useState('');
 
 	const activateAll = () => {
@@ -137,7 +138,7 @@ const AvailableTimes = ({
 
 	const onClickVerMas = () => null;
 
-	const format = matches ? 'hh:mm a' : undefined;
+	const format = 'hh:mm a';
 
 	const isSelectedDoctor = activeDoctorTime.doctorCmp === doctorCmp;
 
@@ -149,12 +150,22 @@ const AvailableTimes = ({
 	const isButtonActive = (scheduleID: string) =>
 		isEmptyTime ? false : activeDoctorTime.scheduleID === scheduleID && isSelectedDoctor;
 
+	useEffect(() => {
+		let totalItems = 0;
+		if (isDesktop) {
+			totalItems = mode === 'short' ? 4 : availableDates.length;
+		} else {
+			totalItems = mode === 'short' ? 3 : availableDates.length;
+		}
+		setMaxItems(totalItems);
+	}, [isDesktop, mode, availableDates]);
+
 	return (
 		<div className={classes.container}>
 			{!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null}
 			<div className={classes.times}>
 				{availableDates
-					.slice(0, mode === 'short' ? MAX_IN_SHORT : availableDates.length)
+					.slice(0, mode === 'short' ? maxItems : availableDates.length)
 					.map(({ id, startTime }: Schedule, scheduleIndex: number) => (
 						<TimeOption
 							scheduleId={id}
@@ -163,17 +174,17 @@ const AvailableTimes = ({
 							disabled={isButtonDisabled(id)}
 							active={isButtonActive(id)}
 							format={format}
-							status={'default'}
+							status={'disabled'}
 							key={`${name}-${doctorCmp}-${id}`}
 						/>
 					))}
-				{
+				{availableDates.length > maxItems && (
 					<div className={classes.verMasButton} onClick={onClickVerMas}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más
 						</Typography>
 					</div>
-				}
+				)}
 			</div>
 			<ModalErrorTime isOpen={isOpenModal} setIsOpen={setIsOpenModal} message={messageError} />
 		</div>
