@@ -1,5 +1,4 @@
 import { addDays, addMinutes, isSameDay } from 'date-fns';
-import { DoctorsHeader } from 'pages/SelectDoctor/components/DoctorsHeader';
 import { parseUTCDate, transformToSnakeCase } from 'utils';
 import aliviaAxios from 'utils/customAxios';
 

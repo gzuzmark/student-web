@@ -40,7 +40,6 @@ const Carrousel = ({
 	const classes = useStyles();
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const [maxItems, setMaxItems] = useState<number>(0);
-	// const [weekCount, setWeekCount] = useState<number>(0);
 	const [allowBackWeek, setAllowBackWeek] = useState(false);
 	const [allowNextWeek, setAllowNextWeek] = useState(false);
 
