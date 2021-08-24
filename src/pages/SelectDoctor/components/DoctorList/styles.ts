@@ -8,11 +8,12 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			alignItems: 'center',
 		},
 		doctorList: {
+			width: '95%',
 			[breakpoints.up('lg')]: {
 				width: '1100px',
 				display: 'flex',
 				justifyContent: 'space-between',
-				alignItems: 'center',
+				// alignItems: 'center',
 				flexWrap: 'wrap',
 			},
 		},
@@ -39,7 +40,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			[breakpoints.up('lg')]: {
 				// borderRadius: '10px',
 				// padding: '20px 24px',
-				margin: '10px',
+				margin: '10px 12px',
 				width: '44%',
 				// boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
 			},
@@ -137,9 +138,11 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 		continueButton: {
 			fontSize: '15px',
 			textTransform: 'unset',
+			fontWeight: 'bold',
 			[breakpoints.up('lg')]: {
-				width: '171px',
+				// width: '171px',
 				fontSize: '13px',
+				marginTop: '10px',
 				lineHeight: '18px',
 				padding: '11.5px 0',
 			},
@@ -158,6 +161,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			display: 'flex',
 			flex: '1',
 			justifyContent: 'flex-end',
+			marginRight: '9px',
 			// paddingBottom: '12px',
 			// [breakpoints.up('lg')]: {
 			// 	paddingBottom: '22px',

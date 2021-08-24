@@ -3,6 +3,7 @@ const selectDoctor = {
 	'left.title.firstLine': 'Selecciona al doctor/a',
 	'left.title.secondLine': 'y horario ideal.',
 	'left.button.continue': 'Continuar',
+	'left.button.seleccionar': 'Seleccionar',
 	'right.default.title': 'Selecciona la especialidad.',
 	'right.title': 'Selecciona la <strong>fecha</strong> y <strong>doctor</strong>',
 	'right.dateLabel': 'FECHA:',

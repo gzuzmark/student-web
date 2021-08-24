@@ -16,9 +16,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 		boxSizing: 'border-box',
 		borderRadius: '8px',
-		margin: '0px 7.5px',
+
 		marginBottom: '10px',
 		padding: '12px 14px',
+		margin: '0px 3.5px',
 
 		// width: '98px',
 		// marginRight: '7px',
@@ -33,6 +34,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			width: '16%',
 			padding: '10px 0',
+			margin: '5px 9.5px',
 		},
 		'&:first-child': {
 			// marginLeft: '0px',

@@ -85,7 +85,7 @@ const DoctorSessions = ({
 				<AvailableTimes
 					doctorCmp={cmp}
 					availableDates={schedules}
-					mode={'short'}
+					mode={'extended'}
 					name={name}
 					selectTime={selectDoctor(cmp, doctorIndex)}
 					activeDoctorTime={activeDoctorTime}
@@ -94,7 +94,7 @@ const DoctorSessions = ({
 			<div>
 				{activeDoctorTime.doctorCmp === cmp ? (
 					<Button fullWidth className={classes.continueButton} variant="contained" onClick={continueToPreRegister}>
-						{t('left.button.continue')}
+						{t('left.button.seleccionar')}
 					</Button>
 				) : null}
 			</div>
