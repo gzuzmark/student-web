@@ -144,8 +144,8 @@ const AvailableTimes = ({
 
 	const isEmptyTime = activeDoctorTime.scheduleID === '';
 
-	const isButtonDisabled = (scheduleID: string) =>
-		isEmptyTime ? false : activeDoctorTime.scheduleID !== scheduleID || !isSelectedDoctor;
+	// const isButtonDisabled = (scheduleID: string) =>
+	// 	isEmptyTime ? false : activeDoctorTime.scheduleID !== scheduleID || !isSelectedDoctor;
 
 	const isButtonActive = (scheduleID: string) =>
 		isEmptyTime ? false : activeDoctorTime.scheduleID === scheduleID && isSelectedDoctor;
