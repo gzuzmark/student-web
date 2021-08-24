@@ -166,19 +166,19 @@ const AvailableTimes = ({
 			<div className={classes.times}>
 				{availableDates
 					.slice(0, mode === 'short' ? maxItems : availableDates.length)
-					.map(({ id, startTime }: Schedule, scheduleIndex: number) => (
+					.map(({ id, startTime, isDisabled }: Schedule, scheduleIndex: number) => (
 						<TimeOption
 							scheduleId={id}
 							date={startTime}
 							onClick={onClick(id, scheduleIndex)}
-							disabled={isButtonDisabled(id)}
+							disabled={isDisabled}
 							active={isButtonActive(id)}
 							format={format}
-							status={'disabled'}
+							status={'default'}
 							key={`${name}-${doctorCmp}-${id}`}
 						/>
 					))}
-				{availableDates.length > maxItems && (
+				{mode === 'short' && availableDates.length > maxItems && (
 					<div className={classes.verMasButton} onClick={onClickVerMas}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más

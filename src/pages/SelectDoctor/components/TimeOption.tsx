@@ -102,13 +102,13 @@ interface TimeOptionProps {
 	scheduleId?: string;
 	date: Date;
 	onClick: () => void;
-	disabled?: boolean;
+	disabled: boolean;
 	active?: boolean;
 	format?: string;
 	status?: StatusType;
 }
 
-const TimeOption = ({ date, onClick, format, active = false, status }: TimeOptionProps) => {
+const TimeOption = ({ date, onClick, disabled, format, active = false, status }: TimeOptionProps) => {
 	const classes = useStyles({ active });
 
 	return (

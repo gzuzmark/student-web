@@ -33,10 +33,10 @@ const DateCalendar = ({ dateSchedule, selectedDate, onClick }: DateCalendarProps
 		} else if (isTomorrow(date)) {
 			setDayText('Mañana');
 		} else {
-			const day = format(date, 'eee', { locale: es });
+			const day = format(date, 'eeee', { locale: es });
 			setDayText(_.upperFirst(day));
 		}
-		setDateMonthText(format(date, 'dd MMMM', { locale: es }));
+		setDateMonthText(format(date, 'dd MMM', { locale: es }));
 		setStatus(() => {
 			return isEmpty
 				? 'disabled'

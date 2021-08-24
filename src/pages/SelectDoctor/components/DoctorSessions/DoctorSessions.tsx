@@ -85,7 +85,7 @@ const DoctorSessions = ({
 				<AvailableTimes
 					doctorCmp={cmp}
 					availableDates={schedules}
-					mode={'extended'}
+					mode={'short'}
 					name={name}
 					selectTime={selectDoctor(cmp, doctorIndex)}
 					activeDoctorTime={activeDoctorTime}
