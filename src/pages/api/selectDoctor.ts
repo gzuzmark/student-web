@@ -1,4 +1,4 @@
-import { addDays, addMinutes, isSameDay } from 'date-fns';
+import { addDays, addHours, addMinutes, isAfter, isSameDay } from 'date-fns';
 import { parseUTCDate, transformToSnakeCase } from 'utils';
 import aliviaAxios from 'utils/customAxios';
 
@@ -127,47 +127,53 @@ const isDisabled = (studentId: string | null): boolean => {
 	return true;
 };
 
-const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] =>
-	doctors.map(
-		({
-			id,
-			name,
-			cmp,
-			rating,
-			about_me,
-			formation,
-			diseases,
-			ratings,
-			schedules,
-			photo,
-			title,
-			last_name,
-			specialty_name,
-		}: DoctorAvailabilityAPI) => ({
-			id,
-			name,
-			cmp,
-			lastName: last_name,
-			speciality: title,
-			specialityName: specialty_name,
-			profilePicture: photo,
-			schedules: schedules.map(({ id, start_time, end_time, student_id }: ScheduleAPI) => ({
+const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] => {
+	const minHourDate = addHours(new Date(), 1);
+	return doctors
+		.map(
+			({
 				id,
-				startTime: parseUTCDate(start_time),
-				endTime: parseUTCDate(end_time),
-				isDisabled: isDisabled(student_id),
-			})),
-			rating,
-			aboutMe: about_me,
-			education: formation,
-			diseases,
-			patientOpinions: ratings.map(({ rating, comment, created_at }) => ({
-				comment,
-				score: rating,
-				datePublished: created_at,
-			})),
-		}),
-	);
+				name,
+				cmp,
+				rating,
+				about_me,
+				formation,
+				diseases,
+				ratings,
+				schedules,
+				photo,
+				title,
+				last_name,
+				specialty_name,
+			}: DoctorAvailabilityAPI) => ({
+				id,
+				name,
+				cmp,
+				lastName: last_name,
+				speciality: title,
+				specialityName: specialty_name,
+				profilePicture: photo,
+				schedules: schedules
+					.map(({ id, start_time, end_time, student_id }: ScheduleAPI) => ({
+						id,
+						startTime: parseUTCDate(start_time),
+						endTime: parseUTCDate(end_time),
+						isDisabled: isDisabled(student_id),
+					}))
+					.filter(({ startTime }) => isAfter(startTime, minHourDate)),
+				rating,
+				aboutMe: about_me,
+				education: formation,
+				diseases,
+				patientOpinions: ratings.map(({ rating, comment, created_at }) => ({
+					comment,
+					score: rating,
+					datePublished: created_at,
+				})),
+			}),
+		)
+		.filter((doctor) => doctor.schedules.length > 0);
+};
 
 const createMedicalSpecialityQuery = (data: RequestProps): SnakeRequestProps =>
 	transformToSnakeCase<RequestProps, SnakeRequestProps>(data);
