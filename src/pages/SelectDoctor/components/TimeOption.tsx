@@ -36,6 +36,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			padding: '10px 0',
 			margin: '5px 9.5px',
 		},
+		[breakpoints.down('xs')]: {
+			padding: '12px 10px',
+			margin: '4px 2px',
+			marginRight: '10px',
+		},
 		'&:first-child': {
 			// marginLeft: '0px',
 			// marginRight: '7.5px',
