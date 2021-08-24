@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Rating from '@material-ui/lab/Rating';
-import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
-
 import { DoctorAvailability, Schedule } from 'pages/api';
-import { addGAEvent, getHumanDay, getHour } from 'utils';
-
-import AvailableTimes from '../AvailableTimes';
-import useStyles from './styles';
-import DetailedDoctorModal from './DetailedDoctorModal';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { addGAEvent, getHour, getHumanDay } from 'utils';
+import DoctorSessions from '../DoctorSessions/DoctorSessions';
 import { validSelectTimeWithNow } from '../FunctionsHelper';
 import { ModalErrorTime } from '../ModalErrorTime';
+import DetailedDoctorModal from './DetailedDoctorModal';
+import useStyles from './styles';
 
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
@@ -20,6 +15,7 @@ interface DoctorListProps {
 	setDoctor: Function;
 	setSchedule: Function;
 	shouldShowMoreDoctorInfo: boolean;
+	doctorViewSessionExtended: DoctorAvailability | null;
 }
 
 export interface ActiveDoctorTime {
@@ -35,6 +31,7 @@ const DoctorList = ({
 	setDoctor,
 	setSchedule,
 	shouldShowMoreDoctorInfo,
+	doctorViewSessionExtended = null,
 }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
@@ -90,6 +87,10 @@ const DoctorList = ({
 		}
 	};
 
+	if (doctorViewSessionExtended != null) {
+		return <div>Doctor extendido</div>;
+	}
+
 	return (
 		<div className={classes.container}>
 			<div className={classes.counter}>
@@ -101,89 +102,18 @@ const DoctorList = ({
 				</Typography>
 			</div>
 			<div className={classes.doctorList}>
-				{doctors.map(
-					(
-						{ name, lastName, cmp, profilePicture, speciality, rating, schedules, patientOpinions }: DoctorAvailability,
-						doctorIndex: number,
-					) => (
-						<div className={classes.doctorWrapper} key={doctorIndex}>
-							<div className={classes.doctor}>
-								<div className={classes.photoWrapper}>
-									<img className={classes.photo} src={profilePicture} alt="doctor" />
-								</div>
-								<div className={classes.info}>
-									<div className={classes.nameWrapper}>
-										<Typography component="span" className={clsx(classes.name, 'no-caps')}>
-											{t('right.doctor.prefix')}{' '}
-										</Typography>
-										<Typography component="span" className={classes.name}>
-											{name} {lastName}
-										</Typography>
-									</div>
-									{/* <div className={classes.flexWrapper}>
-										<div className={classes.specialityWrapper}>
-											<Typography className={classes.speciality}>{speciality}</Typography>
-										</div>
-										<div>
-											<Typography className={classes.cmp}>CMP: {cmp}</Typography>
-										</div>
-									</div> */}
-									<div className={classes.doctorInfoWrapper}>
-										<div>
-											<Button
-												className={classes.doctorMoreInfo}
-												onClick={() => {
-													selectDoctorForModal(doctorIndex);
-													openDetailedDoctorModal();
-												}}
-											>
-												{t('right.doctor.moreInformation')}
-											</Button>
-										</div>
-										{true && patientOpinions.length >= 1 && (
-											<div className={classes.ratingWrapper}>
-												<Rating
-													className={classes.doctorRating}
-													value={rating}
-													precision={0.5}
-													readOnly
-													size={'small'}
-												/>
-												<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
-											</div>
-										)}
-									</div>
-								</div>
-							</div>
-							{/* <div className={classes.availableTitleWrapper}>
-								<Typography className={classes.availableTitle} component="span">
-									{t('right.availableDoctors.title')}
-								</Typography>
-							</div> */}
-							<div className={classes.timesWrapper}>
-								<AvailableTimes
-									doctorCmp={cmp}
-									availableDates={schedules}
-									name={name}
-									selectTime={selectDoctor(cmp, doctorIndex)}
-									activeDoctorTime={activeDoctorTime}
-								/>
-							</div>
-							<div>
-								{activeDoctorTime.doctorCmp === cmp ? (
-									<Button
-										fullWidth
-										className={classes.continueButton}
-										variant="contained"
-										onClick={continueToPreRegister}
-									>
-										{t('left.button.continue')}
-									</Button>
-								) : null}
-							</div>
-						</div>
-					),
-				)}
+				{doctors.map((doctor: DoctorAvailability, doctorIndex: number) => (
+					<DoctorSessions
+						key={doctorIndex}
+						doctor={doctor}
+						doctorIndex={doctorIndex}
+						activeDoctorTime={activeDoctorTime}
+						selectDoctor={selectDoctor}
+						selectDoctorForModal={selectDoctorForModal}
+						openDetailedDoctorModal={openDetailedDoctorModal}
+						continueToPreRegister={continueToPreRegister}
+					/>
+				))}
 				{shouldShowMoreDoctorInfo ? (
 					<DetailedDoctorModal
 						isOpen={isDetailDoctorModalOpen}

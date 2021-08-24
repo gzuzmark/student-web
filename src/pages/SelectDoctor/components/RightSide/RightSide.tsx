@@ -284,6 +284,7 @@ const RightSide = ({
 					setDoctor={setDoctor}
 					setSchedule={setSchedule}
 					shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
+					doctorViewSessionExtended={null}
 				/>
 			) : (
 				<div className={classes.emptyMessageWrapper}>
@@ -294,6 +295,22 @@ const RightSide = ({
 			)}
 		</>
 	);
+	// if (true) {
+	// 	return (
+	// 		<RightLayout className={classes.rightLayout}>
+	// 			<div className={classes.wrapper}>
+	// 				<Carrousel
+	// 					dates={isLoadData ? null : listDates}
+	// 					selectedDate={selectedDate}
+	// 					isNextAvailableDate={isNextWeek}
+	// 					onSelectDate={(date: Date) => setSelectedDate(date)}
+	// 					onBackWeek={callApiSchedules}
+	// 					onNextWeek={callApiSchedules}
+	// 				/>
+	// 			</div>
+	// 		</RightLayout>
+	// 	);
+	// }
 
 	return (
 		<RightLayout className={classes.rightLayout}>
