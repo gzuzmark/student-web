@@ -1065,7 +1065,7 @@ const Payment = () => {
 												<Field
 													component={TextField}
 													name="documentType"
-													label={t('Documento')}
+													label={t('contact.fields.id.label.toYou')}
 													variant="outlined"
 													fullWidth
 													onChange={(e: any) => {
