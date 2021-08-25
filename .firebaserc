@@ -1,6 +1,16 @@
 {
   "projects": {
     "default": "alivia-web-client-dev",
-    "prod": "alivia-pacientes"
+    "prod": "alivia-pacientes",
+    "pacientes-stage": "alivia-pacientes-stage"
+  },
+  "targets": {
+    "alivia-pacientes-stage": {
+      "hosting": {
+        "pacientes-stage": [
+          "alivia-pacientes-stage"
+        ]
+      }
+    }
   }
 }
