@@ -121,9 +121,9 @@ const AvailableTimes = ({
 	const [maxItems, setMaxItems] = useState<number>(0);
 	const [messageError, setMessageError] = useState('');
 
-	const activateAll = () => {
-		selectTime('', -1);
-	};
+	// const activateAll = () => {
+	// 	selectTime('', -1);
+	// };
 
 	const onClick = (scheduleId: string, scheduleIndex: number) => () => {
 		try {
