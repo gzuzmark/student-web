@@ -83,7 +83,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			padding: '0px',
 		},
 		nameWrapper: {
-			paddingBottom: '14px',
+			paddingBottom: '3px',
 		},
 		name: {
 			fontFamily: 'Montserrat,-apple-system,sans-serif',
