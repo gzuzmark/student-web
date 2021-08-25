@@ -8,7 +8,6 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			alignItems: 'center',
 		},
 		doctorList: {
-			width: '42%',
 			[breakpoints.up('lg')]: {
 				width: '1100px',
 				display: 'flex',
@@ -18,6 +17,9 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			},
 			[breakpoints.down('xs')]: {
 				width: '95%',
+			},
+			[breakpoints.down('md')]: {
+				width: '55%%',
 			},
 		},
 		counter: {
@@ -46,6 +48,9 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 				margin: '10px 12px',
 				width: '44%',
 				// boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+			},
+			[breakpoints.down('xs')]: {
+				padding: '20px 10px',
 			},
 		},
 		doctor: {
