@@ -77,10 +77,26 @@ export const defaultNewUserValidationSchema = object().shape({
 });
 
 export const guestValidationSchema = object().shape({
+	identificationType: string().required(messages.identificationType.required),
 	identification: string()
 		.min(8, messages.identification.digits)
 		.max(12, messages.identification.digits)
-		.required(messages.identification.required),
+		.required(messages.identification.required)
+		.when('identificationType', {
+			is: 1,
+			then: string().matches(
+				/^[0-9]{8}$/g,
+				'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character',
+			),
+		})
+		.when('identificationType', {
+			is: 2,
+			then: string().matches(
+				/^[a-zA-Z0-9]{12,}$/g,
+				'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character',
+			),
+		}),
+
 	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
 		.max(9, messages.phoneNumber.required)
