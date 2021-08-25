@@ -188,7 +188,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			fontSize: '12px',
 			lineHeight: '16px',
 			color: '#A3ABCC',
-			marginTop: '1.5px',
+			marginTop: '4.5px',
 			marginLeft: '10px',
 			marginRight: '5px',
 		},
@@ -203,6 +203,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			color: '#676F8F',
 			margin: '0px !important',
 			padding: '0px !important',
+			justifyContent: 'flex-start',
 			// '&:hover': {
 			// 	textDecoration: 'none',
 			// },

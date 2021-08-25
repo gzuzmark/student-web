@@ -57,7 +57,6 @@ const Carrousel = ({
 				const firstSchedule: DateSchedule = dates[0];
 				const { date } = firstSchedule;
 				const firstDate = addDays(date, (maxItems - 1) * -1);
-				console.log('Back Carrousel', firstDate);
 				onBackWeek(firstDate);
 			}
 		}
@@ -69,7 +68,6 @@ const Carrousel = ({
 			setAllowNextWeek(false);
 			const lastIndex = maxItems - 1;
 			if (onNextWeek) {
-				console.log('Next Carrousel', dates[lastIndex].date);
 				onNextWeek(dates[lastIndex].date);
 			}
 		}

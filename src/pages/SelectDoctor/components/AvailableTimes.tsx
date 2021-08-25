@@ -121,9 +121,9 @@ const AvailableTimes = ({
 	const [maxItems, setMaxItems] = useState<number>(0);
 	const [messageError, setMessageError] = useState('');
 
-	const activateAll = () => {
-		selectTime('', -1);
-	};
+	// const activateAll = () => {
+	// 	selectTime('', -1);
+	// };
 
 	const onClick = (scheduleId: string, scheduleIndex: number) => () => {
 		try {
@@ -162,7 +162,7 @@ const AvailableTimes = ({
 
 	return (
 		<div className={classes.container}>
-			{!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null}
+			{/* {!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null} */}
 			<div className={classes.times}>
 				{availableDates
 					.slice(0, mode === 'short' ? maxItems : availableDates.length)
@@ -174,7 +174,7 @@ const AvailableTimes = ({
 							disabled={isDisabled}
 							active={isButtonActive(id)}
 							format={format}
-							status={'default'}
+							status={isDisabled ? 'disabled' : activeDoctorTime.scheduleID === id ? 'selected' : 'default'}
 							key={`${name}-${doctorCmp}-${id}`}
 						/>
 					))}
