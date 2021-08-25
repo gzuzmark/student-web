@@ -285,6 +285,7 @@ const RightSide = ({
 					setSchedule={setSchedule}
 					shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
 					doctorViewSessionExtended={null}
+					selectedDate={selectedDate || new Date()}
 				/>
 			) : (
 				<div className={classes.emptyMessageWrapper}>

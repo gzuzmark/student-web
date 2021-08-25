@@ -1,6 +1,6 @@
 import Typography from '@material-ui/core/Typography';
 import { DoctorAvailability, Schedule } from 'pages/api';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { addGAEvent, getHour, getHumanDay } from 'utils';
 import DoctorSessions from '../DoctorSessions/DoctorSessions';
@@ -16,6 +16,7 @@ interface DoctorListProps {
 	setSchedule: Function;
 	shouldShowMoreDoctorInfo: boolean;
 	doctorViewSessionExtended: DoctorAvailability | null;
+	selectedDate: Date;
 }
 
 export interface ActiveDoctorTime {
@@ -32,6 +33,7 @@ const DoctorList = ({
 	setSchedule,
 	shouldShowMoreDoctorInfo,
 	doctorViewSessionExtended = null,
+	selectedDate,
 }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
@@ -66,6 +68,7 @@ const DoctorList = ({
 			setSchedule(null);
 		}
 	};
+
 	const continueToPreRegister = () => {
 		try {
 			const doctor = doctors[activeDoctorTime.doctorIndex];
@@ -86,6 +89,12 @@ const DoctorList = ({
 			setIsOpenModal(true);
 		}
 	};
+
+	useEffect(() => {
+		setActiveDoctorTime({ doctorCmp: '', scheduleID: '', scheduleIndex: -1, doctorIndex: -1 });
+		setDoctor(null);
+		setSchedule(null);
+	}, [selectedDate, setDoctor, setSchedule]);
 
 	if (doctorViewSessionExtended != null) {
 		return <div>Doctor extendido</div>;
