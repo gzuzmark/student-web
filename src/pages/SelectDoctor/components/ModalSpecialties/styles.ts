@@ -79,7 +79,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			fontWeight: 600,
 			textAlign: 'center',
 			borderRadius: '8px',
+			transition: 'none',
 			'&:hover': {
+				boxShadow: 'none',
 				background: '#51D8AE',
 			},
 		},
