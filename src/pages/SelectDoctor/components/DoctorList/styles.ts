@@ -203,6 +203,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			color: '#676F8F',
 			margin: '0px !important',
 			padding: '0px !important',
+			justifyContent: 'flex-start',
 			// '&:hover': {
 			// 	textDecoration: 'none',
 			// },
