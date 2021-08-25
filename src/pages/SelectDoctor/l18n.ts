@@ -18,7 +18,7 @@ const selectDoctor = {
 	'right.doctor.prefix': 'Dr(a)',
 	'right.doctor.male.prefix': 'Dr',
 	'right.doctor.female.prefix': 'Dra',
-	'right.doctor.moreInformation': 'sobre el doctor',
+	'right.doctor.moreInformation': 'Mi perfil',
 	'steps.firstStep.label': 'DOCTOR & HORARIO',
 	'steps.firstStep.button': 'Otra especialidad',
 	'steps.secondStep.label': 'REGISTRO',
