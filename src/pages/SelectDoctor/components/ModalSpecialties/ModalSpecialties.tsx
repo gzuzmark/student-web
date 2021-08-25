@@ -15,7 +15,10 @@ interface ModalSpecialtiesProps {
 
 const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpecialtiesProps) => {
 	const classes = useStyles();
-	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('md'));
+	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	const isMobile = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('xs'));
+	const isTablet = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('lg'));
+	const isXsMobile = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down(400));
 	const history = useHistory();
 	const [skills, setSkills] = useState<SpecialtyType[]>([]);
 	const [selectedSkill, setSelectedSkill] = useState<SpecialtyType | null>(null);
@@ -35,6 +38,10 @@ const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpeci
 			onCloseModal(selectedSkill);
 		}
 	};
+
+	useEffect(() => {
+		console.log(isXsMobile, isMobile, isTablet, isDesktop);
+	}, [isXsMobile, isMobile, isTablet, isDesktop]);
 
 	useEffect(() => {
 		const listSpecialties = isDevelopment() ? DEV_IMAGES : PROD_IMAGES;
@@ -68,7 +75,15 @@ const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpeci
 				<div className={classes.container}>
 					<Grid container spacing={0}>
 						{skills?.map((skill: SpecialtyType, i) => (
-							<Grid item xs={6} md={6} lg={3} xl={3} key={i} className={classes.cardItem}>
+							<Grid
+								item
+								xs={isXsMobile ? 12 : isMobile ? 6 : 3}
+								md={isTablet ? 3 : 4}
+								lg={3}
+								xl={3}
+								key={i}
+								className={classes.cardItem}
+							>
 								<SpecialtyCard
 									skill={skill}
 									isActive={skill.id === selectedSkill?.id}
