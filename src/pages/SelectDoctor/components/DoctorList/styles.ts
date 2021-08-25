@@ -188,7 +188,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			fontSize: '12px',
 			lineHeight: '16px',
 			color: '#A3ABCC',
-			marginTop: '1.5px',
+			marginTop: '4.5px',
 			marginLeft: '10px',
 			marginRight: '5px',
 		},
