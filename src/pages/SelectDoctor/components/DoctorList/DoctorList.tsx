@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Rating from '@material-ui/lab/Rating';
-import { useTranslation } from 'react-i18next';
-import clsx from 'clsx';
-
 import { DoctorAvailability, Schedule } from 'pages/api';
-import { addGAEvent, getHumanDay, getHour } from 'utils';
-
-import AvailableTimes from '../AvailableTimes';
-import useStyles from './styles';
-import DetailedDoctorModal from './DetailedDoctorModal';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { addGAEvent, getHour, getHumanDay } from 'utils';
+import DoctorSessions from '../DoctorSessions/DoctorSessions';
 import { validSelectTimeWithNow } from '../FunctionsHelper';
 import { ModalErrorTime } from '../ModalErrorTime';
+import DetailedDoctorModal from './DetailedDoctorModal';
+import useStyles from './styles';
 
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
@@ -20,6 +15,8 @@ interface DoctorListProps {
 	setDoctor: Function;
 	setSchedule: Function;
 	shouldShowMoreDoctorInfo: boolean;
+	doctorViewSessionExtended: DoctorAvailability | null;
+	selectedDate: Date;
 }
 
 export interface ActiveDoctorTime {
@@ -35,6 +32,8 @@ const DoctorList = ({
 	setDoctor,
 	setSchedule,
 	shouldShowMoreDoctorInfo,
+	doctorViewSessionExtended = null,
+	selectedDate,
 }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
@@ -69,6 +68,7 @@ const DoctorList = ({
 			setSchedule(null);
 		}
 	};
+
 	const continueToPreRegister = () => {
 		try {
 			const doctor = doctors[activeDoctorTime.doctorIndex];
@@ -90,8 +90,18 @@ const DoctorList = ({
 		}
 	};
 
+	useEffect(() => {
+		setActiveDoctorTime({ doctorCmp: '', scheduleID: '', scheduleIndex: -1, doctorIndex: -1 });
+		setDoctor(null);
+		setSchedule(null);
+	}, [selectedDate, setDoctor, setSchedule]);
+
+	if (doctorViewSessionExtended != null) {
+		return <div>Doctor extendido</div>;
+	}
+
 	return (
-		<>
+		<div className={classes.container}>
 			<div className={classes.counter}>
 				<Typography className={classes.counterFirstPart} component="span">
 					{t('right.foundDoctors', { doctors: doctors.length })}{' '}
@@ -101,83 +111,18 @@ const DoctorList = ({
 				</Typography>
 			</div>
 			<div className={classes.doctorList}>
-				{doctors.map(
-					(
-						{ name, lastName, cmp, profilePicture, speciality, rating, schedules, patientOpinions }: DoctorAvailability,
-						doctorIndex: number,
-					) => (
-						<div className={classes.doctorWrapper} key={cmp}>
-							<div className={classes.doctor}>
-								<div className={classes.photoWrapper}>
-									<img className={classes.photo} src={profilePicture} alt="doctor" />
-								</div>
-								<div className={classes.info}>
-									<div className={classes.nameWrapper}>
-										<Typography component="span" className={clsx(classes.name, 'no-caps')}>
-											{t('right.doctor.prefix')}{' '}
-										</Typography>
-										<Typography component="span" className={classes.name}>
-											{name} {lastName}
-										</Typography>
-									</div>
-									<div className={classes.flexWrapper}>
-										<div className={classes.specialityWrapper}>
-											<Typography className={classes.speciality}>{speciality}</Typography>
-										</div>
-										<div>
-											<Typography className={classes.cmp}>CMP: {cmp}</Typography>
-										</div>
-									</div>
-									{shouldShowMoreDoctorInfo ? (
-										<>
-											{patientOpinions.length >= 5 ? (
-												<div className={classes.ratingWrapper}>
-													<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
-													<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
-												</div>
-											) : null}
-											<div>
-												<Button
-													className={classes.doctorMoreInfo}
-													onClick={() => {
-														selectDoctorForModal(doctorIndex);
-														openDetailedDoctorModal();
-													}}
-												>
-													{t('right.doctor.moreInformation')}
-												</Button>
-											</div>
-										</>
-									) : null}
-								</div>
-							</div>
-							<div className={classes.availableTitleWrapper}>
-								<Typography className={classes.availableTitle} component="span">
-									{t('right.availableDoctors.title')}
-								</Typography>
-							</div>
-							<div className={classes.timesWrapper}>
-								<AvailableTimes
-									doctorCmp={cmp}
-									availableDates={schedules}
-									name={name}
-									selectTime={selectDoctor(cmp, doctorIndex)}
-									activeDoctorTime={activeDoctorTime}
-								/>
-								{activeDoctorTime.doctorCmp === cmp ? (
-									<Button
-										fullWidth
-										className={classes.continueButton}
-										variant="contained"
-										onClick={continueToPreRegister}
-									>
-										{t('left.button.continue')}
-									</Button>
-								) : null}
-							</div>
-						</div>
-					),
-				)}
+				{doctors.map((doctor: DoctorAvailability, doctorIndex: number) => (
+					<DoctorSessions
+						key={doctorIndex}
+						doctor={doctor}
+						doctorIndex={doctorIndex}
+						activeDoctorTime={activeDoctorTime}
+						selectDoctor={selectDoctor}
+						selectDoctorForModal={selectDoctorForModal}
+						openDetailedDoctorModal={openDetailedDoctorModal}
+						continueToPreRegister={continueToPreRegister}
+					/>
+				))}
 				{shouldShowMoreDoctorInfo ? (
 					<DetailedDoctorModal
 						isOpen={isDetailDoctorModalOpen}
@@ -187,7 +132,7 @@ const DoctorList = ({
 				) : null}
 				<ModalErrorTime isOpen={isOpenModal} setIsOpen={setIsOpenModal} message={messageError} />
 			</div>
-		</>
+		</div>
 	);
 };
 

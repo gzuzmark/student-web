@@ -1,6 +1,6 @@
+import { addDays, addHours, addMinutes, isAfter, isSameDay } from 'date-fns';
+import { parseUTCDate, transformToSnakeCase } from 'utils';
 import aliviaAxios from 'utils/customAxios';
-import { transformToSnakeCase } from 'utils';
-import { parseUTCDate } from 'utils';
 
 // API Types
 
@@ -13,6 +13,7 @@ interface ScheduleAPI {
 	id: string;
 	start_time: number;
 	end_time: number;
+	student_id: string | null;
 }
 
 interface DiseaseAPI {
@@ -53,6 +54,8 @@ interface NextAvailableSchedulesAPI {
 	data: {
 		next_available_date: number;
 		doctors: DoctorAvailabilityAPI[];
+		dates: string[];
+		status: boolean;
 	};
 }
 
@@ -62,6 +65,7 @@ export interface Schedule {
 	id: string;
 	startTime: Date;
 	endTime: Date;
+	isDisabled: boolean;
 }
 
 export interface PatientOpinion {
@@ -101,51 +105,75 @@ interface RequestProps {
 	window?: number;
 }
 
+export interface DateSchedule {
+	date: Date;
+	isEmpty: boolean;
+}
+
 interface NextAvailableSchedules {
 	nextAvailableDate: Date;
 	doctors: DoctorAvailability[];
+	dates: DateSchedule[];
+	isNextDays: boolean;
 }
 
-const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] =>
-	doctors.map(
-		({
-			id,
-			name,
-			cmp,
-			rating,
-			about_me,
-			formation,
-			diseases,
-			ratings,
-			schedules,
-			photo,
-			title,
-			last_name,
-			specialty_name,
-		}: DoctorAvailabilityAPI) => ({
-			id,
-			name,
-			cmp,
-			lastName: last_name,
-			speciality: title,
-			specialityName: specialty_name,
-			profilePicture: photo,
-			schedules: schedules.map(({ id, start_time, end_time }: ScheduleAPI) => ({
+const isDisabled = (studentId: string | null): boolean => {
+	if (studentId === null) {
+		return false;
+	}
+	if (studentId.length === 0) {
+		return false;
+	}
+	return true;
+};
+
+const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailability[] => {
+	const minHourDate = addHours(new Date(), 1);
+	return doctors
+		.map(
+			({
 				id,
-				startTime: parseUTCDate(start_time),
-				endTime: parseUTCDate(end_time),
-			})),
-			rating,
-			aboutMe: about_me,
-			education: formation,
-			diseases,
-			patientOpinions: ratings.map(({ rating, comment, created_at }) => ({
-				comment,
-				score: rating,
-				datePublished: created_at,
-			})),
-		}),
-	);
+				name,
+				cmp,
+				rating,
+				about_me,
+				formation,
+				diseases,
+				ratings,
+				schedules,
+				photo,
+				title,
+				last_name,
+				specialty_name,
+			}: DoctorAvailabilityAPI) => ({
+				id,
+				name,
+				cmp,
+				lastName: last_name,
+				speciality: title,
+				specialityName: specialty_name,
+				profilePicture: photo,
+				schedules: schedules
+					.map(({ id, start_time, end_time, student_id }: ScheduleAPI) => ({
+						id,
+						startTime: parseUTCDate(start_time),
+						endTime: parseUTCDate(end_time),
+						isDisabled: isDisabled(student_id),
+					}))
+					.filter(({ startTime }) => isAfter(startTime, minHourDate)),
+				rating,
+				aboutMe: about_me,
+				education: formation,
+				diseases,
+				patientOpinions: ratings.map(({ rating, comment, created_at }) => ({
+					comment,
+					score: rating,
+					datePublished: created_at,
+				})),
+			}),
+		)
+		.filter((doctor) => doctor.schedules.length > 0);
+};
 
 const createMedicalSpecialityQuery = (data: RequestProps): SnakeRequestProps =>
 	transformToSnakeCase<RequestProps, SnakeRequestProps>(data);
@@ -160,15 +188,49 @@ export const getMedicalSpecialities = async (data: RequestProps): Promise<Doctor
 	return parsedData;
 };
 
-export const getNextAvailableSchedules = async (useCaseID: string): Promise<NextAvailableSchedules> => {
+export const getNextAvailableSchedules = async (
+	useCaseID: string,
+	startDate: Date,
+): Promise<NextAvailableSchedules> => {
+	startDate.setHours(0, 0, 0, 0);
 	const response = await aliviaAxios.get<NextAvailableSchedulesAPI>('/doctors/next-available-schedule', {
-		params: { use_case: useCaseID },
+		params: { use_case: useCaseID, from: startDate.getTime() },
 	});
 	const { data } = response;
 	const parsedDoctorsData = parseResponseData(data.data.doctors);
+	const dates = validWeek(parsedDoctorsData, startDate);
 
 	return {
 		nextAvailableDate: parseUTCDate(data.data.next_available_date),
 		doctors: parsedDoctorsData,
+		dates: dates,
+		isNextDays: data.data.dates.length > 7,
 	};
+};
+
+const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
+	const listWeek = completeWeek(startDate);
+	return listWeek.map<DateSchedule>((dateWeek: Date) => {
+		const hasSessions = doctors.filter((doctor: DoctorAvailability) => {
+			const days = doctor.schedules.filter((schedule) => isSameDay(schedule.startTime, dateWeek));
+			return days.length > 0;
+		});
+		return {
+			date: dateWeek,
+			isEmpty: hasSessions.length === 0,
+		};
+	});
+};
+
+const completeWeek = (startDate: Date) => {
+	return [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(startDate, i));
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const parseToDates = (dates: string[]): Date[] => {
+	const offset = new Date().getTimezoneOffset();
+	const datesToDatesObjects: Date[] = dates.map((date: string) => {
+		return addMinutes(new Date(date), offset);
+	});
+	return datesToDatesObjects;
 };
