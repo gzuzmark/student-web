@@ -169,7 +169,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			display: 'flex',
 			flex: '1',
 			justifyContent: 'flex-end',
-			marginRight: '9px',
+			// marginRight: '9px',
 			// paddingBottom: '12px',
 			// [breakpoints.up('lg')]: {
 			// 	paddingBottom: '22px',
