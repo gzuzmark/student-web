@@ -21,6 +21,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		flex: '1',
 		flexWrap: 'wrap',
 		marginBottom: '18px',
+		width: '103%',
 		[breakpoints.up('lg')]: {
 			marginBottom: '0',
 		},
