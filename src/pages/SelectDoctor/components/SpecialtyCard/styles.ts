@@ -1,4 +1,5 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
+import { MAX_XS_MOBILE, MIN_MOBILE } from '../ModalSpecialties/styles';
 
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
@@ -10,12 +11,22 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			width: '148px',
 			minWidth: '148px',
 			maxHeight: '126px',
-			marginBottom: '16px',
 			cursor: 'pointer',
 			marginLeft: '8px',
 			marginRight: '8px',
+			marginBottom: '16px',
 			[breakpoints.down('xs')]: {
 				minWidth: 'none',
+			},
+			[breakpoints.down(MIN_MOBILE)]: {
+				flex: 1,
+				minWidth: 'unset',
+				margin: '0px 0px 16px',
+			},
+			[breakpoints.down(MAX_XS_MOBILE)]: {
+				flex: 1,
+				minWidth: 'unset',
+				margin: '0px 7.5px 16px',
 			},
 		},
 		active: {
