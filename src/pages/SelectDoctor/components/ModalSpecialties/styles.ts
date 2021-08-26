@@ -1,5 +1,9 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
+export const MIN_DESKTOP = 800;
+export const MIN_MOBILE = 375 + 1; // 375
+export const MAX_XS_MOBILE = 425 + 1;
+
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		modal: {
@@ -21,6 +25,25 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			height: 23,
 			cursor: 'pointer',
 		},
+		dropwdown: {
+			position: 'fixed',
+			top: '0px',
+			left: '0px',
+			right: '0px',
+			backgroundColor: '#FFFFFF',
+		},
+		bodyContainer: {
+			display: 'flex',
+			flex: 1,
+			[breakpoints.down(MIN_DESKTOP)]: {
+				marginTop: '70px',
+			},
+		},
+		body: {
+			[breakpoints.up(MIN_DESKTOP)]: {
+				maxWidth: '840px !important',
+			},
+		},
 		card: {
 			display: 'flex',
 			flexDirection: 'column',
@@ -29,6 +52,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			borderColor: '#FFFFFF',
 			[breakpoints.up('md')]: {
 				marginTop: '80px',
+			},
+			[breakpoints.down(MIN_DESKTOP)]: {
+				marginBottom: '90px',
 			},
 		},
 		cardTitle: {
@@ -53,22 +79,36 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				minWidth: '756px',
 				maxWidth: '756px',
 			},
-			[breakpoints.down('xs')]: {
-				margin: '0px 10px',
+			[breakpoints.down(MIN_MOBILE)]: {
+				margin: '0px',
+				flexWrap: 'wrap',
+			},
+			[breakpoints.down(MAX_XS_MOBILE)]: {
+				margin: '0px 25px',
+				flexWrap: 'wrap',
 			},
 		},
 		cardItem: {
 			width: '148px',
 			display: 'flex',
 			justifyContent: 'center',
+			[breakpoints.down(MIN_MOBILE)]: {
+				// margin: '0px 25px',
+			},
 		},
 		divButton: {
 			display: 'flex',
 			flexDirection: 'column',
 			alignItems: 'flex-start',
 			padding: '21px 60px 37px',
-			[breakpoints.down('xs')]: {
+			[breakpoints.down(MIN_DESKTOP)]: {
+				display: 'block',
+				position: 'fixed',
+				left: '0px',
+				right: '0px',
+				bottom: '0px',
 				padding: '20px 25px 30px',
+				backgroundColor: '#FFFFFF',
 			},
 		},
 		button: {

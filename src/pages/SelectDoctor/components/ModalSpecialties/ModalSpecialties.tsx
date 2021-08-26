@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { DEV_IMAGES, isDevelopment, PROD_IMAGES, SpecialtyType } from 'utils/skillImages';
 import DropdownSpecialties from '../DropdownSpecialties/DropdownSpecialties';
 import SpecialtyCard from '../SpecialtyCard/SpecialtyCard';
-import useStyles from './styles';
+import useStyles, { MIN_DESKTOP } from './styles';
 
 interface ModalSpecialtiesProps {
 	isOpen: boolean;
@@ -15,7 +15,7 @@ interface ModalSpecialtiesProps {
 
 const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpecialtiesProps) => {
 	const classes = useStyles();
-	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up(MIN_DESKTOP));
 	const isMobile = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('xs'));
 	const isTablet = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('lg'));
 	const isXsMobile = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down(400));
@@ -68,36 +68,42 @@ const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpeci
 					<img alt="close" src={closeIcon} className={classes.closeIcon} />
 				</span>
 			) : (
-				<DropdownSpecialties specialityId={defaultSpecialty?.id} onlyView={true} onClick={() => onClose()} />
-			)}
-			<div className={classes.card}>
-				{isDesktop && <Typography className={classes.cardTitle}>Elige una especialidad</Typography>}
-				<div className={classes.container}>
-					<Grid container spacing={0}>
-						{skills?.map((skill: SpecialtyType, i) => (
-							<Grid
-								item
-								xs={isXsMobile ? 12 : isMobile ? 6 : 3}
-								md={isTablet ? 3 : 4}
-								lg={3}
-								xl={3}
-								key={i}
-								className={classes.cardItem}
-							>
-								<SpecialtyCard
-									skill={skill}
-									isActive={skill.id === selectedSkill?.id}
-									onSelected={onSelectedSpecialty}
-								/>
-							</Grid>
-						))}
-					</Grid>
+				<div className={classes.dropwdown}>
+					<DropdownSpecialties specialityId={defaultSpecialty?.id} onlyView={true} onClick={() => onClose()} />
 				</div>
-			</div>
-			<div className={classes.divButton}>
-				<Button variant={'contained'} onClick={onClickSelected} fullWidth className={classes.button}>
-					Seleccionar
-				</Button>
+			)}
+			<div className={classes.bodyContainer}>
+				<div className={classes.body}>
+					<div className={classes.card}>
+						{isDesktop && <Typography className={classes.cardTitle}>Elige una especialidad</Typography>}
+						<div className={classes.container}>
+							<Grid container spacing={0}>
+								{skills?.map((skill: SpecialtyType, i) => (
+									<Grid
+										item
+										xs={isXsMobile ? 12 : 6}
+										md={isTablet ? 3 : 4}
+										lg={3}
+										xl={3}
+										key={i}
+										className={classes.cardItem}
+									>
+										<SpecialtyCard
+											skill={skill}
+											isActive={skill.id === selectedSkill?.id}
+											onSelected={onSelectedSpecialty}
+										/>
+									</Grid>
+								))}
+							</Grid>
+						</div>
+					</div>
+					<div className={classes.divButton}>
+						<Button variant={'contained'} onClick={onClickSelected} fullWidth className={classes.button}>
+							Seleccionar
+						</Button>
+					</div>
+				</div>
 			</div>
 		</Dialog>
 	);
