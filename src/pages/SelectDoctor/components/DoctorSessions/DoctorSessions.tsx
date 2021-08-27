@@ -1,13 +1,13 @@
 import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import React from 'react';
-import useStyles from '../DoctorList/styles';
-import clsx from 'clsx';
-import { useTranslation } from 'react-i18next';
 import { Rating } from '@material-ui/lab';
+import clsx from 'clsx';
 import { DoctorAvailability } from 'pages/api';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import AvailableTimes from '../AvailableTimes';
 import { ActiveDoctorTime } from '../DoctorList/DoctorList';
+import useStyles from '../DoctorList/styles';
 
 interface DoctorSessionsProps {
 	doctor: DoctorAvailability;
@@ -31,6 +31,10 @@ const DoctorSessions = ({
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const { name, lastName, cmp, profilePicture, rating, schedules, patientOpinions } = doctor;
+
+	// useEffect(() => {
+	// 	console.log(doctor);
+	// }, [doctor]);
 
 	return (
 		<div className={classes.doctorWrapper}>
