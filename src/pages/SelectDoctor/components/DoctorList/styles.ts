@@ -169,6 +169,8 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			display: 'flex',
 			flex: '1',
 			justifyContent: 'flex-end',
+			alignItems: 'center',
+			alignContent: 'center',
 			// marginRight: '9px',
 			// paddingBottom: '12px',
 			// [breakpoints.up('lg')]: {
@@ -188,9 +190,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			fontSize: '12px',
 			lineHeight: '16px',
 			color: '#A3ABCC',
-			marginTop: '4.5px',
-			marginLeft: '10px',
-			marginRight: '5px',
+			margin: '2px 5px 0px 10px',
 		},
 		doctorMoreInfo: {
 			fontFamily: 'Mulish, sans-serif',
