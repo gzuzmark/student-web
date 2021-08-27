@@ -16,6 +16,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
 import Carrousel from '../Carrousel/Carrousel';
 import { DoctorList } from '../DoctorList';
+import FilterDateDoctor from '../FilterDateDoctor/FilterDateDoctor';
 import useStyles from './styles';
 
 export const FAKE_SESSION_ID = 'fake';
@@ -316,12 +317,13 @@ const RightSide = ({
 	return (
 		<RightLayout className={classes.rightLayout}>
 			<div className={classes.wrapper}>
-				<div className={classes.titleContainer}>
+				{/* <div className={classes.titleContainer}>
 					<Typography component="span" className={classes.title}>
 						<Trans i18nKey={`selectDoctor:${'right.title'}`} />
 					</Typography>
-				</div>
+				</div> */}
 				{/* <DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} /> */}
+				<FilterDateDoctor />
 				<Carrousel
 					dates={isLoadData ? null : listDates}
 					selectedDate={selectedDate}
