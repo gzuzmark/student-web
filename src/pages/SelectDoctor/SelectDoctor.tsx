@@ -7,12 +7,13 @@ import { getUseCase, DoctorAvailability, Schedule } from 'pages/api';
 import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
 
 import { Container } from '../common';
-import { LeftSide } from './components/LeftSide';
+// import { LeftSide } from './components/LeftSide';
 import { RightSide } from './components/RightSide';
 import WarningModal from './components/WarningModal/WarningModal';
 import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
 import { formatDoctor } from './utils';
 import { Skills } from './components/Skills';
+import DropdownSpecialties from './components/DropdownSpecialties/DropdownSpecialties';
 
 const DEFAULT_TRIAGE_VALUES = [
 	{ question: '¿Para quién es la consulta?', answer: 'relative' },
@@ -54,6 +55,7 @@ const SelectDoctor = () => {
 	const shouldShowTheDoctorDetailedInfo = (params.show || '') === '1';
 	const showSmallSignUp = ((params.bsignup as string) || '') === '1';
 	const { useCase, userToken, updateState } = useContext(AppContext);
+	const [specialityId, setEspecialityId] = useState<string | null>(null);
 	const isUserLoggedIn = !!userToken;
 	const selectAppointmentOwner = (owner: string) => () => {
 		const isForSomeoneElse = owner === GUEST;
@@ -112,11 +114,16 @@ const SelectDoctor = () => {
 	const onAcceptWarning = () => toggleWarningModal(false);
 	usePageTitle('Seleccion doctor');
 
+	const onChangeDropdown = (id: string) => {
+		requestUseCaseID(id, updateState, toggleWarningModal);
+	};
+
 	useEffect(() => {
 		const useCaseParam = params.malestar as string;
 
 		if (!useCase && useCaseParam && updateState) {
 			requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
+			setEspecialityId(useCaseParam);
 		}
 
 		if (updateState) {
@@ -141,31 +148,33 @@ const SelectDoctor = () => {
 	]);
 
 	return (
-		<Container>
-			<LeftSide step={!params.malestar ? -1 : 0} />
-			{!params.malestar ? (
-				<Skills />
-			) : (
-				<RightSide
-					isUserLoggedIn={!!userToken}
-					useCase={useCase}
-					minutes={minutes}
-					numSessions={numSessions}
-					selectDoctorCallback={selectDoctorCallback}
-					setDoctor={setDoctor}
-					setSchedule={setSchedule}
-					shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
+		<>
+			<DropdownSpecialties specialityId={specialityId} onChange={onChangeDropdown} />
+			<Container>
+				{/* <LeftSide step={!params.malestar ? -1 : 0} /> */}
+				{!params.malestar ? (
+					<Skills />
+				) : (
+					<RightSide
+						isUserLoggedIn={!!userToken}
+						useCase={useCase}
+						minutes={minutes}
+						numSessions={numSessions}
+						selectDoctorCallback={selectDoctorCallback}
+						setDoctor={setDoctor}
+						setSchedule={setSchedule}
+						shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
+					/>
+				)}
+				<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
+				<SelectAppointmentOwner
+					isOpen={isSelectOwnerOpen}
+					selectAppointmentForMe={selectAppointmentOwner(MYSELF)}
+					selectAppointmentForSomeoneElse={selectAppointmentOwner(GUEST)}
+					onClose={closeSelectOwnerModal}
 				/>
-			)}
-
-			<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
-			<SelectAppointmentOwner
-				isOpen={isSelectOwnerOpen}
-				selectAppointmentForMe={selectAppointmentOwner(MYSELF)}
-				selectAppointmentForSomeoneElse={selectAppointmentOwner(GUEST)}
-				onClose={closeSelectOwnerModal}
-			/>
-		</Container>
+			</Container>
+		</>
 	);
 };
 

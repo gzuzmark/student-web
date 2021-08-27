@@ -1,13 +1,21 @@
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import { isSameDay } from 'date-fns/esm';
 import isToday from 'date-fns/isToday';
-import { DoctorAvailability, getMedicalSpecialities, getNextAvailableSchedules, Schedule, UseCase } from 'pages/api';
+import {
+	DateSchedule,
+	DoctorAvailability,
+	getMedicalSpecialities,
+	getNextAvailableSchedules,
+	Schedule,
+	UseCase,
+} from 'pages/api';
 import { Loading, RightLayout } from 'pages/common';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { dateToUTCUnixTimestamp, getEndOfDay, getStartOfDay } from 'utils';
+import Carrousel from '../Carrousel/Carrousel';
 import { DoctorList } from '../DoctorList';
-import { DoctorsHeader } from '../DoctorsHeader';
 import useStyles from './styles';
 
 export const FAKE_SESSION_ID = 'fake';
@@ -75,6 +83,7 @@ const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 				id: `${FAKE_SESSION_ID}-${i}`,
 				startTime: currentStartTime,
 				endTime: endTime,
+				isDisabled: true,
 			} as Schedule;
 			newSchedules.push(schedule);
 			// updating the next schedule startTime as the previous schedule endTime
@@ -90,6 +99,7 @@ const buildFakeSessions = (schedules: Schedule[]): Schedule[] => {
 	return schedules;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getDoctors = async (
 	selectedDate: Date | null,
 	useCase: UseCase | null | undefined,
@@ -140,46 +150,59 @@ const getDoctors = async (
 	}
 };
 
+const getSelectedDay = (dates: DateSchedule[]): Date | null => {
+	const datesWithSessions = dates.filter((date) => !date.isEmpty);
+	if (datesWithSessions.length > 0) {
+		return datesWithSessions[0].date;
+	}
+	return null;
+};
+
 const getClosestSchedules = async (
 	useCase: string,
+	selectedDate: Date,
 	setSelectedDate: Function,
 	setDoctors: Function,
 	setMinDate: Function,
+	setListDates: Function,
+	setIsNextWeek: Function,
 ) => {
-	const { nextAvailableDate, doctors } = await getNextAvailableSchedules(useCase);
-	const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
-	const newDoctors = isTargetUseCase
-		? doctors.map((doc: DoctorAvailability) => {
-				const realSchedules = doc.schedules;
-				const fakeSchedules = buildFakeSessions(realSchedules);
-				const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
-					const searchSession = realSchedules.find(
-						(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
-					);
-					return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
-				});
-				if (newSchedules.length > 0) {
-					const lastInd = newSchedules.length - 1;
-					newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
-					newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
-				}
-				return {
-					...doc,
-					schedules: newSchedules,
-				};
-		  })
-		: doctors;
+	const { nextAvailableDate, doctors, dates, isNextDays } = await getNextAvailableSchedules(useCase, selectedDate);
+	// const isTargetUseCase = useCase === DERMA_ID || useCase === GINE_ID;
+	// const newDoctors = isTargetUseCase
+	// 	? doctors.map((doc: DoctorAvailability) => {
+	// 			const realSchedules = doc.schedules;
+	// 			const fakeSchedules = buildFakeSessions(realSchedules);
+	// 			const newSchedules = fakeSchedules.map((fake: Schedule, i: number) => {
+	// 				const searchSession = realSchedules.find(
+	// 					(real: Schedule) => dateToUTCUnixTimestamp(real.startTime) === dateToUTCUnixTimestamp(fake.startTime),
+	// 				);
+	// 				return i === fakeSchedules.length - 1 ? fake : searchSession || fake;
+	// 			});
+	// 			if (newSchedules.length > 0) {
+	// 				const lastInd = newSchedules.length - 1;
+	// 				newSchedules[0] = { ...newSchedules[0], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-first` };
+	// 				newSchedules[lastInd] = { ...newSchedules[lastInd], ...FAKE_SESSION_BODY, id: `${FAKE_SESSION_ID}-last` };
+	// 			}
+	// 			return {
+	// 				...doc,
+	// 				schedules: newSchedules,
+	// 			};
+	// 	  })
+	// 	: doctors;
 
-	setDoctors(newDoctors);
-	setSelectedDate(nextAvailableDate);
+	setDoctors(doctors);
+	setSelectedDate(getSelectedDay(dates));
 	setMinDate(nextAvailableDate);
+	setListDates(dates);
+	setIsNextWeek(isNextDays);
 };
 
 interface RightSideProps {
 	useCase: UseCase | null | undefined;
 	isUserLoggedIn: boolean;
-	minutes: string;
-	numSessions: string;
+	minutes?: string;
+	numSessions?: string;
 	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
@@ -188,8 +211,6 @@ interface RightSideProps {
 
 const RightSide = ({
 	useCase,
-	minutes,
-	numSessions,
 	selectDoctorCallback,
 	setDoctor,
 	setSchedule,
@@ -197,36 +218,74 @@ const RightSide = ({
 }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
-	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-	const [minDate, setMinDate] = useState<Date | null>(new Date());
+	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+	const [, setMinDate] = useState<Date | null>(new Date());
 	const [doctors, setDoctors] = useState<DoctorAvailability[]>([]);
 	const [isLoadData, setIsLoadData] = useState<boolean>(true);
+	const [listDates, setListDates] = useState<DateSchedule[]>([]);
+	const [doctorsForDay, setDoctorsForDay] = useState<DoctorAvailability[]>([]);
+	const [isNextWeek, setIsNextWeek] = useState<boolean>(false);
 
-	const updateDate = useCallback(
-		(newDate: Date | null) => {
-			setSelectedDate(newDate);
-			setIsLoadData(true);
-			getDoctors(newDate, useCase, setDoctors, minutes, numSessions).finally(() => setIsLoadData(false));
+	// const updateDate = useCallback(
+	// 	(newDate: Date) => {
+	// 		setSelectedDate(newDate);
+	// 		setIsLoadData(true);
+	// 		getDoctors(newDate, useCase, setDoctors, minutes, numSessions).finally(() => setIsLoadData(false));
+	// 	},
+	// 	[minutes, numSessions, useCase],
+	// );
+
+	useEffect(() => {
+		if (selectedDate != null) {
+			setDoctorsForDay(
+				doctors
+					.map((doctor: DoctorAvailability) => {
+						const schedulesSelectedDay = [...doctor.schedules].filter((schedule: Schedule) => {
+							const { startTime } = schedule;
+							return isSameDay(selectedDate, startTime);
+						});
+						const doctorCopy = { ...doctor };
+						doctorCopy.schedules = schedulesSelectedDay;
+						return doctorCopy;
+					})
+					.filter((doctor) => doctor.schedules.length > 0),
+			);
+		}
+	}, [selectedDate, doctors]);
+
+	const callApiSchedules = useCallback(
+		(startDate: Date) => {
+			if (useCase) {
+				setIsLoadData(true);
+				getClosestSchedules(
+					useCase.id,
+					startDate,
+					setSelectedDate,
+					setDoctors,
+					setMinDate,
+					setListDates,
+					setIsNextWeek,
+				).finally(() => setIsLoadData(false));
+			}
 		},
-		[minutes, numSessions, useCase],
+		[useCase],
 	);
 
 	useEffect(() => {
-		if (useCase) {
-			setIsLoadData(true);
-			getClosestSchedules(useCase.id, setSelectedDate, setDoctors, setMinDate).finally(() => setIsLoadData(false));
-		}
-	}, [useCase]);
+		callApiSchedules(new Date());
+	}, [callApiSchedules]);
 
 	const sectionWithSpecialty = () => (
 		<>
-			{doctors.length > 0 ? (
+			{doctorsForDay.length > 0 ? (
 				<DoctorList
-					doctors={doctors}
+					doctors={doctorsForDay}
 					selectDoctorCallback={selectDoctorCallback}
 					setDoctor={setDoctor}
 					setSchedule={setSchedule}
 					shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
+					doctorViewSessionExtended={null}
+					selectedDate={selectedDate || new Date()}
 				/>
 			) : (
 				<div className={classes.emptyMessageWrapper}>
@@ -237,16 +296,40 @@ const RightSide = ({
 			)}
 		</>
 	);
+	// if (true) {
+	// 	return (
+	// 		<RightLayout className={classes.rightLayout}>
+	// 			<div className={classes.wrapper}>
+	// 				<Carrousel
+	// 					dates={isLoadData ? null : listDates}
+	// 					selectedDate={selectedDate}
+	// 					isNextAvailableDate={isNextWeek}
+	// 					onSelectDate={(date: Date) => setSelectedDate(date)}
+	// 					onBackWeek={callApiSchedules}
+	// 					onNextWeek={callApiSchedules}
+	// 				/>
+	// 			</div>
+	// 		</RightLayout>
+	// 	);
+	// }
 
 	return (
-		<RightLayout>
+		<RightLayout className={classes.rightLayout}>
 			<div className={classes.wrapper}>
 				<div className={classes.titleContainer}>
 					<Typography component="span" className={classes.title}>
 						<Trans i18nKey={`selectDoctor:${'right.title'}`} />
 					</Typography>
 				</div>
-				<DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} />
+				{/* <DoctorsHeader useCase={useCase} date={selectedDate} updateDate={updateDate} minDate={minDate} /> */}
+				<Carrousel
+					dates={isLoadData ? null : listDates}
+					selectedDate={selectedDate}
+					isNextAvailableDate={isNextWeek}
+					onSelectDate={(date: Date) => setSelectedDate(date)}
+					onBackWeek={callApiSchedules}
+					onNextWeek={callApiSchedules}
+				/>
 				<Divider className={classes.divider} />
 				{isLoadData ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>
