@@ -47,6 +47,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 		},
 		emptyMessage: {
 			fontSize: '16px',
+			textAlign: 'center',
 			lineHeight: '25px',
 			padding: '0 30px 20px 26px',
 			[breakpoints.up('lg')]: {
