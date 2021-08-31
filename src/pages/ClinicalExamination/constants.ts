@@ -14,6 +14,6 @@ export const initialPatientPassword: PatientPasswordValues = {
 };
 
 export const modalityOptions = [
-	{ label: 'A Domicilio', value: 1 },
+	// { label: 'A Domicilio', value: 1 },
 	{ label: 'Presencial', value: 2 },
 ];
