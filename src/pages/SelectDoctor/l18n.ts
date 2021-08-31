@@ -14,7 +14,7 @@ const selectDoctor = {
 	'right.availableDoctors.title': 'ELIGE UN HORARIO:',
 	'right.availableDoctors': 'DOCTOR DISPONIBLE',
 	'right.availableDoctors_plural': 'DOCTORES DISPONIBLES', // eslint-disable-line
-	'right.notFoundDoctors': 'NO HAY DOCTORES DISPONIBLES EN LA FECHA SELECCIONADA. POR FAVOR ELIGE OTRA FECHA',
+	'right.notFoundDoctors': 'NO HAY DOCTORES DISPONIBLES PARA LAS FECHAS INDICADAS',
 	'right.doctor.prefix': 'Dr(a)',
 	'right.doctor.male.prefix': 'Dr',
 	'right.doctor.female.prefix': 'Dra',

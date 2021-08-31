@@ -150,14 +150,6 @@ const getDoctors = async (
 	}
 };
 
-const getSelectedDay = (dates: DateSchedule[]): Date | null => {
-	const datesWithSessions = dates.filter((date) => !date.isEmpty);
-	if (datesWithSessions.length > 0) {
-		return datesWithSessions[0].date;
-	}
-	return null;
-};
-
 const getClosestSchedules = async (
 	useCase: string,
 	selectedDate: Date,
@@ -192,7 +184,7 @@ const getClosestSchedules = async (
 	// 	: doctors;
 
 	setDoctors(doctors);
-	setSelectedDate(getSelectedDay(dates));
+	setSelectedDate(null); // getSelectedDay(dates)
 	setMinDate(nextAvailableDate);
 	setListDates(dates);
 	setIsNextWeek(isNextDays);
@@ -250,6 +242,8 @@ const RightSide = ({
 					})
 					.filter((doctor) => doctor.schedules.length > 0),
 			);
+		} else {
+			setDoctorsForDay([]);
 		}
 	}, [selectedDate, doctors]);
 
@@ -326,7 +320,7 @@ const RightSide = ({
 					dates={isLoadData ? null : listDates}
 					selectedDate={selectedDate}
 					isNextAvailableDate={isNextWeek}
-					onSelectDate={(date: Date) => setSelectedDate(date)}
+					onSelectDate={(date: Date | null) => setSelectedDate(date)}
 					onBackWeek={callApiSchedules}
 					onNextWeek={callApiSchedules}
 				/>
