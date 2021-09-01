@@ -1,19 +1,16 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import AppContext, { GUEST, MYSELF, PAYMENT_STEP, SELECT_DOCTOR_STEP } from 'AppContext';
+import { DoctorAvailability, getUseCase, Schedule } from 'pages/api';
 import { parse } from 'query-string';
-
-import { usePageTitle, redirectToBaseAlivia, addGAEvent } from 'utils';
-import { getUseCase, DoctorAvailability, Schedule } from 'pages/api';
-import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
-
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { addGAEvent, redirectToBaseAlivia, usePageTitle } from 'utils';
 import { Container } from '../common';
-// import { LeftSide } from './components/LeftSide';
-import { RightSide } from './components/RightSide';
-import WarningModal from './components/WarningModal/WarningModal';
-import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
-import { formatDoctor } from './utils';
-import { Skills } from './components/Skills';
 import DropdownSpecialties from './components/DropdownSpecialties/DropdownSpecialties';
+import { RightSide } from './components/RightSide';
+import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
+import { Skills } from './components/Skills';
+import WarningModal from './components/WarningModal/WarningModal';
+import { formatDoctor } from './utils';
 
 const DEFAULT_TRIAGE_VALUES = [
 	{ question: '¿Para quién es la consulta?', answer: 'relative' },
