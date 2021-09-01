@@ -71,7 +71,7 @@ const DoctorSessions = ({
 								{t('right.doctor.moreInformation')}
 							</Button>
 						</div>
-						{true && patientOpinions.length >= 1 && (
+						{patientOpinions.length >= 1 && (
 							<div className={classes.ratingWrapper}>
 								<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly size={'small'} />
 								<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
