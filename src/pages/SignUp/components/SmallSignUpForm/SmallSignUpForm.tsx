@@ -200,7 +200,7 @@ const SmallSignUpForm = ({ onSubmit, validateAgeAfterSelecting }: SmallSignUpFor
 									name="identification"
 									label={t('aboutme.fields.document.label.minor')}
 									variant="outlined"
-									inputProps={{ maxLength: 11 }}
+									inputProps={{ maxLength: 12 }}
 									fullWidth
 								/>
 							</div>

@@ -135,7 +135,7 @@ const Payment = () => {
 
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
-		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
+		inTestEnvironment: false, //!!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`
 	});
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
@@ -1065,7 +1065,7 @@ const Payment = () => {
 												<Field
 													component={TextField}
 													name="documentType"
-													label={t('Documento')}
+													label={t('contact.fields.id.label.toYou')}
 													variant="outlined"
 													fullWidth
 													onChange={(e: any) => {
