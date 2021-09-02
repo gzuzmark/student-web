@@ -8,7 +8,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			justifyContent: 'center',
 			alignItems: 'center',
 			padding: '30px 0px',
-			backgroundColor: '#FFFFFF',
+			backgroundColor: '#ffffff',
 		},
 		carousel: {
 			display: 'flex',

@@ -81,7 +81,7 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	outOfStockLabel: {
 		backgroundColor: 'rgba(83, 91, 108, 0.6)',
 		borderRadius: '5px',
-		color: 'white',
+		color: '#ffffff',
 		fontSize: '10px',
 		lineHeight: '15px',
 		letterSpacing: '5px',
@@ -164,7 +164,7 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	notAvailableLabel: {
 		backgroundColor: 'rgba(83, 91, 108, 0.6)',
 		borderRadius: '5px',
-		color: 'white',
+		color: '#ffffff',
 		fontSize: '10px',
 		lineHeight: '15px',
 		letterSpacing: '5px',

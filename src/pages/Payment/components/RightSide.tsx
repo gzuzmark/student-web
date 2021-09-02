@@ -397,7 +397,7 @@ const RightSide = ({
 						color: '#535B6C',
 					}}
 				>
-					<div style={{ padding: '2px 16px', backgroundColor: 'white' }}>
+					<div style={{ padding: '2px 16px', backgroundColor: '#ffffff' }}>
 						<h2>
 							<b>APROVECHA EL 20% DE DESCUENTO EN TU COMPRA</b>
 						</h2>

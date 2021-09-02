@@ -18,7 +18,7 @@ const palette = {
 	primary: {
 		main: MAIN_GREEN,
 		light: LIGHT_GREEN,
-		contrastText: 'white',
+		contrastText: '#ffffff',
 	},
 	error: {
 		main: RED_MAIN,
@@ -169,7 +169,7 @@ const overrides: Overrides = {
 	MuiSelect: {
 		select: {
 			'&:focus': {
-				backgroundColor: 'white',
+				backgroundColor: '#ffffff',
 			},
 		},
 		iconOutlined: {
@@ -190,7 +190,7 @@ const overrides: Overrides = {
 				boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
 			},
 			'&$disabled': {
-				color: 'white',
+				color: '#ffffff',
 				backgroundColor: DISABLED,
 			},
 			[defaultTheme.breakpoints.up('lg')]: {
@@ -198,16 +198,16 @@ const overrides: Overrides = {
 			},
 		},
 		containedPrimary: {
-			color: 'white',
+			color: '#ffffff',
 			'&:hover': {
 				backgroundColor: MAIN_GREEN,
 			},
 		},
 		outlinedPrimary: {
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
 			border: '1px solid #1ECD96',
 			'&:hover': {
-				backgroundColor: 'white',
+				backgroundColor: '#ffffff',
 				boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
 			},
 		},
@@ -260,7 +260,7 @@ const overrides: Overrides = {
 	},
 	MuiOutlinedInput: {
 		root: {
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
 			'&&:hover $notchedOutline': {
 				borderColor: BLUE_STEEL,
 			},

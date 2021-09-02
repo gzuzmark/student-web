@@ -6,6 +6,7 @@ import { addGAEvent, getHour, getHumanDay } from 'utils';
 import DoctorSessions from '../DoctorSessions/DoctorSessions';
 import { validSelectTimeWithNow } from '../FunctionsHelper';
 import { ModalErrorTime } from '../ModalErrorTime';
+import TimeFrameFilter from '../TimeFilter/TimeFilter';
 import DetailedDoctorModal from './DetailedDoctorModal';
 import useStyles from './styles';
 
@@ -102,13 +103,24 @@ const DoctorList = ({
 
 	return (
 		<div className={classes.container}>
-			<div className={classes.counter}>
-				<Typography className={classes.counterFirstPart} component="span">
-					{t('right.foundDoctors', { doctors: doctors.length })}{' '}
-				</Typography>
-				<Typography className={classes.counterSecondPart} component="span">
-					{t('right.availableDoctors', { count: doctors.length })}
-				</Typography>
+			<div className={classes.timeFilterContainer}>
+				<div className={classes.counter}>
+					<Typography className={classes.counterFirstPart} component="span">
+						Resultados:{' '}
+					</Typography>
+					<Typography className={classes.counterFirstPart} component="span">
+						{t('right.foundDoctors', { doctors: doctors.length })}{' '}
+					</Typography>
+					<Typography className={classes.counterFirstPart} component="span">
+						en{' '}
+					</Typography>
+					<Typography className={classes.counterSecondPart} component="span">
+						{t('right.specialityName', { speciality: doctors[0].specialityName })}{' '}
+					</Typography>
+				</div>
+				<div className={classes.timeFilterList}>
+					<TimeFrameFilter />
+				</div>
 			</div>
 			<div className={classes.doctorList}>
 				{doctors.map((doctor: DoctorAvailability, doctorIndex: number) => (

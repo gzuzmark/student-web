@@ -43,7 +43,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		width: '36px',
 		height: '36px',
 		boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.15)',
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		borderRadius: '50%',
 		margin: '0 auto 17.5px',
 		padding: '8.25px',

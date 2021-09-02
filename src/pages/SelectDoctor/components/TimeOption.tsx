@@ -70,7 +70,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	buttonDefault: {
 		border: '2px solid #84E4C6',
-		backgroundColor: '#FFFFFF',
+		backgroundColor: '#ffffff',
 		color: '#52575C',
 		cursor: 'pointer',
 	},
@@ -111,7 +111,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		color: '#A3ABCC',
 	},
 	textSelected: {
-		color: '#FFFFFF',
+		color: '#ffffff',
 		fontWeight: 'bold',
 	},
 }));

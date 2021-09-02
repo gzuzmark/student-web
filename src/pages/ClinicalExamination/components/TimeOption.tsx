@@ -44,7 +44,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	buttonHidden: {
-		color: 'white',
+		color: '#ffffff',
 		boxShadow: 'none',
 		backgroundColor: '#D9D9DC',
 	},

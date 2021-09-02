@@ -27,7 +27,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	wrapper: {
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		textAlign: 'center',
 		[breakpoints.up('lg')]: {
 			width: '889px',

@@ -22,8 +22,27 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 				width: '55%%',
 			},
 		},
+		timeFilterList: {
+			display: 'flex',
+			flexWrap: 'wrap',
+			justifyContent: 'center',
+			[breakpoints.up('lg')]: {
+				paddingLeft: '16px',
+			},
+			[breakpoints.down('xs')]: {},
+			[breakpoints.down('md')]: {
+				width: '55%%',
+				paddingBottom: '16px',
+			},
+		},
+		timeFilterContainer: {
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			flexWrap: 'wrap',
+		},
 		counter: {
-			padding: '0 24px 24px',
+			padding: '0 24px 20px',
 			[breakpoints.up('lg')]: {
 				padding: '22px 0 20px 0',
 			},
@@ -38,7 +57,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			lineHeight: '15px',
 		},
 		doctorWrapper: {
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
 			padding: '20px 21px',
 			marginBottom: '28px',
 			//boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
@@ -133,7 +152,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			},
 		},
 		dateButton: {
-			color: 'white',
+			color: '#ffffff',
 			textTransform: 'lowercase',
 		},
 		timesWrapper: {

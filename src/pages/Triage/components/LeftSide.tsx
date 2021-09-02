@@ -11,7 +11,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	layout: {
 		backgroundColor: BACKGROUND_DEFAULT,
 		[breakpoints.up('lg')]: {
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
 		},
 	},
 	wrapper: {

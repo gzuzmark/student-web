@@ -31,8 +31,10 @@ export interface Distrito {
 export const postAddress = async (sessionId: string, data: DataAddress) => {
 	try {
 		await ugoConsoleAxios.post(`/alivia/sessions/${sessionId}/address`, data);
-	} catch (e) {
-		throw Error(e);
+	} catch (err) {
+		if (err instanceof Error) {
+			throw Error(err.message);
+		}
 	}
 };
 

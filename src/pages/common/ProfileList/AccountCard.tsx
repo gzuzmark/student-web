@@ -38,7 +38,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		height: '68px',
 		width: '68px',
 		'& > path': {
-			fill: ({ isCurrentAccount }: StylesProps) => (isCurrentAccount ? 'white' : palette.primary.main),
+			fill: ({ isCurrentAccount }: StylesProps) => (isCurrentAccount ? '#ffffff' : palette.primary.main),
 		},
 		[breakpoints.up('lg')]: {
 			height: '106px',

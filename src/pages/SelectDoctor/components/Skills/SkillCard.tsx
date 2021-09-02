@@ -8,7 +8,7 @@ import { stylesWithTheme } from 'utils';
 const useStyles = stylesWithTheme(() => ({
 	card: {
 		alignItems: 'center',
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		borderRadius: '5px',
 		boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
 		cursor: 'pointer',
