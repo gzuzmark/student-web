@@ -1,4 +1,5 @@
 import qs from 'query-string';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -42,7 +43,11 @@ const parseParams = (location: { search: string }): SelectDoctorParams => {
 
 const useSelectDoctorParam = (): [SelectDoctorParams] => {
 	const location = useLocation();
-	const [params] = useState<SelectDoctorParams>(parseParams(location));
+	const [params, setParams] = useState<SelectDoctorParams>(parseParams(location));
+
+	useEffect(() => {
+		setParams(parseParams(location));
+	}, [location]);
 
 	return [params];
 };
