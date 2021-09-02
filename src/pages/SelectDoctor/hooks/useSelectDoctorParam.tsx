@@ -32,10 +32,10 @@ const defaultSelectDoctorParams: SelectDoctorParams = {
 const parseParams = (location: { search: string }): SelectDoctorParams => {
 	const parse = qs.parse(location.search);
 	const params: SelectDoctorParams = { ...defaultSelectDoctorParams };
-	if (parse.malestar != undefined) {
+	if (parse.malestar !== undefined) {
 		params.malestar = String(parse.malestar);
 	}
-	if (parse._ga != undefined) {
+	if (parse._ga !== undefined) {
 		params.ga = String(parse._ga);
 	}
 	return params;
