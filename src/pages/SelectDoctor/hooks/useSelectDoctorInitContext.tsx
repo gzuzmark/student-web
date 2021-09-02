@@ -9,6 +9,7 @@ const useSelectDoctorInitContext = (): [SelectDoctorParams, UseCase | null] => {
 	const [params] = useSelectDoctorParam();
 	const [useCase] = useUseCase(params.malestar);
 	const { updateState } = useContext(AppContext);
+	const { isUbigeoEnabled, utmSource, utmMedium, utmCampaign, showSmallSignUp } = params;
 
 	useEffect(() => {
 		if (updateState && useCase) {
@@ -17,9 +18,16 @@ const useSelectDoctorInitContext = (): [SelectDoctorParams, UseCase | null] => {
 				appointmentCreationStep: SELECT_DOCTOR_STEP,
 				triage: DEFAULT_TRIAGE_VALUES,
 				appointmentOwner: GUEST,
+				isUbigeoEnabled,
+				trackParams: {
+					utmSource,
+					utmMedium,
+					utmCampaign,
+				},
+				showSmallSignUp,
 			});
 		}
-	}, [updateState, useCase]);
+	}, [isUbigeoEnabled, showSmallSignUp, updateState, useCase, utmCampaign, utmMedium, utmSource]);
 
 	return [params, useCase];
 };
