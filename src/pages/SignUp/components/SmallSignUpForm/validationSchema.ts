@@ -20,6 +20,9 @@ const messages = {
 	identification: {
 		required: i18next.t('signUp:aboutme.validation.document.required'),
 	},
+	identificationType: {
+		required: i18next.t('newSignUp:contactPatient.validation.idType.required'),
+	},
 	phoneNumber: {
 		required: i18next.t('signUp:contact.validation.phoneNumber.required'),
 	},
@@ -30,6 +33,7 @@ const messages = {
 };
 
 const validationSchema = object().shape({
+	identificationType: string().required(messages.identificationType.required),
 	name: string().required(messages.name.required),
 	lastName: string().required(messages.lastName.required),
 	birthDate: date()

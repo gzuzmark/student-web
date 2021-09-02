@@ -107,6 +107,13 @@ const useStyles = stylesWithTheme(({ breakpoints, spacing }: Theme) => ({
 	},
 }));
 
+const getBooleanOrTrue = (value: string | undefined | null): boolean => {
+	if (value === undefined || value === null) {
+		return true;
+	}
+	return !!JSON.parse(String(value).toLowerCase());
+};
+
 const Payment = () => {
 	const {
 		doctor,
@@ -135,7 +142,7 @@ const Payment = () => {
 
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
-		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
+		inTestEnvironment: getBooleanOrTrue(process.env.REACT_APP_KUSHKI_IN_TEST_ENV), //!!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`
 	});
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
@@ -1065,7 +1072,7 @@ const Payment = () => {
 												<Field
 													component={TextField}
 													name="documentType"
-													label={t('Documento')}
+													label={t('contact.fields.id.label.toYou')}
 													variant="outlined"
 													fullWidth
 													onChange={(e: any) => {
