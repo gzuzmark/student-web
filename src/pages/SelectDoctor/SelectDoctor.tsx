@@ -1,62 +1,30 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import { parse } from 'query-string';
-
-import { usePageTitle, redirectToBaseAlivia, addGAEvent } from 'utils';
-import { getUseCase, DoctorAvailability, Schedule } from 'pages/api';
-import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
-
+import AppContext, { GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
+import { DoctorAvailability, Schedule } from 'pages/api';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { addGAEvent, redirectToBaseAlivia, usePageTitle } from 'utils';
 import { Container } from '../common';
-// import { LeftSide } from './components/LeftSide';
-import { RightSide } from './components/RightSide';
-import WarningModal from './components/WarningModal/WarningModal';
-import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
-import { formatDoctor } from './utils';
-import { Skills } from './components/Skills';
 import DropdownSpecialties from './components/DropdownSpecialties/DropdownSpecialties';
-
-const DEFAULT_TRIAGE_VALUES = [
-	{ question: '¿Para quién es la consulta?', answer: 'relative' },
-	{ question: '¿Qué tan fuerte es el malestar?', answer: 'moderate' },
-	{ question: 'De acuerdo, describe el malestar:', answer: '-' },
-	{ question: '¿Hace cuánto tiempo se viene presentando este malestar?', answer: '-' },
-];
-
-const requestUseCaseID = async (useCaseID: string, updateState: Function | undefined, toggleWarningModal: Function) => {
-	if (updateState) {
-		const useCase = await getUseCase(useCaseID);
-		if (useCase && window.nutritionistUseCaseId === useCase.id) {
-			toggleWarningModal(true);
-		}
-		updateState({
-			useCase,
-			appointmentCreationStep: SELECT_DOCTOR_STEP,
-			triage: DEFAULT_TRIAGE_VALUES,
-			appointmentOwner: GUEST,
-		});
-	}
-};
+import { RightSide } from './components/RightSide';
+import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
+import WarningModal from './components/WarningModal/WarningModal';
+import useSelectDoctorInitContext from './hooks/useSelectDoctorInitContext';
+import { formatDoctor } from './utils';
 
 const SelectDoctor = () => {
+	const { userToken, updateState } = useContext(AppContext);
+	const history = useHistory();
+	const [params, useCase] = useSelectDoctorInitContext();
+
 	const [showWarningModal, toggleWarningModal] = useState<boolean>(false);
 	const [isSelectOwnerOpen, setSelectOwnerOpen] = useState<boolean>(false);
 	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
 	const [schedule, setSchedule] = useState<Schedule | null>(null);
-
-	const location = useLocation();
-	const history = useHistory();
-	const params = parse(location.search);
-	const isUbigeoEnabled = ((params.ubigeo as string) || '') === '1';
-	const minutes = (params.minutes as string) || '';
-	const numSessions = (params.num_sessions as string) || '';
-	const utmSource = (params.utm_source as string) || '';
-	const utmMedium = (params.utm_medium as string) || '';
-	const utmCampaign = (params.utm_campaign as string) || '';
-	const shouldShowTheDoctorDetailedInfo = (params.show || '') === '1' || true;
-	const showSmallSignUp = ((params.bsignup as string) || '') === '1';
-	const { useCase, userToken, updateState } = useContext(AppContext);
 	const [specialityId, setEspecialityId] = useState<string | null>(null);
+
+	const { malestar, showSmallSignUp } = params;
 	const isUserLoggedIn = !!userToken;
+
 	const selectAppointmentOwner = (owner: string) => () => {
 		const isForSomeoneElse = owner === GUEST;
 		const ownerToLabel = {
@@ -114,58 +82,30 @@ const SelectDoctor = () => {
 	const onAcceptWarning = () => toggleWarningModal(false);
 	usePageTitle('Seleccion doctor');
 
-	const onChangeDropdown = (id: string) => {
-		requestUseCaseID(id, updateState, toggleWarningModal);
-	};
-
 	useEffect(() => {
-		const useCaseParam = params.malestar as string;
-
-		if (!useCase && useCaseParam && updateState) {
-			requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
-			setEspecialityId(useCaseParam);
+		if (useCase && window.nutritionistUseCaseId === useCase.id) {
+			toggleWarningModal(true);
 		}
-
-		if (updateState) {
-			updateState({ isUbigeoEnabled, trackParams: { utmSource, utmMedium, utmCampaign }, showSmallSignUp });
+		if (malestar) {
+			setEspecialityId(malestar);
 		}
-
-		if (useCase && useCase.id) {
-			if (window.nutritionistUseCaseId === useCase.id) {
-				toggleWarningModal(true);
-			}
+		if (useCase) {
+			const { id } = useCase;
+			setEspecialityId(id);
 		}
-	}, [
-		location.search,
-		updateState,
-		useCase,
-		isUbigeoEnabled,
-		params.malestar,
-		utmSource,
-		utmMedium,
-		utmCampaign,
-		showSmallSignUp,
-	]);
+	}, [useCase, malestar]);
 
 	return (
 		<>
-			<DropdownSpecialties specialityId={specialityId} onChange={onChangeDropdown} />
+			<DropdownSpecialties specialityId={specialityId} />
 			<Container>
-				{/* <LeftSide step={!params.malestar ? -1 : 0} /> */}
-				{!params.malestar ? (
-					<Skills />
-				) : (
-					<RightSide
-						isUserLoggedIn={!!userToken}
-						useCase={useCase}
-						minutes={minutes}
-						numSessions={numSessions}
-						selectDoctorCallback={selectDoctorCallback}
-						setDoctor={setDoctor}
-						setSchedule={setSchedule}
-						shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
-					/>
-				)}
+				<RightSide
+					isUserLoggedIn={!!userToken}
+					useCaseId={malestar}
+					selectDoctorCallback={selectDoctorCallback}
+					setDoctor={setDoctor}
+					setSchedule={setSchedule}
+				/>
 				<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
 				<SelectAppointmentOwner
 					isOpen={isSelectOwnerOpen}

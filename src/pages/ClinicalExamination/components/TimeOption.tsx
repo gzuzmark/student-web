@@ -1,10 +1,10 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core';
-import { stylesWithTheme } from 'utils';
-import { AvailableTime } from 'types';
-import dayjs from 'dayjs';
+import Button from '@material-ui/core/Button';
 import clsx from 'clsx';
+import { format } from 'date-fns';
+import React from 'react';
+import { AvailableTime } from 'types';
+import { stylesWithTheme } from 'utils';
 
 interface StylesProps {
 	active: boolean;
@@ -66,7 +66,7 @@ const TimeOption = ({ value, onClick, disabled }: TimeOptionProps) => {
 	return (
 		<div className={classes.dateButtonWrapper}>
 			<Button className={className} variant="contained" fullWidth onClick={() => onClick(value)}>
-				{dayjs(value.start_time).add(5, 'hours').format('HH:mm')}
+				{format(new Date(value.start_time), 'hh:mm a')}
 			</Button>
 		</div>
 	);

@@ -191,23 +191,14 @@ const getClosestSchedules = async (
 };
 
 interface RightSideProps {
-	useCase: UseCase | null | undefined;
+	useCaseId: string | null | undefined;
 	isUserLoggedIn: boolean;
-	minutes?: string;
-	numSessions?: string;
 	selectDoctorCallback: () => void;
 	setDoctor: Function;
 	setSchedule: Function;
-	shouldShowMoreDoctorInfo: boolean;
 }
 
-const RightSide = ({
-	useCase,
-	selectDoctorCallback,
-	setDoctor,
-	setSchedule,
-	shouldShowMoreDoctorInfo,
-}: RightSideProps) => {
+const RightSide = ({ useCaseId, selectDoctorCallback, setDoctor, setSchedule }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -249,10 +240,11 @@ const RightSide = ({
 
 	const callApiSchedules = useCallback(
 		(startDate: Date) => {
-			if (useCase) {
+			if (useCaseId) {
+				console.log(useCaseId);
 				setIsLoadData(true);
 				getClosestSchedules(
-					useCase.id,
+					useCaseId,
 					startDate,
 					setSelectedDate,
 					setDoctors,
@@ -262,7 +254,7 @@ const RightSide = ({
 				).finally(() => setIsLoadData(false));
 			}
 		},
-		[useCase],
+		[useCaseId],
 	);
 
 	useEffect(() => {
@@ -277,7 +269,7 @@ const RightSide = ({
 					selectDoctorCallback={selectDoctorCallback}
 					setDoctor={setDoctor}
 					setSchedule={setSchedule}
-					shouldShowMoreDoctorInfo={shouldShowMoreDoctorInfo}
+					shouldShowMoreDoctorInfo={true}
 					doctorViewSessionExtended={null}
 					selectedDate={selectedDate || new Date()}
 				/>

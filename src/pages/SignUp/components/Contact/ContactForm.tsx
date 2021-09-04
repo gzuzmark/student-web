@@ -182,7 +182,7 @@ const ContactForm = ({
 						<FormControl className={classes.fieldWrapper} fullWidth>
 							<Field
 								component={TextField}
-								label={t(`contact.fields.idType.label.${contactKey}`)}
+								label={'Tipo de documento'}
 								name="identificationType"
 								variant="outlined"
 								select
@@ -197,7 +197,7 @@ const ContactForm = ({
 								name="identification"
 								label={t(`contact.fields.id.label.${contactKey}`)}
 								variant="outlined"
-								inputProps={{ maxLength: 11 }}
+								inputProps={{ maxLength: 12 }}
 								fullWidth
 							/>
 						</div>
