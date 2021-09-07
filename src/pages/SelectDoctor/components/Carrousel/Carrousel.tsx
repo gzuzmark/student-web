@@ -74,7 +74,7 @@ const Carrousel = ({
 	};
 
 	const isBackWeek = useCallback((): boolean => {
-		if (dates != null) {
+		if (dates != null && dates.length > 0) {
 			const firstDay = dates[0].date;
 			const today = new Date();
 			return firstDay > today && !isSameDay(firstDay, today);
