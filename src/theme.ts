@@ -16,6 +16,9 @@ const RED_MAIN = '#FE6B6F';
 const NEUTRAL2 = '#676F8F';
 
 const palette = {
+	neutral2: {
+		main: NEUTRAL2,
+	},
 	primary: {
 		main: MAIN_GREEN,
 		light: LIGHT_GREEN,
