@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import WbSunnyIcon from '@material-ui/icons/WbSunny';
-import Brightness4Icon from '@material-ui/icons/Brightness4';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
+import React, { useState } from 'react';
+
 import { ReactComponent as FilterIcon } from 'icons/filter.svg';
 import { ReactComponent as SunIcon } from 'icons/sun.svg';
 import { ReactComponent as SunsetIcon } from 'icons/sunset.svg';
@@ -49,7 +47,6 @@ const BootstrapButton = withStyles((theme: Theme) =>
 		},
 		label: {
 			width: '100%', // Ensure the correct width for iOS Safari
-			// color: '#676F8F',
 			display: 'inherit',
 			alignItems: 'inherit',
 			justifyContent: 'inherit',
@@ -64,15 +61,6 @@ const BootstrapButton = withStyles((theme: Theme) =>
 		selected: {
 			'&:hover': {},
 		},
-		// '&:hover': {},
-		// '&:active': {
-		// 	boxShadow: 'none',
-		// 	backgroundColor: '#0062cc',
-		// 	borderColor: '#005cbf',
-		// },
-		// '&:focus': {
-		// 	boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-		// },
 	}),
 )(ToggleButton);
 
@@ -93,15 +81,8 @@ interface TimeFrameFilterProps {
 	onChange: (filters: string[]) => void;
 }
 
-// export enum TimereFrameOptionsEnum {
-// 	morning = 1,
-// 	afternoon = 2,
-// 	evening = 3,
-// }
-
 const TimeFrameFilter = ({ onChange }: TimeFrameFilterProps) => {
 	const classes = useStyles();
-	// const timeFrameOptions = ['morning', 'afternoon', 'evening'];
 	const [formats, setFormats] = useState<string[]>([]);
 
 	const handleFormat = (event: React.MouseEvent<HTMLElement>, newFormats: string[]) => {
@@ -111,74 +92,8 @@ const TimeFrameFilter = ({ onChange }: TimeFrameFilterProps) => {
 		}
 	};
 
-	// useEffect(() => {
-	// 	console.log('useEffect');
-	// 	onChange([]);
-	// }, [onChange]);
-
-	// const [alignment, setAlignment] = React.useState<string | null>('left');
-	// const [buttonColor, setColor] = React.useState<string | null>('outlined');
-
-	// const changeColor = () => {
-	// 	setColor('container');
-	// };
-
-	// const handleAlignment = (event: React.MouseEvent<HTMLElement>, newAlignment: string | null) => {
-	// 	setAlignment(newAlignment);
-	// };
-
 	return (
-		// <ToggleButtonGroup value={alignment} exclusive onChange={handleAlignment} aria-label="text alignment">
-		// 	<ToggleButton value="morning" aria-label="morning time">
-		// 		<WbSunnyIcon />
-		// 		mañana
-		// 	</ToggleButton>
-		// 	<ToggleButton value="afternoon" aria-label="afternoon time">
-		// 		<Brightness4Icon />
-		// 		tarde
-		// 	</ToggleButton>
-		// 	<ToggleButton value="evening" aria-label="evening time">
-		// 		<Brightness2Icon />
-		// 		noche
-		// 	</ToggleButton>
-		// </ToggleButtonGroup>
 		<>
-			{/* <div className={classes.imgWrapper}>
-				<img src={filter} width={18} height={18} alt="filter frame icon" />
-			</div>
-			<ButtonGroup>
-				<BootstrapButton
-					className={classes.outlinedPrimary}
-					size="small"
-					variant="outlined"
-					color="primary"
-					startIcon={<WbSunnyIcon />}
-				>
-					{' '}
-					Mañana
-				</BootstrapButton>
-				<BootstrapButton
-					className={classes.outlinedPrimary}
-					size="small"
-					variant="outlined"
-					color="primary"
-					startIcon={<Brightness4Icon />}
-				>
-					{' '}
-					Tarde
-				</BootstrapButton>
-				<BootstrapButton
-					className={classes.outlinedPrimary}
-					size="small"
-					variant="outlined"
-					color="primary"
-					startIcon={<Brightness2Icon />}
-				>
-					{' '}
-					Noche
-				</BootstrapButton>
-			</ButtonGroup> */}
-
 			<div className={classes.imgWrapper}>
 				<FilterIcon />
 			</div>
