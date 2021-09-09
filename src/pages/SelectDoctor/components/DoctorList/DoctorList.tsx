@@ -1,5 +1,5 @@
 import Typography from '@material-ui/core/Typography';
-import { addHours, endOfDay, isWithinInterval, startOfDay } from 'date-fns/esm';
+import { addHours, addMinutes, endOfDay, isWithinInterval, startOfDay } from 'date-fns/esm';
 import { DoctorAvailability, Schedule } from 'pages/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -107,10 +107,13 @@ const DoctorList = ({
 					const dayStart = startOfDay(startTime);
 					const dayEnd = endOfDay(startTime);
 
-					const isMorningInterval = isWithinInterval(startTime, { start: dayStart, end: addHours(dayStart, 12.59) });
+					const isMorningInterval = isWithinInterval(startTime, {
+						start: dayStart,
+						end: addHours(addMinutes(dayStart, 59), 12),
+					});
 					const isAfternoonInterval = isWithinInterval(startTime, {
 						start: addHours(dayStart, 13),
-						end: addHours(dayStart, 16.59),
+						end: addHours(addMinutes(dayStart, 59), 16),
 					});
 					const isEveningInterval = isWithinInterval(startTime, {
 						start: addHours(dayStart, 17),
@@ -145,20 +148,6 @@ const DoctorList = ({
 		}
 		setTimeFrameFilter(filters);
 		filterDoctors(doctors);
-		// console.log({ filteredDocs });
-		// const filteredDoctors = doctors.filter(({ schedules }) => {
-		// 	const somechedules = schedules.some((schedule) => {
-		// 		const { startTime } = schedule;
-		// 		const dayStart = startOfDay(new Date());
-		// 		const dayEnd = endOfDay(new Date());
-		// 		if (
-		// 			filters.find((filter) => filter === 'morning') &&
-		// 			isWithinInterval(startTime, { start: dayStart, end: dayEnd })
-		// 		) {
-		// 			return true;
-		// 		}
-		// 	});
-		// });
 	};
 
 	useEffect(() => {
