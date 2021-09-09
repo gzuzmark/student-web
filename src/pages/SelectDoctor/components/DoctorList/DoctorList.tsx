@@ -28,6 +28,32 @@ export interface ActiveDoctorTime {
 	scheduleIndex: number;
 }
 
+export enum TimereFrameOptionsEnum {
+	morning = 'morning',
+	afternoon = 'afternoon',
+	evening = 'evening',
+}
+
+export const getTimeFrameIntervals = (startTime: Date) => {
+	const dayStart = startOfDay(startTime);
+	const dayEnd = endOfDay(startTime);
+	return {
+		morning: { start: startOfDay(startTime), end: addHours(addMinutes(dayStart, 59), 12) },
+		afternoon: { start: addHours(dayStart, 13), end: addHours(addMinutes(dayStart, 59), 16) },
+		evening: { start: addHours(dayStart, 17), end: dayEnd },
+	};
+};
+
+const isIntervalSelected = (timeFrameFilter: string[], interval: string) =>
+	timeFrameFilter.some((filter) => filter === interval);
+
+const isInsideIntervalRange = (day: Date, startTime: Date, endTime: Date) => {
+	return isWithinInterval(day, {
+		start: startTime,
+		end: endTime,
+	});
+};
+
 const DoctorList = ({
 	doctors,
 	selectDoctorCallback,
@@ -104,26 +130,15 @@ const DoctorList = ({
 				const { schedules } = current;
 				const somechedules = schedules.some((schedule) => {
 					const { startTime } = schedule;
-					const dayStart = startOfDay(startTime);
-					const dayEnd = endOfDay(startTime);
+					const intervals = getTimeFrameIntervals(startTime);
 
-					const isMorningInterval = isWithinInterval(startTime, {
-						start: dayStart,
-						end: addHours(addMinutes(dayStart, 59), 12),
-					});
-					const isAfternoonInterval = isWithinInterval(startTime, {
-						start: addHours(dayStart, 13),
-						end: addHours(addMinutes(dayStart, 59), 16),
-					});
-					const isEveningInterval = isWithinInterval(startTime, {
-						start: addHours(dayStart, 17),
-						end: dayEnd,
-					});
-					const evening = timeFrameFilter.some((filter) => filter === 'evening') && isEveningInterval;
 					return (
-						(timeFrameFilter.some((filter) => filter === 'morning') && isMorningInterval) ||
-						(timeFrameFilter.some((filter) => filter === 'afternoon') && isAfternoonInterval) ||
-						evening
+						(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.morning) &&
+							isInsideIntervalRange(startTime, intervals.morning.start, intervals.morning.end)) ||
+						(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.afternoon) &&
+							isInsideIntervalRange(startTime, intervals.afternoon.start, intervals.afternoon.end)) ||
+						(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.evening) &&
+							isInsideIntervalRange(startTime, intervals.evening.start, intervals.evening.end))
 					);
 				});
 
@@ -166,7 +181,7 @@ const DoctorList = ({
 			<div className={classes.timeFilterContainer}>
 				<div className={classes.counter}>
 					{filteredDoctors.length === 0 ? (
-						<>
+						<div className={classes.counterContent}>
 							<Typography className={classes.counterFirstPartMobile} component="span">
 								No hay especialistas disponobiles{' '}
 							</Typography>
@@ -176,9 +191,9 @@ const DoctorList = ({
 							<Typography className={classes.counterSecondPart} component="span">
 								No hay especialistas disponibles{' '}
 							</Typography>
-						</>
+						</div>
 					) : (
-						<>
+						<div className={classes.counterContent}>
 							<Typography className={classes.counterFirstPart} component="span">
 								Resultados:{' '}
 							</Typography>
@@ -186,7 +201,9 @@ const DoctorList = ({
 								Tenemos{' '}
 							</Typography>
 							<Typography className={classes.counterFirstPartBold} component="span">
-								{t('right.foundDoctors', { doctors: doctors.length })}{' '}
+								{t('right.foundDoctors', {
+									doctors: filteredDoctors.length < 10 ? `0${filteredDoctors.length}` : filteredDoctors.length,
+								})}{' '}
 							</Typography>
 							<Typography className={classes.counterFirstPartMobile} component="span">
 								disponibles{' '}
@@ -194,7 +211,7 @@ const DoctorList = ({
 							<Typography className={classes.counterSecondPart} component="span">
 								en {t('right.specialityName', { speciality: doctors[0].specialityName })}{' '}
 							</Typography>
-						</>
+						</div>
 					)}
 				</div>
 				<div className={classes.timeFilterList}>

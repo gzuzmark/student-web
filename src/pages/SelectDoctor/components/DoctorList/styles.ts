@@ -3,15 +3,21 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 	createStyles({
 		container: {
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'center',
+			// display: 'flex',
+			// flexDirection: 'column',
+			// alignItems: 'center',
+			display: 'grid',
+			// gridAutoFlow: 'column',
+			// gridAutoColumns: '1fr',
+			gap: '1em',
+			gridTemplateRows: 'repeat(auto-fit, minmax(3em, 6em))',
+			justifyContent: 'center',
 		},
 		doctorList: {
 			[breakpoints.up('lg')]: {
 				width: '1100px',
 				display: 'flex',
-				justifyContent: 'center',
+				justifyContent: 'flex-start',
 				// alignItems: 'center',
 				flexWrap: 'wrap',
 			},
@@ -30,27 +36,31 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 				paddingLeft: '16px',
 			},
 			[breakpoints.down('xs')]: {},
-			[breakpoints.down('md')]: {
-				paddingBottom: '8px',
-			},
+			[breakpoints.down('md')]: {},
 		},
 		timeFilterContainer: {
 			display: 'flex',
-			justifyContent: 'flex-start',
-			flexWrap: 'wrap',
+			alignItems: 'center',
+			justifyContent: 'center',
 			[breakpoints.down('xs')]: {
-				flexDirection: 'column-reverse',
 				backgroundColor: '#F7F8FC',
+
+				flexDirection: 'column-reverse',
 			},
 		},
 		counter: {
-			padding: '0 24px 20px',
+			display: 'flex',
+			flexDirection: 'row',
+			padding: '0 24px 0px',
 			[breakpoints.up('lg')]: {
 				padding: '22px 0 20px 0',
 			},
 			[breakpoints.down('xs')]: {
-				padding: '0 18px 12px',
+				padding: '0 18px 0px',
 			},
+		},
+		counterContent: {
+			flex: '1 1 auto',
 		},
 		counterFirstPart: {
 			color: '#A3ABCC',
@@ -100,6 +110,8 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 				// boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
 			},
 			[breakpoints.down('xs')]: {
+				width: '100%',
+
 				padding: '20px 10px',
 			},
 		},

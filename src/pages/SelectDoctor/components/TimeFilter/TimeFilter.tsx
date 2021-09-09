@@ -24,13 +24,16 @@ const BootstrapButton = withStyles((theme: Theme) =>
 			textTransform: 'none',
 			background: '#FFFFFF;',
 			borderColor: '#E5EFFF',
+			fontFamily: 'Mulish, sans-serif',
 			'&:hover': {
 				backgroundColor: '#FFFFFF',
 			},
 			'&$selected': {
+				fontFamily: 'Mulish, sans-serif',
 				color: '#FFFFFF',
 				backgroundColor: '#2C7BFD',
 				fill: '#FFFFFF',
+				fontWeight: 'bold',
 				'&:hover': {
 					backgroundColor: '#2C7BFD',
 				},
@@ -67,7 +70,6 @@ const BootstrapButton = withStyles((theme: Theme) =>
 const StyledToggleButtonGroup = withStyles((theme) => ({
 	grouped: {
 		margin: theme.spacing(2),
-		border: 'none',
 		'&:not(:first-child)': {
 			borderRadius: theme.shape.borderRadius,
 		},
