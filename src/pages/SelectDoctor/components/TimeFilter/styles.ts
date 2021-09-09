@@ -23,6 +23,9 @@ const useStyles = makeStyles(({ breakpoints, spacing }) => ({
 		display: 'flex',
 		justifyContent: 'center',
 		paddingRight: '8px',
+		[breakpoints.down('md')]: {
+			display: 'none',
+		},
 		[breakpoints.down('xs')]: {
 			display: 'none',
 		},

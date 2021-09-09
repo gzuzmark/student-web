@@ -13,6 +13,7 @@ const BLUE_STEEL = '#9EADCC';
 const PRIMARY_BLACK = '#535B6C';
 const SECONDARY_BLACK = '#353535';
 const RED_MAIN = '#FE6B6F';
+const NEUTRAL2 = '#676F8F';
 
 const palette = {
 	primary: {

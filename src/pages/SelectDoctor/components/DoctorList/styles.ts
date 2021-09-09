@@ -31,30 +31,61 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			},
 			[breakpoints.down('xs')]: {},
 			[breakpoints.down('md')]: {
-				width: '55%%',
-				paddingBottom: '16px',
+				paddingBottom: '8px',
 			},
 		},
 		timeFilterContainer: {
 			display: 'flex',
-			justifyContent: 'center',
-			alignItems: 'center',
+			justifyContent: 'flex-start',
 			flexWrap: 'wrap',
+			[breakpoints.down('xs')]: {
+				flexDirection: 'column-reverse',
+				backgroundColor: '#F7F8FC',
+			},
 		},
 		counter: {
 			padding: '0 24px 20px',
 			[breakpoints.up('lg')]: {
 				padding: '22px 0 20px 0',
 			},
+			[breakpoints.down('xs')]: {
+				padding: '0 18px 12px',
+			},
 		},
 		counterFirstPart: {
+			color: '#A3ABCC',
 			fontWeight: 'bold',
 			fontSize: '14px',
 			lineHeight: '15px',
+			[breakpoints.down('xs')]: {
+				display: 'none',
+			},
+		},
+		counterFirstPartBold: {
+			color: '#2C7BFD',
+			fontWeight: 'bold',
+			fontSize: '14px',
+			lineHeight: '15px',
+			[breakpoints.down('xs')]: {
+				color: '#52575C',
+			},
 		},
 		counterSecondPart: {
 			fontSize: '14px',
 			lineHeight: '15px',
+			[breakpoints.down('xs')]: {
+				display: 'none',
+			},
+		},
+		counterFirstPartMobile: {
+			display: 'none',
+			[breakpoints.down('xs')]: {
+				color: '#52575C',
+				fontWeight: 'bold',
+				fontSize: '14px',
+				lineHeight: '15px',
+				display: 'inline',
+			},
 		},
 		doctorWrapper: {
 			backgroundColor: '#ffffff',

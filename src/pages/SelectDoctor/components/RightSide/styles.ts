@@ -32,6 +32,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 			},
 		},
 		divider: {
+			backgroundColor: '#F7F8FC',
 			margin: '0 24px 32px',
 			[breakpoints.up('lg')]: {
 				margin: '0',

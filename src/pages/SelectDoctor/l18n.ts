@@ -10,7 +10,7 @@ const selectDoctor = {
 	'right.useCaseLabel': 'ESPECIALIDAD:',
 	'right.appointmentCostLabel': 'COSTO DE CONSULTA:',
 	'right.appointmentDurationLabel': 'DURACIÓN PROMEDIO:',
-	'right.foundDoctors': '{{doctors}} especialista(s)',
+	'right.foundDoctors': '{{doctors}} especialistas',
 	'right.availableDoctors.title': 'ELIGE UN HORARIO:',
 	'right.availableDoctors': 'DOCTOR DISPONIBLE',
 	'right.specialityName': '{{speciality}}',

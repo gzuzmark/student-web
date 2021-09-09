@@ -1,6 +1,7 @@
 import Typography from '@material-ui/core/Typography';
+import { addHours, endOfDay, isWithinInterval, startOfDay } from 'date-fns/esm';
 import { DoctorAvailability, Schedule } from 'pages/api';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { addGAEvent, getHour, getHumanDay } from 'utils';
 import DoctorSessions from '../DoctorSessions/DoctorSessions';
@@ -48,6 +49,8 @@ const DoctorList = ({
 	const [isDetailDoctorModalOpen, setIsDetailDoctorModalOpen] = useState<boolean>(false);
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [messageError, setMessageError] = useState('');
+	const [filteredDoctors, setFilteredDoctors] = useState<DoctorAvailability[]>(doctors);
+	const [timeFrameFilter, setTimeFrameFilter] = useState<string[]>([]);
 
 	const selectDoctorForModal = (index: number) => {
 		setSelectedDoctor(doctors[index]);
@@ -91,11 +94,79 @@ const DoctorList = ({
 		}
 	};
 
+	const filterDoctors = useCallback(
+		(medics: DoctorAvailability[]) => {
+			if (timeFrameFilter.length === 0) {
+				setFilteredDoctors(doctors);
+				return;
+			}
+			const filteredDoctors = medics.reduce((acc: DoctorAvailability[], current) => {
+				const { schedules } = current;
+				const somechedules = schedules.some((schedule) => {
+					const { startTime } = schedule;
+					const dayStart = startOfDay(startTime);
+					const dayEnd = endOfDay(startTime);
+
+					const isMorningInterval = isWithinInterval(startTime, { start: dayStart, end: addHours(dayStart, 12.59) });
+					const isAfternoonInterval = isWithinInterval(startTime, {
+						start: addHours(dayStart, 13),
+						end: addHours(dayStart, 16.59),
+					});
+					const isEveningInterval = isWithinInterval(startTime, {
+						start: addHours(dayStart, 17),
+						end: dayEnd,
+					});
+					const evening = timeFrameFilter.some((filter) => filter === 'evening') && isEveningInterval;
+					return (
+						(timeFrameFilter.some((filter) => filter === 'morning') && isMorningInterval) ||
+						(timeFrameFilter.some((filter) => filter === 'afternoon') && isAfternoonInterval) ||
+						evening
+					);
+				});
+
+				if (somechedules) {
+					return [...acc, current];
+				}
+				return acc;
+			}, []);
+			setFilteredDoctors(filteredDoctors);
+		},
+		[doctors, timeFrameFilter],
+	);
+
+	const onTimeFitlerChange = (filters: string[]) => {
+		console.group('filters');
+		console.log(filters);
+		console.groupEnd();
+		if (filters.length === 0) {
+			setTimeFrameFilter([]);
+			setFilteredDoctors(doctors);
+			return;
+		}
+		setTimeFrameFilter(filters);
+		filterDoctors(doctors);
+		// console.log({ filteredDocs });
+		// const filteredDoctors = doctors.filter(({ schedules }) => {
+		// 	const somechedules = schedules.some((schedule) => {
+		// 		const { startTime } = schedule;
+		// 		const dayStart = startOfDay(new Date());
+		// 		const dayEnd = endOfDay(new Date());
+		// 		if (
+		// 			filters.find((filter) => filter === 'morning') &&
+		// 			isWithinInterval(startTime, { start: dayStart, end: dayEnd })
+		// 		) {
+		// 			return true;
+		// 		}
+		// 	});
+		// });
+	};
+
 	useEffect(() => {
 		setActiveDoctorTime({ doctorCmp: '', scheduleID: '', scheduleIndex: -1, doctorIndex: -1 });
 		setDoctor(null);
 		setSchedule(null);
-	}, [selectedDate, setDoctor, setSchedule]);
+		filterDoctors(doctors);
+	}, [doctors, filterDoctors, selectedDate, setDoctor, setSchedule]);
 
 	if (doctorViewSessionExtended != null) {
 		return <div>Doctor extendido</div>;
@@ -105,25 +176,44 @@ const DoctorList = ({
 		<div className={classes.container}>
 			<div className={classes.timeFilterContainer}>
 				<div className={classes.counter}>
-					<Typography className={classes.counterFirstPart} component="span">
-						Resultados:{' '}
-					</Typography>
-					<Typography className={classes.counterFirstPart} component="span">
-						{t('right.foundDoctors', { doctors: doctors.length })}{' '}
-					</Typography>
-					<Typography className={classes.counterFirstPart} component="span">
-						en{' '}
-					</Typography>
-					<Typography className={classes.counterSecondPart} component="span">
-						{t('right.specialityName', { speciality: doctors[0].specialityName })}{' '}
-					</Typography>
+					{filteredDoctors.length === 0 ? (
+						<>
+							<Typography className={classes.counterFirstPartMobile} component="span">
+								No hay especialistas disponobiles{' '}
+							</Typography>
+							<Typography className={classes.counterFirstPart} component="span">
+								Resultados:{' '}
+							</Typography>
+							<Typography className={classes.counterSecondPart} component="span">
+								No hay especialistas disponibles{' '}
+							</Typography>
+						</>
+					) : (
+						<>
+							<Typography className={classes.counterFirstPart} component="span">
+								Resultados:{' '}
+							</Typography>
+							<Typography className={classes.counterFirstPartMobile} component="span">
+								Tenemos{' '}
+							</Typography>
+							<Typography className={classes.counterFirstPartBold} component="span">
+								{t('right.foundDoctors', { doctors: doctors.length })}{' '}
+							</Typography>
+							<Typography className={classes.counterFirstPartMobile} component="span">
+								disponibles{' '}
+							</Typography>
+							<Typography className={classes.counterSecondPart} component="span">
+								en {t('right.specialityName', { speciality: doctors[0].specialityName })}{' '}
+							</Typography>
+						</>
+					)}
 				</div>
 				<div className={classes.timeFilterList}>
-					<TimeFrameFilter />
+					<TimeFrameFilter onChange={onTimeFitlerChange} />
 				</div>
 			</div>
 			<div className={classes.doctorList}>
-				{doctors.map((doctor: DoctorAvailability, doctorIndex: number) => (
+				{filteredDoctors.map((doctor: DoctorAvailability, doctorIndex: number) => (
 					<DoctorSessions
 						key={doctorIndex}
 						doctor={doctor}
