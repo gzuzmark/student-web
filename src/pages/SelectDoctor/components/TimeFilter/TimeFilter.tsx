@@ -24,13 +24,16 @@ const BootstrapButton = withStyles((theme: Theme) =>
 			textTransform: 'none',
 			background: '#FFFFFF;',
 			borderColor: '#E5EFFF',
+			fontFamily: 'Mulish, sans-serif',
 			'&:hover': {
 				backgroundColor: '#FFFFFF',
 			},
 			'&$selected': {
+				fontFamily: 'Mulish, sans-serif',
 				color: '#FFFFFF',
 				backgroundColor: '#2C7BFD',
 				fill: '#FFFFFF',
+				fontWeight: 'bold',
 				'&:hover': {
 					backgroundColor: '#2C7BFD',
 				},
@@ -65,14 +68,25 @@ const BootstrapButton = withStyles((theme: Theme) =>
 )(ToggleButton);
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
+	root: {
+		borderRadius: '4px',
+		display: 'grid',
+		gap: '1.25rem',
+		gridTemplateColumns: '1fr 1fr 1fr',
+		[theme.breakpoints.down('xs')]: {
+			display: 'inline-flex',
+			gap: '0rem',
+		},
+	},
 	grouped: {
-		margin: theme.spacing(2),
-		border: 'none',
 		'&:not(:first-child)': {
 			borderRadius: theme.shape.borderRadius,
 		},
 		'&:first-child': {
 			borderRadius: theme.shape.borderRadius,
+		},
+		[theme.breakpoints.down('xs')]: {
+			margin: theme.spacing(2),
 		},
 	},
 }))(ToggleButtonGroup);
@@ -98,13 +112,13 @@ const TimeFrameFilter = ({ onChange }: TimeFrameFilterProps) => {
 				<FilterIcon />
 			</div>
 			<StyledToggleButtonGroup size="small" value={formats} onChange={handleFormat} aria-label="text formatting">
-				<BootstrapButton value="morning" aria-label="morning">
+				<BootstrapButton value="morning" aria-label="morning" disableRipple>
 					<SunIcon /> <p>Mañana</p>
 				</BootstrapButton>
-				<BootstrapButton value="afternoon" aria-label="afternoon">
+				<BootstrapButton value="afternoon" aria-label="afternoon" disableRipple>
 					<SunsetIcon /> <p>Tarde</p>
 				</BootstrapButton>
-				<BootstrapButton value="evening" aria-label="evening">
+				<BootstrapButton value="evening" aria-label="evening" disableRipple>
 					<MoonIcon />
 					<p>Noche</p>
 				</BootstrapButton>
