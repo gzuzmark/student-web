@@ -132,8 +132,10 @@ const AvailableTimes = ({
 			validSelectTimeWithNow(schedule);
 			selectTime(scheduleId, scheduleIndex);
 		} catch (error) {
-			setMessageError(error.message);
-			setIsOpenModal(true);
+			if (error instanceof Error) {
+				setMessageError(error.message);
+				setIsOpenModal(true);
+			}
 		}
 	};
 
