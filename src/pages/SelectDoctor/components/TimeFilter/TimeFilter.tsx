@@ -100,13 +100,13 @@ const TimeFrameFilter = ({ onChange }: TimeFrameFilterProps) => {
 				<FilterIcon />
 			</div>
 			<StyledToggleButtonGroup size="small" value={formats} onChange={handleFormat} aria-label="text formatting">
-				<BootstrapButton value="morning" aria-label="morning">
+				<BootstrapButton value="morning" aria-label="morning" disableRipple>
 					<SunIcon /> <p>Mañana</p>
 				</BootstrapButton>
-				<BootstrapButton value="afternoon" aria-label="afternoon">
+				<BootstrapButton value="afternoon" aria-label="afternoon" disableRipple>
 					<SunsetIcon /> <p>Tarde</p>
 				</BootstrapButton>
-				<BootstrapButton value="evening" aria-label="evening">
+				<BootstrapButton value="evening" aria-label="evening" disableRipple>
 					<MoonIcon />
 					<p>Noche</p>
 				</BootstrapButton>
