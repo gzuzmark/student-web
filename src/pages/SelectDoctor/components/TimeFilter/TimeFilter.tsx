@@ -33,7 +33,8 @@ const BootstrapButton = withStyles((theme: Theme) =>
 				color: '#FFFFFF',
 				backgroundColor: '#2C7BFD',
 				fill: '#FFFFFF',
-				fontWeight: 'bold',
+				fontWeight: '800',
+				fontStyle: 'bold',
 				'&:hover': {
 					backgroundColor: '#2C7BFD',
 				},
