@@ -1,7 +1,8 @@
 import Typography from '@material-ui/core/Typography';
-import AppContext, { PAYMENT_STEP } from 'AppContext';
+import AppContext, { GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
 import { addHours, addMinutes, endOfDay, isWithinInterval, startOfDay } from 'date-fns/esm';
 import { DoctorAvailability, Schedule } from 'pages/api';
+import useSelectDoctorParam from 'pages/SelectDoctor/hooks/useSelectDoctorParam';
 import { formatDoctor } from 'pages/SelectDoctor/utils';
 import React, { useCallback, useEffect, useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +11,7 @@ import { addGAEvent, getHour, getHumanDay } from 'utils';
 import DoctorSessions from '../DoctorSessions/DoctorSessions';
 import { validSelectTimeWithNow } from '../FunctionsHelper';
 import { ModalErrorTime } from '../ModalErrorTime';
+import { SelectAppointmentOwner } from '../SelectAppointmentOwner';
 import TimeFrameFilter from '../TimeFilter/TimeFilter';
 import DetailedDoctorModal from './DetailedDoctorModal';
 import useStyles from './styles';
@@ -78,10 +80,12 @@ const DoctorList = ({
 	const [timeFrameFilter, setTimeFrameFilter] = useState<string[]>([]);
 
 	const history = useHistory();
+	const [params] = useSelectDoctorParam();
 	const { userToken, user, updateState } = useContext(AppContext);
 	const isUserLoggedIn = !!userToken && user ? user.id !== '' : false;
 	const [schedule, setSchedule] = useState<Schedule | null>(null);
 	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
+	const [isSelectOwnerOpen, setSelectOwnerOpen] = useState<boolean>(false);
 
 	const selectDoctorForModal = (index: number) => {
 		setSelectedDoctor(doctors[index]);
@@ -92,6 +96,44 @@ const DoctorList = ({
 	const openDetailedDoctorModal = () => {
 		setIsDetailDoctorModalOpen(true);
 	};
+
+	const selectAppointmentOwner = (owner: string) => () => {
+		const isForSomeoneElse = owner === GUEST;
+		const ownerToLabel = {
+			[GUEST]: 'Para alguien más',
+			[MYSELF]: 'Para mi',
+		};
+
+		if (updateState) {
+			addGAEvent({
+				category: 'Agendar cita - Paso 1 - Popup',
+				// eslint-disable-next-line
+				// @ts-ignore
+				action: ownerToLabel[owner],
+				label: '(not available)',
+			});
+			updateState({
+				appointmentOwner: owner,
+				appointmentCreationStep: PAYMENT_STEP,
+				// schedule,
+				// doctor: formatDoctor(doctor),
+			});
+			setSelectOwnerOpen(false);
+
+			if (params.showSmallSignUp) {
+				history.push('/informacion_paciente');
+			} else if (isForSomeoneElse || !isUserLoggedIn) {
+				history.push('/registro/sobre_ti');
+			} else if (!isForSomeoneElse && isUserLoggedIn) {
+				history.push('/registro/datos_medicos');
+			}
+		}
+	};
+
+	const closeSelectOwnerModal = () => {
+		setSelectOwnerOpen(false);
+	};
+
 	const selectDoctor = (doctorCmp: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => {
 		if (scheduleID !== '') {
 			setActiveDoctorTime({ doctorCmp, scheduleID, scheduleIndex, doctorIndex });
@@ -114,7 +156,7 @@ const DoctorList = ({
 		}
 
 		if (!isUserLoggedIn) {
-			// setSelectOwnerOpen(true);
+			setSelectOwnerOpen(true);
 		} else {
 			history.push('/seleccionar_paciente');
 		}
@@ -259,6 +301,12 @@ const DoctorList = ({
 				) : null}
 				<ModalErrorTime isOpen={isOpenModal} setIsOpen={setIsOpenModal} message={messageError} />
 			</div>
+			<SelectAppointmentOwner
+				isOpen={isSelectOwnerOpen}
+				selectAppointmentForMe={selectAppointmentOwner(MYSELF)}
+				selectAppointmentForSomeoneElse={selectAppointmentOwner(GUEST)}
+				onClose={closeSelectOwnerModal}
+			/>
 		</div>
 	);
 };
