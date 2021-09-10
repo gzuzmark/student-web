@@ -1,5 +1,4 @@
 import AppContext, { GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
-import { DoctorAvailability, Schedule } from 'pages/api';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { addGAEvent, redirectToBaseAlivia, usePageTitle } from 'utils';
@@ -9,7 +8,6 @@ import { RightSide } from './components/RightSide';
 import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
 import WarningModal from './components/WarningModal/WarningModal';
 import useSelectDoctorInitContext from './hooks/useSelectDoctorInitContext';
-import { formatDoctor } from './utils';
 
 const SelectDoctor = () => {
 	const { userToken, updateState } = useContext(AppContext);
@@ -18,8 +16,8 @@ const SelectDoctor = () => {
 
 	const [showWarningModal, toggleWarningModal] = useState<boolean>(false);
 	const [isSelectOwnerOpen, setSelectOwnerOpen] = useState<boolean>(false);
-	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
-	const [schedule, setSchedule] = useState<Schedule | null>(null);
+	// const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
+	// const [schedule, setSchedule] = useState<Schedule | null>(null);
 	const [specialityId, setEspecialityId] = useState<string | null>(null);
 
 	const { malestar, showSmallSignUp } = params;
@@ -43,8 +41,8 @@ const SelectDoctor = () => {
 			updateState({
 				appointmentOwner: owner,
 				appointmentCreationStep: PAYMENT_STEP,
-				schedule,
-				doctor: formatDoctor(doctor),
+				// schedule,
+				// doctor: formatDoctor(doctor),
 			});
 			setSelectOwnerOpen(false);
 
@@ -57,21 +55,7 @@ const SelectDoctor = () => {
 			}
 		}
 	};
-	const selectDoctorCallback = () => {
-		if (updateState) {
-			updateState({
-				appointmentCreationStep: PAYMENT_STEP,
-				schedule,
-				doctor: formatDoctor(doctor),
-			});
-		}
 
-		if (!isUserLoggedIn) {
-			setSelectOwnerOpen(true);
-		} else {
-			history.push('/seleccionar_paciente');
-		}
-	};
 	const closeSelectOwnerModal = () => {
 		setSelectOwnerOpen(false);
 	};
@@ -102,9 +86,9 @@ const SelectDoctor = () => {
 				<RightSide
 					isUserLoggedIn={!!userToken}
 					useCaseId={malestar}
-					selectDoctorCallback={selectDoctorCallback}
-					setDoctor={setDoctor}
-					setSchedule={setSchedule}
+					// selectDoctorCallback={selectDoctorCallback}
+					// setDoctor={setDoctor}
+					// setSchedule={setSchedule}
 				/>
 				<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
 				<SelectAppointmentOwner

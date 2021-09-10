@@ -11,13 +11,13 @@ import { DoctorList } from '../DoctorList';
 import useStyles from './styles';
 interface RightSideProps {
 	useCaseId: string | null | undefined;
-	isUserLoggedIn: boolean;
-	selectDoctorCallback: () => void;
-	setDoctor: Function;
-	setSchedule: Function;
+	isUserLoggedIn?: boolean;
+	selectDoctorCallback?: () => void;
+	setDoctor?: Function;
+	setSchedule?: Function;
 }
 
-const RightSide = ({ useCaseId, selectDoctorCallback, setDoctor, setSchedule }: RightSideProps) => {
+const RightSide = ({ useCaseId }: RightSideProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 
@@ -62,12 +62,10 @@ const RightSide = ({ useCaseId, selectDoctorCallback, setDoctor, setSchedule }: 
 			{doctorsForDay.length > 0 ? (
 				<DoctorList
 					doctors={doctorsForDay}
-					selectDoctorCallback={selectDoctorCallback}
-					setDoctor={setDoctor}
-					setSchedule={setSchedule}
+					// selectDoctorCallback={selectDoctorCallback}
+					// setDoctor={setDoctor}
+					// setSchedule={setSchedule}
 					shouldShowMoreDoctorInfo={true}
-					doctorViewSessionExtended={null}
-					selectedDate={selectedDate || new Date()}
 				/>
 			) : (
 				<div className={classes.emptyMessageWrapper}>

@@ -1,8 +1,11 @@
 import Typography from '@material-ui/core/Typography';
+import AppContext, { PAYMENT_STEP } from 'AppContext';
 import { addHours, endOfDay, isWithinInterval, startOfDay } from 'date-fns/esm';
 import { DoctorAvailability, Schedule } from 'pages/api';
-import React, { useCallback, useEffect, useState } from 'react';
+import { formatDoctor } from 'pages/SelectDoctor/utils';
+import React, { useCallback, useEffect, useState, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
 import { addGAEvent, getHour, getHumanDay } from 'utils';
 import DoctorSessions from '../DoctorSessions/DoctorSessions';
 import { validSelectTimeWithNow } from '../FunctionsHelper';
@@ -13,12 +16,10 @@ import useStyles from './styles';
 
 interface DoctorListProps {
 	doctors: DoctorAvailability[];
-	selectDoctorCallback: () => void;
-	setDoctor: Function;
-	setSchedule: Function;
+	selectDoctorCallback?: () => void;
+	setDoctor?: Function;
+	setSchedule?: Function;
 	shouldShowMoreDoctorInfo: boolean;
-	doctorViewSessionExtended: DoctorAvailability | null;
-	selectedDate: Date;
 }
 
 export interface ActiveDoctorTime {
@@ -30,12 +31,10 @@ export interface ActiveDoctorTime {
 
 const DoctorList = ({
 	doctors,
-	selectDoctorCallback,
-	setDoctor,
-	setSchedule,
+	// selectDoctorCallback,
+	// setDoctor,
+	// setSchedule,
 	shouldShowMoreDoctorInfo,
-	doctorViewSessionExtended = null,
-	selectedDate,
 }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
@@ -51,6 +50,13 @@ const DoctorList = ({
 	const [messageError, setMessageError] = useState('');
 	const [filteredDoctors, setFilteredDoctors] = useState<DoctorAvailability[]>(doctors);
 	const [timeFrameFilter, setTimeFrameFilter] = useState<string[]>([]);
+
+	// new for David
+	const history = useHistory();
+	const { userToken, user, updateState } = useContext(AppContext);
+	const isUserLoggedIn = !!userToken && user ? user.id !== '' : false;
+	const [schedule, setSchedule] = useState<Schedule | null>(null);
+	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
 
 	const selectDoctorForModal = (index: number) => {
 		setSelectedDoctor(doctors[index]);
@@ -73,6 +79,22 @@ const DoctorList = ({
 		}
 	};
 
+	const selectDoctorCallback = () => {
+		if (updateState) {
+			updateState({
+				appointmentCreationStep: PAYMENT_STEP,
+				schedule,
+				doctor: formatDoctor(doctor),
+			});
+		}
+
+		if (!isUserLoggedIn) {
+			// setSelectOwnerOpen(true);
+		} else {
+			history.push('/seleccionar_paciente');
+		}
+	};
+
 	const continueToPreRegister = () => {
 		try {
 			const doctor = doctors[activeDoctorTime.doctorIndex];
@@ -89,8 +111,10 @@ const DoctorList = ({
 			});
 			selectDoctorCallback();
 		} catch (error) {
-			setMessageError(error.message);
-			setIsOpenModal(true);
+			if (error instanceof Error) {
+				setMessageError(error.message);
+				setIsOpenModal(true);
+			}
 		}
 	};
 
@@ -166,11 +190,7 @@ const DoctorList = ({
 		setDoctor(null);
 		setSchedule(null);
 		filterDoctors(doctors);
-	}, [doctors, filterDoctors, selectedDate, setDoctor, setSchedule]);
-
-	if (doctorViewSessionExtended != null) {
-		return <div>Doctor extendido</div>;
-	}
+	}, [doctors, filterDoctors]);
 
 	return (
 		<div className={classes.container}>
