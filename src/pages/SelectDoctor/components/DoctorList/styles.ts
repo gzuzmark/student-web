@@ -9,8 +9,6 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			display: 'grid',
 			// gridAutoFlow: 'column',
 			// gridAutoColumns: '1fr',
-			gap: '1em',
-			gridTemplateRows: 'repeat(auto-fit, minmax(3em, 6em))',
 			justifyContent: 'center',
 		},
 		doctorList: {
@@ -39,12 +37,15 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			[breakpoints.down('md')]: {},
 		},
 		timeFilterContainer: {
-			display: 'flex',
+			display: 'grid',
 			alignItems: 'center',
-			justifyContent: 'center',
-			[breakpoints.down('xs')]: {
+			gridTemplateColumns: 'repeat(auto-fit, minmax(3em, 34em))',
+			padding: '20px 0 0 0',
+			[breakpoints.down('md')]: {
+				display: 'flex',
+				alignItems: 'flex-start',
 				backgroundColor: '#F7F8FC',
-
+				padding: '0 0 1rem',
 				flexDirection: 'column-reverse',
 			},
 		},
@@ -52,9 +53,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			display: 'flex',
 			flexDirection: 'row',
 			padding: '0 24px 0px',
-			[breakpoints.up('lg')]: {
-				padding: '22px 0 20px 0',
-			},
+			[breakpoints.up('lg')]: {},
 			[breakpoints.down('xs')]: {
 				padding: '0 18px 0px',
 			},
@@ -203,6 +202,9 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			[breakpoints.up('lg')]: {
 				display: 'flex',
 				alignItems: 'center',
+			},
+			[breakpoints.down('xs')]: {
+				padding: '0 0.5rem',
 			},
 		},
 		continueButton: {
