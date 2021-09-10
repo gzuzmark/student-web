@@ -68,13 +68,25 @@ const BootstrapButton = withStyles((theme: Theme) =>
 )(ToggleButton);
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
+	root: {
+		borderRadius: '4px',
+		display: 'grid',
+		gap: '1.25rem',
+		gridTemplateColumns: '1fr 1fr 1fr',
+		[theme.breakpoints.down('xs')]: {
+			display: 'inline-flex',
+			gap: '0rem',
+		},
+	},
 	grouped: {
-		margin: theme.spacing(2),
 		'&:not(:first-child)': {
 			borderRadius: theme.shape.borderRadius,
 		},
 		'&:first-child': {
 			borderRadius: theme.shape.borderRadius,
+		},
+		[theme.breakpoints.down('xs')]: {
+			margin: theme.spacing(2),
 		},
 	},
 }))(ToggleButtonGroup);

@@ -29,7 +29,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 		timeFilterList: {
 			display: 'flex',
 			flexWrap: 'wrap',
-			justifyContent: 'center',
+			justifyContent: 'flex-end',
 			[breakpoints.up('lg')]: {
 				paddingLeft: '16px',
 			},
