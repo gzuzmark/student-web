@@ -22,6 +22,7 @@ interface DoctorListProps {
 	setDoctor?: Function;
 	setSchedule?: Function;
 	shouldShowMoreDoctorInfo: boolean;
+	onSeeMore?: (doctor: DoctorAvailability) => void;
 }
 
 export interface ActiveDoctorTime {
@@ -63,6 +64,7 @@ const DoctorList = ({
 	// setDoctor,
 	// setSchedule,
 	shouldShowMoreDoctorInfo,
+	onSeeMore,
 }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
@@ -290,6 +292,7 @@ const DoctorList = ({
 						selectDoctorForModal={selectDoctorForModal}
 						openDetailedDoctorModal={openDetailedDoctorModal}
 						continueToPreRegister={continueToPreRegister}
+						onSeeMore={() => onSeeMore && onSeeMore(doctor)}
 					/>
 				))}
 				{shouldShowMoreDoctorInfo ? (

@@ -201,7 +201,6 @@ export const getNextAvailableSchedules = async (
 	const dates = validWeek(parsedDoctorsData, startDate);
 
 	return {
-		// nextAvailableDate: parseUTCDate(data.data.next_available_date),
 		doctors: parsedDoctorsData,
 		dates: dates,
 		isNextDays: data.data.dates.length > 7,

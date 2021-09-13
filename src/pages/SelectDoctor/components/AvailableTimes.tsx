@@ -106,6 +106,7 @@ interface AvailableTimesProps {
 	selectTime: (scheduleId: string, scheduleIndex: number) => void;
 	activeDoctorTime: ActiveDoctorTime;
 	mode?: ModeType;
+	onSeeMore?: () => void;
 }
 
 const AvailableTimes = ({
@@ -115,6 +116,7 @@ const AvailableTimes = ({
 	selectTime,
 	activeDoctorTime,
 	mode = 'short',
+	onSeeMore,
 }: AvailableTimesProps) => {
 	const classes = useStyles();
 	const isDesktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
@@ -138,8 +140,6 @@ const AvailableTimes = ({
 			}
 		}
 	};
-
-	const onClickVerMas = () => null;
 
 	const format = 'hh:mm a';
 
@@ -181,8 +181,8 @@ const AvailableTimes = ({
 							key={`${name}-${doctorCmp}-${id}`}
 						/>
 					))}
-				{mode === 'short' && availableDates.length > maxItems && (
-					<div className={classes.verMasButton} onClick={onClickVerMas}>
+				{((mode === 'short' && availableDates.length > maxItems) || true) && (
+					<div className={classes.verMasButton} onClick={onSeeMore}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más
 						</Typography>

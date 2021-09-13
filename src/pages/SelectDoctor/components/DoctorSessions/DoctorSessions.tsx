@@ -15,6 +15,7 @@ interface DoctorSessionsProps {
 	selectDoctorForModal: (index: number) => void;
 	openDetailedDoctorModal: () => void;
 	continueToPreRegister: () => void;
+	onSeeMore: () => void;
 }
 
 const DoctorSessions = ({
@@ -22,9 +23,8 @@ const DoctorSessions = ({
 	doctorIndex,
 	activeDoctorTime,
 	selectDoctor,
-	// selectDoctorForModal,
-	// openDetailedDoctorModal,
 	continueToPreRegister,
+	onSeeMore,
 }: DoctorSessionsProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
@@ -41,6 +41,7 @@ const DoctorSessions = ({
 					name={name}
 					selectTime={selectDoctor(cmp, doctorIndex)}
 					activeDoctorTime={activeDoctorTime}
+					onSeeMore={onSeeMore}
 				/>
 			</div>
 			<div>
