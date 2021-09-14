@@ -14,28 +14,22 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 		},
 		div: {
 			width: '550px',
-			padding: '36px 43px 20px',
+			padding: '24px 43px 20px',
 			flex: 1,
 			backgroundColor: '#FFFFFF',
 			boxSizing: 'border-box',
 			[breakpoints.down(MOBILE)]: {
 				width: '100%',
-				padding: '36px 20px 20px',
-			},
-		},
-		divBack: {
-			display: 'flex',
-			width: '550px',
-			padding: '22px 0px',
-			backgroundColor: '#F7F8FC',
-			boxSizing: 'border-box',
-			[breakpoints.down(MOBILE)]: {
-				width: '100%',
+				padding: '14px 25px 20px',
 			},
 		},
 		header: {
+			margin: '0px 55px 0px',
 			paddingBottom: '0px',
 			backgroundColor: '#FFFFFF',
+			[breakpoints.down(MOBILE)]: {
+				margin: '0px',
+			},
 		},
 	}),
 );

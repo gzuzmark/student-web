@@ -1,8 +1,8 @@
-import React from 'react';
-import useStyles from './useStyles';
-import IconBack from 'icons/left2.svg';
 import { Typography } from '@material-ui/core';
+import IconBack from 'icons/left2.svg';
+import React from 'react';
 import { useHistory } from 'react-router';
+import useStyles from './useStyles';
 
 const GoBack = () => {
 	const classes = useStyles();

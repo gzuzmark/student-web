@@ -4,19 +4,18 @@ import { Loading } from 'pages';
 import { DateSchedule, DoctorAvailability, Schedule } from 'pages/api';
 import Carrousel from 'pages/SelectDoctor/components/Carrousel/Carrousel';
 import { DoctorHeader } from 'pages/SelectDoctor/components/DoctorHeader';
+import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
 import { ModalErrorTime } from 'pages/SelectDoctor/components/ModalErrorTime';
 import { SelectAppointmentOwner } from 'pages/SelectDoctor/components/SelectAppointmentOwner';
 import { formatDoctor } from 'pages/SelectDoctor/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useContext } from 'react';
+import { addGAEvent, getHour, getHumanDay } from 'utils';
 import DayShift from './components/DayShift/DayShift';
 import GoBack from './components/GoBack/GoBack';
 import useScheduleWeek from './hooks/useScheduleWeek';
 import useSelectDoctorHourParams from './hooks/useSelectDoctorHourParams';
 import useStyles from './useStyles';
-import { addGAEvent, getHour, getHumanDay } from 'utils';
-import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
 
 const SelectDoctorHour = () => {
 	const classes = useStyles();

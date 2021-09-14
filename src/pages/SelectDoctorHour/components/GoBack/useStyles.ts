@@ -1,13 +1,14 @@
-import { createStyles, Theme } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
 import { stylesWithTheme } from 'utils';
 
-const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
+const useStyles = stylesWithTheme(() =>
 	createStyles({
 		container: {
 			display: 'flex',
 			flexDirection: 'row',
 			flex: 1,
 			cursor: 'pointer',
+			margin: '0px 0px 24px',
 		},
 		text: {
 			fontFamily: 'Mulish, sans-serif',

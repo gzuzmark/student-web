@@ -82,7 +82,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		justifyContent: 'flex-end',
 		alignItems: 'center',
 		alignContent: 'center',
-		// marginRight: '9px',
+		marginRight: '9px',
 		// paddingBottom: '12px',
 		// [breakpoints.up('lg')]: {
 		// 	paddingBottom: '22px',
