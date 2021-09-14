@@ -171,7 +171,7 @@ const AvailableTimes = ({
 							status={isDisabled ? 'disabled' : activeDoctorTime.scheduleID === id ? 'selected' : 'default'}
 						/>
 					))}
-				{((mode === 'short' && availableDates.length > maxItems) || true) && (
+				{((mode === 'short' && availableDates.length > maxItems) || false) && (
 					<div className={classes.verMasButton} onClick={onSeeMore}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más
