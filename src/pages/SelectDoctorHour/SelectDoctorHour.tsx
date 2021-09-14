@@ -5,6 +5,7 @@ import Carrousel from 'pages/SelectDoctor/components/Carrousel/Carrousel';
 import { DoctorHeader } from 'pages/SelectDoctor/components/DoctorHeader';
 import React, { useEffect, useState } from 'react';
 import DayShift from './components/DayShift/DayShift';
+import GoBack from './components/GoBack/GoBack';
 import useScheduleWeek from './hooks/useScheduleWeek';
 import useSelectDoctorHourParams from './hooks/useSelectDoctorHourParams';
 import useStyles from './useStyles';
@@ -21,6 +22,7 @@ const SelectDoctorHour = () => {
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	const [isNextWeek, setIsNextWeek] = useState<boolean>(false);
 	const [schedulesForDay, setSchedulesForDay] = useState<Schedule[]>([]);
+	const [activeShift, setActiveShift] = useState<number | null>(null);
 
 	useEffect(() => {
 		if (params) {
@@ -58,6 +60,9 @@ const SelectDoctorHour = () => {
 
 	return (
 		<div className={classes.container}>
+			<div className={classes.divBack}>
+				<GoBack />
+			</div>
 			<div className={classes.div}>
 				<DoctorHeader className={classes.header} doctor={doctor} />
 				<Carrousel
@@ -69,7 +74,20 @@ const SelectDoctorHour = () => {
 					onBackWeek={(date) => setStartDate(date)}
 					onNextWeek={(date) => setStartDate(date)}
 				/>
-				{isLoad ? <Loading loadingMessage="Buscando disponibilidad..." /> : <DayShift schedules={schedulesForDay} />}
+				{isLoad ? (
+					<Loading loadingMessage="Buscando disponibilidad..." />
+				) : (
+					<>
+						{[0].map((i) => (
+							<DayShift
+								key={i}
+								schedules={schedulesForDay}
+								showButtonContinue={activeShift === i}
+								onActiveScheduleButton={() => setActiveShift(i)}
+							/>
+						))}
+					</>
+				)}
 			</div>
 		</div>
 	);

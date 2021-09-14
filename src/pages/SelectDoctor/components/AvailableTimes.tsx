@@ -28,12 +28,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	dateButtonWrapper: {
 		width: '98px',
-		marginRight: '7px',
-		marginBottom: '11px',
+		// marginRight: '7px',
+		// marginBottom: '11px',
 		'&:nth-child(3n)': {
 			marginRight: '0',
 			[breakpoints.up('lg')]: {
-				marginRight: '7px',
+				// marginRight: '7px',
 			},
 		},
 		[breakpoints.up('lg')]: {
@@ -171,7 +171,7 @@ const AvailableTimes = ({
 							status={isDisabled ? 'disabled' : activeDoctorTime.scheduleID === id ? 'selected' : 'default'}
 						/>
 					))}
-				{((mode === 'extended' && availableDates.length > maxItems) || true) && (
+				{((mode === 'short' && availableDates.length > maxItems) || true) && (
 					<div className={classes.verMasButton} onClick={onSeeMore}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más

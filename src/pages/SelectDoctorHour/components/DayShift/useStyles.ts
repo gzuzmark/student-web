@@ -1,9 +1,7 @@
-import { createStyles } from '@material-ui/core';
+import { createStyles, Theme } from '@material-ui/core';
 import { stylesWithTheme } from 'utils';
 
-// { breakpoints }: Theme
-
-const useStyles = stylesWithTheme(() =>
+const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 	createStyles({
 		container: {
 			flexDirection: 'column',
@@ -15,7 +13,17 @@ const useStyles = stylesWithTheme(() =>
 			display: 'flex',
 			flex: '1',
 			flexWrap: 'wrap',
-			margin: '0px 17px',
+			margin: '16px 0px',
+		},
+		continueButton: {
+			fontSize: '15px',
+			textTransform: 'unset',
+			fontWeight: 'bold',
+			[breakpoints.up('lg')]: {
+				fontSize: '13px',
+				lineHeight: '18px',
+				padding: '11.5px 0',
+			},
 		},
 	}),
 );

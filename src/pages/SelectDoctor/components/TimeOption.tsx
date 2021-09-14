@@ -31,7 +31,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		// 	},
 		// },
 		width: '23%',
-		marginRight: '9px',
+		// marginRight: '9px',
 		padding: '10px 0',
 
 		[breakpoints.up('lg')]: {
