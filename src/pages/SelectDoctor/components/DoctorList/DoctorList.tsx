@@ -26,7 +26,7 @@ interface DoctorListProps {
 }
 
 export interface ActiveDoctorTime {
-	doctorCmp: string;
+	doctorID: string;
 	scheduleID: string;
 	doctorIndex: number;
 	scheduleIndex: number;
@@ -58,18 +58,11 @@ const isInsideIntervalRange = (day: Date, startTime: Date, endTime: Date) => {
 	});
 };
 
-const DoctorList = ({
-	doctors,
-	// selectDoctorCallback,
-	// setDoctor,
-	// setSchedule,
-	shouldShowMoreDoctorInfo,
-	onSeeMore,
-}: DoctorListProps) => {
+const DoctorList = ({ doctors, shouldShowMoreDoctorInfo, onSeeMore }: DoctorListProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
 	const [activeDoctorTime, setActiveDoctorTime] = useState<ActiveDoctorTime>({
-		doctorCmp: '',
+		doctorID: '',
 		scheduleID: '',
 		scheduleIndex: -1,
 		doctorIndex: -1,
@@ -117,8 +110,8 @@ const DoctorList = ({
 			updateState({
 				appointmentOwner: owner,
 				appointmentCreationStep: PAYMENT_STEP,
-				// schedule,
-				// doctor: formatDoctor(doctor),
+				schedule,
+				doctor: formatDoctor(doctor),
 			});
 			setSelectOwnerOpen(false);
 
@@ -136,13 +129,13 @@ const DoctorList = ({
 		setSelectOwnerOpen(false);
 	};
 
-	const selectDoctor = (doctorCmp: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => {
+	const selectDoctor = (doctorID: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => {
 		if (scheduleID !== '') {
-			setActiveDoctorTime({ doctorCmp, scheduleID, scheduleIndex, doctorIndex });
+			setActiveDoctorTime({ doctorID, scheduleID, scheduleIndex, doctorIndex });
 			setDoctor(doctors[doctorIndex]);
 			setSchedule(doctors[doctorIndex].schedules[scheduleIndex]);
 		} else {
-			setActiveDoctorTime({ doctorCmp: '', scheduleID, scheduleIndex: -1, doctorIndex: -1 });
+			setActiveDoctorTime({ doctorID: '', scheduleID, scheduleIndex: -1, doctorIndex: -1 });
 			setDoctor(null);
 			setSchedule(null);
 		}
@@ -233,7 +226,7 @@ const DoctorList = ({
 	};
 
 	useEffect(() => {
-		setActiveDoctorTime({ doctorCmp: '', scheduleID: '', scheduleIndex: -1, doctorIndex: -1 });
+		setActiveDoctorTime({ doctorID: '', scheduleID: '', scheduleIndex: -1, doctorIndex: -1 });
 		setDoctor(null);
 		setSchedule(null);
 		filterDoctors(doctors);
@@ -246,7 +239,7 @@ const DoctorList = ({
 					{filteredDoctors.length === 0 ? (
 						<div className={classes.counterContent}>
 							<Typography className={classes.counterFirstPartMobile} component="span">
-								No hay especialistas disponobiles{' '}
+								No hay especialistas disponibles{' '}
 							</Typography>
 							<Typography className={classes.counterFirstPart} component="span">
 								Resultados:{' '}

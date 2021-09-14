@@ -11,7 +11,7 @@ interface DoctorSessionsProps {
 	doctor: DoctorAvailability;
 	doctorIndex: number;
 	activeDoctorTime: ActiveDoctorTime;
-	selectDoctor: (doctorCmp: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => void;
+	selectDoctor: (doctorId: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => void;
 	selectDoctorForModal: (index: number) => void;
 	openDetailedDoctorModal: () => void;
 	continueToPreRegister: () => void;
@@ -28,24 +28,23 @@ const DoctorSessions = ({
 }: DoctorSessionsProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('selectDoctor');
-	const { name, cmp, schedules } = doctor;
+	const { id, schedules } = doctor;
 
 	return (
 		<div className={classes.doctorWrapper}>
 			<DoctorHeader doctor={doctor} />
 			<div className={classes.timesWrapper}>
 				<AvailableTimes
-					doctorCmp={cmp}
+					doctorId={id}
 					availableDates={schedules}
-					mode={'extended'}
-					name={name}
-					selectTime={selectDoctor(cmp, doctorIndex)}
+					mode={'short'}
+					selectTime={selectDoctor(id, doctorIndex)}
 					activeDoctorTime={activeDoctorTime}
 					onSeeMore={onSeeMore}
 				/>
 			</div>
 			<div>
-				{activeDoctorTime.doctorCmp === cmp ? (
+				{activeDoctorTime.doctorID === id ? (
 					<Button fullWidth className={classes.continueButton} variant="contained" onClick={continueToPreRegister}>
 						{t('left.button.seleccionar')}
 					</Button>

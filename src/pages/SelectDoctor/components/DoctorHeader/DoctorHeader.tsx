@@ -8,16 +8,17 @@ import { useTranslation } from 'react-i18next';
 import useStyles from './styles';
 
 interface DoctorHeaderProps {
+	className?: string | undefined;
 	doctor: DoctorAvailability;
 }
 
-const DoctorHeader = ({ doctor }: DoctorHeaderProps) => {
+const DoctorHeader = ({ doctor, className }: DoctorHeaderProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const { name, lastName, profilePicture, rating, patientOpinions } = doctor;
 
 	return (
-		<div className={classes.doctor}>
+		<div className={clsx(classes.doctor, className)}>
 			<div className={classes.photoWrapper}>
 				<img className={classes.photo} src={profilePicture} alt="doctor" />
 			</div>

@@ -101,8 +101,7 @@ type ModeType = 'short' | 'extended';
 
 interface AvailableTimesProps {
 	availableDates: Schedule[];
-	name: string;
-	doctorCmp: string;
+	doctorId: string;
 	selectTime: (scheduleId: string, scheduleIndex: number) => void;
 	activeDoctorTime: ActiveDoctorTime;
 	mode?: ModeType;
@@ -111,8 +110,7 @@ interface AvailableTimesProps {
 
 const AvailableTimes = ({
 	availableDates,
-	name,
-	doctorCmp,
+	doctorId,
 	selectTime,
 	activeDoctorTime,
 	mode = 'short',
@@ -123,10 +121,6 @@ const AvailableTimes = ({
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [maxItems, setMaxItems] = useState<number>(0);
 	const [messageError, setMessageError] = useState('');
-
-	// const activateAll = () => {
-	// 	selectTime('', -1);
-	// };
 
 	const onClick = (scheduleId: string, scheduleIndex: number) => () => {
 		try {
@@ -143,12 +137,9 @@ const AvailableTimes = ({
 
 	const format = 'hh:mm a';
 
-	const isSelectedDoctor = activeDoctorTime.doctorCmp === doctorCmp;
+	const isSelectedDoctor = activeDoctorTime.doctorID === doctorId;
 
 	const isEmptyTime = activeDoctorTime.scheduleID === '';
-
-	// const isButtonDisabled = (scheduleID: string) =>
-	// 	isEmptyTime ? false : activeDoctorTime.scheduleID !== scheduleID || !isSelectedDoctor;
 
 	const isButtonActive = (scheduleID: string) =>
 		isEmptyTime ? false : activeDoctorTime.scheduleID === scheduleID && isSelectedDoctor;
@@ -165,12 +156,12 @@ const AvailableTimes = ({
 
 	return (
 		<div className={classes.container}>
-			{/* {!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null} */}
 			<div className={classes.times}>
 				{availableDates
 					.slice(0, mode === 'short' ? maxItems : availableDates.length)
 					.map(({ id, startTime, isDisabled }: Schedule, scheduleIndex: number) => (
 						<TimeOption
+							key={scheduleIndex}
 							scheduleId={id}
 							date={startTime}
 							onClick={onClick(id, scheduleIndex)}
@@ -178,10 +169,9 @@ const AvailableTimes = ({
 							active={isButtonActive(id)}
 							format={format}
 							status={isDisabled ? 'disabled' : activeDoctorTime.scheduleID === id ? 'selected' : 'default'}
-							key={`${name}-${doctorCmp}-${id}`}
 						/>
 					))}
-				{((mode === 'short' && availableDates.length > maxItems) || true) && (
+				{((mode === 'extended' && availableDates.length > maxItems) || true) && (
 					<div className={classes.verMasButton} onClick={onSeeMore}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más
