@@ -117,6 +117,12 @@ export interface NextAvailableSchedules {
 	isNextDays: boolean;
 }
 
+export interface DoctorAvailableSchedules {
+	doctor: DoctorAvailability | null;
+	dates: DateSchedule[];
+	isNextDays: boolean;
+}
+
 const isDisabled = (studentId: string | null): boolean => {
 	if (studentId === null) {
 		return false;
@@ -207,7 +213,7 @@ export const getNextAvailableSchedules = async (
 	};
 };
 
-const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
+export const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
 	const listWeek = completeWeek(startDate);
 	return listWeek.map<DateSchedule>((dateWeek: Date) => {
 		const hasSessions = doctors.filter((doctor: DoctorAvailability) => {

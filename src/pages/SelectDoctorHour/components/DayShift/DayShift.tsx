@@ -1,7 +1,6 @@
 import { Schedule } from 'pages/api';
 import TimeOption from 'pages/SelectDoctor/components/TimeOption';
-import React from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useStyles from './useStyles';
 
 export type ShiftType = '' | '' | '';
@@ -15,6 +14,10 @@ const DayShift = ({ schedules }: DayShiftProps) => {
 	const classes = useStyles();
 	const [activeSchedule, setActiveSchedule] = useState<string | null>(null);
 
+	useEffect(() => {
+		setActiveSchedule(null);
+	}, [schedules]);
+
 	return (
 		<div className={classes.container}>
 			<div className={classes.divHours}>
@@ -23,7 +26,7 @@ const DayShift = ({ schedules }: DayShiftProps) => {
 						key={i}
 						scheduleId={id}
 						date={startTime}
-						format={'dd-MM/hh:mm a'}
+						format={'hh:mm a'}
 						status={isDisabled ? 'disabled' : activeSchedule === id ? 'selected' : 'default'}
 						onClick={() => setActiveSchedule(id)}
 					/>

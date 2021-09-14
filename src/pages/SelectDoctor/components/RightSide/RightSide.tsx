@@ -34,18 +34,21 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 	const [isLoad, schedules] = useDoctorSchedules(useCaseId || '', startDateWeek);
 
 	const onSeeMore = (doctor: DoctorAvailability) => {
-		const data: SelectDoctorSchedule = {
-			useCase: useCaseId || '',
-			doctor: doctor,
-			listDates: listDates,
-			isNextDays: isNextWeek,
-			selectDate: selectedDate || new Date(),
-		};
-		if (updateState) {
-			updateState({
-				selectDoctorSchedule: data,
-			});
-			history.push('/seleccionar_doctor_ver_mas');
+		const doctorSelected = doctors.find((doc) => doc.id === doctor.id);
+		if (doctorSelected) {
+			const data: SelectDoctorSchedule = {
+				useCase: useCaseId || '',
+				doctor: doctorSelected,
+				listDates: listDates,
+				isNextDays: isNextWeek,
+				selectDate: selectedDate || new Date(),
+			};
+			if (updateState) {
+				updateState({
+					selectDoctorSchedule: data,
+				});
+				history.push('/seleccionar_doctor_ver_mas');
+			}
 		}
 	};
 
