@@ -12,9 +12,10 @@ export interface DayShiftProps {
 	schedules: Schedule[];
 	showButtonContinue: boolean;
 	onActiveScheduleButton?: () => void;
+	onClickContinueButton: (schedule: Schedule) => void;
 }
 
-const DayShift = ({ schedules, showButtonContinue, onActiveScheduleButton }: DayShiftProps) => {
+const DayShift = ({ schedules, showButtonContinue, onActiveScheduleButton, onClickContinueButton }: DayShiftProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const [activeSchedule, setActiveSchedule] = useState<string | null>(null);
@@ -23,6 +24,15 @@ const DayShift = ({ schedules, showButtonContinue, onActiveScheduleButton }: Day
 		setActiveSchedule(id);
 		if (onActiveScheduleButton) {
 			onActiveScheduleButton();
+		}
+	};
+
+	const onClickContinue = () => {
+		if (activeSchedule != null) {
+			const findSchedule = schedules.find((sch) => sch.id === activeSchedule);
+			if (findSchedule && onClickContinueButton) {
+				onClickContinueButton(findSchedule);
+			}
 		}
 	};
 
@@ -52,7 +62,7 @@ const DayShift = ({ schedules, showButtonContinue, onActiveScheduleButton }: Day
 			</div>
 			{activeSchedule != null && (
 				<div>
-					<Button fullWidth className={classes.continueButton} variant="contained">
+					<Button fullWidth className={classes.continueButton} variant="contained" onClick={onClickContinue}>
 						{t('left.button.seleccionar')}
 					</Button>
 				</div>
