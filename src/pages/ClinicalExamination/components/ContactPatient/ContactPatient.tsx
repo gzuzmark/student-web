@@ -57,7 +57,7 @@ const ContactPatient = ({ contactData, onChangeStep }: ContactPatientProps): Rea
 	};
 	const gotToTermsAndConditions = () => {
 		redirectToURL(
-			'https://docs.google.com/document/u/2/d/e/2PACX-1vS3SBl2FrGqj_qWltyMkUOF1B3dNSHtvr7sbqGy6OJvuKQKGcIklLBvO4GIOev4YQ/pub',
+			'https://docs.google.com/document/d/e/2PACX-1vQBjhj6QCJ0ywkZ1o9IROUIfz5haZ6oSBWz4p3G533it-1wf8e-TRZguMHhTpq3wA/pub',
 			true,
 		);
 	};

@@ -30,7 +30,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			top: '0px',
 			left: '0px',
 			right: '0px',
-			backgroundColor: '#FFFFFF',
+			backgroundColor: '#ffffff',
 		},
 		bodyContainer: {
 			display: 'flex',
@@ -48,8 +48,8 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			display: 'flex',
 			flexDirection: 'column',
 			marginTop: '20px',
-			backgroundColor: '#FFFFFF',
-			borderColor: '#FFFFFF',
+			backgroundColor: '#ffffff',
+			borderColor: '#ffffff',
 			[breakpoints.up('md')]: {
 				marginTop: '80px',
 			},
@@ -108,7 +108,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				right: '0px',
 				bottom: '0px',
 				padding: '20px 25px 30px',
-				backgroundColor: '#FFFFFF',
+				backgroundColor: '#ffffff',
 			},
 		},
 		button: {

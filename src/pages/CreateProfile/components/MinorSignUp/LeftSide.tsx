@@ -9,7 +9,7 @@ import { stylesWithTheme } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	layout: {
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 	},
 	wrapper: {
 		padding: '18px 34px 20px 34px',

@@ -46,7 +46,7 @@ import {
 import { Container, Loading } from 'pages/common';
 import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
 import { ModalErrorTime } from 'pages/SelectDoctor/components/ModalErrorTime';
-import { FAKE_SESSION_ID } from 'pages/SelectDoctor/components/RightSide/RightSide';
+import { FAKE_SESSION_ID } from 'pages/SelectDoctor/services/contants';
 import React, { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -107,6 +107,13 @@ const useStyles = stylesWithTheme(({ breakpoints, spacing }: Theme) => ({
 	},
 }));
 
+const getBooleanOrTrue = (value: string | undefined | null): boolean => {
+	if (value === undefined || value === null) {
+		return true;
+	}
+	return !!JSON.parse(String(value).toLowerCase());
+};
+
 const Payment = () => {
 	const {
 		doctor,
@@ -135,7 +142,7 @@ const Payment = () => {
 
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
-		inTestEnvironment: !!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`,
+		inTestEnvironment: getBooleanOrTrue(process.env.REACT_APP_KUSHKI_IN_TEST_ENV), //!!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`
 	});
 
 	const [openKushkiModal, setOpenKushkiModal] = React.useState(false);
@@ -197,9 +204,11 @@ const Payment = () => {
 		try {
 			validSelectTimeWithNow(schedule);
 			return true;
-		} catch (error) {
-			setErrorTimeMessage(error.message);
-			return false;
+		} catch (e) {
+			if (e instanceof Error) {
+				setErrorTimeMessage(e.message);
+				return false;
+			}
 		}
 	}, [schedule]);
 

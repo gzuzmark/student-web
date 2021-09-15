@@ -10,9 +10,10 @@ const selectDoctor = {
 	'right.useCaseLabel': 'ESPECIALIDAD:',
 	'right.appointmentCostLabel': 'COSTO DE CONSULTA:',
 	'right.appointmentDurationLabel': 'DURACIÓN PROMEDIO:',
-	'right.foundDoctors': 'TENEMOS {{doctors}}',
+	'right.foundDoctors': '{{doctors}} especialistas',
 	'right.availableDoctors.title': 'ELIGE UN HORARIO:',
 	'right.availableDoctors': 'DOCTOR DISPONIBLE',
+	'right.specialityName': '{{speciality}}',
 	'right.availableDoctors_plural': 'DOCTORES DISPONIBLES', // eslint-disable-line
 	'right.notFoundDoctors': 'NO HAY DOCTORES DISPONIBLES PARA LAS FECHAS INDICADAS',
 	'right.doctor.prefix': 'Dr(a)',

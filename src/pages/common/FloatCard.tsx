@@ -18,13 +18,13 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 	},
 	content: {
 		[breakpoints.up('lg')]: {
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
 			width: ({ width }: StyleProps) => `${width || 856}px`,
 			height: ({ height }: StyleProps) => `${height || 580}px`,
 		},
 	},
 	contentMobile: {
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		width: ({ width }: StyleProps) => `${width || 856}px`,
 		height: ({ height }: StyleProps) => `${height || 580}px`,
 	},
