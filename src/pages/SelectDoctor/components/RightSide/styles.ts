@@ -32,7 +32,8 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 			},
 		},
 		divider: {
-			margin: '0 24px 32px',
+			backgroundColor: '#F7F8FC',
+			margin: '0 24px',
 			[breakpoints.up('lg')]: {
 				margin: '0',
 			},
@@ -47,6 +48,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 		},
 		emptyMessage: {
 			fontSize: '16px',
+			textAlign: 'center',
 			lineHeight: '25px',
 			padding: '0 30px 20px 26px',
 			[breakpoints.up('lg')]: {

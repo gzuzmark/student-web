@@ -41,7 +41,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 
 	laboratorioWrapper: {
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		padding: '40px 24px',
 		marginBottom: '8px',
 		boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
@@ -272,7 +272,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		borderRadius: '255px',
 		marginBottom: '10px',
 		justifyContent: 'space-between',
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 	},
 	textExam: {
 		color: '#535B6C',

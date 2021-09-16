@@ -3,7 +3,7 @@ import { Theme } from '@material-ui/core/styles';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		position: 'relative',
 		overflow: 'hidden',
 	},
@@ -34,7 +34,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		paddingLeft: '25px',
 		paddingRight: '25px',
 		[breakpoints.up('lg')]: {
-			background: 'white',
+			background: '#ffffff',
 			borderTopLeftRadius: '25px',
 			borderBottomLeftRadius: '25px',
 			flex: '1 1 auto',

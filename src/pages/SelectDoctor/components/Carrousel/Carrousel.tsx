@@ -11,7 +11,7 @@ import { Skeleton } from '@material-ui/lab';
 import { addDays, isAfter, isSameDay } from 'date-fns/esm';
 import { useCallback } from 'react';
 
-type ModeCarrouselType = 'short' | 'large';
+export type ModeCarrouselType = 'short' | 'large';
 interface CarrouselProps {
 	/**
 	 * Show dates in carrousel
@@ -20,7 +20,7 @@ interface CarrouselProps {
 	selectedDate: Date | null;
 	isNextAvailableDate: boolean;
 	mode?: ModeCarrouselType;
-	onSelectDate?: (date: Date) => void;
+	onSelectDate: (date: Date | null) => void;
 	onNextWeek?: (firstDate: Date) => void;
 	onBackWeek?: (firstDate: Date) => void;
 }
@@ -74,7 +74,7 @@ const Carrousel = ({
 	};
 
 	const isBackWeek = useCallback((): boolean => {
-		if (dates != null) {
+		if (dates != null && dates.length > 0) {
 			const firstDay = dates[0].date;
 			const today = new Date();
 			return firstDay > today && !isSameDay(firstDay, today);
@@ -86,7 +86,7 @@ const Carrousel = ({
 		(totalItems: number): boolean => {
 			if (dates != null) {
 				if (totalItems === NUM_ITEMS_SHORT) {
-					const flagDate = dates[NUM_ITEMS_SHORT];
+					const flagDate = dates[NUM_ITEMS_SHORT - 1];
 					const hasDayWithSessions = dates.filter((dateSchedule) =>
 						isAfter(dateSchedule.date, flagDate.date) ? !dateSchedule.isEmpty : false,
 					);
@@ -99,6 +99,14 @@ const Carrousel = ({
 		[dates, isNextAvailableDate],
 	);
 
+	const getSelectedDay = (dates: DateSchedule[]): Date | null => {
+		const datesWithSessions = dates.filter((date) => !date.isEmpty);
+		if (datesWithSessions.length > 0) {
+			return datesWithSessions[0].date;
+		}
+		return null;
+	};
+
 	useEffect(() => {
 		const totalItems = mode === 'large' ? (isDesktop ? NUM_ITEMS_LARGE : NUM_ITEMS_SHORT) : NUM_ITEMS_SHORT;
 		setMaxItems(totalItems);
@@ -110,6 +118,16 @@ const Carrousel = ({
 			setAllowNextWeek(false);
 		}
 	}, [mode, isDesktop, dates, isNextAvailableDate, isBackWeek, isNextWeek]);
+
+	useEffect(() => {
+		if (dates != null) {
+			const totalItems = mode === 'large' ? (isDesktop ? NUM_ITEMS_LARGE : NUM_ITEMS_SHORT) : NUM_ITEMS_SHORT;
+			const filterDates = dates.slice(0, totalItems - 1);
+			const selectedDate = getSelectedDay(filterDates);
+			onSelectDate(selectedDate);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isDesktop, dates]);
 
 	return (
 		<div className={classes.container}>
@@ -130,10 +148,10 @@ const Carrousel = ({
 								<DateCalendar key={i} dateSchedule={dateSchedule} selectedDate={selectedDate} onClick={onClickDay} />
 							))}
 				<div
-					className={clsx(classes.arrow, allowNextWeek && isNextAvailableDate ? classes.pointer : classes.rotate)}
+					className={clsx(classes.arrow, allowNextWeek ? classes.pointer : classes.rotate)}
 					onClick={onNextCarrousel}
 				>
-					<img alt="right" src={allowNextWeek && isNextAvailableDate ? RightEnabled : LeftDisabled} />
+					<img alt="right" src={allowNextWeek ? RightEnabled : LeftDisabled} />
 				</div>
 			</div>
 		</div>

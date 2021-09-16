@@ -9,7 +9,7 @@ import { stylesWithTheme } from 'utils';
 const useStyles = stylesWithTheme(({ palette }: Theme) => ({
 	card: {
 		alignItems: 'center',
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		borderRaius: '4px',
 		boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
 		cursor: 'pointer',

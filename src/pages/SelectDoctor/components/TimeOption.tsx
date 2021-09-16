@@ -31,7 +31,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		// 	},
 		// },
 		width: '23%',
-		marginRight: '9px',
+		// marginRight: '9px',
 		padding: '10px 0',
 
 		[breakpoints.up('lg')]: {
@@ -70,7 +70,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	buttonDefault: {
 		border: '2px solid #84E4C6',
-		backgroundColor: '#FFFFFF',
+		backgroundColor: '#ffffff',
 		color: '#52575C',
 		cursor: 'pointer',
 	},
@@ -111,7 +111,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		color: '#A3ABCC',
 	},
 	textSelected: {
-		color: '#FFFFFF',
+		color: '#ffffff',
 		fontWeight: 'bold',
 	},
 }));
@@ -128,7 +128,7 @@ interface TimeOptionProps {
 	status?: StatusType;
 }
 
-const TimeOption = ({ date, onClick, format, active = false, status }: TimeOptionProps) => {
+const TimeOption = ({ date, onClick, active = false, format, status }: TimeOptionProps) => {
 	const classes = useStyles({ active });
 
 	const onClickTimeOption = () => {
@@ -149,7 +149,6 @@ const TimeOption = ({ date, onClick, format, active = false, status }: TimeOptio
 			)}
 			onClick={onClickTimeOption}
 		>
-			{/* <Button className={classes.dateButton} variant="contained" onClick={onClick} disabled={disabled} fullWidth> */}
 			<Typography
 				component="span"
 				className={clsx(
@@ -161,9 +160,8 @@ const TimeOption = ({ date, onClick, format, active = false, status }: TimeOptio
 						: classes.textSelected,
 				)}
 			>
-				{formatApiDate(date, 'h:mm a' || format)}
+				{formatApiDate(date, format)}
 			</Typography>
-			{/* </Button> */}
 		</div>
 	);
 };

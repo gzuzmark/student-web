@@ -38,7 +38,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	wrapper: {
 		[breakpoints.up('lg')]: {
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
 			margin: '0 auto',
 			// height: '632px',
 			height: '700px',

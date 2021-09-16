@@ -28,12 +28,12 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	dateButtonWrapper: {
 		width: '98px',
-		marginRight: '7px',
-		marginBottom: '11px',
+		// marginRight: '7px',
+		// marginBottom: '11px',
 		'&:nth-child(3n)': {
 			marginRight: '0',
 			[breakpoints.up('lg')]: {
-				marginRight: '7px',
+				// marginRight: '7px',
 			},
 		},
 		[breakpoints.up('lg')]: {
@@ -101,20 +101,20 @@ type ModeType = 'short' | 'extended';
 
 interface AvailableTimesProps {
 	availableDates: Schedule[];
-	name: string;
-	doctorCmp: string;
+	doctorId: string;
 	selectTime: (scheduleId: string, scheduleIndex: number) => void;
 	activeDoctorTime: ActiveDoctorTime;
 	mode?: ModeType;
+	onSeeMore?: () => void;
 }
 
 const AvailableTimes = ({
 	availableDates,
-	name,
-	doctorCmp,
+	doctorId,
 	selectTime,
 	activeDoctorTime,
 	mode = 'short',
+	onSeeMore,
 }: AvailableTimesProps) => {
 	const classes = useStyles();
 	const isDesktop = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
@@ -122,31 +122,24 @@ const AvailableTimes = ({
 	const [maxItems, setMaxItems] = useState<number>(0);
 	const [messageError, setMessageError] = useState('');
 
-	// const activateAll = () => {
-	// 	selectTime('', -1);
-	// };
-
 	const onClick = (scheduleId: string, scheduleIndex: number) => () => {
 		try {
 			const schedule: Schedule = availableDates[scheduleIndex];
 			validSelectTimeWithNow(schedule);
 			selectTime(scheduleId, scheduleIndex);
 		} catch (error) {
-			setMessageError(error.message);
-			setIsOpenModal(true);
+			if (error instanceof Error) {
+				setMessageError(error.message);
+				setIsOpenModal(true);
+			}
 		}
 	};
 
-	const onClickVerMas = () => null;
-
 	const format = 'hh:mm a';
 
-	const isSelectedDoctor = activeDoctorTime.doctorCmp === doctorCmp;
+	const isSelectedDoctor = activeDoctorTime.doctorID === doctorId;
 
 	const isEmptyTime = activeDoctorTime.scheduleID === '';
-
-	// const isButtonDisabled = (scheduleID: string) =>
-	// 	isEmptyTime ? false : activeDoctorTime.scheduleID !== scheduleID || !isSelectedDoctor;
 
 	const isButtonActive = (scheduleID: string) =>
 		isEmptyTime ? false : activeDoctorTime.scheduleID === scheduleID && isSelectedDoctor;
@@ -163,12 +156,12 @@ const AvailableTimes = ({
 
 	return (
 		<div className={classes.container}>
-			{/* {!isEmptyTime ? <div onClick={activateAll} className={classes.timesOverlay} /> : null} */}
 			<div className={classes.times}>
 				{availableDates
 					.slice(0, mode === 'short' ? maxItems : availableDates.length)
 					.map(({ id, startTime, isDisabled }: Schedule, scheduleIndex: number) => (
 						<TimeOption
+							key={scheduleIndex}
 							scheduleId={id}
 							date={startTime}
 							onClick={onClick(id, scheduleIndex)}
@@ -176,11 +169,10 @@ const AvailableTimes = ({
 							active={isButtonActive(id)}
 							format={format}
 							status={isDisabled ? 'disabled' : activeDoctorTime.scheduleID === id ? 'selected' : 'default'}
-							key={`${name}-${doctorCmp}-${id}`}
 						/>
 					))}
-				{mode === 'short' && availableDates.length > maxItems && (
-					<div className={classes.verMasButton} onClick={onClickVerMas}>
+				{((mode === 'short' && availableDates.length > maxItems) || false) && (
+					<div className={classes.verMasButton} onClick={onSeeMore}>
 						<Typography component="span" className={classes.textVerMas}>
 							Ver más
 						</Typography>

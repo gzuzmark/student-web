@@ -65,14 +65,14 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		'&&': {
 			boxShadow: '2px 2px 6px rgba(0, 0, 0, 0.24)',
 			color: 'grey',
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
 			borderRadius: '50%',
 			minWidth: '40px',
 			padding: '10px 0',
 		},
 	},
 	currentPositionWrapper: {
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.12)',
 		top: 0,
 		left: 0,

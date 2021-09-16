@@ -92,7 +92,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		display: 'flex',
 		alignItems: 'center',
 		backgroundColor: ({ useDefaultBackground }: { useDefaultBackground: boolean }) =>
-			useDefaultBackground ? BACKGROUND_DEFAULT : 'white',
+			useDefaultBackground ? BACKGROUND_DEFAULT : '#ffffff',
 		padding: '8px 0 7px 8px',
 		width: '100%',
 		marginRight: '10px',

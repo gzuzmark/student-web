@@ -110,9 +110,15 @@ export interface DateSchedule {
 	isEmpty: boolean;
 }
 
-interface NextAvailableSchedules {
-	nextAvailableDate: Date;
+export interface NextAvailableSchedules {
+	// nextAvailableDate: Date;
 	doctors: DoctorAvailability[];
+	dates: DateSchedule[];
+	isNextDays: boolean;
+}
+
+export interface DoctorAvailableSchedules {
+	doctor: DoctorAvailability | null;
 	dates: DateSchedule[];
 	isNextDays: boolean;
 }
@@ -201,14 +207,13 @@ export const getNextAvailableSchedules = async (
 	const dates = validWeek(parsedDoctorsData, startDate);
 
 	return {
-		nextAvailableDate: parseUTCDate(data.data.next_available_date),
 		doctors: parsedDoctorsData,
 		dates: dates,
 		isNextDays: data.data.dates.length > 7,
 	};
 };
 
-const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
+export const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
 	const listWeek = completeWeek(startDate);
 	return listWeek.map<DateSchedule>((dateWeek: Date) => {
 		const hasSessions = doctors.filter((doctor: DoctorAvailability) => {
