@@ -12,7 +12,6 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			[breakpoints.up('lg')]: {
 				maxWidth: '896px',
 			},
-			border: '0.2px solid #ccc',
 		},
 		doctorList: {
 			display: 'flex',
@@ -26,9 +25,14 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			display: 'flex',
 			flex: 1,
 			flexWrap: 'wrap',
+			boxSizing: 'border-box',
 			justifyContent: 'flex-end',
 			[breakpoints.up('lg')]: {
 				paddingLeft: '16px',
+			},
+			[breakpoints.down('md')]: {
+				width: '100% !important',
+				padding: '0px',
 			},
 		},
 		timeFilterContainer: {
@@ -39,17 +43,15 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				display: 'flex',
 				alignItems: 'flex-start',
 				backgroundColor: '#F7F8FC',
-				padding: '0 0 1rem',
+				padding: '16px 24px',
 				flexDirection: 'column-reverse',
 			},
 		},
 		counter: {
 			display: 'flex',
 			flexDirection: 'row',
-			// padding: '0 24px 0px',
-			[breakpoints.up('lg')]: {},
-			[breakpoints.down('xs')]: {
-				padding: '0 18px 0px',
+			[breakpoints.down('md')]: {
+				padding: '14px 0px 0px',
 			},
 		},
 		counterContent: {

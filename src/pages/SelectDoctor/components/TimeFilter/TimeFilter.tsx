@@ -49,7 +49,7 @@ const BootstrapButton = withStyles((theme: Theme) =>
 			boxSizing: 'border-box',
 			borderRadius: '4px',
 			[theme.breakpoints.down('md')]: {
-				width: 'calc(100% - 2 * 12px) / 3',
+				width: 'calc((100% - 24px) / 3)',
 			},
 		},
 		label: {
