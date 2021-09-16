@@ -24,7 +24,10 @@ const BootstrapButton = withStyles((theme: Theme) =>
 			background: '#FFFFFF;',
 			borderColor: '#E5EFFF',
 			fontFamily: 'Mulish, sans-serif',
-			minWidth: '7.25rem',
+			minWidth: '6.35rem',
+			[theme.breakpoints.down('xs')]: {
+				minWidth: 'calc(100% - 26.65vh);',
+			},
 			'&:hover': {
 				backgroundColor: '#FFFFFF',
 			},
@@ -78,7 +81,7 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
 			borderRadius: theme.shape.borderRadius,
 		},
 		[theme.breakpoints.down('xs')]: {
-			margin: theme.spacing(2),
+			margin: '2.35vh', //theme.spacing(2),
 		},
 	},
 }))(ToggleButtonGroup);
