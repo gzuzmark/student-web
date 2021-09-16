@@ -5,9 +5,6 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		container: {
 			display: 'grid',
 			justifyContent: 'center',
-			[breakpoints.down('lg')]: {
-				justifyContent: 'unset',
-			},
 		},
 		doctorList: {
 			[breakpoints.up('lg')]: {
