@@ -6,9 +6,10 @@ import { Container } from 'pages/common';
 import mobileLogin from 'icons/mobile_login.png';
 import desktopImage from 'icons/login_image.jpg';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import IconBack from 'icons/left2.svg';
 import Circle from 'pages/common/Circle';
 import AppContext from 'AppContext';
-import { usePageTitle, useCurrentUserRediction } from 'utils';
+import { usePageTitle, useCurrentUserRediction, redirectToURL } from 'utils';
 
 import { LoginForm } from './components';
 import useStyles from './styles';
@@ -21,6 +22,10 @@ const Login = () => {
 	usePageTitle('Iniciar sesion');
 	useCurrentUserRediction({ isUserLoggedIn: !!userToken, redirectPath: '/dashboard/citas' });
 
+	const onClickGoToStart = () => {
+		redirectToURL('https://alivia.pe/botica');
+	};
+
 	return (
 		<Container className={classes.container}>
 			<div className={classes.imgWrapper}>
@@ -28,6 +33,10 @@ const Login = () => {
 				<img className={classes.desktopImg} src={desktopImage} alt="desktop background" />
 			</div>
 			<div className={classes.loginFormContainer}>
+				<div className={classes.goToStartButton} onClick={onClickGoToStart}>
+					<img alt="" src={IconBack} height={20} />
+					<Typography className={classes.goToStartText}>Ir al inicio</Typography>
+				</div>
 				<div className={classes.contentWrapper}>
 					<BrandLogo className={classes.brandImg} />
 					<Typography className={classes.title} variant="h2">
