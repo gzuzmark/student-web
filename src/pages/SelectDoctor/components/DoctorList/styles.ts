@@ -3,12 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		container: {
-			// display: 'flex',
-			// flexDirection: 'column',
-			// alignItems: 'center',
 			display: 'grid',
-			// gridAutoFlow: 'column',
-			// gridAutoColumns: '1fr',
 			justifyContent: 'center',
 		},
 		doctorList: {
@@ -16,14 +11,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				width: '1100px',
 				display: 'flex',
 				justifyContent: 'flex-start',
-				// alignItems: 'center',
 				flexWrap: 'wrap',
-			},
-			[breakpoints.down('xs')]: {
-				width: '95%',
-			},
-			[breakpoints.down('md')]: {
-				width: '55%%',
 			},
 		},
 		timeFilterList: {
@@ -100,18 +88,14 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			backgroundColor: '#ffffff',
 			padding: '20px 21px',
 			marginBottom: '28px',
-			//boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
+			boxSizing: 'border-box',
 			[breakpoints.up('lg')]: {
-				// borderRadius: '10px',
-				// padding: '20px 24px',
 				margin: '10px 12px',
 				width: '44%',
-				// boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
 			},
-			[breakpoints.down('xs')]: {
+			[breakpoints.down('md')]: {
 				width: '100%',
-
-				padding: '20px 10px',
+				padding: '20px 24px',
 			},
 		},
 		cmp: {
@@ -145,16 +129,12 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				display: 'flex',
 				alignItems: 'center',
 			},
-			[breakpoints.down('xs')]: {
-				padding: '0 0.5rem',
-			},
 		},
 		continueButton: {
 			fontSize: '15px',
 			textTransform: 'unset',
 			fontWeight: 'bold',
 			[breakpoints.up('lg')]: {
-				// width: '171px',
 				fontSize: '13px',
 				marginTop: '10px',
 				lineHeight: '18px',

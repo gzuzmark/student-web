@@ -98,7 +98,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	text: {
-		fontFamily: 'Montserrat, sans-serif',
+		fontFamily: 'Mulish, sans-serif',
 		fontStyle: 'normal',
 		fontWeight: 'normal',
 		fontSize: '12px',
@@ -112,13 +112,14 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	textSelected: {
 		color: '#ffffff',
-		fontWeight: 'bold',
+		fontWeight: '700',
 	},
 }));
 
 type StatusType = 'default' | 'disabled' | 'selected';
 
 interface TimeOptionProps {
+	className?: string;
 	scheduleId?: string;
 	date: Date;
 	onClick: () => void;
@@ -128,7 +129,7 @@ interface TimeOptionProps {
 	status?: StatusType;
 }
 
-const TimeOption = ({ date, onClick, active = false, format, status }: TimeOptionProps) => {
+const TimeOption = ({ className, date, onClick, active = false, format, status }: TimeOptionProps) => {
 	const classes = useStyles({ active });
 
 	const onClickTimeOption = () => {
@@ -146,6 +147,7 @@ const TimeOption = ({ date, onClick, active = false, format, status }: TimeOptio
 					: status === 'disabled'
 					? classes.buttonDisabled
 					: classes.buttonSelected,
+				className,
 			)}
 			onClick={onClickTimeOption}
 		>
