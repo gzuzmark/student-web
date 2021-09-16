@@ -265,7 +265,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		borderRadius: '255px',
 		marginBottom: '10px',
 		justifyContent: 'space-between',
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 	},
 	textExam: {
 		color: '#535B6C',

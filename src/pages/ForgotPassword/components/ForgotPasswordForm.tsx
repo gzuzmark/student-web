@@ -22,7 +22,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	content: {
 		padding: '18px 24px 0',
 		[breakpoints.up('lg')]: {
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
 			padding: ({ step }: StylesProps) => `${step === 2 ? '76px 0 34px' : '110px 0 0'} 173px`,
 		},
 	},

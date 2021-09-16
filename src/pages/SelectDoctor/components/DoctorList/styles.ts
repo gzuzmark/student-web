@@ -1,115 +1,105 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
+const gap = 28;
+
+const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		container: {
+			margin: '0 auto',
 			display: 'flex',
 			flexDirection: 'column',
-			alignItems: 'center',
+			alignContent: 'center',
+			[breakpoints.up('lg')]: {
+				maxWidth: '896px',
+			},
 		},
 		doctorList: {
+			display: 'flex',
+			flex: 1,
+			flexWrap: 'wrap',
+			boxSizing: 'border-box',
+			rowGap: `${gap}px`,
+			columnGap: `${gap}px`,
+		},
+		timeFilterList: {
+			display: 'flex',
+			flex: 1,
+			flexWrap: 'wrap',
+			boxSizing: 'border-box',
+			justifyContent: 'flex-end',
 			[breakpoints.up('lg')]: {
-				width: '1100px',
-				display: 'flex',
-				justifyContent: 'center',
-				// alignItems: 'center',
-				flexWrap: 'wrap',
-			},
-			[breakpoints.down('xs')]: {
-				width: '95%',
+				paddingLeft: '16px',
 			},
 			[breakpoints.down('md')]: {
-				width: '55%%',
+				width: '100% !important',
+				padding: '0px',
+			},
+		},
+		timeFilterContainer: {
+			display: 'flex',
+			alignItems: 'center',
+			padding: '36px 0 28px 0',
+			[breakpoints.down('xs')]: {
+				display: 'flex',
+				alignItems: 'flex-start',
+				backgroundColor: '#F7F8FC',
+				padding: '16px 24px',
+				flexDirection: 'column-reverse',
 			},
 		},
 		counter: {
-			padding: '0 24px 24px',
-			[breakpoints.up('lg')]: {
-				padding: '22px 0 20px 0',
+			display: 'flex',
+			flexDirection: 'row',
+			[breakpoints.down('xs')]: {
+				padding: '14px 0px 0px',
 			},
 		},
+		counterContent: {
+			flex: '1 1 auto',
+		},
 		counterFirstPart: {
+			color: '#A3ABCC',
 			fontWeight: 'bold',
 			fontSize: '14px',
 			lineHeight: '15px',
+			[breakpoints.down('xs')]: {
+				display: 'none',
+			},
+		},
+		counterFirstPartBold: {
+			color: '#2C7BFD',
+			fontWeight: 'bold',
+			fontSize: '14px',
+			lineHeight: '15px',
+			[breakpoints.down('xs')]: {
+				color: '#52575C',
+			},
 		},
 		counterSecondPart: {
 			fontSize: '14px',
 			lineHeight: '15px',
+			[breakpoints.down('xs')]: {
+				display: 'none',
+			},
+		},
+		counterFirstPartMobile: {
+			display: 'none',
+			[breakpoints.down('xs')]: {
+				color: '#52575C',
+				fontWeight: 'bold',
+				fontSize: '14px',
+				lineHeight: '15px',
+				display: 'inline',
+			},
 		},
 		doctorWrapper: {
-			backgroundColor: 'white',
+			backgroundColor: '#ffffff',
+			boxSizing: 'border-box',
 			padding: '20px 21px',
-			marginBottom: '28px',
-			//boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
-			[breakpoints.up('lg')]: {
-				// borderRadius: '10px',
-				// padding: '20px 24px',
-				margin: '10px 12px',
-				width: '44%',
-				// boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+			width: `calc((100% - ${gap}px) / 2)`,
+			[breakpoints.down('md')]: {
+				width: '100%',
 			},
-			[breakpoints.down('xs')]: {
-				padding: '20px 10px',
-			},
-		},
-		doctor: {
-			display: 'flex',
-			alignItems: 'flex-start',
-			paddingBottom: '20px',
-		},
-		photoWrapper: {
-			paddingRight: '15px',
-			// [breakpoints.up('lg')]: {
-			// 	paddingRight: '14px',
-			// },
-		},
-		photo: {
-			borderRadius: '51%',
-			width: '48px',
-			height: '48px',
-			[breakpoints.up('lg')]: {
-				width: '48px',
-				height: '48px',
-			},
-		},
-		info: {
-			flex: '1',
-		},
-		doctorInfoWrapper: {
-			display: 'flex',
-			flexDirection: 'row',
-			alignItems: 'flex-start',
-			padding: '0px',
-		},
-		nameWrapper: {
-			paddingBottom: '3px',
-		},
-		name: {
-			fontFamily: 'Montserrat,-apple-system,sans-serif',
-			fontStyle: 'normal',
-			fontWeight: 600,
-			fontSize: '14px',
-			lineHeight: '120%',
-			// '&.no-caps': {
-			// 	textTransform: 'none',
-			// },
-			// [breakpoints.up('lg')]: {
-			// 	fontSize: '20px',
-			// 	lineHeight: '25px',
-			// },
-		},
-		specialityWrapper: {
-			paddingBottom: '5px',
-			[breakpoints.up('lg')]: {
-				paddingRight: '27px',
-				paddingBottom: '11px',
-			},
-		},
-		speciality: {
-			fontSize: '12px',
-			lineHeight: '17px',
-			textTransform: 'uppercase',
 		},
 		cmp: {
 			fontSize: '12px',
@@ -133,7 +123,7 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			},
 		},
 		dateButton: {
-			color: 'white',
+			color: '#ffffff',
 			textTransform: 'lowercase',
 		},
 		timesWrapper: {
@@ -148,7 +138,6 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 			textTransform: 'unset',
 			fontWeight: 'bold',
 			[breakpoints.up('lg')]: {
-				// width: '171px',
 				fontSize: '13px',
 				marginTop: '10px',
 				lineHeight: '18px',
@@ -165,48 +154,10 @@ const useStyles = makeStyles(({ palette, breakpoints }: Theme) =>
 				lineHeight: '17px',
 			},
 		},
-		ratingWrapper: {
-			display: 'flex',
-			flex: '1',
-			justifyContent: 'flex-end',
-			alignItems: 'center',
-			alignContent: 'center',
-			// marginRight: '9px',
-			// paddingBottom: '12px',
-			// [breakpoints.up('lg')]: {
-			// 	paddingBottom: '22px',
-			// },
-		},
-		doctorRating: {
-			'&&': {
-				// color: palette.primary.main,
-				color: '#FACD40',
+		divButtonContinue: {
+			[breakpoints.down('md')]: {
+				marginTop: '16px',
 			},
-		},
-		ratingNumber: {
-			fontFamily: 'Mulish, sans-serif',
-			fontStyle: 'normal',
-			fontWeight: 'normal',
-			fontSize: '12px',
-			lineHeight: '16px',
-			color: '#A3ABCC',
-			margin: '2px 5px 0px 10px',
-		},
-		doctorMoreInfo: {
-			fontFamily: 'Mulish, sans-serif',
-			fontStyle: 'normal',
-			fontWeight: 'normal',
-			fontSize: '12px',
-			lineHeight: '15px',
-			textDecorationLine: 'underline',
-			textTransform: 'none',
-			color: '#676F8F',
-			margin: '0px !important',
-			padding: '0px !important',
-			justifyContent: 'flex-start',
-			// '&:hover': {
-			// 	textDecoration: 'none',
-			// },
 		},
 	}),
 );

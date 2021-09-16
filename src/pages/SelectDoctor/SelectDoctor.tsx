@@ -1,178 +1,47 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import { parse } from 'query-string';
-
-import { usePageTitle, redirectToBaseAlivia, addGAEvent } from 'utils';
-import { getUseCase, DoctorAvailability, Schedule } from 'pages/api';
-import AppContext, { SELECT_DOCTOR_STEP, GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
-
+import AppContext from 'AppContext';
+import React, { useContext, useEffect, useState } from 'react';
+import { redirectToBaseAlivia, usePageTitle } from 'utils';
 import { Container } from '../common';
-// import { LeftSide } from './components/LeftSide';
+import DropdownSpecialties from './components/DropdownSpecialties/DropdownSpecialties';
 import { RightSide } from './components/RightSide';
 import WarningModal from './components/WarningModal/WarningModal';
-import { SelectAppointmentOwner } from './components/SelectAppointmentOwner';
-import { formatDoctor } from './utils';
-import { Skills } from './components/Skills';
-import DropdownSpecialties from './components/DropdownSpecialties/DropdownSpecialties';
-
-const DEFAULT_TRIAGE_VALUES = [
-	{ question: '¿Para quién es la consulta?', answer: 'relative' },
-	{ question: '¿Qué tan fuerte es el malestar?', answer: 'moderate' },
-	{ question: 'De acuerdo, describe el malestar:', answer: '-' },
-	{ question: '¿Hace cuánto tiempo se viene presentando este malestar?', answer: '-' },
-];
-
-const requestUseCaseID = async (useCaseID: string, updateState: Function | undefined, toggleWarningModal: Function) => {
-	if (updateState) {
-		const useCase = await getUseCase(useCaseID);
-		if (useCase && window.nutritionistUseCaseId === useCase.id) {
-			toggleWarningModal(true);
-		}
-		updateState({
-			useCase,
-			appointmentCreationStep: SELECT_DOCTOR_STEP,
-			triage: DEFAULT_TRIAGE_VALUES,
-			appointmentOwner: GUEST,
-		});
-	}
-};
+import useSelectDoctorInitContext from './hooks/useSelectDoctorInitContext';
 
 const SelectDoctor = () => {
+	usePageTitle('Seleccion doctor');
+
+	const { userToken } = useContext(AppContext);
+	const [params, useCase] = useSelectDoctorInitContext();
 	const [showWarningModal, toggleWarningModal] = useState<boolean>(false);
-	const [isSelectOwnerOpen, setSelectOwnerOpen] = useState<boolean>(false);
-	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
-	const [schedule, setSchedule] = useState<Schedule | null>(null);
-
-	const location = useLocation();
-	const history = useHistory();
-	const params = parse(location.search);
-	const isUbigeoEnabled = ((params.ubigeo as string) || '') === '1';
-	const minutes = (params.minutes as string) || '';
-	const numSessions = (params.num_sessions as string) || '';
-	const utmSource = (params.utm_source as string) || '';
-	const utmMedium = (params.utm_medium as string) || '';
-	const utmCampaign = (params.utm_campaign as string) || '';
-	const shouldShowTheDoctorDetailedInfo = (params.show || '') === '1' || true;
-	const showSmallSignUp = ((params.bsignup as string) || '') === '1';
-	const { useCase, userToken, updateState } = useContext(AppContext);
 	const [specialityId, setEspecialityId] = useState<string | null>(null);
-	const isUserLoggedIn = !!userToken;
-	const selectAppointmentOwner = (owner: string) => () => {
-		const isForSomeoneElse = owner === GUEST;
-		const ownerToLabel = {
-			[GUEST]: 'Para alguien más',
-			[MYSELF]: 'Para mi',
-		};
+	const { malestar } = params;
 
-		if (updateState) {
-			addGAEvent({
-				category: 'Agendar cita - Paso 1 - Popup',
-				// eslint-disable-next-line
-				// @ts-ignore
-				action: ownerToLabel[owner],
-				label: '(not available)',
-			});
-			updateState({
-				appointmentOwner: owner,
-				appointmentCreationStep: PAYMENT_STEP,
-				schedule,
-				doctor: formatDoctor(doctor),
-			});
-			setSelectOwnerOpen(false);
-
-			if (showSmallSignUp) {
-				history.push('/informacion_paciente');
-			} else if (isForSomeoneElse || !isUserLoggedIn) {
-				history.push('/registro/sobre_ti');
-			} else if (!isForSomeoneElse && isUserLoggedIn) {
-				history.push('/registro/datos_medicos');
-			}
-		}
-	};
-	const selectDoctorCallback = () => {
-		if (updateState) {
-			updateState({
-				appointmentCreationStep: PAYMENT_STEP,
-				schedule,
-				doctor: formatDoctor(doctor),
-			});
-		}
-
-		if (!isUserLoggedIn) {
-			setSelectOwnerOpen(true);
-		} else {
-			history.push('/seleccionar_paciente');
-		}
-	};
-	const closeSelectOwnerModal = () => {
-		setSelectOwnerOpen(false);
-	};
 	const onRejectWarning = () => {
 		toggleWarningModal(false);
 		redirectToBaseAlivia();
 	};
-	const onAcceptWarning = () => toggleWarningModal(false);
-	usePageTitle('Seleccion doctor');
 
-	const onChangeDropdown = (id: string) => {
-		requestUseCaseID(id, updateState, toggleWarningModal);
-	};
+	const onAcceptWarning = () => toggleWarningModal(false);
 
 	useEffect(() => {
-		const useCaseParam = params.malestar as string;
-
-		if (!useCase && useCaseParam && updateState) {
-			requestUseCaseID(useCaseParam, updateState, toggleWarningModal);
-			setEspecialityId(useCaseParam);
+		if (useCase && window.nutritionistUseCaseId === useCase.id) {
+			toggleWarningModal(true);
 		}
-
-		if (updateState) {
-			updateState({ isUbigeoEnabled, trackParams: { utmSource, utmMedium, utmCampaign }, showSmallSignUp });
+		if (malestar) {
+			setEspecialityId(malestar);
 		}
-
-		if (useCase && useCase.id) {
-			if (window.nutritionistUseCaseId === useCase.id) {
-				toggleWarningModal(true);
-			}
+		if (useCase) {
+			const { id } = useCase;
+			setEspecialityId(id);
 		}
-	}, [
-		location.search,
-		updateState,
-		useCase,
-		isUbigeoEnabled,
-		params.malestar,
-		utmSource,
-		utmMedium,
-		utmCampaign,
-		showSmallSignUp,
-	]);
+	}, [useCase, malestar]);
 
 	return (
 		<>
-			<DropdownSpecialties specialityId={specialityId} onChange={onChangeDropdown} />
+			<DropdownSpecialties specialityId={specialityId} />
 			<Container>
-				{/* <LeftSide step={!params.malestar ? -1 : 0} /> */}
-				{!params.malestar ? (
-					<Skills />
-				) : (
-					<RightSide
-						isUserLoggedIn={!!userToken}
-						useCase={useCase}
-						minutes={minutes}
-						numSessions={numSessions}
-						selectDoctorCallback={selectDoctorCallback}
-						setDoctor={setDoctor}
-						setSchedule={setSchedule}
-						shouldShowMoreDoctorInfo={shouldShowTheDoctorDetailedInfo}
-					/>
-				)}
+				<RightSide isUserLoggedIn={!!userToken} useCaseId={malestar} />
 				<WarningModal isOpen={showWarningModal} onCancel={onRejectWarning} onAccept={onAcceptWarning} />
-				<SelectAppointmentOwner
-					isOpen={isSelectOwnerOpen}
-					selectAppointmentForMe={selectAppointmentOwner(MYSELF)}
-					selectAppointmentForSomeoneElse={selectAppointmentOwner(GUEST)}
-					onClose={closeSelectOwnerModal}
-				/>
 			</Container>
 		</>
 	);

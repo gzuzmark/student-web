@@ -16,7 +16,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	card: {
 		alignItems: 'center',
-		backgroundColor: ({ isCurrentAccount }: StylesProps) => (isCurrentAccount ? palette.primary.main : 'white'),
+		backgroundColor: ({ isCurrentAccount }: StylesProps) => (isCurrentAccount ? palette.primary.main : '#ffffff'),
 		boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
 		cursor: 'pointer',
 		display: 'flex',

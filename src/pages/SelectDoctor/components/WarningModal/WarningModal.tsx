@@ -21,7 +21,7 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) => ({
 		top: '50%',
 		left: '50%',
 		transform: 'translate(-50%, -50%)',
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		padding: '1rem',
 		width: '100%',
 		height: '100%',

@@ -11,7 +11,7 @@ const useStyles = stylesWithTheme(() => ({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		borderRadius: '255px',
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		padding: '8px 14px 8px 18px',
 		marginBottom: '10px',
 	},

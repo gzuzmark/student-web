@@ -3,6 +3,7 @@ import { getLocalValue } from 'utils';
 import { UseCase } from 'pages/api/useCase';
 import { Doctor, Schedule } from 'pages/api/selectDoctor';
 import { Laboratorys, Schedules } from 'pages/api/laboratories';
+import { DoctorAvailability, DateSchedule } from './pages/api/selectDoctor';
 
 export const EMPTY_TRACK_PARAMS = {
 	utmSource: '',
@@ -80,6 +81,13 @@ export interface LabExam {
 	files: string[];
 }
 
+export interface SelectDoctorSchedule {
+	useCase: string;
+	doctor: DoctorAvailability;
+	listDates: DateSchedule[];
+	isNextDays: boolean;
+	selectDate: Date;
+}
 interface ContextProps {
 	user: User | null;
 	patientUser: User | null;
@@ -91,6 +99,7 @@ interface ContextProps {
 	useCase: UseCase | null;
 	doctor: Doctor | null;
 	schedule: Schedule | null;
+	selectDoctorSchedule: SelectDoctorSchedule | null;
 	appointmentOwner: AppointmentOwner;
 	triage: TriagePair[];
 	updateState: Function;
@@ -119,6 +128,7 @@ const defaultState: ContextProps = {
 	useCase: null,
 	doctor: null,
 	schedule: null,
+	selectDoctorSchedule: null,
 	triage: [],
 	appointmentOwner: MYSELF,
 	updateState: Function.prototype,

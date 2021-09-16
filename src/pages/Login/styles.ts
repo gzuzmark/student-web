@@ -3,7 +3,7 @@ import { Theme } from '@material-ui/core/styles';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		position: 'relative',
 		overflow: 'hidden',
 	},
@@ -11,6 +11,32 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		[breakpoints.up('lg')]: {
 			position: 'relative',
 			width: '83.1vh',
+		},
+	},
+	goToStartText: {
+		fontFamily: 'Mulish, sans-serif',
+		fontStyle: 'normal',
+		fontWeight: 600,
+		fontSize: '14px',
+		lineHeight: '20px',
+		color: '#1ECD96',
+		marginLeft: '10px',
+	},
+	goToStartButton: {
+		cursor: 'pointer',
+		display: 'flex',
+		fontSize: '12px',
+		padding: '30px 6rem',
+		textTransform: 'none',
+		textDecoration: 'none',
+		'&:hover': {
+			textDecoration: 'none',
+		},
+		[breakpoints.up('lg')]: {
+			fontSize: '15px',
+		},
+		[breakpoints.down('md')]: {
+			padding: '30px 0px',
 		},
 	},
 	mobileImg: {
@@ -34,7 +60,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		paddingLeft: '25px',
 		paddingRight: '25px',
 		[breakpoints.up('lg')]: {
-			background: 'white',
+			background: '#ffffff',
 			borderTopLeftRadius: '25px',
 			borderBottomLeftRadius: '25px',
 			flex: '1 1 auto',

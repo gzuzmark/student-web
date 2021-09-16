@@ -45,3 +45,14 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 
 backend alivia api dev: https://alivia-api-dev.uc.r.appspot.com
+
+## Validar Payment
+
+File: src/pages/Payment/Payment.tsx
+Line: 138
+```
+const kushki = new Kushki({
+    merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
+    inTestEnvironment: false, //!!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`
+});
+```

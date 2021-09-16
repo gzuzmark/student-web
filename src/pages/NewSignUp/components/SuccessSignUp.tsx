@@ -34,7 +34,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		flexDirection: 'column',
 	},
 	wrapper: {
-		backgroundColor: 'white',
+		backgroundColor: '#ffffff',
 		textAlign: 'center',
 		[breakpoints.up('lg')]: {
 			width: '889px',

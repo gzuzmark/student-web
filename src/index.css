@@ -79,6 +79,15 @@
        url(./fonts/Mulish-ExtraLight.ttf) format('ttf');
 }
 
+@font-face {
+     font-family: "Mulish";
+     font-weight: 800;
+     font-style: bold;
+     src: url(./fonts/Mulish-Bold.ttf);
+     src: local('Mulish-Bold'),
+          url(./fonts/Mulish-Bold.ttf) format('ttf');
+   }
+
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
