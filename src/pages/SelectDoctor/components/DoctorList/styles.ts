@@ -27,9 +27,8 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		timeFilterContainer: {
 			display: 'grid',
 			alignItems: 'center',
-			gridTemplateColumns: 'repeat(auto-fit, minmax(3em, 34em))',
-			padding: '20px 0 10px 0',
-			[breakpoints.down('md')]: {
+			padding: '36px 0 28px 0',
+			[breakpoints.down('xs')]: {
 				display: 'flex',
 				alignItems: 'flex-start',
 				backgroundColor: '#F7F8FC',
@@ -40,10 +39,8 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		counter: {
 			display: 'flex',
 			flexDirection: 'row',
-			padding: '0 24px 0px',
-			[breakpoints.up('lg')]: {},
 			[breakpoints.down('xs')]: {
-				padding: '0 18px 0px',
+				padding: '14px 0px 0px',
 			},
 		},
 		counterContent: {
