@@ -13,6 +13,32 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			width: '83.1vh',
 		},
 	},
+	goToStartText: {
+		fontFamily: 'Mulish, sans-serif',
+		fontStyle: 'normal',
+		fontWeight: 600,
+		fontSize: '14px',
+		lineHeight: '20px',
+		color: '#1ECD96',
+		marginLeft: '10px',
+	},
+	goToStartButton: {
+		cursor: 'pointer',
+		display: 'flex',
+		fontSize: '12px',
+		padding: '30px 6rem',
+		textTransform: 'none',
+		textDecoration: 'none',
+		'&:hover': {
+			textDecoration: 'none',
+		},
+		[breakpoints.up('lg')]: {
+			fontSize: '15px',
+		},
+		[breakpoints.down('md')]: {
+			padding: '30px 0px',
+		},
+	},
 	mobileImg: {
 		position: 'fixed',
 		top: '24px',

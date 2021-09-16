@@ -3,6 +3,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import IconBack from 'icons/left2.svg';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -14,6 +15,7 @@ import { ReactComponent as LeftIcon } from 'icons/left.svg';
 import { ReactComponent as UserIcon } from 'icons/default_user_icon.svg';
 
 import NavMenu from './NavMenu';
+import { redirectToURL } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
@@ -42,6 +44,34 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			cursor: 'pointer',
 			[breakpoints.up('lg')]: {
 				display: 'none',
+			},
+		},
+		goToStartText: {
+			fontFamily: 'Mulish, sans-serif',
+			fontStyle: 'normal',
+			fontWeight: 600,
+			fontSize: '14px',
+			lineHeight: '20px',
+			color: '#1ECD96',
+			marginLeft: '10px',
+		},
+		goToStartButton: {
+			cursor: 'pointer',
+			display: 'none',
+			fontSize: '12px',
+			padding: 0,
+			position: 'absolute',
+			left: '26px',
+			textTransform: 'none',
+			textDecoration: 'none',
+			'&:hover': {
+				textDecoration: 'none',
+			},
+			[breakpoints.up('lg')]: {
+				display: 'flex',
+				padding: '10px 20px',
+				left: '72px',
+				fontSize: '15px',
 			},
 		},
 		loginButton: {
@@ -94,7 +124,8 @@ const Nav = () => {
 		history.push('/iniciar_sesion');
 	};
 	const onGoBack = () => {
-		history.goBack();
+		// history.goBack();
+		redirectToURL('https://alivia.pe/botica');
 	};
 	const handleProfileMenuOpen = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -103,10 +134,18 @@ const Nav = () => {
 		setAnchorEl(null);
 	};
 
+	const onClickGoToStart = () => {
+		redirectToURL('https://alivia.pe/botica');
+	};
+
 	return (
 		<div>
 			<nav className={clsx(classes.container, 'nav-container')}>
 				<LeftIcon className={classes.arrowIcon} onClick={onGoBack} />
+				<div className={classes.goToStartButton} onClick={onClickGoToStart}>
+					<img alt="" src={IconBack} height={20} />
+					<Typography className={classes.goToStartText}>Ir al inicio</Typography>
+				</div>
 				<BrandLogo className={classes.brandLogo} />
 				{user && user.id !== '' ? (
 					<div className={classes.userIconWrapper}>
