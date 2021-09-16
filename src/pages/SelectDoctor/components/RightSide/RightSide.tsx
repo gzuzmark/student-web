@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router';
 import Carrousel from '../Carrousel/Carrousel';
 import { DoctorList } from '../DoctorList';
-import FilterDateDoctor from '../FilterDateDoctor/FilterDateDoctor';
+import FilterDateDoctor, { FilterType } from '../FilterDateDoctor/FilterDateDoctor';
 import useStyles from './styles';
 interface RightSideProps {
 	useCaseId: string | null | undefined;
@@ -33,6 +33,7 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 	const [doctorsForDay, setDoctorsForDay] = useState<DoctorAvailability[]>([]);
 	const [isNextWeek, setIsNextWeek] = useState<boolean>(false);
 	const [isLoad, schedules] = useDoctorSchedules(useCaseId || '', startDateWeek);
+	const [valueFilter, setValueFilter] = useState<FilterType>('date');
 
 	const onSeeMore = (doctor: DoctorAvailability) => {
 		const doctorSelected = doctors.find((doc) => doc.id === doctor.id);
@@ -81,32 +82,43 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 		}
 	}, [schedules]);
 
-	const sectionWithSpecialty = () => (
-		<>
-			{doctorsForDay.length > 0 ? (
-				<DoctorList doctors={doctorsForDay} shouldShowMoreDoctorInfo={true} onSeeMore={onSeeMore} />
-			) : (
-				<div className={classes.emptyMessageWrapper}>
-					<Typography component="div" className={classes.emptyMessage}>
-						{t('right.notFoundDoctors')}
-					</Typography>
-				</div>
-			)}
-		</>
-	);
+	const sectionWithSpecialty = () => {
+		if (valueFilter === 'doctor') {
+			return <div>filtro de doctores</div>;
+		}
+		return (
+			<>
+				{doctorsForDay.length > 0 ? (
+					<DoctorList doctors={doctorsForDay} shouldShowMoreDoctorInfo={true} onSeeMore={onSeeMore} />
+				) : (
+					<div className={classes.emptyMessageWrapper}>
+						<Typography component="div" className={classes.emptyMessage}>
+							{t('right.notFoundDoctors')}
+						</Typography>
+					</div>
+				)}
+			</>
+		);
+	};
+
+	const onChangeFilterDateDoctor = (value: FilterType) => {
+		setValueFilter(value);
+	};
 
 	return (
 		<RightLayout className={classes.rightLayout}>
 			<div className={classes.wrapper}>
-				<FilterDateDoctor onChangeFilter={() => null} />
-				<Carrousel
-					dates={isLoad ? null : listDates}
-					selectedDate={selectedDate}
-					isNextAvailableDate={isNextWeek}
-					onSelectDate={(date: Date | null) => setSelectedDate(date)}
-					onBackWeek={(date: Date) => setStartDateWeek(date)}
-					onNextWeek={(date: Date) => setStartDateWeek(date)}
-				/>
+				<FilterDateDoctor value={valueFilter} onChangeFilter={onChangeFilterDateDoctor} />
+				{valueFilter === 'date' && (
+					<Carrousel
+						dates={isLoad ? null : listDates}
+						selectedDate={selectedDate}
+						isNextAvailableDate={isNextWeek}
+						onSelectDate={(date: Date | null) => setSelectedDate(date)}
+						onBackWeek={(date: Date) => setStartDateWeek(date)}
+						onNextWeek={(date: Date) => setStartDateWeek(date)}
+					/>
+				)}
 				<Divider className={classes.divider} />
 				{isLoad ? <Loading loadingMessage="Buscando disponibilidad..." /> : sectionWithSpecialty()}
 			</div>

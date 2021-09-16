@@ -5,10 +5,13 @@ import TabsFilter from '../TabsFilter/TabsFilter';
 import useStyles from './style';
 
 export interface FilterDateDoctorProps {
-	onChangeFilter: () => void;
+	value: FilterType;
+	onChangeFilter: (type: FilterType) => void;
 }
 
-const FilterDateDoctor = ({ onChangeFilter }: FilterDateDoctorProps) => {
+export type FilterType = 'date' | 'doctor';
+
+const FilterDateDoctor = ({ value, onChangeFilter }: FilterDateDoctorProps) => {
 	const classes = useStyles();
 
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
@@ -16,7 +19,11 @@ const FilterDateDoctor = ({ onChangeFilter }: FilterDateDoctorProps) => {
 	return (
 		<div className={classes.container}>
 			<div className={classes.titleDiv}>Elige tu cita</div>
-			{isDesktop ? <RadioButtonFilter /> : <TabsFilter />}
+			{isDesktop ? (
+				<RadioButtonFilter value={value} onChangeFilter={onChangeFilter} />
+			) : (
+				<TabsFilter value={value} onChangeFilter={onChangeFilter} />
+			)}
 		</div>
 	);
 };
