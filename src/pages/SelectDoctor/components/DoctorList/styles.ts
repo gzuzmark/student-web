@@ -30,7 +30,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		timeFilterContainer: {
 			display: 'grid',
 			alignItems: 'center',
-			gridTemplateColumns: 'repeat(auto-fit, minmax(3em, 32em))',
+			gridTemplateColumns: 'repeat(auto-fit, minmax(3em, 34em))',
 			padding: '20px 0 10px 0',
 			[breakpoints.down('md')]: {
 				display: 'flex',
