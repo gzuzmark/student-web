@@ -48,6 +48,9 @@ const BootstrapButton = withStyles((theme: Theme) =>
 			border: '1px solid #E5EFFF',
 			boxSizing: 'border-box',
 			borderRadius: '4px',
+			[theme.breakpoints.down('md')]: {
+				width: 'calc(100% - 2 * 12px) / 3',
+			},
 		},
 		label: {
 			width: '100%', // Ensure the correct width for iOS Safari
@@ -75,8 +78,9 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
 		gap: '1.25rem',
 		gridTemplateColumns: '1fr 1fr 1fr',
 		[theme.breakpoints.down('xs')]: {
-			display: 'inline-flex',
-			gap: '0rem',
+			display: 'flex',
+			gap: '12px',
+			flex: '1',
 		},
 	},
 	grouped: {
@@ -87,7 +91,7 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
 			borderRadius: theme.shape.borderRadius,
 		},
 		[theme.breakpoints.down('xs')]: {
-			margin: theme.spacing(2),
+			// margin: theme.spacing(2),
 		},
 	},
 }))(ToggleButtonGroup);
