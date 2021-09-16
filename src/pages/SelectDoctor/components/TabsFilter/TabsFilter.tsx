@@ -4,7 +4,7 @@ import useStyles from './style';
 const TabsFilter = () => {
 	const classes = useStyles();
 
-	return <div className={classes.container}></div>;
+	return <div className={classes.container}>Tabs</div>;
 };
 
 export default TabsFilter;

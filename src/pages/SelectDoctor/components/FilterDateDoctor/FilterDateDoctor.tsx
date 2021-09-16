@@ -4,7 +4,11 @@ import RadioButtonFilter from '../RadioButtonFilter/RadioButtonFilter';
 import TabsFilter from '../TabsFilter/TabsFilter';
 import useStyles from './style';
 
-const FilterDateDoctor = () => {
+export interface FilterDateDoctorProps {
+	onChangeFilter: () => void;
+}
+
+const FilterDateDoctor = ({ onChangeFilter }: FilterDateDoctorProps) => {
 	const classes = useStyles();
 
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
