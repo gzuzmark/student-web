@@ -154,6 +154,11 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				lineHeight: '17px',
 			},
 		},
+		divButtonContinue: {
+			[breakpoints.down('md')]: {
+				marginTop: '16px',
+			},
+		},
 	}),
 );
 
