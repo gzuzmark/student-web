@@ -19,12 +19,12 @@ import { Theme } from '@material-ui/core/styles';
 const BootstrapButton = withStyles((theme: Theme) =>
 	createStyles({
 		root: {
+			width: theme.typography.pxToRem(104),
 			height: theme.typography.pxToRem(32),
 			textTransform: 'none',
 			background: '#FFFFFF;',
 			borderColor: '#E5EFFF',
 			fontFamily: 'Mulish, sans-serif',
-			minWidth: '7.25rem',
 			'&:hover': {
 				backgroundColor: '#FFFFFF',
 			},
@@ -69,8 +69,17 @@ const BootstrapButton = withStyles((theme: Theme) =>
 )(ToggleButton);
 
 const StyledToggleButtonGroup = withStyles((theme) => ({
+	root: {
+		borderRadius: '4px',
+		display: 'grid',
+		gap: '1.25rem',
+		gridTemplateColumns: '1fr 1fr 1fr',
+		[theme.breakpoints.down('xs')]: {
+			display: 'inline-flex',
+			gap: '0rem',
+		},
+	},
 	grouped: {
-		margin: theme.spacing(2),
 		'&:not(:first-child)': {
 			borderRadius: theme.shape.borderRadius,
 		},
