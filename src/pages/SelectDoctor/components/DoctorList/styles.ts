@@ -31,7 +31,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			display: 'grid',
 			alignItems: 'center',
 			gridTemplateColumns: 'repeat(auto-fit, minmax(3em, 34em))',
-			padding: '20px 0 0 0',
+			padding: '20px 0 10px 0',
 			[breakpoints.down('md')]: {
 				display: 'flex',
 				alignItems: 'flex-start',
