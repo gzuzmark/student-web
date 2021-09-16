@@ -98,7 +98,7 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 	return (
 		<RightLayout className={classes.rightLayout}>
 			<div className={classes.wrapper}>
-				<FilterDateDoctor />
+				<FilterDateDoctor onChangeFilter={() => null} />
 				<Carrousel
 					dates={isLoad ? null : listDates}
 					selectedDate={selectedDate}
