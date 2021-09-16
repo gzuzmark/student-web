@@ -57,7 +57,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		},
 		goToStartButton: {
 			cursor: 'pointer',
-			display: 'flex',
+			display: 'none',
 			fontSize: '12px',
 			padding: 0,
 			position: 'absolute',
@@ -68,6 +68,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				textDecoration: 'none',
 			},
 			[breakpoints.up('lg')]: {
+				display: 'flex',
 				padding: '10px 20px',
 				left: '72px',
 				fontSize: '15px',
