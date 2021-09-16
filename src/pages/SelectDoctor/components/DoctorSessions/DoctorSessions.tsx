@@ -6,8 +6,10 @@ import AvailableTimes from '../AvailableTimes';
 import { DoctorHeader } from '../DoctorHeader';
 import { ActiveDoctorTime } from '../DoctorList/DoctorList';
 import useStyles from '../DoctorList/styles';
+import clsx from 'clsx';
 
 interface DoctorSessionsProps {
+	className?: string;
 	doctor: DoctorAvailability;
 	doctorIndex: number;
 	activeDoctorTime: ActiveDoctorTime;
@@ -19,6 +21,7 @@ interface DoctorSessionsProps {
 }
 
 const DoctorSessions = ({
+	className,
 	doctor,
 	doctorIndex,
 	activeDoctorTime,
@@ -31,7 +34,7 @@ const DoctorSessions = ({
 	const { id, schedules } = doctor;
 
 	return (
-		<div className={classes.doctorWrapper}>
+		<div className={clsx(classes.doctorWrapper, className)}>
 			<DoctorHeader doctor={doctor} />
 			<div className={classes.timesWrapper}>
 				<AvailableTimes
