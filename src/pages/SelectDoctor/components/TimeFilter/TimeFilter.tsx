@@ -48,7 +48,7 @@ const BootstrapButton = withStyles((theme: Theme) =>
 			border: '1px solid #E5EFFF',
 			boxSizing: 'border-box',
 			borderRadius: '4px',
-			[theme.breakpoints.down('md')]: {
+			[theme.breakpoints.down('xs')]: {
 				width: 'calc((100% - 24px) / 3)',
 			},
 		},

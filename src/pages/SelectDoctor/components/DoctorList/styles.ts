@@ -39,7 +39,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			display: 'flex',
 			alignItems: 'center',
 			padding: '36px 0 28px 0',
-			[breakpoints.down('md')]: {
+			[breakpoints.down('xs')]: {
 				display: 'flex',
 				alignItems: 'flex-start',
 				backgroundColor: '#F7F8FC',
@@ -50,7 +50,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		counter: {
 			display: 'flex',
 			flexDirection: 'row',
-			[breakpoints.down('md')]: {
+			[breakpoints.down('xs')]: {
 				padding: '14px 0px 0px',
 			},
 		},
