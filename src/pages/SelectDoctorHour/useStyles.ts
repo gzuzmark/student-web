@@ -20,7 +20,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 			boxSizing: 'border-box',
 			[breakpoints.down(MOBILE)]: {
 				width: '100%',
-				padding: '14px 25px 20px',
+				padding: '14px 0px 20px',
 			},
 		},
 		header: {
@@ -28,7 +28,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 			paddingBottom: '0px',
 			backgroundColor: '#FFFFFF',
 			[breakpoints.down(MOBILE)]: {
-				margin: '0px',
+				margin: '0px 24px',
 			},
 		},
 	}),
