@@ -259,10 +259,13 @@ const DoctorList = ({ doctors, shouldShowMoreDoctorInfo, onSeeMore }: DoctorList
 							<Typography className={classes.counterFirstPartBold} component="span">
 								{t('right.foundDoctors', {
 									doctors: filteredDoctors.length < 10 ? `0${filteredDoctors.length}` : filteredDoctors.length,
+									plural: filteredDoctors.length === 1 ? '' : 's',
 								})}{' '}
 							</Typography>
 							<Typography className={classes.counterFirstPartMobile} component="span">
-								disponibles{' '}
+								{t('right.foundDoctors.available', {
+									plural: filteredDoctors.length === 1 ? '' : 's',
+								})}{' '}
 							</Typography>
 							<Typography className={classes.counterSecondPart} component="span">
 								en {t('right.specialityName', { speciality: doctors[0].specialityName })}{' '}
