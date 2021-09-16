@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { Schedule } from 'pages/api';
 import TimeOption from 'pages/SelectDoctor/components/TimeOption';
 import React, { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ export interface DayShiftProps {
 const DayShift = ({ schedules, showButtonContinue, onActiveScheduleButton, onClickContinueButton }: DayShiftProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
+
 	const [activeSchedule, setActiveSchedule] = useState<string | null>(null);
 
 	const onClickSchedule = (id: string) => {
@@ -48,25 +49,32 @@ const DayShift = ({ schedules, showButtonContinue, onActiveScheduleButton, onCli
 
 	return (
 		<div className={classes.container}>
-			<div className={classes.divHours}>
-				{schedules.map(({ id, isDisabled, startTime }, i) => (
-					<TimeOption
-						key={i}
-						scheduleId={id}
-						date={startTime}
-						format={'hh:mm a'}
-						status={isDisabled ? 'disabled' : activeSchedule === id ? 'selected' : 'default'}
-						onClick={() => onClickSchedule(id)}
-					/>
-				))}
+			<div className={classes.divTitle}>
+				<Typography className={classes.title}>Todos los turnos</Typography>
 			</div>
-			{activeSchedule != null && (
-				<div>
-					<Button fullWidth className={classes.continueButton} variant="contained" onClick={onClickContinue}>
-						{t('left.button.seleccionar')}
-					</Button>
+			<div className={classes.divider} />
+			<div className={classes.divSchedule}>
+				<div className={classes.divHours}>
+					{schedules.map(({ id, isDisabled, startTime }, i) => (
+						<TimeOption
+							key={i}
+							className={classes.hourItem}
+							scheduleId={id}
+							date={startTime}
+							format={'hh:mm a'}
+							status={isDisabled ? 'disabled' : activeSchedule === id ? 'selected' : 'default'}
+							onClick={() => onClickSchedule(id)}
+						/>
+					))}
 				</div>
-			)}
+				{activeSchedule != null && (
+					<div className={classes.divButton}>
+						<Button fullWidth className={classes.continueButton} variant="contained" onClick={onClickContinue}>
+							{t('left.button.seleccionar')}
+						</Button>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };

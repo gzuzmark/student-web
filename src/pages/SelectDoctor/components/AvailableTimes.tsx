@@ -1,4 +1,4 @@
-import { Theme, Typography } from '@material-ui/core';
+import { Theme, Typography, createStyles } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Schedule } from 'pages/api';
 import React, { useEffect, useState } from 'react';
@@ -7,94 +7,97 @@ import { ActiveDoctorTime } from './DoctorList/DoctorList';
 import { validSelectTimeWithNow } from './FunctionsHelper';
 import ModalErrorTime from './ModalErrorTime/ModalErrorTime';
 import TimeOption from './TimeOption';
-const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
-	container: {
-		flex: '1',
-		position: 'relative',
-		// [breakpoints.up('lg')]: {
-		// 	width: '456px',
-		// 	marginRight: '10px', // 7px of margin right from buttons + 12px from container width space + 10px to all sum up 29px
-		// },
-	},
-	times: {
-		display: 'flex',
-		flex: '1',
-		flexWrap: 'wrap',
-		marginBottom: '18px',
-		width: '103%',
-		[breakpoints.up('lg')]: {
-			marginBottom: '0',
+
+const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
+	createStyles({
+		container: {
+			flex: '1',
+			position: 'relative',
+			// [breakpoints.up('lg')]: {
+			// 	width: '456px',
+			// 	marginRight: '10px', // 7px of margin right from buttons + 12px from container width space + 10px to all sum up 29px
+			// },
 		},
-	},
-	dateButtonWrapper: {
-		width: '98px',
-		// marginRight: '7px',
-		// marginBottom: '11px',
-		'&:nth-child(3n)': {
-			marginRight: '0',
+		times: {
+			display: 'flex',
+			flex: '1',
+			flexWrap: 'wrap',
+			marginBottom: '18px',
+			width: '103%',
 			[breakpoints.up('lg')]: {
-				// marginRight: '7px',
-			},
-		},
-		[breakpoints.up('lg')]: {
-			width: '46px',
-			'&:nth-last-child(-n + 6)': {
 				marginBottom: '0',
 			},
 		},
-	},
-	dateButton: {
-		textTransform: 'lowercase',
-		fontSize: '14px',
-		lineHeight: '15px',
-		padding: '7.5px 0',
-		[breakpoints.up('lg')]: {
-			marginRight: '7px',
-			minWidth: 'auto',
-			fontSize: '13px',
-			lineHeight: '18px',
-			padding: '11.5px 8px',
+		dateButtonWrapper: {
+			width: '98px',
+			// marginRight: '7px',
+			// marginBottom: '11px',
+			'&:nth-child(3n)': {
+				marginRight: '0',
+				[breakpoints.up('lg')]: {
+					// marginRight: '7px',
+				},
+			},
+			[breakpoints.up('lg')]: {
+				width: '46px',
+				'&:nth-last-child(-n + 6)': {
+					marginBottom: '0',
+				},
+			},
 		},
-	},
-	timesOverlay: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-		cursor: 'pointer',
-	},
-	verMasButton: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		// padding: '12px 7px',
-		boxSizing: 'border-box',
-		borderRadius: '8px',
-		margin: '0px',
-		marginLeft: '10px',
-		background: '#E9FAF5',
-		border: '1.5px solid #E9FAF5',
-		cursor: 'pointer',
-		width: '24%',
-		height: '45px',
-
-		[breakpoints.up('lg')]: {
-			width: '16%',
-			height: '40px',
+		dateButton: {
+			textTransform: 'lowercase',
+			fontSize: '14px',
+			lineHeight: '15px',
+			padding: '7.5px 0',
+			[breakpoints.up('lg')]: {
+				marginRight: '7px',
+				minWidth: 'auto',
+				fontSize: '13px',
+				lineHeight: '18px',
+				padding: '11.5px 8px',
+			},
 		},
-	},
+		timesOverlay: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0,
+			cursor: 'pointer',
+		},
+		verMasButton: {
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+			// padding: '12px 7px',
+			boxSizing: 'border-box',
+			borderRadius: '8px',
+			margin: '0px',
+			marginLeft: '10px',
+			background: '#E9FAF5',
+			border: '1.5px solid #E9FAF5',
+			cursor: 'pointer',
+			width: '24%',
+			height: '45px',
 
-	textVerMas: {
-		fontFamily: 'Montserrat, sans-serif',
-		fontStyle: 'normal',
-		fontWeight: 800,
-		fontSize: '12px',
-		lineHeight: '16px',
-		color: '#1ECD96',
-	},
-}));
+			[breakpoints.up('lg')]: {
+				width: '16%',
+				height: '40px',
+			},
+		},
+
+		textVerMas: {
+			fontFamily: 'Montserrat, sans-serif',
+			fontStyle: 'normal',
+			fontWeight: 800,
+			fontSize: '12px',
+			lineHeight: '16px',
+			color: '#1ECD96',
+		},
+	}),
+);
 
 type ModeType = 'short' | 'extended';
 // const MAX_IN_SHORT = 4;
