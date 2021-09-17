@@ -1,38 +1,49 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 
+const gap = 28;
+
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		container: {
-			display: 'grid',
-			justifyContent: 'center',
+			margin: '0 auto',
+			display: 'flex',
+			flexDirection: 'column',
+			alignContent: 'center',
+			[breakpoints.up('lg')]: {
+				maxWidth: '896px',
+			},
 		},
 		doctorList: {
-			[breakpoints.up('lg')]: {
-				width: '1100px',
-				display: 'flex',
-				justifyContent: 'flex-start',
-				flexWrap: 'wrap',
-			},
+			display: 'flex',
+			flex: 1,
+			flexWrap: 'wrap',
+			boxSizing: 'border-box',
+			rowGap: `${gap}px`,
+			columnGap: `${gap}px`,
 		},
 		timeFilterList: {
 			display: 'flex',
+			flex: 1,
 			flexWrap: 'wrap',
+			boxSizing: 'border-box',
 			justifyContent: 'flex-end',
 			[breakpoints.up('lg')]: {
 				paddingLeft: '16px',
 			},
-			[breakpoints.down('xs')]: {},
-			[breakpoints.down('md')]: {},
+			[breakpoints.down('md')]: {
+				width: '100% !important',
+				padding: '0px',
+			},
 		},
 		timeFilterContainer: {
-			display: 'grid',
+			display: 'flex',
 			alignItems: 'center',
 			padding: '36px 0 28px 0',
 			[breakpoints.down('xs')]: {
 				display: 'flex',
 				alignItems: 'flex-start',
 				backgroundColor: '#F7F8FC',
-				padding: '0 0 1rem',
+				padding: '16px 24px',
 				flexDirection: 'column-reverse',
 			},
 		},
@@ -83,16 +94,11 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		},
 		doctorWrapper: {
 			backgroundColor: '#ffffff',
-			padding: '20px 21px',
-			marginBottom: '28px',
 			boxSizing: 'border-box',
-			[breakpoints.up('lg')]: {
-				margin: '10px 12px',
-				width: '44%',
-			},
+			padding: '20px 21px',
+			width: `calc((100% - ${gap}px) / 2)`,
 			[breakpoints.down('md')]: {
 				width: '100%',
-				padding: '20px 24px',
 			},
 		},
 		cmp: {

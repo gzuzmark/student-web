@@ -24,7 +24,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 			display: 'flex',
 			flex: '1',
 			flexWrap: 'wrap',
-			marginBottom: '18px',
 			boxSizing: 'border-box',
 			rowGap: `${gap}px`,
 			columnGap: `${gap}px`,

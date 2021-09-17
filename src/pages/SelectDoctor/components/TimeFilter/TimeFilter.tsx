@@ -78,8 +78,9 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
 		gap: '1.25rem',
 		gridTemplateColumns: '1fr 1fr 1fr',
 		[theme.breakpoints.down('xs')]: {
-			display: 'inline-flex',
-			gap: '0rem',
+			display: 'flex',
+			gap: '12px',
+			flex: '1',
 		},
 	},
 	grouped: {
@@ -90,7 +91,7 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
 			borderRadius: theme.shape.borderRadius,
 		},
 		[theme.breakpoints.down('xs')]: {
-			margin: theme.spacing(2),
+			// margin: theme.spacing(2),
 		},
 	},
 }))(ToggleButtonGroup);
