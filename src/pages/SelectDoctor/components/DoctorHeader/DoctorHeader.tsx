@@ -3,8 +3,9 @@ import Typography from '@material-ui/core/Typography';
 import { Rating } from '@material-ui/lab';
 import clsx from 'clsx';
 import { DoctorAvailability } from 'pages/api';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import DetailedDoctorModal from '../DoctorList/DetailedDoctorModal';
 import useStyles from './styles';
 
 interface DoctorHeaderProps {
@@ -16,6 +17,7 @@ const DoctorHeader = ({ doctor, className }: DoctorHeaderProps) => {
 	const { t } = useTranslation('selectDoctor');
 	const classes = useStyles();
 	const { name, lastName, profilePicture, rating, patientOpinions } = doctor;
+	const [isDetailDoctorModalOpen, setIsDetailDoctorModalOpen] = useState<boolean>(false);
 
 	return (
 		<div className={clsx(classes.doctor, className)}>
@@ -33,13 +35,7 @@ const DoctorHeader = ({ doctor, className }: DoctorHeaderProps) => {
 				</div>
 				<div className={classes.doctorInfoWrapper}>
 					<div>
-						<Button
-							className={classes.doctorMoreInfo}
-							// onClick={() => {
-							// 	selectDoctorForModal(doctorIndex);
-							// 	openDetailedDoctorModal();
-							// }}
-						>
+						<Button className={classes.doctorMoreInfo} onClick={() => setIsDetailDoctorModalOpen(true)}>
 							{t('right.doctor.moreInformation')}
 						</Button>
 					</div>
@@ -51,6 +47,13 @@ const DoctorHeader = ({ doctor, className }: DoctorHeaderProps) => {
 					)}
 				</div>
 			</div>
+			{isDetailDoctorModalOpen && (
+				<DetailedDoctorModal
+					isOpen={isDetailDoctorModalOpen}
+					doctor={doctor}
+					closeModal={() => setIsDetailDoctorModalOpen(false)}
+				/>
+			)}
 		</div>
 	);
 };

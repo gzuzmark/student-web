@@ -46,7 +46,7 @@ const DoctorSessions = ({
 					onSeeMore={onSeeMore}
 				/>
 			</div>
-			<div>
+			<div className={classes.divButtonContinue}>
 				{activeDoctorTime.doctorID === id ? (
 					<Button fullWidth className={classes.continueButton} variant="contained" onClick={continueToPreRegister}>
 						{t('left.button.seleccionar')}
