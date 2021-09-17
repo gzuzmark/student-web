@@ -28,7 +28,7 @@ const RadioButtonFilter = ({ value, onChangeFilter }: RadioButtonFilterProps) =>
 					checked={value === 'doctor'}
 				/>
 				<label className={classes.labelItem} htmlFor="radioDoctor">
-					Por Doctor
+					Por Médico
 				</label>
 			</div>
 		</div>

@@ -12,6 +12,7 @@ import Carrousel from '../Carrousel/Carrousel';
 import { DoctorList } from '../DoctorList';
 import FilterDateDoctor, { FilterType } from '../FilterDateDoctor/FilterDateDoctor';
 import useStyles from './styles';
+import DoctorListFilter from '../DoctorList/DoctorListFilter';
 interface RightSideProps {
 	useCaseId: string | null | undefined;
 	isUserLoggedIn?: boolean;
@@ -84,7 +85,19 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 
 	const sectionWithSpecialty = () => {
 		if (valueFilter === 'doctor') {
-			return <div>filtro de doctores</div>;
+			return (
+				<>
+					{doctorsForDay.length > 0 ? (
+						<DoctorListFilter doctors={doctorsForDay} shouldShowMoreDoctorInfo={true} onSeeMore={onSeeMore} />
+					) : (
+						<div className={classes.emptyMessageWrapper}>
+							<Typography component="div" className={classes.emptyMessage}>
+								{t('right.notFoundDoctors')}
+							</Typography>
+						</div>
+					)}
+				</>
+			);
 		}
 		return (
 			<>

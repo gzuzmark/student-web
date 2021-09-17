@@ -15,6 +15,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			fontWeight: 'bold',
 			color: '#535B6C',
 			fontSize: '26px',
+			fontFamily: 'Montserrat',
 		},
 	}),
 );
