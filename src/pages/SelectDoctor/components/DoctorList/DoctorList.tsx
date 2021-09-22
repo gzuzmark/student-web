@@ -186,27 +186,26 @@ const DoctorList = ({ doctors, shouldShowMoreDoctorInfo, onSeeMore }: DoctorList
 				setFilteredDoctors(doctors);
 				return;
 			}
-			const filteredDoctors = medics.reduce((acc: DoctorAvailability[], current) => {
-				const { schedules } = current;
-				const somechedules = schedules.some((schedule) => {
-					const { startTime } = schedule;
-					const intervals = getTimeFrameIntervals(startTime);
+			const filteredDoctors = medics
+				.map((current: DoctorAvailability) => {
+					const currentCopy = { ...current };
+					const filterSchedules = currentCopy.schedules.filter((schedule) => {
+						const { startTime } = schedule;
+						const intervals = getTimeFrameIntervals(startTime);
 
-					return (
-						(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.morning) &&
-							isInsideIntervalRange(startTime, intervals.morning.start, intervals.morning.end)) ||
-						(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.afternoon) &&
-							isInsideIntervalRange(startTime, intervals.afternoon.start, intervals.afternoon.end)) ||
-						(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.evening) &&
-							isInsideIntervalRange(startTime, intervals.evening.start, intervals.evening.end))
-					);
-				});
-
-				if (somechedules) {
-					return [...acc, current];
-				}
-				return acc;
-			}, []);
+						return (
+							(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.morning) &&
+								isInsideIntervalRange(startTime, intervals.morning.start, intervals.morning.end)) ||
+							(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.afternoon) &&
+								isInsideIntervalRange(startTime, intervals.afternoon.start, intervals.afternoon.end)) ||
+							(isIntervalSelected(timeFrameFilter, TimereFrameOptionsEnum.evening) &&
+								isInsideIntervalRange(startTime, intervals.evening.start, intervals.evening.end))
+						);
+					});
+					currentCopy.schedules = filterSchedules;
+					return currentCopy;
+				})
+				.filter((current) => current.schedules.length > 0);
 			setFilteredDoctors(filteredDoctors);
 		},
 		[doctors, timeFrameFilter],
