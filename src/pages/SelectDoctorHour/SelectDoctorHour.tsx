@@ -13,7 +13,6 @@ import { Loading } from 'pages';
 import { DateSchedule, DoctorAvailability, Schedule } from 'pages/api';
 import Carrousel from 'pages/SelectDoctor/components/Carrousel/Carrousel';
 import { DoctorHeader } from 'pages/SelectDoctor/components/DoctorHeader';
-import { getTimeFrameIntervals } from 'pages/SelectDoctor/components/DoctorList/utils';
 import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
 import { ModalErrorTime } from 'pages/SelectDoctor/components/ModalErrorTime';
 import { SelectAppointmentOwner } from 'pages/SelectDoctor/components/SelectAppointmentOwner';

@@ -8,6 +8,8 @@ import { DoctorAvailability, DateSchedule } from './pages/api/selectDoctor';
 import { ReactComponent as SunIcon } from 'icons/sun.svg';
 import { ReactComponent as SunsetIcon } from 'icons/sunset.svg';
 import { ReactComponent as MoonIcon } from 'icons/moon.svg';
+import { addHours, addMinutes, startOfDay } from 'date-fns/esm';
+import { endOfDay } from 'date-fns';
 
 export const EMPTY_TRACK_PARAMS = {
 	utmSource: '',
@@ -79,6 +81,16 @@ export interface TimeFrameIntervals {
 	start: Date;
 	end: Date;
 }
+
+export const getTimeFrameIntervals = (startTime: Date): FromTimeFrameIntervals => {
+	const dayStart = startOfDay(startTime);
+	const dayEnd = endOfDay(startTime);
+	return {
+		morning: { start: startOfDay(startTime), end: addHours(addMinutes(dayStart, 59), 12) },
+		afternoon: { start: addHours(dayStart, 13), end: addHours(addMinutes(dayStart, 59), 16) },
+		evening: { start: addHours(dayStart, 17), end: dayEnd },
+	};
+};
 
 interface AppProviderProps {
 	children: ReactElement;
