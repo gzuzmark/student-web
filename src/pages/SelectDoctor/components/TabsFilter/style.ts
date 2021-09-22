@@ -1,5 +1,4 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
-import { bool } from 'yup';
 
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({

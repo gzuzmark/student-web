@@ -4,7 +4,7 @@ import { addHours, addMinutes, endOfDay, isWithinInterval, startOfDay } from 'da
 import { DoctorAvailability, Schedule } from 'pages/api';
 import useSelectDoctorParam from 'pages/SelectDoctor/hooks/useSelectDoctorParam';
 import { formatDoctor } from 'pages/SelectDoctor/utils';
-import React, { useCallback, useEffect, useState, useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { addGAEvent, getHour, getHumanDay } from 'utils';
@@ -12,7 +12,6 @@ import DoctorSessions from '../DoctorSessions/DoctorSessions';
 import { validSelectTimeWithNow } from '../FunctionsHelper';
 import { ModalErrorTime } from '../ModalErrorTime';
 import { SelectAppointmentOwner } from '../SelectAppointmentOwner';
-import TimeFrameFilter from '../TimeFilter/TimeFilter';
 import DetailedDoctorModal from './DetailedDoctorModal';
 import useStyles from './styles';
 
@@ -72,7 +71,7 @@ const DoctorListFilter = ({ doctors, shouldShowMoreDoctorInfo, onSeeMore }: Doct
 	const [isOpenModal, setIsOpenModal] = useState(false);
 	const [messageError, setMessageError] = useState('');
 	const [filteredDoctors, setFilteredDoctors] = useState<DoctorAvailability[]>(doctors);
-	const [timeFrameFilter, setTimeFrameFilter] = useState<string[]>([]);
+	const [timeFrameFilter] = useState<string[]>([]);
 
 	const history = useHistory();
 	const [params] = useSelectDoctorParam();
@@ -212,19 +211,6 @@ const DoctorListFilter = ({ doctors, shouldShowMoreDoctorInfo, onSeeMore }: Doct
 		[doctors, timeFrameFilter],
 	);
 
-	const onTimeFitlerChange = (filters: string[]) => {
-		console.group('filters');
-		console.log(filters);
-		console.groupEnd();
-		if (filters.length === 0) {
-			setTimeFrameFilter([]);
-			setFilteredDoctors(doctors);
-			return;
-		}
-		setTimeFrameFilter(filters);
-		filterDoctors(doctors);
-	};
-
 	useEffect(() => {
 		setActiveDoctorTime({ doctorID: '', scheduleID: '', scheduleIndex: -1, doctorIndex: -1 });
 		setDoctor(null);
@@ -272,9 +258,6 @@ const DoctorListFilter = ({ doctors, shouldShowMoreDoctorInfo, onSeeMore }: Doct
 							</Typography>
 						</div>
 					)}
-				</div>
-				<div className={classes.timeFilterList}>
-					<TimeFrameFilter onChange={onTimeFitlerChange} />
 				</div>
 			</div>
 			<div className={classes.doctorList}>
