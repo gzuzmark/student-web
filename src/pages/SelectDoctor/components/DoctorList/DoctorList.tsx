@@ -1,5 +1,5 @@
 import Typography from '@material-ui/core/Typography';
-import AppContext, { GUEST, MYSELF, PAYMENT_STEP, TimereFrameOptionsEnum } from 'AppContext';
+import AppContext, { getTimeFrameIntervals, GUEST, MYSELF, PAYMENT_STEP, TimereFrameOptionsEnum } from 'AppContext';
 import { isWithinInterval } from 'date-fns/esm';
 import { DoctorAvailability, Schedule } from 'pages/api';
 import useSelectDoctorParam from 'pages/SelectDoctor/hooks/useSelectDoctorParam';
@@ -15,7 +15,6 @@ import { SelectAppointmentOwner } from '../SelectAppointmentOwner';
 import TimeFrameFilter from '../TimeFilter/TimeFilter';
 import DetailedDoctorModal from './DetailedDoctorModal';
 import useStyles from './styles';
-import { getTimeFrameIntervals } from './utils';
 
 interface DoctorListProps {
 	doctors: DoctorAvailability[];

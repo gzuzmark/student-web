@@ -1,4 +1,5 @@
 import AppContext, {
+	getTimeFrameIntervals,
 	GroupedSchedules,
 	GUEST,
 	MYSELF,
