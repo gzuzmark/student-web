@@ -5,6 +5,10 @@ import { Doctor, Schedule } from 'pages/api/selectDoctor';
 import { Laboratorys, Schedules } from 'pages/api/laboratories';
 import { DoctorAvailability, DateSchedule } from './pages/api/selectDoctor';
 
+import { ReactComponent as SunIcon } from 'icons/sun.svg';
+import { ReactComponent as SunsetIcon } from 'icons/sunset.svg';
+import { ReactComponent as MoonIcon } from 'icons/moon.svg';
+
 export const EMPTY_TRACK_PARAMS = {
 	utmSource: '',
 	utmMedium: '',
@@ -45,6 +49,36 @@ export type AppointmentCreationStep =
 	| 'pre-signup'
 	| 'payment'
 	| 'confirmation';
+
+export enum TimereFrameOptionsEnum {
+	morning = 'morning',
+	afternoon = 'afternoon',
+	evening = 'evening',
+}
+
+export const timeFrames: FromTimeFrameOption = {
+	morning: { value: 'Mañana', icon: SunIcon },
+	afternoon: { value: 'Tarde', icon: SunsetIcon },
+	evening: { value: 'Noche', icon: MoonIcon },
+};
+
+export type TimeFrame = 'morning' | 'afternoon' | 'evening';
+export type FromTimeFrameOption = {
+	[k in TimeFrame]: TimeFrameOption;
+};
+export type FromTimeFrameIntervals = { [k in TimeFrame]: TimeFrameIntervals };
+
+export type GroupedSchedules = { [k in TimeFrame]?: Schedule[] };
+
+export interface TimeFrameOption {
+	value: string;
+	icon: React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>;
+}
+
+export interface TimeFrameIntervals {
+	start: Date;
+	end: Date;
+}
 
 interface AppProviderProps {
 	children: ReactElement;

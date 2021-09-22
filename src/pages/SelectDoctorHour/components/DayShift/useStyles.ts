@@ -7,7 +7,7 @@ const itemsDesktop = 5;
 const itemsMobile = 4;
 const itemsMobileXS = 3;
 
-const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
+const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) =>
 	createStyles({
 		container: {
 			flexDirection: 'column',
@@ -15,9 +15,15 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 			alignItems: 'center',
 		},
 		divTitle: {
+			display: 'flex',
+			alignItems: 'center',
 			padding: '4px 30px',
 			[breakpoints.down(MOBILE)]: {
 				padding: '4px 24px',
+			},
+			'& > svg': {
+				fill: '#1ECD96',
+				paddingRight: '8px',
 			},
 		},
 		title: {
