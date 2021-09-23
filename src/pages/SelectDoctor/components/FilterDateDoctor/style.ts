@@ -9,6 +9,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			alignItems: 'center',
 			paddingTop: '32px',
 			backgroundColor: '#FFFFFF',
+			[breakpoints.down('md')]: {
+				paddingTop: '20px',
+			},
 		},
 		titleDiv: {
 			fontFamily: 'Montserrat',
