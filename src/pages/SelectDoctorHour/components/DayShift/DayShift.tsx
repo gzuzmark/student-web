@@ -32,6 +32,10 @@ const DayShift = ({
 	const [activeSchedule, setActiveSchedule] = useState<string | null>(null);
 
 	const onClickSchedule = (id: string) => {
+		if (activeSchedule === id) {
+			setActiveSchedule(null);
+			return;
+		}
 		setActiveSchedule(id);
 		if (onActiveScheduleButton) {
 			onActiveScheduleButton();

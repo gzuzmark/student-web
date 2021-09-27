@@ -114,12 +114,13 @@ const DoctorList = ({ doctors, shouldShowMoreDoctorInfo, onSeeMore }: DoctorList
 	};
 
 	const selectDoctor = (doctorID: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => {
-		if (scheduleID !== '') {
+		if (scheduleID !== '' && scheduleID !== schedule?.id) {
 			setActiveDoctorTime({ doctorID, scheduleID, scheduleIndex, doctorIndex });
 			setDoctor(doctors[doctorIndex]);
+
 			setSchedule(doctors[doctorIndex].schedules[scheduleIndex]);
 		} else {
-			setActiveDoctorTime({ doctorID: '', scheduleID, scheduleIndex: -1, doctorIndex: -1 });
+			setActiveDoctorTime({ doctorID: '', scheduleID: '', scheduleIndex: -1, doctorIndex: -1 });
 			setDoctor(null);
 			setSchedule(null);
 		}

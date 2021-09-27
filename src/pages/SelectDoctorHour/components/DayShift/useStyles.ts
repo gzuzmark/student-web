@@ -22,7 +22,7 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }: Theme) =>
 				padding: '4px 24px',
 			},
 			'& > svg': {
-				fill: '#1ECD96',
+				fill: '#494F66',
 				paddingRight: '8px',
 			},
 		},
