@@ -13,6 +13,7 @@ import { DoctorList } from '../DoctorList';
 import FilterDateDoctor, { FilterType } from '../FilterDateDoctor/FilterDateDoctor';
 import useStyles from './styles';
 import DoctorListFilter from '../DoctorList/DoctorListFilter';
+import useAllDoctorsForUseCase from 'pages/SelectDoctor/hooks/useAllDoctorsForUseCase';
 interface RightSideProps {
 	useCaseId: string | null | undefined;
 	isUserLoggedIn?: boolean;
@@ -34,6 +35,7 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 	const [doctorsForDay, setDoctorsForDay] = useState<DoctorAvailability[]>([]);
 	const [isNextWeek, setIsNextWeek] = useState<boolean>(false);
 	const [isLoad, schedules] = useDoctorSchedules(useCaseId || '', startDateWeek);
+	const [allDoctors] = useAllDoctorsForUseCase(useCaseId || '');
 	const [valueFilter, setValueFilter] = useState<FilterType>('date');
 
 	const onSeeMore = (doctor: DoctorAvailability) => {
@@ -87,8 +89,8 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 		if (valueFilter === 'doctor') {
 			return (
 				<>
-					{doctorsForDay.length > 0 ? (
-						<DoctorListFilter doctors={doctorsForDay} shouldShowMoreDoctorInfo={true} onSeeMore={onSeeMore} />
+					{allDoctors.length > 0 ? (
+						<DoctorListFilter doctors={allDoctors} />
 					) : (
 						<div className={classes.emptyMessageWrapper}>
 							<Typography component="div" className={classes.emptyMessage}>
