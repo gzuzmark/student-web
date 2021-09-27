@@ -1,6 +1,6 @@
 import Typography from '@material-ui/core/Typography';
-import AppContext, { GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
-import { addHours, addMinutes, endOfDay, isWithinInterval, startOfDay } from 'date-fns/esm';
+import AppContext, { getTimeFrameIntervals, GUEST, MYSELF, PAYMENT_STEP, TimereFrameOptionsEnum } from 'AppContext';
+import { isWithinInterval } from 'date-fns/esm';
 import { DoctorAvailability, Schedule } from 'pages/api';
 import useSelectDoctorParam from 'pages/SelectDoctor/hooks/useSelectDoctorParam';
 import { formatDoctor } from 'pages/SelectDoctor/utils';
@@ -31,22 +31,6 @@ export interface ActiveDoctorTime {
 	doctorIndex: number;
 	scheduleIndex: number;
 }
-
-export enum TimereFrameOptionsEnum {
-	morning = 'morning',
-	afternoon = 'afternoon',
-	evening = 'evening',
-}
-
-export const getTimeFrameIntervals = (startTime: Date) => {
-	const dayStart = startOfDay(startTime);
-	const dayEnd = endOfDay(startTime);
-	return {
-		morning: { start: startOfDay(startTime), end: addHours(addMinutes(dayStart, 59), 12) },
-		afternoon: { start: addHours(dayStart, 13), end: addHours(addMinutes(dayStart, 59), 16) },
-		evening: { start: addHours(dayStart, 17), end: dayEnd },
-	};
-};
 
 const isIntervalSelected = (timeFrameFilter: string[], interval: string) =>
 	timeFrameFilter.some((filter) => filter === interval);
@@ -130,12 +114,13 @@ const DoctorList = ({ doctors, shouldShowMoreDoctorInfo, onSeeMore }: DoctorList
 	};
 
 	const selectDoctor = (doctorID: string, doctorIndex: number) => (scheduleID: string, scheduleIndex: number) => {
-		if (scheduleID !== '') {
+		if (scheduleID !== '' && scheduleID !== schedule?.id) {
 			setActiveDoctorTime({ doctorID, scheduleID, scheduleIndex, doctorIndex });
 			setDoctor(doctors[doctorIndex]);
+
 			setSchedule(doctors[doctorIndex].schedules[scheduleIndex]);
 		} else {
-			setActiveDoctorTime({ doctorID: '', scheduleID, scheduleIndex: -1, doctorIndex: -1 });
+			setActiveDoctorTime({ doctorID: '', scheduleID: '', scheduleIndex: -1, doctorIndex: -1 });
 			setDoctor(null);
 			setSchedule(null);
 		}
