@@ -69,9 +69,16 @@ const DoctorListFilter = ({ doctors }: DoctorListFilterProps) => {
 				</div>
 			</div>
 			<div className={classes.doctorList}>
-				{doctors.map((doctor: DoctorAvailabilityUseCase, doctorIndex: number) => (
-					<DoctorAvailable key={doctorIndex} doctor={doctor} />
-				))}
+				{doctors
+					.filter((doctor: DoctorAvailabilityUseCase) => doctor.hasSchedules)
+					.map((doctor: DoctorAvailabilityUseCase, doctorIndex: number) => (
+						<DoctorAvailable key={doctorIndex} doctor={doctor} />
+					))}
+				{doctors
+					.filter((doctor: DoctorAvailabilityUseCase) => !doctor.hasSchedules)
+					.map((doctor: DoctorAvailabilityUseCase, doctorIndex: number) => (
+						<DoctorAvailable key={doctorIndex} doctor={doctor} />
+					))}
 			</div>
 		</div>
 	);
