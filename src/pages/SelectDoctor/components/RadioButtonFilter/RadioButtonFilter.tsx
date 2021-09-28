@@ -1,6 +1,8 @@
 import React from 'react';
 import { FilterType } from '../FilterDateDoctor/FilterDateDoctor';
 import useStyles from './style';
+import { ReactComponent as RadioButton } from 'icons/radioButton.svg';
+import { ReactComponent as RadioButtonActive } from 'icons/radioButtonActive.svg';
 
 export interface RadioButtonFilterProps {
 	value: FilterType;
@@ -13,21 +15,32 @@ const RadioButtonFilter = ({ value, onChangeFilter }: RadioButtonFilterProps) =>
 	return (
 		<div className={classes.container}>
 			<div className={classes.radioItem} onClick={() => onChangeFilter('date')}>
-				<input className={classes.itemRadio} type="radio" id="radioDate" name="inputRadio" checked={value === 'date'} />
-				<label className={classes.labelItem} htmlFor="radioDate">
+				{/*<input className={classes.itemRadio} type="radio" id="radioDate" name="inputRadio" checked={value === 'date'} />*/}
+				{value === 'date' ? (
+					<RadioButtonActive className={classes.itemRadio} />
+				) : (
+					<RadioButton className={classes.itemRadio} />
+				)}
+				{/*<RadioButton className={classes.itemRadio}/>*/}
+				<label className={value === 'date' ? classes.labelItemActive : classes.labelItem} htmlFor="radioDate">
 					Por Fecha
 				</label>
 			</div>
 
 			<div className={classes.radioItem} onClick={() => onChangeFilter('doctor')}>
-				<input
-					className={classes.itemRadio}
-					type="radio"
-					id="radioDoctor"
-					name="inputRadio"
-					checked={value === 'doctor'}
-				/>
-				<label className={classes.labelItem} htmlFor="radioDoctor">
+				{/*<input*/}
+				{/*	className={classes.itemRadio}*/}
+				{/*	type="radio"*/}
+				{/*	id="radioDoctor"*/}
+				{/*	name="inputRadio"*/}
+				{/*	checked={value === 'doctor'}*/}
+				{/*/>*/}
+				{value === 'doctor' ? (
+					<RadioButtonActive className={classes.itemRadio} />
+				) : (
+					<RadioButton className={classes.itemRadio} />
+				)}
+				<label className={value === 'doctor' ? classes.labelItemActive : classes.labelItem} htmlFor="radioDoctor">
 					Por Médico
 				</label>
 			</div>
