@@ -29,11 +29,11 @@ import useStyles from './useStyles';
 
 const SelectDoctorHour = () => {
 	const classes = useStyles();
-	const [params] = useSelectDoctorHourParams();
+	const [doctorId, dataContext] = useSelectDoctorHourParams();
 
 	const [startDate, setStartDate] = useState<Date | null>(null);
-	const [isLoad, dataDoctor] = useScheduleWeek(params?.useCase, params?.doctor.id, startDate);
-	const [doctor, setDoctor] = useState<DoctorAvailability | null>(params?.doctor || null);
+	const [isLoad, dataDoctor] = useScheduleWeek(doctorId, startDate);
+	const [doctor, setDoctor] = useState<DoctorAvailability | null>(dataContext?.doctor || null);
 
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -125,17 +125,6 @@ const SelectDoctorHour = () => {
 		}
 	};
 
-	// const filterArray = (array, filters) => {
-	// 	const filterKeys = Object.keys(filters);
-	// 	return array.filter((item) => {
-	// 		// validates all filter criteria
-	// 		return filterKeys.every((key) => {
-	// 			// ignores non-function predicates
-	// 			if (typeof filters[key] !== 'function') return true;
-	// 			return filters[key](item[key]);
-	// 		});
-	// 	});
-	// };
 	const isInsideIntervalRange = (day: Date, startTime: Date, endTime: Date) => {
 		return isWithinInterval(day, {
 			start: startTime,
@@ -174,14 +163,19 @@ const SelectDoctorHour = () => {
 	);
 
 	useEffect(() => {
-		if (params) {
-			const { doctor, listDates, isNextDays, selectDate } = params;
-			setDoctor(doctor);
-			setListDates(listDates);
-			setSelectedDate(selectDate);
-			setIsNextWeek(isNextDays);
+		if (dataContext !== undefined) {
+			console.log('data context', dataContext);
+			if (dataContext) {
+				const { doctor, listDates, isNextDays, selectDate } = dataContext;
+				setDoctor(doctor);
+				setListDates(listDates);
+				setSelectedDate(selectDate);
+				setIsNextWeek(isNextDays);
+			} else {
+				setStartDate(new Date());
+			}
 		}
-	}, [params]);
+	}, [dataContext]);
 
 	useEffect(() => {
 		if (selectedDate == null) {
@@ -198,14 +192,17 @@ const SelectDoctorHour = () => {
 	useEffect(() => {
 		if (dataDoctor != null) {
 			const { doctor, dates, isNextDays } = dataDoctor;
+			setDoctor(doctor);
 			setListDates(dates);
 			setIsNextWeek(isNextDays);
-			setDoctor(doctor);
 		}
 	}, [dataDoctor]);
 
 	if (!doctor) {
-		return <></>;
+		if (isLoad) {
+			return <Loading loadingMessage="Buscando información..." />;
+		}
+		return <div>Doctor not found</div>;
 	}
 
 	return (

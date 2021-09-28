@@ -7,11 +7,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) =>
 			paddingLeft: '0px !important',
 		},
 		wrapper: {
-			paddingTop: '26px',
-			[breakpoints.up('lg')]: {
-				paddingTop: '50px',
-				// paddingRight: '104px',
-			},
+			// paddingTop: '26px',
+			// [breakpoints.up('lg')]: {
+			// 	paddingTop: '32px',
+			// 	// paddingRight: '104px',
+			// },
 		},
 		titleContainer: {
 			textAlign: 'center',
