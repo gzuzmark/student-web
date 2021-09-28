@@ -14,7 +14,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			},
 		},
 		titleDiv: {
-			fontFamily: 'Montserrat',
+			fontFamily: 'Mulish, sans-serif',
 			fontStyle: 'normal',
 			fontWeight: 500,
 			fontSize: '26px',

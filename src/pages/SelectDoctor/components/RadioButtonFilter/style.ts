@@ -13,6 +13,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		labelItem: {
 			color: '#A3ABCC',
 			fontSize: '16px',
+			fontFamily: 'Mulish, sans-serif',
 		},
 		radioItem: {
 			margin: '15px 10px',
@@ -22,7 +23,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			'&:checked': {
 				background: 'radial-gradient(red 0%, teal 40%, transparent 50%, transparent)',
 				borderColor: 'teal',
+				backgroundColor: 'red',
 			},
+
 			'&::before': {
 				// content: '""',
 				// display: 'inline-block',

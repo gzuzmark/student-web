@@ -2,7 +2,8 @@ import clsx from 'clsx';
 import { DoctorAvailabilityUseCase } from 'pages/api';
 import React from 'react';
 import { DoctorHeader } from '../DoctorHeader';
-import useStyles from '../DoctorList/styles';
+import useStyles from './styles';
+import Button from '@material-ui/core/Button';
 
 interface DoctorAvailableProps {
 	className?: string;
@@ -17,7 +18,16 @@ const DoctorAvailable = ({ className, doctor }: DoctorAvailableProps) => {
 	return (
 		<div className={clsx(classes.doctorWrapper, className)}>
 			<DoctorHeader doctor={doctor} />
-			<span>{doctor.hasSchedules ? 'tiene horarios' : 'no tiene horarios'}</span>
+			{/*<span>{doctor.hasSchedules ? 'tiene horarios' : 'no tiene horarios'}</span>*/}
+
+			<Button
+				fullWidth
+				className={doctor.hasSchedules ? classes.continueButton : classes.buttonDisabled}
+				variant="contained"
+				disabled={!doctor.hasSchedules}
+			>
+				{doctor.hasSchedules ? 'Ver horarios' : 'No hay horarios horarios disponibles'}
+			</Button>
 		</div>
 	);
 };
