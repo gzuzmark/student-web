@@ -42,6 +42,7 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 		const doctorSelected = doctors.find((doc) => doc.id === doctor.id);
 		if (doctorSelected) {
 			const data: SelectDoctorSchedule = {
+				doctorId: undefined,
 				useCase: useCaseId || '',
 				doctor: doctorSelected,
 				listDates: listDates,
@@ -52,7 +53,10 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 				updateState({
 					selectDoctorSchedule: data,
 				});
-				history.push('/seleccionar_doctor_ver_mas');
+				history.push({
+					pathname: '/seleccionar_doctor_ver_mas',
+					search: `doctor=${doctorSelected.id}`,
+				});
 			}
 		}
 	};
