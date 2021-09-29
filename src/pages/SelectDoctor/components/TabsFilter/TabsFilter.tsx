@@ -19,8 +19,13 @@ const TabsFilter = ({ value, onChangeFilter }: TabsFilterProps) => {
 		<div className={classes.container}>
 			<Box css={{ width: '100%' }}>
 				<Tabs value={value === 'date' ? 0 : 1} onChange={handleTabs} indicatorColor={'primary'} className={classes.tab}>
-					<Tab label="Por Fechas" classes={{ selected: classes.selectedTab }} id="1" className={classes.itemTab} />
-					<Tab label="Por Médicos" classes={{ selected: classes.selectedTab }} id="2" className={classes.itemTab} />
+					<Tab label="Por Fechas" classes={{ selected: classes.selectedTab }} id="1" className={classes.itemTab}></Tab>
+					<Tab
+						label="Por especialistas"
+						classes={{ selected: classes.selectedTab }}
+						id="2"
+						className={classes.itemTab}
+					></Tab>
 				</Tabs>
 			</Box>
 		</div>

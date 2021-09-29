@@ -7,12 +7,11 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			width: '100%',
 			marginTop: '15px',
 		},
-		tabs: {},
 		tab: {
 			fontFamily: 'Mulish, sans-serif',
 
 			'& .MuiTab-root': {
-				textTransform: 'capitalize',
+				textTransform: 'initial',
 				width: '50%',
 				maxWidth: '500px',
 				fontSize: '16px',
@@ -32,7 +31,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		},
 		selectedTab: {
 			color: '#1ECD96 !important',
-			fontWeight: 900,
+			// fontWeight: ['bold'],
+			fontWeight: 'bold',
+			// fontWeightRegular:
 		},
 	}),
 );
