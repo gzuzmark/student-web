@@ -20,7 +20,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			},
 		},
 		itemTab: {
-			fontFamily: 'Mulish, sans-serif',
+			fontFamily: 'Mulish, sans-serif !important',
 		},
 		titleDiv: {
 			display: 'flex',
@@ -31,8 +31,8 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			width: '100%',
 		},
 		selectedTab: {
-			color: '#1ECD96',
-			fontWeight: 'bold',
+			color: '#1ECD96 !important',
+			fontWeight: 900,
 		},
 	}),
 );
