@@ -1,12 +1,48 @@
 import React from 'react';
-import useStyles from './style';
-import { Tabs, Tab, Box } from '@material-ui/core';
+// import useStyles from './style';
+import { Tabs, Tab, Box, makeStyles } from '@material-ui/core';
 import { FilterType } from '../FilterDateDoctor/FilterDateDoctor';
 
 export interface TabsFilterProps {
 	value: FilterType;
 	onChangeFilter: (value: FilterType) => void;
 }
+
+const useStyles = makeStyles((theme) => ({
+	container: {
+		display: 'flex',
+		width: '100%',
+		marginTop: '15px',
+	},
+	tab: {
+		fontFamily: 'Mulish, sans-serif',
+
+		'& .MuiTab-root': {
+			textTransform: 'initial',
+			width: '50%',
+			maxWidth: '500px',
+			fontSize: '16px',
+			//backgroundColor: "orange"
+		},
+	},
+	itemTab: {
+		fontFamily: 'Mulish, sans-serif !important',
+	},
+	titleDiv: {
+		display: 'flex',
+		flex: 1,
+		justifyContent: 'center',
+	},
+	'MuiBox-root': {
+		width: '100%',
+	},
+	selectedTab: {
+		color: '#1ECD96 !important',
+		// fontWeight: ['bold'],
+		fontWeight: 'bold',
+		// fontWeightRegular:
+	},
+}));
 
 const TabsFilter = ({ value, onChangeFilter }: TabsFilterProps) => {
 	const classes = useStyles();
