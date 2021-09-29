@@ -1,4 +1,9 @@
-import { DoctorAvailableSchedules, getNextAvailableSchedules, NextAvailableSchedules, validWeek } from 'pages/api';
+import {
+	DoctorAvailableSchedules,
+	getAvailableSchedulesByDoctorId,
+	NextAvailableSchedules,
+	validWeek,
+} from 'pages/api';
 import { useEffect, useState } from 'react';
 
 const filterDataByDoctorId = (
@@ -17,7 +22,6 @@ const filterDataByDoctorId = (
 };
 
 const useScheduleWeek = (
-	useCaseId: string | undefined,
 	doctorId: string | undefined,
 	startDate: Date | null,
 ): [boolean, DoctorAvailableSchedules | null] => {
@@ -25,16 +29,16 @@ const useScheduleWeek = (
 	const [isLoad, setIsLoad] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (useCaseId && doctorId && startDate != null) {
+		if (doctorId && startDate != null) {
 			setIsLoad(true);
-			getNextAvailableSchedules(useCaseId, startDate).then((response: NextAvailableSchedules) => {
+			getAvailableSchedulesByDoctorId(doctorId, startDate).then((response: NextAvailableSchedules) => {
 				if (response) {
 					setData(filterDataByDoctorId(response, doctorId, startDate));
 					setIsLoad(false);
 				}
 			});
 		}
-	}, [useCaseId, doctorId, startDate]);
+	}, [doctorId, startDate]);
 
 	return [isLoad, data];
 };

@@ -112,7 +112,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	textSelected: {
 		color: '#ffffff',
-		fontWeight: '700',
+		fontWeight: '800',
 	},
 }));
 
