@@ -7,7 +7,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			flexDirection: 'column',
 			justifyContent: 'center',
 			alignItems: 'center',
-			padding: '30px 0px',
+			// padding: '30px 0px',
 			backgroundColor: '#ffffff',
 		},
 		carousel: {
@@ -16,6 +16,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			justifyContent: 'center',
 			alignItems: 'center',
 			padding: '0px',
+			margin: '10px 0 30px 0',
 			// width: '582px',
 			// height: '68px',
 		},
