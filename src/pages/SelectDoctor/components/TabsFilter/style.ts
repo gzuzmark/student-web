@@ -9,6 +9,8 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		},
 		tabs: {},
 		tab: {
+			fontFamily: 'Mulish, sans-serif',
+
 			'& .MuiTab-root': {
 				textTransform: 'capitalize',
 				width: '50%',
@@ -17,7 +19,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				//backgroundColor: "orange"
 			},
 		},
-
+		itemTab: {
+			fontFamily: 'Mulish, sans-serif',
+		},
 		titleDiv: {
 			display: 'flex',
 			flex: 1,

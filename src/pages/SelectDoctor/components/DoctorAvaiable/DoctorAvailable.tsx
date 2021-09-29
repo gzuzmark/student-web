@@ -34,7 +34,7 @@ const DoctorAvailable = ({ className, doctor }: DoctorAvailableProps) => {
 				disabled={!doctor.hasSchedules}
 				onClick={redirectToVerMas}
 			>
-				{doctor.hasSchedules ? 'Ver horarios' : 'No hay horarios horarios disponibles'}
+				{doctor.hasSchedules ? 'Ver horarios' : 'No hay horarios disponibles'}
 			</Button>
 		</div>
 	);
