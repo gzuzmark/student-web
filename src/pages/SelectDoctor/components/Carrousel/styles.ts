@@ -9,6 +9,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			alignItems: 'center',
 			// padding: '30px 0px',
 			backgroundColor: '#ffffff',
+			[breakpoints.down('xs')]: {
+				padding: '30px 0px',
+			},
 		},
 		carousel: {
 			display: 'flex',
@@ -16,9 +19,12 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			justifyContent: 'center',
 			alignItems: 'center',
 			padding: '0px',
-			margin: '10px 0 30px 0',
+
 			// width: '582px',
 			// height: '68px',
+			[breakpoints.up('md')]: {
+				margin: '10px 0 30px 0',
+			},
 		},
 		arrow: {
 			display: 'flex',
