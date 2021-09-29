@@ -40,9 +40,10 @@ const useStyles = makeStyles((theme) => ({
 	selectedTab: {
 		color: '#1ECD96 !important',
 		fontWeight: 'bold',
+		height: '5px',
 	},
 	flexContainer: {
-		borderBottom: '4px solid #F7F8FC',
+		borderBottom: '3px solid #F7F8FC',
 	},
 }));
 
