@@ -21,7 +21,7 @@ const RadioButtonFilter = ({ value, onChangeFilter }: RadioButtonFilterProps) =>
 					<RadioButton className={classes.itemRadio} />
 				)}
 				<label className={value === 'date' ? classes.labelItemActive : classes.labelItem} htmlFor="radioDate">
-					Por Fecha
+					Por fechas
 				</label>
 			</div>
 
