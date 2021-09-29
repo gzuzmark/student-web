@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	itemTab: {
 		fontFamily: 'Mulish, sans-serif !important',
+		color: '#A3ABCC',
 	},
 	titleDiv: {
 		display: 'flex',
@@ -38,9 +39,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 	selectedTab: {
 		color: '#1ECD96 !important',
-		// fontWeight: ['bold'],
 		fontWeight: 'bold',
-		// fontWeightRegular:
+	},
+	flexContainer: {
+		borderBottom: '4px solid #F7F8FC',
 	},
 }));
 
@@ -55,7 +57,13 @@ const TabsFilter = ({ value, onChangeFilter }: TabsFilterProps) => {
 	return (
 		<div className={classes.container}>
 			<Box css={{ width: '100%' }}>
-				<Tabs value={value === 'date' ? 0 : 1} onChange={handleTabs} indicatorColor={'primary'} className={classes.tab}>
+				<Tabs
+					value={value === 'date' ? 0 : 1}
+					onChange={handleTabs}
+					indicatorColor={'primary'}
+					className={classes.tab}
+					classes={{ flexContainer: classes.flexContainer }}
+				>
 					<Tab label="Por fechas" classes={{ selected: classes.selectedTab }} id="1" className={classes.itemTab}></Tab>
 					<Tab
 						label="Por especialistas"
