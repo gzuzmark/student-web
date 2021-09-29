@@ -26,6 +26,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 				margin: '10px 0 30px 0',
 			},
 		},
+
 		arrow: {
 			display: 'flex',
 			justifyContent: 'center',
