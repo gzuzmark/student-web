@@ -13,7 +13,13 @@ const filterDataByDoctorId = (
 ): DoctorAvailableSchedules => {
 	const { doctors, isNextDays } = data;
 	const doctorsFilter = doctors.filter((doctor) => doctor.id === doctorId);
-	const dates = validWeek(doctorsFilter, startDate);
+	let startD = new Date();
+	const doctorsDateFilter = doctors.filter((doctor) => {
+		return (startD = new Date(doctor.schedules[0].startTime));
+	});
+
+	const dates = validWeek(doctorsFilter, startD);
+	console.log(startDate, 'start date 22222222222222222222222222222222222222222');
 	return {
 		doctor: doctorsFilter.length > 0 ? doctorsFilter[0] : null,
 		dates: dates,

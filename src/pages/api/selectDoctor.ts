@@ -247,11 +247,11 @@ export const getNextAvailableSchedules = async (
 	const { data } = response;
 	const parsedDoctorsData = parseResponseData(data.data.doctors);
 	const dates = validWeek(parsedDoctorsData, startDate);
-
+	console.log(data.data.status, 'data');
 	return {
 		doctors: parsedDoctorsData,
 		dates: dates,
-		isNextDays: data.data.dates.length > 7,
+		isNextDays: data.data.status,
 	};
 };
 
@@ -262,7 +262,8 @@ export const getAvailableSchedulesByDoctorId = async (doctorId: string, startDat
 	});
 	const { data } = response;
 	const parsedDoctorsData = parseResponseData(data.data.doctors);
-	const dates = validWeek(parsedDoctorsData, startDate);
+	console.log(data.data.dates[0], 'fecha');
+	const dates = validWeek(parsedDoctorsData, new Date(data.data.dates[0]));
 
 	return {
 		doctors: parsedDoctorsData,
@@ -273,6 +274,7 @@ export const getAvailableSchedulesByDoctorId = async (doctorId: string, startDat
 
 export const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
 	const listWeek = completeWeek(startDate);
+	console.log(listWeek, 'lista semana');
 	return listWeek.map<DateSchedule>((dateWeek: Date) => {
 		const hasSessions = doctors.filter((doctor: DoctorAvailability) => {
 			const days = doctor.schedules.filter((schedule) => isSameDay(schedule.startTime, dateWeek));
@@ -286,6 +288,7 @@ export const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
 };
 
 const completeWeek = (startDate: Date) => {
+	console.log(startDate, 'startdate');
 	return [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(startDate, i));
 };
 
