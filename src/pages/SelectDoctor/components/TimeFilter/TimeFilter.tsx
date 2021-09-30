@@ -1,20 +1,13 @@
 import React, { useState } from 'react';
 
 import { ReactComponent as FilterIcon } from 'icons/filter.svg';
-import { ReactComponent as SunIcon } from 'icons/sun.svg';
-import { ReactComponent as SunsetIcon } from 'icons/sunset.svg';
-import { ReactComponent as MoonIcon } from 'icons/moon.svg';
-// import filter from 'icons/filter.png';
 import useStyles from './styles';
 
-// import ToggleButton from '@material-ui/lab/ToggleButton';
-// import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-// import { ButtonGroup } from '../ButtonGroup/ButtonGroup';
-// import { Button, withStyles } from '@material-ui/core';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { createStyles, withStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core/styles';
+import { timeFrames } from 'AppContext';
 
 const BootstrapButton = withStyles((theme: Theme) =>
 	createStyles({
@@ -117,16 +110,13 @@ const TimeFrameFilter = ({ onChange }: TimeFrameFilterProps) => {
 				<FilterIcon />
 			</div>
 			<StyledToggleButtonGroup size="small" value={formats} onChange={handleFormat} aria-label="text formatting">
-				<BootstrapButton value="morning" aria-label="morning" disableRipple>
-					<SunIcon /> <p>Mañana</p>
-				</BootstrapButton>
-				<BootstrapButton value="afternoon" aria-label="afternoon" disableRipple>
-					<SunsetIcon /> <p>Tarde</p>
-				</BootstrapButton>
-				<BootstrapButton value="evening" aria-label="evening" disableRipple>
-					<MoonIcon />
-					<p>Noche</p>
-				</BootstrapButton>
+				{Object.entries(timeFrames).map(([time, timeOption]) => {
+					return (
+						<BootstrapButton key={time} value={time} aria-label={time} disableRipple>
+							{timeOption.icon ? <timeOption.icon /> : null} <p>{timeOption.value}</p>
+						</BootstrapButton>
+					);
+				})}
 			</StyledToggleButtonGroup>
 		</>
 	);

@@ -127,6 +127,18 @@ const AboutMeForm = ({
 								fullWidth
 							/>
 						</div>
+						<FormControl className={classes.fieldWrapper} fullWidth>
+							<Field
+								component={TextField}
+								label={t('aboutme.fields.gender.label')}
+								name="gender"
+								variant="outlined"
+								select
+							>
+								<MenuItem value={0}>Masculino</MenuItem>
+								<MenuItem value={1}>Femenino</MenuItem>
+							</Field>
+						</FormControl>
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={DatePickerField}
@@ -142,18 +154,7 @@ const AboutMeForm = ({
 								}}
 							/>
 						</div>
-						<FormControl className={classes.fieldWrapper} fullWidth>
-							<Field
-								component={TextField}
-								label={t('aboutme.fields.gender.label')}
-								name="gender"
-								variant="outlined"
-								select
-							>
-								<MenuItem value={0}>Masculino</MenuItem>
-								<MenuItem value={1}>Femenino</MenuItem>
-							</Field>
-						</FormControl>
+
 						{userLabelExists ? (
 							<>
 								<div className={classes.fieldWrapper}>

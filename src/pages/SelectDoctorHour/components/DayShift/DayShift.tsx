@@ -8,6 +8,8 @@ import useStyles from './useStyles';
 export type ShiftType = 'all' | '' | '';
 
 export interface DayShiftProps {
+	title?: string;
+	icon: React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>;
 	shift?: ShiftType;
 	schedules: Schedule[];
 	showButtonContinue: boolean;
@@ -15,13 +17,25 @@ export interface DayShiftProps {
 	onClickContinueButton: (schedule: Schedule) => void;
 }
 
-const DayShift = ({ schedules, showButtonContinue, onActiveScheduleButton, onClickContinueButton }: DayShiftProps) => {
+const DayShift = ({
+	schedules,
+	showButtonContinue,
+	onActiveScheduleButton,
+	onClickContinueButton,
+	title,
+	icon,
+}: DayShiftProps) => {
 	const { t } = useTranslation('selectDoctor');
+	const DayShiftIcon = icon;
 	const classes = useStyles();
 
 	const [activeSchedule, setActiveSchedule] = useState<string | null>(null);
 
 	const onClickSchedule = (id: string) => {
+		if (activeSchedule === id) {
+			setActiveSchedule(null);
+			return;
+		}
 		setActiveSchedule(id);
 		if (onActiveScheduleButton) {
 			onActiveScheduleButton();
@@ -50,7 +64,8 @@ const DayShift = ({ schedules, showButtonContinue, onActiveScheduleButton, onCli
 	return (
 		<div className={classes.container}>
 			<div className={classes.divTitle}>
-				<Typography className={classes.title}>Todos los turnos</Typography>
+				{icon ? <DayShiftIcon /> : null}
+				<Typography className={classes.title}>{title}</Typography>
 			</div>
 			<div className={classes.divider} />
 			<div className={classes.divSchedule}>

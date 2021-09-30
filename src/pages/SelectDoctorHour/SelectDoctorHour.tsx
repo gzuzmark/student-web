@@ -1,5 +1,15 @@
-import AppContext, { GUEST, MYSELF, PAYMENT_STEP } from 'AppContext';
+import AppContext, {
+	getTimeFrameIntervals,
+	GroupedSchedules,
+	GUEST,
+	MYSELF,
+	PAYMENT_STEP,
+	TimeFrame,
+	timeFrames,
+	TimereFrameOptionsEnum,
+} from 'AppContext';
 import { isSameDay } from 'date-fns';
+import { isWithinInterval } from 'date-fns/esm';
 import { Loading } from 'pages';
 import { DateSchedule, DoctorAvailability, Schedule } from 'pages/api';
 import Carrousel from 'pages/SelectDoctor/components/Carrousel/Carrousel';
@@ -8,7 +18,7 @@ import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsH
 import { ModalErrorTime } from 'pages/SelectDoctor/components/ModalErrorTime';
 import { SelectAppointmentOwner } from 'pages/SelectDoctor/components/SelectAppointmentOwner';
 import { formatDoctor } from 'pages/SelectDoctor/utils';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { addGAEvent, getHour, getHumanDay } from 'utils';
 import DayShift from './components/DayShift/DayShift';
@@ -19,16 +29,16 @@ import useStyles from './useStyles';
 
 const SelectDoctorHour = () => {
 	const classes = useStyles();
-	const [params] = useSelectDoctorHourParams();
+	const [doctorId, dataContext] = useSelectDoctorHourParams();
 
 	const [startDate, setStartDate] = useState<Date | null>(null);
-	const [isLoad, dataDoctor] = useScheduleWeek(params?.useCase, params?.doctor.id, startDate);
-	const [doctor, setDoctor] = useState<DoctorAvailability | null>(params?.doctor || null);
+	const [isLoad, dataDoctor] = useScheduleWeek(doctorId, startDate);
+	const [doctor, setDoctor] = useState<DoctorAvailability | null>(dataContext?.doctor || null);
 
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 	const [isNextWeek, setIsNextWeek] = useState<boolean>(false);
-	const [schedulesForDay, setSchedulesForDay] = useState<Schedule[]>([]);
+	const [groupedSchedulesForDay, setGroupedSchedulesForDay] = useState<GroupedSchedules>({});
 	const [activeShift, setActiveShift] = useState<number | null>(null);
 
 	const [isSelectOwnerOpen, setSelectOwnerOpen] = useState<boolean>(false);
@@ -64,7 +74,6 @@ const SelectDoctorHour = () => {
 
 			// params.showSmallSignUp
 			if (false) {
-				history.push('/informacion_paciente');
 			} else if (isForSomeoneElse || !isUserLoggedIn) {
 				history.push('/registro/sobre_ti');
 			} else if (!isForSomeoneElse && isUserLoggedIn) {
@@ -116,38 +125,84 @@ const SelectDoctorHour = () => {
 		}
 	};
 
+	const isInsideIntervalRange = (day: Date, startTime: Date, endTime: Date) => {
+		return isWithinInterval(day, {
+			start: startTime,
+			end: endTime,
+		});
+	};
+
+	const getTimeFrame = useCallback(
+		(startTime: Date): TimeFrame => {
+			const intervals = getTimeFrameIntervals(selectedDate || new Date());
+			return isInsideIntervalRange(startTime, intervals.morning.start, intervals.morning.end)
+				? TimereFrameOptionsEnum.morning
+				: isInsideIntervalRange(startTime, intervals.afternoon.start, intervals.afternoon.end)
+				? TimereFrameOptionsEnum.afternoon
+				: TimereFrameOptionsEnum.evening;
+		},
+		[selectedDate],
+	);
+
+	const groupByTimeFrame = useCallback(
+		(schedules: Schedule[] = []) => {
+			const groupedSchedules: GroupedSchedules = {};
+			schedules.forEach((schedule: Schedule) => {
+				const { startTime } = schedule;
+				const time = getTimeFrame(startTime);
+				if (groupedSchedules[time]) {
+					groupedSchedules[time]?.push(schedule);
+				} else {
+					groupedSchedules[time] = [schedule];
+				}
+			});
+
+			return groupedSchedules;
+		},
+		[getTimeFrame],
+	);
+
 	useEffect(() => {
-		if (params) {
-			const { doctor, listDates, isNextDays, selectDate } = params;
-			setDoctor(doctor);
-			setListDates(listDates);
-			setSelectedDate(selectDate);
-			setIsNextWeek(isNextDays);
+		if (dataContext !== undefined) {
+			console.log('data context', dataContext);
+			if (dataContext) {
+				const { doctor, listDates, isNextDays, selectDate } = dataContext;
+				setDoctor(doctor);
+				setListDates(listDates);
+				setSelectedDate(selectDate);
+				setIsNextWeek(isNextDays);
+			} else {
+				setStartDate(new Date());
+			}
 		}
-	}, [params]);
+	}, [dataContext]);
 
 	useEffect(() => {
 		if (selectedDate == null) {
-			setSchedulesForDay([]);
+			setGroupedSchedulesForDay({});
 		} else {
 			const filterSchedules = doctor?.schedules.filter(({ startTime }: Schedule) => {
 				return isSameDay(startTime, selectedDate);
 			});
-			setSchedulesForDay(filterSchedules || []);
+			const groupedSchedules = groupByTimeFrame(filterSchedules);
+			setGroupedSchedulesForDay(groupedSchedules);
 		}
-	}, [doctor, selectedDate]);
+	}, [doctor, groupByTimeFrame, selectedDate]);
 
 	useEffect(() => {
 		if (dataDoctor != null) {
 			const { doctor, dates, isNextDays } = dataDoctor;
+			setDoctor(doctor);
 			setListDates(dates);
 			setIsNextWeek(isNextDays);
-			setDoctor(doctor);
 		}
 	}, [dataDoctor]);
 
 	if (!doctor) {
-		return <></>;
+		if (isLoad) {
+			return <Loading loadingMessage="Buscando información..." />;
+		}
+		return <div>Doctor not found</div>;
 	}
 
 	return (
@@ -168,12 +223,14 @@ const SelectDoctorHour = () => {
 					<Loading loadingMessage="Buscando disponibilidad..." />
 				) : (
 					<>
-						{[0].map((i) => (
+						{Object.entries(groupedSchedulesForDay).map(([key, schedules], index) => (
 							<DayShift
-								key={i}
-								schedules={schedulesForDay}
-								showButtonContinue={activeShift === i}
-								onActiveScheduleButton={() => setActiveShift(i)}
+								key={key}
+								title={timeFrames[key as keyof GroupedSchedules].value}
+								icon={timeFrames[key as keyof GroupedSchedules].icon}
+								schedules={schedules || []}
+								showButtonContinue={activeShift === index}
+								onActiveScheduleButton={() => setActiveShift(index)}
 								onClickContinueButton={continueToPreRegister}
 							/>
 						))}

@@ -17,7 +17,7 @@ const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpeci
 	const classes = useStyles();
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up(MIN_DESKTOP));
 	const isMobile = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('xs'));
-	const isTablet = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down('lg'));
+	const isTablet = useMediaQuery(({ breakpoints }: Theme) => breakpoints.between(500, 700));
 	const isXsMobile = useMediaQuery(({ breakpoints }: Theme) => breakpoints.down(400));
 	const history = useHistory();
 	const [skills, setSkills] = useState<SpecialtyType[]>([]);
@@ -40,7 +40,7 @@ const ModalSpecialties = ({ isOpen, onCloseModal, defaultSpecialty }: ModalSpeci
 	};
 
 	useEffect(() => {
-		console.log(isXsMobile, isMobile, isTablet, isDesktop);
+		console.log(isXsMobile, isMobile, 'tablet:', isTablet, isDesktop);
 	}, [isXsMobile, isMobile, isTablet, isDesktop]);
 
 	useEffect(() => {
