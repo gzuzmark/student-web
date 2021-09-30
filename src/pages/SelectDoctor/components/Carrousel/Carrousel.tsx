@@ -56,7 +56,12 @@ const Carrousel = ({
 			if (onBackWeek) {
 				const firstSchedule: DateSchedule = dates[0];
 				const { date } = firstSchedule;
-				const firstDate = addDays(date, (maxItems - 1) * -1);
+				let firstDate = new Date();
+				if (mode === 'short') {
+					firstDate = addDays(date, (maxItems - 1) * -1);
+				} else {
+					firstDate = addDays(date, (maxItems - 1) * -1);
+				}
 				onBackWeek(firstDate);
 			}
 		}
@@ -85,6 +90,9 @@ const Carrousel = ({
 	const isNextWeek = useCallback(
 		(totalItems: number): boolean => {
 			if (dates != null) {
+				if (isNextAvailableDate) {
+					return true;
+				}
 				if (totalItems === NUM_ITEMS_SHORT) {
 					const flagDate = dates[NUM_ITEMS_SHORT - 1];
 					const hasDayWithSessions = dates.filter((dateSchedule) =>

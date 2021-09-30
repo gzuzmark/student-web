@@ -247,7 +247,7 @@ export const getNextAvailableSchedules = async (
 	const { data } = response;
 	const parsedDoctorsData = parseResponseData(data.data.doctors);
 	const dates = validWeek(parsedDoctorsData, startDate);
-	console.log(data.data.status, 'data');
+
 	return {
 		doctors: parsedDoctorsData,
 		dates: dates,
@@ -260,21 +260,25 @@ export const getAvailableSchedulesByDoctorId = async (doctorId: string, startDat
 	const response = await aliviaAxios.get<NextAvailableSchedulesAPI>('/doctors/schedules-by-doctorid', {
 		params: { doctor_id: doctorId, from: startDate.getTime() },
 	});
-	const { data } = response;
-	const parsedDoctorsData = parseResponseData(data.data.doctors);
-	console.log(data.data.dates[0], 'fecha');
-	const dates = validWeek(parsedDoctorsData, new Date(data.data.dates[0]));
+	const {
+		data: {
+			data: { doctors, dates, status },
+		},
+	} = response;
+	const parsedDoctorsData = parseResponseData(doctors);
+	const dateInit = new Date(dates[0]);
+	const offsetTimeZone = dateInit.getTimezoneOffset();
+	const datesWeeks = validWeek(parsedDoctorsData, addMinutes(dateInit, offsetTimeZone));
 
 	return {
 		doctors: parsedDoctorsData,
-		dates: dates,
-		isNextDays: data.data.dates.length > 7,
+		dates: datesWeeks,
+		isNextDays: status,
 	};
 };
 
 export const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
 	const listWeek = completeWeek(startDate);
-	console.log(listWeek, 'lista semana');
 	return listWeek.map<DateSchedule>((dateWeek: Date) => {
 		const hasSessions = doctors.filter((doctor: DoctorAvailability) => {
 			const days = doctor.schedules.filter((schedule) => isSameDay(schedule.startTime, dateWeek));

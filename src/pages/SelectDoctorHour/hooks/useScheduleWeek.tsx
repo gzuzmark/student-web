@@ -1,25 +1,10 @@
-import {
-	DoctorAvailableSchedules,
-	getAvailableSchedulesByDoctorId,
-	NextAvailableSchedules,
-	validWeek,
-} from 'pages/api';
+import { DoctorAvailableSchedules, getAvailableSchedulesByDoctorId, NextAvailableSchedules } from 'pages/api';
 import { useEffect, useState } from 'react';
 
-const filterDataByDoctorId = (
-	data: NextAvailableSchedules,
-	doctorId: string,
-	startDate: Date,
-): DoctorAvailableSchedules => {
-	const { doctors, isNextDays } = data;
+const filterDataByDoctorId = (data: NextAvailableSchedules, doctorId: string): DoctorAvailableSchedules => {
+	const { doctors, isNextDays, dates } = data;
 	const doctorsFilter = doctors.filter((doctor) => doctor.id === doctorId);
-	let startD = new Date();
-	const doctorsDateFilter = doctors.filter((doctor) => {
-		return (startD = new Date(doctor.schedules[0].startTime));
-	});
 
-	const dates = validWeek(doctorsFilter, startD);
-	console.log(startDate, 'start date 22222222222222222222222222222222222222222');
 	return {
 		doctor: doctorsFilter.length > 0 ? doctorsFilter[0] : null,
 		dates: dates,
@@ -39,7 +24,7 @@ const useScheduleWeek = (
 			setIsLoad(true);
 			getAvailableSchedulesByDoctorId(doctorId, startDate).then((response: NextAvailableSchedules) => {
 				if (response) {
-					setData(filterDataByDoctorId(response, doctorId, startDate));
+					setData(filterDataByDoctorId(response, doctorId));
 					setIsLoad(false);
 				}
 			});
