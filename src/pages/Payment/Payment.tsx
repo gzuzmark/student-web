@@ -159,7 +159,7 @@ const Payment = () => {
 	const initialValuesCash = {
 		name: '',
 		lastName: '',
-		documentType: '',
+		documentType: 'DNI',
 		documentNumber: '',
 		email: '',
 		description: '',
@@ -1074,7 +1074,7 @@ const Payment = () => {
 												<Field
 													component={TextField}
 													name="documentType"
-													label={t('contact.fields.id.label.toYou')}
+													label={'Tipo de documento'}
 													variant="outlined"
 													fullWidth
 													onChange={(e: any) => {

@@ -8,7 +8,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			marginTop: '15px',
 		},
 		tab: {
-			fontFamily: 'Mulish, sans-serif',
+			fontFamily: 'Mulish, sans-serif !important ',
 
 			'& .MuiTab-root': {
 				textTransform: 'initial',
