@@ -44,7 +44,7 @@ export const newUservalidationSchema = object().shape({
 		})
 		.when('identificationType', {
 			is: 2,
-			then: string().matches(/\b[a-zA-Z0-9]{12}\b/, 'CE inválido'),
+			then: string().matches(/\b[a-zA-Z0-9]{9-12}\b/, 'CE inválido'),
 		}),
 	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
@@ -93,7 +93,7 @@ export const guestValidationSchema = object().shape({
 		})
 		.when('identificationType', {
 			is: `2`,
-			then: string().matches(/^[a-zA-Z0-9]{12,}$/g, 'CE inválido'),
+			then: string().matches(/^[a-zA-Z0-9]{9,12}$/g, 'CE inválido'),
 		}),
 	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
