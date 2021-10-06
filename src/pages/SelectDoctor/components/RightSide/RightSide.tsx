@@ -55,7 +55,7 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 				});
 				history.push({
 					pathname: '/seleccionar_doctor_ver_mas',
-					search: `doctor=${doctorSelected.id}`,
+					search: `doctor=${doctorSelected.id}&dateSelected=${selectedDate?.toISOString()}`,
 				});
 			}
 		}

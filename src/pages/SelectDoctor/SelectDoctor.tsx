@@ -25,7 +25,7 @@ const SelectDoctor = () => {
 
 	useEffect(() => {
 		if (useCase && window.nutritionistUseCaseId === useCase.id) {
-			toggleWarningModal(true);
+			//toggleWarningModal(true);
 		}
 		if (malestar) {
 			setEspecialityId(malestar);
