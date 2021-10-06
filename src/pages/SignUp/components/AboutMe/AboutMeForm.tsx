@@ -45,7 +45,7 @@ const initialValues = {
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
-			maxWidth: '403px',
+			maxWidth: '752px',
 		},
 	},
 	fieldWrapper: {

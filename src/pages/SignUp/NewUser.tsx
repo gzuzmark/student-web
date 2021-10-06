@@ -2,13 +2,12 @@ import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
 import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import { Location } from 'history';
 
-import { Container, RightLayout } from 'pages/common';
+import { MainLayout, RightLayout } from 'pages/common';
 import { createPatient, createAccount, createGuestPatient, UseCase } from 'pages/api';
-import { usePageTitle, setLocalValue, isYoungerThanFifthteen, isUnderAge, addGAEvent } from 'utils';
+import { usePageTitle, setLocalValue, isYoungerThanFifthteen, isUnderAge, addGAEvent, stylesWithTheme } from 'utils';
 import { PAYMENT_STEP, GUEST, TriagePair, AppointmentOwner, User } from 'AppContext';
 
 import {
-	LeftSide,
 	AboutMe,
 	AboutMeValues,
 	MedicalData,
@@ -16,8 +15,10 @@ import {
 	Contact,
 	ContactValues,
 	PreferPediatrics,
+	StepperSection,
 } from './components';
 import { SUB_ROUTES, checkStep, findStep, formatNewUser, updateTriageQuestion } from './utils';
+import { Theme } from '@material-ui/core';
 
 interface NewUserProps {
 	updateState: Function | undefined;
@@ -28,7 +29,23 @@ interface NewUserProps {
 	commingFromAppointmentCreation: boolean;
 	currentUser: User | null | undefined;
 }
-
+const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+	contentBox: {
+		display: 'flex',
+		backgroundColor: '#FFFFFF',
+		margin: 'auto',
+		[breakpoints.up('lg')]: {
+			borderRadius: '8px',
+			maxWidth: '752px',
+		},
+	},
+	wrapper: {
+		padding: '18px 34px 20px 34px',
+		[breakpoints.up('lg')]: {
+			padding: '32px 60px',
+		},
+	},
+}));
 const NewUser = ({
 	isUserLoggedIn,
 	commingFromAppointmentCreation,
@@ -158,7 +175,7 @@ const NewUser = ({
 		},
 		[aboutMeData, currentUser, isAChild, isGuest, isUserLoggedIn, medicalData, push, updateState, useCase],
 	);
-
+	const classes = useStyles();
 	usePageTitle('Registro');
 
 	useLayoutEffect(() => {
@@ -186,31 +203,33 @@ const NewUser = ({
 	}, [listen]);
 
 	return (
-		<Container>
-			<LeftSide step={step} />
-			<RightLayout>
-				<Switch>
-					<Route path="/registro/sobre_ti">
-						<AboutMe
-							aboutMeData={aboutMeData}
-							appointmentOwner={appointmentOwner}
-							onChangeStep={onChangeStep}
-							validationOnChange={validateAgeAfterSelecting}
-						/>
-					</Route>
-					<Route exact path="/registro/datos_medicos">
-						<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
-					</Route>
-					<Route exact path="/registro/contacto">
-						<Contact submitSignUp={submitSignUp} isGuest={isGuest} />
-					</Route>
-					<Route path="/registro/*">
-						<Redirect to="/registro/sobre_ti" />
-					</Route>
-				</Switch>
-				<PreferPediatrics isModalOpen={isAgeRestrictioModalOpen} closeModal={closeAgeRestrictionModal} />
-			</RightLayout>
-		</Container>
+		<div>
+			<StepperSection step={step} />
+			<MainLayout>
+				<div className={classes.contentBox}>
+					<Switch>
+						<Route path="/registro/sobre_ti">
+							<AboutMe
+								aboutMeData={aboutMeData}
+								appointmentOwner={appointmentOwner}
+								onChangeStep={onChangeStep}
+								validationOnChange={validateAgeAfterSelecting}
+							/>
+						</Route>
+						<Route exact path="/registro/datos_medicos">
+							<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
+						</Route>
+						<Route exact path="/registro/contacto">
+							<Contact submitSignUp={submitSignUp} isGuest={isGuest} />
+						</Route>
+						<Route path="/registro/*">
+							<Redirect to="/registro/sobre_ti" />
+						</Route>
+					</Switch>
+					<PreferPediatrics isModalOpen={isAgeRestrictioModalOpen} closeModal={closeAgeRestrictionModal} />
+				</div>
+			</MainLayout>
+		</div>
 	);
 };
 

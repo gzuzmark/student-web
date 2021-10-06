@@ -4,15 +4,19 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Typography from '@material-ui/core/Typography';
 import { useTranslation } from 'react-i18next';
 
-import { LeftLayout, Stepper } from 'pages/common';
+import { Stepper } from 'pages/common';
 import AppContext, { GUEST } from 'AppContext';
 import { stylesWithTheme } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+	layout: {
+		with: '100%',
+		textAlign: 'center',
+	},
 	wrapper: {
 		padding: '18px 34px 20px 34px',
 		[breakpoints.up('lg')]: {
-			padding: '128px 60px 0 40px',
+			padding: '32px 60px',
 		},
 	},
 	titlePrefix: {
@@ -26,8 +30,8 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		textAlign: 'center',
 		paddingBottom: '10px',
 		fontWeight: 'bold',
+		fontFamily: 'Mulish, sans-serif',
 		[breakpoints.up('lg')]: {
-			textAlign: 'left',
 			paddingBottom: '40px',
 		},
 	},
@@ -40,7 +44,7 @@ interface LeftSideProps {
 	step: number;
 }
 
-const LeftSide = ({ step }: LeftSideProps) => {
+const StepperSection = ({ step }: LeftSideProps) => {
 	const { t } = useTranslation('signUp');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
@@ -50,7 +54,7 @@ const LeftSide = ({ step }: LeftSideProps) => {
 	const l18nSelector = isForGuest ? 'guest' : 'toYouOrSomeoneElse';
 
 	return (
-		<LeftLayout>
+		<div className={classes.layout}>
 			<div className={classes.wrapper}>
 				<Typography className={classes.title} variant="h1">
 					{t(`left.title.${l18nSelector}`)}
@@ -62,8 +66,8 @@ const LeftSide = ({ step }: LeftSideProps) => {
 					activeStep={step}
 				/>
 			</div>
-		</LeftLayout>
+		</div>
 	);
 };
 
-export default LeftSide;
+export default StepperSection;

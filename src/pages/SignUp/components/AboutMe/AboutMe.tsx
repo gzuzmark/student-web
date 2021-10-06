@@ -19,15 +19,10 @@ interface AboutMeProps {
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
-		padding: '21px 26px 0',
+		padding: '16px 24px 0',
+		width: '100%',
 		[breakpoints.up('lg')]: {
-			padding: '72px 0px 0px 0px',
-		},
-	},
-	mobileSubtitle: {
-		paddingBottom: '17px',
-		[breakpoints.up('lg')]: {
-			display: 'none',
+			padding: '32px 64px',
 		},
 	},
 	boldText: {
@@ -40,10 +35,18 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	subTitle: {
-		display: 'none',
+		marginBottom: '32px',
+		fontFamily: 'Mulish',
+		fontWeight: '700',
+		fontSize: '16px',
+		color: '#1ECD96',
+		lineHeight: '20px',
+		borderBottom: '1px solid #F0F2FA',
 		[breakpoints.up('lg')]: {
-			display: 'block',
-			paddingBottom: '51px',
+			marginBottom: '40px',
+			lineHeight: '24px',
+			paddingBottom: '16px',
+			fontSize: '20px',
 		},
 	},
 }));
@@ -67,20 +70,6 @@ const AboutMe = ({
 
 	return (
 		<div className={classes.wrapper}>
-			<Typography className={classes.mobileSubtitle} color="primary">
-				{t(`aboutme.subTitle.${userLabel}`)}
-			</Typography>
-			<div className={classes.titleWrapper}>
-				<Typography variant="h2" component="span">
-					{t('aboutme.title.firstSection')}{' '}
-				</Typography>
-				<Typography variant="h2" className={classes.boldText} component="span">
-					{t(defaultLabelType ? `aboutme.title.secondSection.${userLabel}` : 'aboutme.title.secondSection')}{' '}
-				</Typography>
-				<Typography variant="h2" component="span">
-					{t('aboutme.title.thirdSection')}
-				</Typography>
-			</div>
 			<Typography className={classes.subTitle} color="primary">
 				{t(`aboutme.subTitle.${userLabel}`)}
 			</Typography>

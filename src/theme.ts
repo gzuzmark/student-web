@@ -272,6 +272,7 @@ const overrides: Overrides = {
 				borderColor: BLUE_STEEL,
 				borderWidth: '1px',
 			},
+			borderRadius: '8px',
 		},
 		notchedOutline: {
 			borderColor: BLUE_STEEL,
@@ -343,7 +344,7 @@ export const leftStepsLabels = {
 	},
 };
 
-export const BACKGROUND_DEFAULT = '#F8F8F8';
+export const BACKGROUND_DEFAULT = '#F7F8FC';
 
 export default {
 	palette,
