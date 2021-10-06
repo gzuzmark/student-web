@@ -29,7 +29,7 @@ import useStyles from './useStyles';
 
 const SelectDoctorHour = () => {
 	const classes = useStyles();
-	const [doctorId, dataContext] = useSelectDoctorHourParams();
+	const [doctorId, dataContext, selectedDateParam] = useSelectDoctorHourParams();
 
 	const [startDate, setStartDate] = useState<Date | null>(null);
 	const [isLoad, dataDoctor] = useScheduleWeek(doctorId, startDate);
@@ -163,21 +163,6 @@ const SelectDoctorHour = () => {
 	);
 
 	useEffect(() => {
-		if (dataContext !== undefined) {
-			console.log('data context', dataContext);
-			if (dataContext) {
-				const { doctor, listDates, isNextDays, selectDate } = dataContext;
-				setDoctor(doctor);
-				setListDates(listDates);
-				setSelectedDate(selectDate);
-				setIsNextWeek(isNextDays);
-			} else {
-				setStartDate(new Date());
-			}
-		}
-	}, [dataContext]);
-
-	useEffect(() => {
 		if (selectedDate == null) {
 			setGroupedSchedulesForDay({});
 		} else {
@@ -197,6 +182,22 @@ const SelectDoctorHour = () => {
 			setIsNextWeek(isNextDays);
 		}
 	}, [dataDoctor]);
+
+	useEffect(() => {
+		if (dataContext !== undefined) {
+			console.log('data context', dataContext);
+			if (dataContext) {
+				const { doctor, listDates, isNextDays, selectDate } = dataContext;
+				setDoctor(doctor);
+				setListDates(listDates);
+				setSelectedDate(selectDate);
+				setIsNextWeek(isNextDays);
+			} else {
+				setStartDate(new Date());
+				// setSelectedDate(selectedDateParam);
+			}
+		}
+	}, [dataContext, selectedDateParam]);
 
 	if (!doctor) {
 		if (isLoad) {
@@ -218,6 +219,7 @@ const SelectDoctorHour = () => {
 					mode={'short'}
 					onBackWeek={(date) => setStartDate(date)}
 					onNextWeek={(date) => setStartDate(date)}
+					// isMaintainDay={true}
 				/>
 				{isLoad ? (
 					<Loading loadingMessage="Buscando disponibilidad..." />

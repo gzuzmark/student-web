@@ -75,7 +75,7 @@ export const contactPatientValidationSchema = object().shape({
 		})
 		.when('identificationType', {
 			is: '2',
-			then: string().matches(/\b[a-zA-Z0-9]{12}\b/, 'CE inválido'),
+			then: string().matches(/^[a-zA-Z0-9]{9,12}$/, 'CE inválido'),
 		}),
 	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
