@@ -177,13 +177,14 @@ const SelectDoctorHour = () => {
 	useEffect(() => {
 		if (dataDoctor != null) {
 			const { doctor, dates, isNextDays } = dataDoctor;
-			console.log(dataDoctor);
+			console.log(dataDoctor, 'aqui estamos');
 			setDoctor(doctor);
 			setListDates(dates);
 			setIsNextWeek(isNextDays);
 			setSelectedDate(selectedDateParam);
+			setStartDate(selectedDateParam);
 		}
-	}, [dataDoctor, selectedDateParam]);
+	}, [dataDoctor, startDate, selectedDateParam]);
 
 	// useEffect(() => {
 	// 	if (dataContext !== undefined) {
