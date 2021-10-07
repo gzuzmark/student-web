@@ -180,7 +180,6 @@ const SelectDoctorHour = () => {
 			console.log(dataDoctor);
 			setDoctor(doctor);
 			setListDates(dates);
-			console.log(dates, 'dates 111111111111111111111111111');
 			setIsNextWeek(isNextDays);
 			setSelectedDate(selectedDateParam);
 		}
