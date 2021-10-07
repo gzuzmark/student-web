@@ -12,6 +12,7 @@ import { addDays, isAfter, isSameDay } from 'date-fns/esm';
 import { useCallback } from 'react';
 
 export type ModeCarrouselType = 'short' | 'large';
+
 interface CarrouselProps {
 	/**
 	 * Show dates in carrousel
@@ -23,6 +24,7 @@ interface CarrouselProps {
 	onSelectDate: (date: Date | null) => void;
 	onNextWeek?: (firstDate: Date) => void;
 	onBackWeek?: (firstDate: Date) => void;
+	isMaintainDay?: boolean;
 }
 
 const NUM_ITEMS_SHORT = 3;
@@ -36,6 +38,7 @@ const Carrousel = ({
 	onSelectDate,
 	onBackWeek,
 	onNextWeek,
+	isMaintainDay,
 }: CarrouselProps) => {
 	const classes = useStyles();
 	const isDesktop = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
@@ -128,14 +131,27 @@ const Carrousel = ({
 	}, [mode, isDesktop, dates, isNextAvailableDate, isBackWeek, isNextWeek]);
 
 	useEffect(() => {
+		console.log(isMaintainDay, 'estatus carousel');
 		if (dates != null) {
 			const totalItems = mode === 'large' ? (isDesktop ? NUM_ITEMS_LARGE : NUM_ITEMS_SHORT) : NUM_ITEMS_SHORT;
-			const filterDates = dates.slice(0, totalItems - 1);
-			const selectedDate = getSelectedDay(filterDates);
-			onSelectDate(selectedDate);
+
+			if (isMaintainDay) {
+				// const filterDates = dates.slice(0, totalItems - 1);
+				// onSelectDate(selectedDate);
+				// const selectedDate = getSelectedDay(filterDates);
+				// const filterDates = dates.slice(0, totalItems - 1);
+				// const selectedDateFilter = getSelectedDay(filterDates);
+				onSelectDate(selectedDate);
+			} else {
+				const filterDates = dates.slice(0, totalItems - 1);
+				const selectedDateFilter = getSelectedDay(filterDates);
+				onSelectDate(selectedDateFilter);
+			}
+
+			// onSelectDate(selectedDate)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isDesktop, dates]);
+	}, [isDesktop, dates, isMaintainDay]);
 
 	return (
 		<div className={classes.container}>

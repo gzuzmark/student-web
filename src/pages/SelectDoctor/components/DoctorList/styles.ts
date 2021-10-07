@@ -58,6 +58,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			flex: '1 1 auto',
 		},
 		counterFirstPart: {
+			fontFamily: 'Mulish, sans-serif !important',
 			color: '#A3ABCC',
 			fontWeight: 'bold',
 			fontSize: '14px',
