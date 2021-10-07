@@ -10,12 +10,13 @@ import { DEV_IMAGES, isDevelopment, PROD_IMAGES } from 'utils/skillImages';
 
 const ga = '2.23451262.537881002.1630940323-204450824.1629911523';
 
-const useSelectDoctorHourParams = (): [string, SelectDoctorSchedule | undefined | null] => {
+const useSelectDoctorHourParams = (): [string, SelectDoctorSchedule | undefined | null, Date | null] => {
 	const history = useHistory();
 	const location = useLocation();
 	const { selectDoctorSchedule } = useContext(AppContext);
 	const [dataSelectDoctor, setDataSelectDoctor] = useState<SelectDoctorSchedule | undefined | null>(undefined);
 	const [doctorId, setDoctorId] = useState<string>('');
+	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
 	const redirectoToBack = () => {
 		const images = isDevelopment() ? DEV_IMAGES : PROD_IMAGES;
@@ -32,7 +33,13 @@ const useSelectDoctorHourParams = (): [string, SelectDoctorSchedule | undefined 
 
 	useEffect(() => {
 		const parse = qs.parse(location.search);
+		console.log(parse);
 		const doctorId = parse.doctor;
+		const selectedD = parse.dateSelected;
+
+		if (selectedD != null) {
+			setSelectedDate(new Date(String(selectedD)));
+		}
 
 		if (selectDoctorSchedule !== null && selectDoctorSchedule !== undefined) {
 			setDataSelectDoctor(selectDoctorSchedule);
@@ -48,7 +55,7 @@ const useSelectDoctorHourParams = (): [string, SelectDoctorSchedule | undefined 
 		}
 	}, []);
 
-	return [doctorId, dataSelectDoctor];
+	return [doctorId, dataSelectDoctor, selectedDate];
 };
 
 export default useSelectDoctorHourParams;

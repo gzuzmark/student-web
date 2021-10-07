@@ -14,6 +14,7 @@ import FilterDateDoctor, { FilterType } from '../FilterDateDoctor/FilterDateDoct
 import useStyles from './styles';
 import DoctorListFilter from '../DoctorList/DoctorListFilter';
 import useAllDoctorsForUseCase from 'pages/SelectDoctor/hooks/useAllDoctorsForUseCase';
+
 interface RightSideProps {
 	useCaseId: string | null | undefined;
 	isUserLoggedIn?: boolean;
@@ -55,7 +56,7 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 				});
 				history.push({
 					pathname: '/seleccionar_doctor_ver_mas',
-					search: `doctor=${doctorSelected.id}`,
+					search: `doctor=${doctorSelected.id}&dateSelected=${selectedDate?.toISOString()}`,
 				});
 			}
 		}
@@ -120,7 +121,15 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 		);
 	};
 
+	useEffect(() => {
+		let valueOfSession: FilterType = 'doctor';
+		if (sessionStorage.getItem('typeOfData') != null) {
+			valueOfSession = sessionStorage.getItem('typeOfData') === 'doctor' ? 'doctor' : 'date';
+		}
+		setValueFilter(valueOfSession);
+	}, [valueFilter]);
 	const onChangeFilterDateDoctor = (value: FilterType) => {
+		sessionStorage.setItem('typeOfData', value);
 		setValueFilter(value);
 	};
 
@@ -136,6 +145,7 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 						onSelectDate={(date: Date | null) => setSelectedDate(date)}
 						onBackWeek={(date: Date) => setStartDateWeek(date)}
 						onNextWeek={(date: Date) => setStartDateWeek(date)}
+						isMaintainDay={false}
 					/>
 				)}
 				<Divider className={classes.divider} />
