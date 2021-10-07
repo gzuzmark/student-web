@@ -122,7 +122,7 @@ const RightSide = ({ useCaseId }: RightSideProps) => {
 	};
 
 	useEffect(() => {
-		let valueOfSession: FilterType = 'doctor';
+		let valueOfSession: FilterType = 'date';
 		if (sessionStorage.getItem('typeOfData') != null) {
 			valueOfSession = sessionStorage.getItem('typeOfData') === 'doctor' ? 'doctor' : 'date';
 		}
