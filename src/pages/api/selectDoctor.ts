@@ -256,9 +256,9 @@ export const getNextAvailableSchedules = async (
 };
 
 export const getAvailableSchedulesByDoctorId = async (doctorId: string, startDate: Date) => {
-	startDate.setHours(0, 0, 0, 0);
+	// startDate.setHours(0, 0, 0, 0);
 
-	const utcDate = new Date().toUTCString();
+	const utcDate = new Date(startDate).toUTCString();
 	const parseDateToUtc = Date.parse(utcDate);
 	const response = await aliviaAxios.get<NextAvailableSchedulesAPI>('/doctors/schedules-by-doctorid', {
 		params: { doctor_id: doctorId, from: parseDateToUtc },
@@ -272,7 +272,6 @@ export const getAvailableSchedulesByDoctorId = async (doctorId: string, startDat
 	const dateInit = new Date(dates[0]);
 	const offsetTimeZone = dateInit.getTimezoneOffset();
 	const datesWeeks = validWeek(parsedDoctorsData, addMinutes(dateInit, offsetTimeZone));
-	console.log(dateInit, 'fsdfdsfsdosdfndfs h fsdih fdsisdhf jsid');
 
 	return {
 		doctors: parsedDoctorsData,
