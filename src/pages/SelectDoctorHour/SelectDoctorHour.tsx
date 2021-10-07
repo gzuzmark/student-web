@@ -29,11 +29,11 @@ import useStyles from './useStyles';
 
 const SelectDoctorHour = () => {
 	const classes = useStyles();
-	const [doctorId, dataContext, selectedDateParam] = useSelectDoctorHourParams();
+	const [doctorId, , selectedDateParam] = useSelectDoctorHourParams();
 
-	const [startDate, setStartDate] = useState<Date | null>(null);
+	const [startDate, setStartDate] = useState<Date | null>(selectedDateParam || new Date());
 	const [isLoad, dataDoctor] = useScheduleWeek(doctorId, startDate);
-	const [doctor, setDoctor] = useState<DoctorAvailability | null>(dataContext?.doctor || null);
+	const [doctor, setDoctor] = useState<DoctorAvailability | null>(null);
 
 	const [listDates, setListDates] = useState<DateSchedule[]>([]);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -177,27 +177,31 @@ const SelectDoctorHour = () => {
 	useEffect(() => {
 		if (dataDoctor != null) {
 			const { doctor, dates, isNextDays } = dataDoctor;
+			console.log(dataDoctor);
 			setDoctor(doctor);
 			setListDates(dates);
+			console.log(dates, 'dates 111111111111111111111111111');
 			setIsNextWeek(isNextDays);
+			setSelectedDate(selectedDateParam);
 		}
-	}, [dataDoctor]);
+	}, [dataDoctor, selectedDateParam]);
 
-	useEffect(() => {
-		if (dataContext !== undefined) {
-			console.log('data context', dataContext);
-			if (dataContext) {
-				const { doctor, listDates, isNextDays, selectDate } = dataContext;
-				setDoctor(doctor);
-				setListDates(listDates);
-				setSelectedDate(selectDate);
-				setIsNextWeek(isNextDays);
-			} else {
-				setStartDate(new Date());
-				// setSelectedDate(selectedDateParam);
-			}
-		}
-	}, [dataContext, selectedDateParam]);
+	// useEffect(() => {
+	// 	if (dataContext !== undefined) {
+	// 		console.log('data context', dataContext)
+	// 		if (dataContext) {
+	// 			const { doctor, listDates, isNextDays, selectDate } = dataContext;
+	// 			setDoctor(doctor);
+	// 			setListDates(listDates);
+	// 			console.log(listDates, "dates 222222222222222222")
+	// 			setSelectedDate(selectDate);
+	// 			setIsNextWeek(isNextDays);
+	// 		} else {
+	// 			setStartDate(new Date());
+	// 			setSelectedDate(selectedDateParam);
+	// 		}
+	// 	}
+	// }, [dataContext, selectedDateParam]);
 
 	if (!doctor) {
 		if (isLoad) {
@@ -218,8 +222,11 @@ const SelectDoctorHour = () => {
 					onSelectDate={(date) => setSelectedDate(date)}
 					mode={'short'}
 					onBackWeek={(date) => setStartDate(date)}
-					onNextWeek={(date) => setStartDate(date)}
-					// isMaintainDay={true}
+					onNextWeek={(date) => {
+						setStartDate(date);
+						console.log(date, 'next date');
+					}}
+					isMaintainDay={selectedDateParam != null}
 				/>
 				{isLoad ? (
 					<Loading loadingMessage="Buscando disponibilidad..." />
