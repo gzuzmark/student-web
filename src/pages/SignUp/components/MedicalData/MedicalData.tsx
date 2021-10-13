@@ -11,9 +11,10 @@ import IndicacionesModal from './components/IndicacionesModal';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
-		padding: '21px 26px 0',
+		padding: '16px 24px 0',
+		width: '100%',
 		[breakpoints.up('lg')]: {
-			padding: '72px 0px 0px 0px',
+			padding: '32px 64px',
 		},
 	},
 	mobileSubtitle: {
@@ -68,43 +69,6 @@ const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDat
 
 	return (
 		<div className={classes.wrapper}>
-			<Typography className={classes.mobileSubtitle} color="primary">
-				{t(defaultLabelType ? `medicalData.subTitle.${defaultLabelType}` : 'medicalData.subTitle')}
-			</Typography>
-			<div className={classes.titleWrapper}>
-				{matches ? (
-					<>
-						<Typography variant="h2" component="span">
-							{t('medicalData.title.firstSection')}{' '}
-						</Typography>
-						<Typography variant="h2" className={classes.boldText} component="span">
-							{t('medicalData.title.secondSection')}{' '}
-						</Typography>
-						<Typography variant="h2" component="span">
-							{t('medicalData.title.thirdSection')}{' '}
-						</Typography>
-					</>
-				) : (
-					<>
-						<Typography className={classes.boldText} variant="h2" component="span">
-							{t('medicalData.mobile.title.firstSection')}{' '}
-						</Typography>
-						<Typography variant="h2" component="span">
-							{t('medicalData.title.thirdSection')}{' '}
-						</Typography>
-					</>
-				)}
-				<Typography variant="h2" component={matches ? 'div' : 'span'}>
-					{t(
-						defaultLabelType
-							? `medicalData.title.fourthSection.${defaultLabelType}`
-							: 'medicalData.title.fourthSection',
-					)}
-				</Typography>
-			</div>
-			<Typography className={classes.subTitle} color="primary">
-				{t(defaultLabelType ? `medicalData.subTitle.${defaultLabelType}` : 'medicalData.subTitle')}
-			</Typography>
 			<MedicalDataForm
 				medicalData={medicalData}
 				onChangeStep={onChangeStep}

@@ -214,13 +214,14 @@ const NewUser = ({
 								appointmentOwner={appointmentOwner}
 								onChangeStep={onChangeStep}
 								validationOnChange={validateAgeAfterSelecting}
+								isGuest={isGuest}
 							/>
 						</Route>
 						<Route exact path="/registro/datos_medicos">
 							<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
 						</Route>
 						<Route exact path="/registro/contacto">
-							<Contact submitSignUp={submitSignUp} isGuest={isGuest} />
+							<Redirect to="/pago" />
 						</Route>
 						<Route path="/registro/*">
 							<Redirect to="/registro/sobre_ti" />

@@ -14,6 +14,8 @@ const PRIMARY_BLACK = '#535B6C';
 const SECONDARY_BLACK = '#353535';
 const RED_MAIN = '#FE6B6F';
 const NEUTRAL2 = '#676F8F';
+const MAIN_BLUE = '#2C7BFD';
+const LIGHT_BLUE = '#7BADFE';
 
 const palette = {
 	neutral2: {
@@ -37,6 +39,10 @@ const palette = {
 	},
 	action: {
 		disabled: DISABLED,
+	},
+	secondary: {
+		main: MAIN_BLUE,
+		light: LIGHT_BLUE,
 	},
 };
 
@@ -96,7 +102,7 @@ const typography = {
 		lineHeight: '18px',
 		letterSpacing: '0.2px',
 		[defaultTheme.breakpoints.up('lg')]: {
-			fontSize: '15px',
+			fontSize: '14px',
 			lineHeight: '20px',
 		},
 	},
@@ -209,6 +215,7 @@ const overrides: Overrides = {
 		},
 		outlinedPrimary: {
 			backgroundColor: '#ffffff',
+			borderRadius: '8px',
 			border: '1px solid #1ECD96',
 			'&:hover': {
 				backgroundColor: '#ffffff',

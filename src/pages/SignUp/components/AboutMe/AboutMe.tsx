@@ -15,6 +15,7 @@ interface AboutMeProps {
 	appointmentOwner?: AppointmentOwner;
 	defaultLabelType?: string;
 	validationOnChange?: (date: Date | null) => void;
+	isGuest: boolean;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -43,7 +44,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		lineHeight: '20px',
 		borderBottom: '1px solid #F0F2FA',
 		[breakpoints.up('lg')]: {
-			marginBottom: '40px',
+			marginBottom: '48px',
 			lineHeight: '24px',
 			paddingBottom: '16px',
 			fontSize: '20px',
@@ -57,6 +58,7 @@ const AboutMe = ({
 	appointmentOwner,
 	defaultLabelType,
 	validationOnChange,
+	isGuest,
 }: AboutMeProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
@@ -79,6 +81,7 @@ const AboutMe = ({
 				onChangeStep={onChangeStep}
 				openPrivacyPolicy={openDialog}
 				validationOnChange={validationOnChange}
+				isGuest={isGuest}
 			/>
 		</div>
 	);
