@@ -9,7 +9,7 @@ import { usePageTitle, stylesWithTheme, addGAEvent } from 'utils';
 
 import { MedicalData, MedicalDataValues } from './components';
 import { Typography } from '@material-ui/core';
-import { AppointmentOwner } from 'AppContext';
+import { AppointmentOwner, GUEST } from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -46,6 +46,7 @@ const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInfo
 	const { push } = useHistory();
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
+	const isGuest = appointmentOwner === GUEST;
 	const submitMedicalInformation = useCallback(
 		async (medicalData: MedicalDataValues) => {
 			if (updateState && appointmentOwner) {
@@ -74,7 +75,7 @@ const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInfo
 			<RightLayout>
 				<Switch>
 					<Route exact path="/registro/datos_medicos">
-						<MedicalData medicalData={undefined} onChangeStep={submitMedicalInformation} />
+						<MedicalData medicalData={undefined} isGuest={isGuest} onChangeStep={submitMedicalInformation} />
 					</Route>
 					<Route path="/registro/*">
 						<Redirect to="/registro/datos_medicos" />

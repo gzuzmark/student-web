@@ -45,9 +45,10 @@ interface MedicalDataProps {
 	onChangeStep: (values: MedicalDataValues, onError?: Function) => void;
 	medicalData: MedicalDataValues | undefined;
 	defaultLabelType?: string;
+	isGuest: boolean;
 }
 
-const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDataProps) => {
+const MedicalData = ({ onChangeStep, medicalData, isGuest }: MedicalDataProps) => {
 	const { t } = useTranslation('signUp');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
@@ -74,6 +75,7 @@ const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDat
 				onChangeStep={onChangeStep}
 				openIndicacionesModal={openIndicacionesModal}
 				openPrivacyPolicy={openDialog}
+				isGuest={isGuest}
 			/>
 			<IndicacionesModal isOpen={isIndicacionesModalOpen} onClose={closeIndicacionesModal} />
 		</div>

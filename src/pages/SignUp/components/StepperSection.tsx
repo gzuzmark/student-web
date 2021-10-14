@@ -28,21 +28,21 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			padding: '32px auto',
 		},
 	},
-	titlePrefix: {
-		display: 'none',
-		[breakpoints.up('lg')]: {
-			display: 'block',
-			paddingBottom: '17px',
-		},
-	},
 	title: {
 		textAlign: 'center',
-		paddingBottom: '10px',
+		paddingBottom: '8px',
 		fontWeight: 'bold',
 		fontFamily: 'Mulish, sans-serif',
 		[breakpoints.up('lg')]: {
-			paddingBottom: '40px',
+			paddingBottom: '24px',
 		},
+	},
+	subtitle: {
+		fontFamily: 'Mulish',
+		fontWeight: '600',
+		fontSize: '16px',
+		lineHeight: '20px',
+		color: '#676F8F',
 	},
 }));
 const StepConnector1 = withStyles(({ breakpoints }: Theme) =>
@@ -81,7 +81,7 @@ interface StepperProps extends Omit<MuiStepperProps, 'children'> {
 	StepIconComponent?: never;
 	connector?: never;
 }
-const getStepContent = (step: number) => {
+const getStepTitle = (step: number) => {
 	switch (step) {
 		case 0:
 			return 'Información del Paciente';
@@ -89,6 +89,18 @@ const getStepContent = (step: number) => {
 			return 'Datos de la consulta';
 		case 2:
 			return 'Paga tu consulta';
+		default:
+			return 'step';
+	}
+};
+const getStepContent = (step: number) => {
+	switch (step) {
+		case 0:
+			return 'Ingresa los datos';
+		case 1:
+			return 'Ingresa los detalles para facilitar la atención del médico';
+		case 2:
+			return 'Selecciona un método de pago';
 		default:
 			return 'step';
 	}
@@ -136,6 +148,9 @@ const StepperSection = ({ step, stepClassName, ...stepperProps }: StepperProps) 
 					})}
 				</MuiStepper>
 				<Typography className={classes.title} variant="h1">
+					{getStepTitle(step)}
+				</Typography>
+				<Typography className={classes.subtitle} variant="h1">
 					{getStepContent(step)}
 				</Typography>
 			</div>

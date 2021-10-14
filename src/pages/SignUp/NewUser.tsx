@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react'
 import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import { Location } from 'history';
 
-import { MainLayout, RightLayout } from 'pages/common';
+import { MainLayout } from 'pages/common';
 import { createPatient, createAccount, createGuestPatient, UseCase } from 'pages/api';
 import { usePageTitle, setLocalValue, isYoungerThanFifthteen, isUnderAge, addGAEvent, stylesWithTheme } from 'utils';
 import { PAYMENT_STEP, GUEST, TriagePair, AppointmentOwner, User } from 'AppContext';
@@ -218,7 +218,7 @@ const NewUser = ({
 							/>
 						</Route>
 						<Route exact path="/registro/datos_medicos">
-							<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} />
+							<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} isGuest={isGuest} />
 						</Route>
 						<Route exact path="/registro/contacto">
 							<Redirect to="/pago" />

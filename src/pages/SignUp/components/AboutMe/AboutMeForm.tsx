@@ -10,10 +10,9 @@ import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { DatePickerField, OptionsGroup, Option, FilesGroupField } from 'pages/common';
+import { DatePickerField, OptionsGroup, Option } from 'pages/common';
 import validationSchema, { minorValidationSchema } from './validationSchema';
 import { FormLabel, Grid, Typography } from '@material-ui/core';
-import { findLastIndex } from 'lodash.chunk/node_modules/@types/lodash';
 
 export interface AboutMeValues {
 	name: string;
@@ -25,7 +24,7 @@ export interface AboutMeValues {
 	documentIssueDate?: Date | null;
 	identificationType: string;
 	haveAllergies: boolean | null;
-	moreInfo1: boolean | null;
+	condition: boolean | null;
 	address: string;
 }
 
@@ -48,7 +47,7 @@ const initialValues = {
 	documentIssueDate: null,
 	identificationType: '',
 	haveAllergies: null,
-	moreInfo1: null,
+	condition: null,
 	address: '',
 };
 
@@ -85,7 +84,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		textDecoration: 'underline',
 	},
 	subTitle: {
-		marginBottom: '32px',
+		marginBottom: '24px',
 		fontFamily: 'Mulish',
 		fontWeight: '700',
 		fontSize: '16px',
@@ -93,7 +92,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		lineHeight: '20px',
 		borderBottom: '1px solid #F0F2FA',
 		[breakpoints.up('lg')]: {
-			marginBottom: '48px',
+			marginBottom: '30px',
 			lineHeight: '24px',
 			paddingBottom: '16px',
 			fontSize: '20px',
@@ -268,10 +267,10 @@ const AboutMeForm = ({
 						</Grid>
 						<Grid container spacing={2} className={classes.labelYesNo}>
 							<Grid item sm>
-								<FormLabel>{t('medicalData.fields.moreInfo.helperText')}</FormLabel>
+								<FormLabel>{t('aboutme.fields.moreInfo.helperText')}</FormLabel>
 							</Grid>
 							<Grid item sm={6} xs={12} md="auto">
-								<Field component={OptionsGroup} name="moreInfo1" fullWidth>
+								<Field component={OptionsGroup} name="condition" fullWidth>
 									<Option className={classes.optionButton} value={true}>
 										{t('medicalData.fields.yesOption')}
 									</Option>

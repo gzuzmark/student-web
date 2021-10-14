@@ -21,9 +21,11 @@ import { Grid } from '@material-ui/core';
 export interface MedicalDataValues {
 	takeMedicines: boolean | null;
 	medicineList: string;
-	haveAllergies: boolean | null;
 	allergies: string;
+	symptom: string;
 	moreInfo: string;
+	phoneNumber: string;
+	email?: string;
 	consultReason: string;
 	files?: string[];
 	isDermatology: boolean | null;
@@ -35,14 +37,16 @@ interface MedicalDataFormProps {
 	medicalData: MedicalDataValues | undefined;
 	//---------------------------
 	openIndicacionesModal: () => void;
-	//---------------------------
+	isGuest: boolean;
 }
 
 const initialValues = {
 	takeMedicines: null,
 	medicineList: '',
-	haveAllergies: null,
 	allergies: '',
+	phoneNumber: '',
+	email: '',
+	symptom: '',
 	moreInfo: '',
 	consultReason: '',
 	files: [],
@@ -143,7 +147,7 @@ function especialidad(speciality = '') {
 	if (speciality === 'Dermatología') {
 		return 'Adjunta al menos dos fotos del problema en piel, una a 10 cm y otra a 30 cm de distancia. (Obligatorio)';
 	} else {
-		return 'Adjunta fotos o exámenes realizados. (Opcional)';
+		return 'Adjunta fotos, resultados de laboratorio, rayos X, ecografías, etc.';
 	}
 }
 
@@ -168,11 +172,13 @@ const MedicalDataForm = ({
 	openPrivacyPolicy,
 	medicalData,
 	openIndicacionesModal,
+	isGuest,
 }: MedicalDataFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const consultReasonRef = useRef<Element | null>(null);
+	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
 	const onSubmit = useCallback(
 		(values: MedicalDataValues, { setSubmitting }: { setSubmitting: Function }) => {
 			onChangeStep(values);
@@ -249,6 +255,9 @@ const MedicalDataForm = ({
 							/>
 						</div>
 						<div className={classes.fieldWrapper}>
+							<div className={classes.fieldLabelWrapper}>
+								<FormLabel>{t('medicalData.fields.photos.label')}</FormLabel>
+							</div>
 							<input name="isDermatology" value={String(useCase?.name === 'Dermatología')} type="hidden" />
 
 							<Field
@@ -287,8 +296,36 @@ const MedicalDataForm = ({
 						</div>
 						<div>
 							<Typography className={classes.subTitle} color="primary">
-								{t('Datos Medicos')}
+								{t('medicalData.fields.files.label.contacto')}
 							</Typography>
+							<Grid container spacing={1}>
+								<Grid item sm={6} xs={6}>
+									<div className={classes.fieldWrapper}>
+										<Field
+											component={TextField}
+											className={classes.fieldWithHelperText}
+											name="phoneNumber"
+											type="tel"
+											label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
+											variant="outlined"
+											inputProps={{ maxLength: 9 }}
+											fullWidth
+										/>
+									</div>
+								</Grid>
+								<Grid item sm={6} xs={6}>
+									<div className={classes.fieldWrapper}>
+										<Field
+											component={TextField}
+											className={classes.fieldWithHelperText}
+											name="email"
+											label={t(`contact.fields.email.label.${contactKey}`)}
+											variant="outlined"
+											fullWidth
+										/>
+									</div>
+								</Grid>
+							</Grid>
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>
