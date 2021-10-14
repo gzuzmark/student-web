@@ -325,17 +325,17 @@ const ContactForm = ({
 							/>
 						</div>
 					</div>
-					{/*
+
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
 							{t('contact.submit.text')}
 						</Button>
-					</div>*/}
-					<div className={classes.fieldWrapper}>
+					</div>
+					{/*<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm}>
 							{t('contact.submit.text')}
 						</Button>
-					</div>
+					</div>*/}
 				</Form>
 			)}
 		</Formik>
