@@ -20,7 +20,7 @@ export interface AboutMeValues {
 	secondSurname: string;
 	birthDate: Date | null;
 	gender: number | undefined;
-	identification?: string;
+	identification: string;
 	documentIssueDate?: Date | null;
 	identificationType: string;
 	haveAllergies: boolean | null;

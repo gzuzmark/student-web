@@ -178,7 +178,8 @@ const ContactForm = ({
 		>
 			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
-					<div>
+					{/*<div>
+						
 						<FormControl className={classes.fieldWrapper} fullWidth>
 							<Field
 								component={TextField}
@@ -330,12 +331,24 @@ const ContactForm = ({
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
 							{t('contact.submit.text')}
 						</Button>
-					</div>
-					{/*<div className={classes.fieldWrapper}>
-						<Button variant="contained" fullWidth onClick={submitForm}>
-							{t('contact.submit.text')}
-						</Button>
 					</div>*/}
+					<div>
+						<div className={classes.fieldWrapper}>
+							<Field
+								component={TextField}
+								name="identification"
+								label={t(`contact.fields.id.label.${contactKey}`)}
+								variant="outlined"
+								inputProps={{ maxLength: 12 }}
+								fullWidth
+							/>
+						</div>
+						<div className={classes.fieldWrapper}>
+							<Button variant="contained" fullWidth onClick={submitForm}>
+								{t('contact.submit.text')}
+							</Button>
+						</div>
+					</div>
 				</Form>
 			)}
 		</Formik>

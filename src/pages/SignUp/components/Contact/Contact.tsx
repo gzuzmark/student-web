@@ -70,12 +70,12 @@ const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
 
 	return (
 		<div className={classes.wrapper}>
-			<Typography className={classes.mobileSubtitle} color="primary">
+			{/*<Typography className={classes.mobileSubtitle} color="primary">
 				{t('contact.subTitle')}
 			</Typography>
 			<Typography className={classes.subTitle} color="primary">
 				{t('contact.subTitle')}
-			</Typography>
+			</Typography>*/}
 			<ContactForm
 				submitSignUp={submitSignUp}
 				openPrivacyPolicy={gotToPolicy}

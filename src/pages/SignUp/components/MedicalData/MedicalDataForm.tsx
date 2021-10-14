@@ -28,6 +28,10 @@ export interface MedicalDataValues {
 	consultReason: string;
 	files?: string[];
 	isDermatology: boolean | null;
+	//identification: string;
+	//identificationType: string;
+	isTerm?: boolean | null;
+	isClub?: boolean;
 }
 
 interface MedicalDataFormProps {
@@ -49,6 +53,8 @@ const initialValues = {
 	consultReason: '',
 	files: [],
 	isDermatology: false,
+	isTerm: true,
+	isClub: true,
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
