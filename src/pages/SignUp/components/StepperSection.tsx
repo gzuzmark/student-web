@@ -12,10 +12,19 @@ import MuiStepConnector from '@material-ui/core/StepConnector';
 import { ReactComponent as UserIcon } from 'icons/user2.svg';
 import { ReactComponent as Stethoscope } from 'icons/stethoscope.svg';
 import { ReactComponent as StethoscopeD } from 'icons/stethoscope_d.svg';
+import { ReactComponent as Cash } from 'icons/cash.svg';
 import { ReactComponent as Money } from 'icons/money2.svg';
 import { ReactComponent as Check } from 'icons/check.svg';
 import { StepIconProps } from '@material-ui/core/StepIcon';
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
+	root: {
+		padding: 0,
+		backgroundColor: 'transparent',
+		margin: 'auto',
+		[breakpoints.up('lg')]: {
+			maxWidth: '220px',
+		},
+	},
 	layout: {
 		width: '100%',
 		textAlign: 'center',
@@ -45,30 +54,37 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		color: '#676F8F',
 	},
 }));
-const StepConnector1 = withStyles(({ breakpoints }: Theme) =>
+const StepColorConnector = withStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		root: {
 			padding: 0,
-		},
-		lineVertical: {
-			borderLeftStyle: 'none',
-			borderRightStyle: 'solid',
-			minHeight: 59,
-			marginRight: '26.5px',
 		},
 		alternativeLabel: {
 			top: 19,
 			left: 'calc(-50% + 17px)',
 			right: 'calc(50% + 17px)',
 		},
-		line: {
-			borderColor: '#F0F2FA',
-			[breakpoints.up('lg')]: {
-				padding: '0 46px 0 0',
-				borderTopWidth: 2,
-				borderRightWidth: 2,
-				borderLeftWidth: 2,
+		disabled: {
+			'& $line': {
+				background: '#F0F2FA',
 			},
+		},
+		active: {
+			'& $line': {
+				borderColor: '#2C7BFD',
+				background: '#2C7BFD',
+			},
+		},
+		completed: {
+			background: '#2C7BFD',
+			'& $line': {
+				borderColor: '#2C7BFD',
+				background: '#2C7BFD',
+			},
+		},
+		line: {
+			borderColor: 'transparent',
+			borderRadius: '4px',
 		},
 	}),
 )(MuiStepConnector);
@@ -112,7 +128,7 @@ const ColorlibStepIcon = (props: StepIconProps) => {
 	const icons: { [key: string]: React.ReactElement } = {
 		1: <UserIcon />,
 		2: <Stethoscope />,
-		3: <Money />,
+		3: <Cash />,
 	};
 	const iconsDisabled: { [key: string]: React.ReactElement } = {
 		1: <Money />,
@@ -138,7 +154,12 @@ const StepperSection = ({ step, stepClassName, ...stepperProps }: StepperProps) 
 	return (
 		<div className={classes.layout}>
 			<div className={classes.wrapper}>
-				<MuiStepper classes={{ root: classes.root }} {...stepperProps} connector={<StepConnector1 />} activeStep={step}>
+				<MuiStepper
+					classes={{ root: classes.root }}
+					{...stepperProps}
+					connector={<StepColorConnector />}
+					activeStep={step}
+				>
 					{steps.map((step: string) => {
 						return (
 							<Step key={step}>

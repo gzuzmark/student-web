@@ -70,7 +70,7 @@ const initialValues = {
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
-			maxWidth: '403px',
+			maxWidth: '752px',
 		},
 	},
 	fieldWrapper: {
@@ -325,8 +325,14 @@ const ContactForm = ({
 							/>
 						</div>
 					</div>
+					{/*
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
+							{t('contact.submit.text')}
+						</Button>
+					</div>*/}
+					<div className={classes.fieldWrapper}>
+						<Button variant="contained" fullWidth onClick={submitForm}>
 							{t('contact.submit.text')}
 						</Button>
 					</div>

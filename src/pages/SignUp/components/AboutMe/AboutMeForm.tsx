@@ -161,8 +161,8 @@ const AboutMeForm = ({
 										variant="outlined"
 										select
 									>
-										<MenuItem value={'0'}>DNI</MenuItem>
-										<MenuItem value={'1'}>CE</MenuItem>
+										<MenuItem value={'1'}>DNI</MenuItem>
+										<MenuItem value={'2'}>CE</MenuItem>
 									</Field>
 								</FormControl>
 							</Grid>

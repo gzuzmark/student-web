@@ -221,7 +221,7 @@ const NewUser = ({
 							<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} isGuest={isGuest} />
 						</Route>
 						<Route exact path="/registro/contacto">
-							<Redirect to="/pago" />
+							<Contact submitSignUp={submitSignUp} isGuest={isGuest} />
 						</Route>
 						<Route path="/registro/*">
 							<Redirect to="/registro/sobre_ti" />

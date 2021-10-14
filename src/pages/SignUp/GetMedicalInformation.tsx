@@ -33,7 +33,6 @@ const createTriage = (t: Function, medicalData: MedicalDataValues, appointmentOw
 	{ question: 'De acuerdo, describe el malestar:', answer: medicalData.consultReason },
 	{ question: '¿Hace cuánto tiempo se viene presentando este malestar?', answer: '-' },
 	{ question: t('medicalData.fields.medicineList.label'), answer: medicalData.medicineList },
-	{ question: t('medicalData.fields.allergies.label'), answer: medicalData.allergies },
 	{ question: t('medicalData.fields.moreInfo.label'), answer: medicalData.moreInfo },
 ];
 

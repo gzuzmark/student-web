@@ -15,9 +15,10 @@ interface ContactProps {
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
-		padding: '21px 26px 0',
+		padding: '16px 24px 0',
+		width: '100%',
 		[breakpoints.up('lg')]: {
-			padding: '81px 0px 0px 0px',
+			padding: '32px 64px',
 		},
 	},
 	mobileSubtitle: {
@@ -72,14 +73,6 @@ const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
 			<Typography className={classes.mobileSubtitle} color="primary">
 				{t('contact.subTitle')}
 			</Typography>
-			<div className={classes.titleWrapper}>
-				<Typography variant="h2" component="span">
-					{t('contact.title.firstLine')}{' '}
-				</Typography>
-				<Typography className={classes.boldText} variant="h2" component="span">
-					{t('contact.title.secondLine')}
-				</Typography>
-			</div>
 			<Typography className={classes.subTitle} color="primary">
 				{t('contact.subTitle')}
 			</Typography>

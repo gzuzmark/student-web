@@ -21,7 +21,6 @@ import { Grid } from '@material-ui/core';
 export interface MedicalDataValues {
 	takeMedicines: boolean | null;
 	medicineList: string;
-	allergies: string;
 	symptom: string;
 	moreInfo: string;
 	phoneNumber: string;
@@ -43,7 +42,6 @@ interface MedicalDataFormProps {
 const initialValues = {
 	takeMedicines: null,
 	medicineList: '',
-	allergies: '',
 	phoneNumber: '',
 	email: '',
 	symptom: '',
