@@ -9,7 +9,7 @@ import { usePageTitle, stylesWithTheme, addGAEvent } from 'utils';
 
 import { MedicalData, MedicalDataValues } from './components';
 import { Typography } from '@material-ui/core';
-import { AppointmentOwner, GUEST } from 'AppContext';
+import { AppointmentOwner } from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {

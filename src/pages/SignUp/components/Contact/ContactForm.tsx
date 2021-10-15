@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -13,8 +13,6 @@ import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils/createStyles';
 
 import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
-import AppContext from 'AppContext';
-import { getLocations, Ubigeo } from 'pages/api';
 import FormControl from '@material-ui/core/FormControl';
 
 import MenuItem from '@material-ui/core/MenuItem';
@@ -155,8 +153,8 @@ const ContactForm = ({
 	isGuest,
 }: ContactFormProps) => {
 	const { t } = useTranslation('signUp');
-	const { isUbigeoEnabled } = useContext(AppContext);
-	const [ubigeos, setUbigeos] = useState<string[]>([]);
+	//const { isUbigeoEnabled } = useContext(AppContext);
+	//const [ubigeos, setUbigeos] = useState<string[]>([]);
 	const classes = useStyles(initialValues.isTerm);
 	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
 
@@ -187,7 +185,7 @@ const ContactForm = ({
 	const handleChange = (event: any) => {
 		setChecked(event.target.checked);
 	};
-
+	/*
 	const handleTypeUbigeo = async (e: any) => {
 		const value = e.target.value;
 		if (value) {
@@ -197,7 +195,7 @@ const ContactForm = ({
 		} else {
 			setUbigeos([]);
 		}
-	};
+	};*/
 
 	return (
 		<Formik

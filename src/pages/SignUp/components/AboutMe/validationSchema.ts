@@ -2,7 +2,6 @@ import * as Yup from 'yup';
 import i18next from 'l18n/index';
 
 import { registerCustomValidators } from 'utils/addCustomValidations';
-import { boolean } from 'yup';
 
 registerCustomValidators(Yup);
 

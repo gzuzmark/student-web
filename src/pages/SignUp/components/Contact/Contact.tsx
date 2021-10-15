@@ -1,6 +1,5 @@
 import React from 'react';
 import { Theme } from '@material-ui/core/styles';
-import { useTranslation } from 'react-i18next';
 
 import { redirectToURL } from 'utils';
 import { stylesWithTheme } from 'utils/createStyles';
