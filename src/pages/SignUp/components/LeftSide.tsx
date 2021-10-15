@@ -57,7 +57,7 @@ const LeftSide = ({ step }: LeftSideProps) => {
 				</Typography>
 				<Stepper
 					steps={steps}
-					orientation={matches ? 'vertical' : 'horizontal'}
+					//orientation={matches ? 'vertical' : 'horizontal'}
 					alternativeLabel={!matches}
 					activeStep={step}
 				/>

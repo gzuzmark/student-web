@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Typography from '@material-ui/core/Typography';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
@@ -11,9 +10,10 @@ import IndicacionesModal from './components/IndicacionesModal';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
-		padding: '21px 26px 0',
+		padding: '16px 24px 0',
+		width: '100%',
 		[breakpoints.up('lg')]: {
-			padding: '72px 0px 0px 0px',
+			padding: '32px 64px',
 		},
 	},
 	mobileSubtitle: {
@@ -44,9 +44,11 @@ interface MedicalDataProps {
 	onChangeStep: (values: MedicalDataValues, onError?: Function) => void;
 	medicalData: MedicalDataValues | undefined;
 	defaultLabelType?: string;
+	isGuest: boolean;
+	//submitSignUp: (values: ContactValues) => Promise<void>;
 }
 
-const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDataProps) => {
+const MedicalData = ({ onChangeStep, medicalData, isGuest /*submitSignUp*/ }: MedicalDataProps) => {
 	const { t } = useTranslation('signUp');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
@@ -65,51 +67,21 @@ const MedicalData = ({ onChangeStep, medicalData, defaultLabelType }: MedicalDat
 	const openIndicacionesModal = () => {
 		setIsIndicacionesModalOpen(true);
 	};
+	const gotToPolicy = () => {
+		redirectToURL(
+			'https://docs.google.com/document/u/1/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
+			true,
+		);
+	};
 
 	return (
 		<div className={classes.wrapper}>
-			<Typography className={classes.mobileSubtitle} color="primary">
-				{t(defaultLabelType ? `medicalData.subTitle.${defaultLabelType}` : 'medicalData.subTitle')}
-			</Typography>
-			<div className={classes.titleWrapper}>
-				{matches ? (
-					<>
-						<Typography variant="h2" component="span">
-							{t('medicalData.title.firstSection')}{' '}
-						</Typography>
-						<Typography variant="h2" className={classes.boldText} component="span">
-							{t('medicalData.title.secondSection')}{' '}
-						</Typography>
-						<Typography variant="h2" component="span">
-							{t('medicalData.title.thirdSection')}{' '}
-						</Typography>
-					</>
-				) : (
-					<>
-						<Typography className={classes.boldText} variant="h2" component="span">
-							{t('medicalData.mobile.title.firstSection')}{' '}
-						</Typography>
-						<Typography variant="h2" component="span">
-							{t('medicalData.title.thirdSection')}{' '}
-						</Typography>
-					</>
-				)}
-				<Typography variant="h2" component={matches ? 'div' : 'span'}>
-					{t(
-						defaultLabelType
-							? `medicalData.title.fourthSection.${defaultLabelType}`
-							: 'medicalData.title.fourthSection',
-					)}
-				</Typography>
-			</div>
-			<Typography className={classes.subTitle} color="primary">
-				{t(defaultLabelType ? `medicalData.subTitle.${defaultLabelType}` : 'medicalData.subTitle')}
-			</Typography>
 			<MedicalDataForm
 				medicalData={medicalData}
 				onChangeStep={onChangeStep}
 				openIndicacionesModal={openIndicacionesModal}
-				openPrivacyPolicy={openDialog}
+				isGuest={isGuest}
+				openPrivacyPolicy={gotToPolicy}
 			/>
 			<IndicacionesModal isOpen={isIndicacionesModalOpen} onClose={closeIndicacionesModal} />
 		</div>

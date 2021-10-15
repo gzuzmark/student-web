@@ -2,12 +2,20 @@ import * as Yup from 'yup';
 import i18next from 'l18n/index';
 
 import { registerCustomValidators } from 'utils/addCustomValidations';
+import { boolean } from 'yup';
 
 registerCustomValidators(Yup);
 
 const { string, object, date, number } = Yup;
 
 const messages = {
+	identificationType: {
+		required: i18next.t('signUp:contact.validation.idType.required'),
+	},
+	identification: {
+		required: i18next.t('signUp:contact.validation.id.required'),
+		digits: i18next.t('signUp:contact.validation.id.digits'),
+	},
 	name: {
 		required: i18next.t('signUp:aboutme.validation.name.required'),
 	},
@@ -22,9 +30,6 @@ const messages = {
 	},
 	gender: {
 		required: i18next.t('signUp:aboutme.validation.gender.required'),
-	},
-	identification: {
-		required: i18next.t('signUp:aboutme.validation.document.required'),
 	},
 	documentIssueDate: {
 		required: i18next.t('signUp:aboutme.validation.documentIssueDate.required'),

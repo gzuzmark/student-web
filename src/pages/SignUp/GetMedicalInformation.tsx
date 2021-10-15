@@ -9,7 +9,7 @@ import { usePageTitle, stylesWithTheme, addGAEvent } from 'utils';
 
 import { MedicalData, MedicalDataValues } from './components';
 import { Typography } from '@material-ui/core';
-import { AppointmentOwner } from 'AppContext';
+import { AppointmentOwner, GUEST } from 'AppContext';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -33,7 +33,6 @@ const createTriage = (t: Function, medicalData: MedicalDataValues, appointmentOw
 	{ question: 'De acuerdo, describe el malestar:', answer: medicalData.consultReason },
 	{ question: '¿Hace cuánto tiempo se viene presentando este malestar?', answer: '-' },
 	{ question: t('medicalData.fields.medicineList.label'), answer: medicalData.medicineList },
-	{ question: t('medicalData.fields.allergies.label'), answer: medicalData.allergies },
 	{ question: t('medicalData.fields.moreInfo.label'), answer: medicalData.moreInfo },
 ];
 
@@ -46,6 +45,7 @@ const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInfo
 	const { push } = useHistory();
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
+	const isGuest = appointmentOwner === GUEST;
 	const submitMedicalInformation = useCallback(
 		async (medicalData: MedicalDataValues) => {
 			if (updateState && appointmentOwner) {
@@ -74,7 +74,7 @@ const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInfo
 			<RightLayout>
 				<Switch>
 					<Route exact path="/registro/datos_medicos">
-						<MedicalData medicalData={undefined} onChangeStep={submitMedicalInformation} />
+						<MedicalData medicalData={undefined} isGuest={isGuest} onChangeStep={submitMedicalInformation} />
 					</Route>
 					<Route path="/registro/*">
 						<Redirect to="/registro/datos_medicos" />

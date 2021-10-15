@@ -3,7 +3,7 @@ import { FieldProps } from 'formik';
 import { Theme } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { useDropzone } from 'react-dropzone';
-import { ReactComponent as BackArrow } from 'icons/straight-arrow-left.svg';
+import { ReactComponent as AddIcon } from 'icons/add_icon.svg';
 
 import { stylesWithTheme } from 'utils';
 import File from './File';
@@ -20,10 +20,8 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	dropzone: {
 		borderWidth: 0.5,
 		borderRadius: 3,
-		borderStyle: 'dashed',
-		borderColor: palette.info.main,
-		backgroundColor: 'rgba(30,205,150,0.05)',
-		color: '#bdbdbd',
+		backgroundColor: 'rgba(240, 242, 250, 1)',
+		color: '#676F8F',
 		alignItems: 'center',
 		display: 'flex',
 		flex: 1,
@@ -35,8 +33,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		marginBottom: ({ hasFiles }: StylesProps) => (hasFiles ? '15px' : '0px'),
 		[breakpoints.up('lg')]: {
 			marginBottom: ({ hasFiles }: StylesProps) => (hasFiles ? '25px' : '0px'),
-			display: 'block',
-			padding: '20px 15px',
+			padding: '21px 15px',
 		},
 	},
 	uploadIcon: {
@@ -49,19 +46,15 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		padding: '8.25px',
 	},
 	arrow: {
-		'& > *': {
-			stroke: palette.primary.main,
-		},
-		width: '36px',
-		height: '36px',
-		transform: 'rotate(90deg)',
+		width: '24px',
+		height: '24px',
 	},
 	labelText: {
 		fontSize: '13px',
-		lineHeight: '18px',
+		fontFamily: 'Mulish',
+		lineHeight: '16px',
 		[breakpoints.up('lg')]: {
-			fontSize: '15px',
-			lineHeight: '20px',
+			paddingTop: '17px',
 		},
 	},
 	optionalMobile: {
@@ -151,8 +144,8 @@ const FilesGroupField = ({
 		<div>
 			<div {...getRootProps()} className={classes.dropzone}>
 				<input {...getInputProps()} id={inputId} />
-				<div className={classes.uploadIcon}>
-					<BackArrow className={classes.arrow} />
+				<div>
+					<AddIcon className={classes.arrow} />
 				</div>
 				{!!labelText && (
 					<>

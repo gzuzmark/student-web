@@ -11,8 +11,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		root: {
 			padding: 0,
 			backgroundColor: 'transparent',
+			margin: 'auto',
 			[breakpoints.up('lg')]: {
-				padding: '0 46px 0 0',
+				maxWidth: '220px',
 			},
 		},
 	}),
