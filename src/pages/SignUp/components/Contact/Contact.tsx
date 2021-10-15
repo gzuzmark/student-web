@@ -1,7 +1,5 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
-import { useTranslation } from 'react-i18next';
 
 import { redirectToURL } from 'utils';
 import { stylesWithTheme } from 'utils/createStyles';
@@ -15,9 +13,10 @@ interface ContactProps {
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
-		padding: '21px 26px 0',
+		padding: '16px 24px 0',
+		width: '100%',
 		[breakpoints.up('lg')]: {
-			padding: '81px 0px 0px 0px',
+			padding: '32px 64px',
 		},
 	},
 	mobileSubtitle: {
@@ -46,7 +45,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
-	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const gotToPolicy = () => {
 		redirectToURL(
@@ -69,20 +67,6 @@ const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
 
 	return (
 		<div className={classes.wrapper}>
-			<Typography className={classes.mobileSubtitle} color="primary">
-				{t('contact.subTitle')}
-			</Typography>
-			<div className={classes.titleWrapper}>
-				<Typography variant="h2" component="span">
-					{t('contact.title.firstLine')}{' '}
-				</Typography>
-				<Typography className={classes.boldText} variant="h2" component="span">
-					{t('contact.title.secondLine')}
-				</Typography>
-			</div>
-			<Typography className={classes.subTitle} color="primary">
-				{t('contact.subTitle')}
-			</Typography>
 			<ContactForm
 				submitSignUp={submitSignUp}
 				openPrivacyPolicy={gotToPolicy}
