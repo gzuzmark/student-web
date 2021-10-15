@@ -15,7 +15,6 @@ interface AboutMeProps {
 	appointmentOwner?: AppointmentOwner;
 	defaultLabelType?: string;
 	validationOnChange?: (date: Date | null) => void;
-	isGuest: boolean;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -58,7 +57,6 @@ const AboutMe = ({
 	appointmentOwner,
 	defaultLabelType,
 	validationOnChange,
-	isGuest,
 }: AboutMeProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
@@ -81,7 +79,6 @@ const AboutMe = ({
 				onChangeStep={onChangeStep}
 				openPrivacyPolicy={openDialog}
 				validationOnChange={validationOnChange}
-				isGuest={isGuest}
 			/>
 		</div>
 	);

@@ -45,7 +45,6 @@ const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInfo
 	const { push } = useHistory();
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
-	const isGuest = appointmentOwner === GUEST;
 	const submitMedicalInformation = useCallback(
 		async (medicalData: MedicalDataValues) => {
 			if (updateState && appointmentOwner) {
@@ -74,7 +73,7 @@ const GetMedicalInformation = ({ updateState, appointmentOwner }: GetMedicalInfo
 			<RightLayout>
 				<Switch>
 					<Route exact path="/registro/datos_medicos">
-						<MedicalData medicalData={undefined} isGuest={isGuest} onChangeStep={submitMedicalInformation} />
+						<MedicalData medicalData={undefined} onChangeStep={submitMedicalInformation} />
 					</Route>
 					<Route path="/registro/*">
 						<Redirect to="/registro/datos_medicos" />

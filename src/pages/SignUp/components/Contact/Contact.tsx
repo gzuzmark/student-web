@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 
@@ -47,7 +46,6 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
-	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const gotToPolicy = () => {
 		redirectToURL(
@@ -70,12 +68,6 @@ const Contact = ({ submitSignUp, isGuest }: ContactProps) => {
 
 	return (
 		<div className={classes.wrapper}>
-			{/*<Typography className={classes.mobileSubtitle} color="primary">
-				{t('contact.subTitle')}
-			</Typography>
-			<Typography className={classes.subTitle} color="primary">
-				{t('contact.subTitle')}
-			</Typography>*/}
 			<ContactForm
 				submitSignUp={submitSignUp}
 				openPrivacyPolicy={gotToPolicy}

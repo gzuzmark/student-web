@@ -35,11 +35,9 @@ const RightSide = ({ step, nextStep, onSubmit }: RightSideProps) => {
 
 	return (
 		<RightLayout>
-			{step === 0 ? (
-				/*<AboutMe aboutMeData={aboutMeData} onChangeStep={onChangeStep} defaultLabelType="minor" />*/ <></>
-			) : null}
+			{step === 0 ? <AboutMe aboutMeData={aboutMeData} onChangeStep={onChangeStep} defaultLabelType="minor" /> : null}
 			{step === 1 ? (
-				/*<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} defaultLabelType="minor" />*/ <></>
+				<MedicalData medicalData={medicalData} onChangeStep={onChangeStep} defaultLabelType="minor" />
 			) : null}
 		</RightLayout>
 	);

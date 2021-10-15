@@ -38,7 +38,6 @@ interface MedicalDataFormProps {
 	medicalData: MedicalDataValues | undefined;
 	//---------------------------
 	openIndicacionesModal: () => void;
-	isGuest: boolean;
 	//--------
 }
 
@@ -158,7 +157,6 @@ const MedicalDataForm = ({
 	//submitSignUp,
 	medicalData,
 	openIndicacionesModal,
-	isGuest,
 }: MedicalDataFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();

@@ -3,16 +3,15 @@ import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-// import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { DatePickerField, Option } from 'pages/common';
+import { DatePickerField } from 'pages/common';
 import validationSchema, { minorValidationSchema } from './validationSchema';
-import { Grid, Typography } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 export interface AboutMeValues {
 	name: string;
@@ -32,7 +31,6 @@ interface AboutMeFormProps {
 	openPrivacyPolicy: () => void;
 	userLabel?: string;
 	validationOnChange?: (date: Date | null) => void;
-	isGuest: boolean;
 }
 
 const initialValues = {
@@ -118,14 +116,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-const AboutMeForm = ({
-	aboutMeData,
-	onChangeStep,
-	openPrivacyPolicy,
-	userLabel,
-	validationOnChange,
-	isGuest,
-}: AboutMeFormProps) => {
+const AboutMeForm = ({ aboutMeData, onChangeStep, userLabel, validationOnChange }: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const onSubmit = useCallback(

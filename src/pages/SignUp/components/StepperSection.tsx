@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Typography from '@material-ui/core/Typography';
