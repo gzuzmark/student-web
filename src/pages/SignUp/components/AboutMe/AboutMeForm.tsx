@@ -10,9 +10,9 @@ import { Formik, Form, Field } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
-import { DatePickerField, OptionsGroup, Option } from 'pages/common';
+import { DatePickerField, Option } from 'pages/common';
 import validationSchema, { minorValidationSchema } from './validationSchema';
-import { FormLabel, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 
 export interface AboutMeValues {
 	name: string;
@@ -128,7 +128,6 @@ const AboutMeForm = ({
 }: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
-	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
 	const onSubmit = useCallback(
 		(values: AboutMeValues, { setSubmitting }: { setSubmitting: Function; setFieldError: Function }) => {
 			onChangeStep(values);
@@ -189,7 +188,7 @@ const AboutMeForm = ({
 								fullWidth
 							/>
 						</div>
-						<Grid container spacing={1}>
+						<Grid container spacing={2}>
 							<Grid item sm={6} xs={6}>
 								<div className={classes.fieldWrapper}>
 									<Field
@@ -215,31 +214,6 @@ const AboutMeForm = ({
 								</div>
 							</Grid>
 						</Grid>
-						{/*
-						<Typography className={classes.subTitle} color="primary">
-							{t('Datos Medicos')}
-						</Typography>
-						<Grid container spacing={2} className={classes.labelYesNo}>
-							<Grid item sm>
-								<FormLabel>{t('aboutme.fields.moreInfo.helperText')}</FormLabel>
-							</Grid>
-							<Grid item sm={6} xs={12} md="auto">
-								<Field component={OptionsGroup} name="condition" fullWidth>
-									<Option className={classes.optionButton} value={true}>
-										{t('medicalData.fields.yesOption')}
-									</Option>
-									<Option className={classes.optionButton} value={false}>
-										{t('medicalData.fields.noOption')}
-									</Option>
-								</Field>
-							</Grid>
-						</Grid>
-						<div className={classes.fieldLabelWrapper}>
-							<Typography>{t('¿Cual es el distrito actual del paciente?')}</Typography>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Field component={TextField} name="address" placeholder={t('Lima - Perú')} variant="outlined" fullWidth />
-						</div>*/}
 						{userLabelExists ? (
 							<>
 								<div className={classes.fieldWrapper}>

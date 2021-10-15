@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { Grid, TextField as MaterialTextField } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -245,70 +245,7 @@ const ContactForm = ({
 								</div>
 							</>
 						)}
-						<div className={classes.fieldWrapper}>
-							<FormControlLabel
-								control={
-									<>
-										<Field
-											component={Checkbox}
-											type="checkbox"
-											name="isTerm"
-											color="primary"
-											checked={isChecked}
-											onClick={handleChange}
-										/>
-									</>
-								}
-								label={
-									<>
-										<Typography className={classes.legalInformation} component="span">
-											{t('contact.legalInformation.firstSection1')}{' '}
-										</Typography>
-										<Typography
-											className={classes.privacyPolicyLink}
-											component="span"
-											color="primary"
-											onClick={openTermsAndConditions}
-										>
-											{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
-										</Typography>
-										<Typography className={classes.legalInformation} component="span">
-											{t('contact.legalInformation.secondSection1')}{' '}
-										</Typography>
-										<Typography
-											className={classes.privacyPolicyLink}
-											component="span"
-											color="primary"
-											onClick={openPrivacyPolicy}
-										>
-											{t('contact.legalInformation.privacyPolicyLink1')}{' '}
-										</Typography>
-									</>
-								}
-							/>
-							<ErrorMessage className={classes.termsConditions} name="isTerm" component="p"></ErrorMessage>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<FormControlLabel
-								control={<Field component={Checkbox} type="checkbox" name="isClub" color="primary" />}
-								label={
-									<>
-										<Typography className={classes.legalInformation} component="span">
-											{t('contact.legalInformation.firstSection2')}{' '}
-										</Typography>
-										<Typography
-											className={classes.privacyPolicyLink}
-											component="span"
-											color="primary"
-											onClick={openDataAnalitycs}
-										>
-											{t('contact.legalInformation.analysisData')}{' '}
-										</Typography>
-									</>
-								}
-							/>
-						</div>
-					</div>
+						
 
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
