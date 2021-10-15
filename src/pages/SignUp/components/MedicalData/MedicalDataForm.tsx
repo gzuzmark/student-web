@@ -28,8 +28,6 @@ export interface MedicalDataValues {
 	isDermatology: boolean | null;
 	haveAllergies: boolean | null;
 	allergies: string;
-	//identification: string;
-	//identificationType: string;
 	isTerm?: boolean | null;
 	isClub?: boolean;
 }
@@ -41,6 +39,7 @@ interface MedicalDataFormProps {
 	//---------------------------
 	openIndicacionesModal: () => void;
 	isGuest: boolean;
+	//--------
 }
 
 const initialValues = {
@@ -156,7 +155,7 @@ function indicaciones(speciality = '') {
 
 const MedicalDataForm = ({
 	onChangeStep,
-	openPrivacyPolicy,
+	//submitSignUp,
 	medicalData,
 	openIndicacionesModal,
 	isGuest,
@@ -165,7 +164,7 @@ const MedicalDataForm = ({
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const consultReasonRef = useRef<Element | null>(null);
-	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
+
 	const onSubmit = useCallback(
 		(values: MedicalDataValues, { setSubmitting }: { setSubmitting: Function }) => {
 			onChangeStep(values);
@@ -229,17 +228,11 @@ const MedicalDataForm = ({
 								</Field>
 							</Grid>
 						</Grid>
-						<div className={classes.fieldWrapper}>
+						<div className={classes.fieldWrapper} style={{ display: !values.takeMedicines ? 'none' : 'block' }}>
 							<div className={classes.fieldLabelWrapper}>
 								<FormLabel>{t('medicalData.fields.medicineList.label')}</FormLabel>
 							</div>
-							<Field
-								component={TextField}
-								name="medicineList"
-								variant="outlined"
-								disabled={!values.takeMedicines}
-								fullWidth
-							/>
+							<Field component={TextField} name="medicineList" variant="outlined" fullWidth />
 						</div>
 						<Grid container spacing={2} className={classes.labelYesNo}>
 							<Grid item sm>
@@ -256,13 +249,12 @@ const MedicalDataForm = ({
 								</Field>
 							</Grid>
 						</Grid>
-						<div className={classes.fieldWrapper}>
+						<div className={classes.fieldWrapper} style={{ display: !values.haveAllergies ? 'none' : 'block' }}>
 							<Field
 								component={TextField}
 								name="allergies"
 								placeholder={t('medicalData.fields.allergies.label')}
 								variant="outlined"
-								disabled={!values.haveAllergies}
 								fullWidth
 							/>
 						</div>

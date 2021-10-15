@@ -7,7 +7,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import { Checkbox } from 'formik-material-ui';
-import { Autocomplete, AutocompleteRenderInputParams } from 'formik-material-ui-lab';
 import { Formik, Form, Field, FormikHelpers, ErrorMessage } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -417,28 +416,35 @@ const ContactForm = ({
 							<ErrorMessage className={classes.termsConditions} name="isTerm" component="p"></ErrorMessage>
 						</div>
 						<div className={classes.fieldWrapper}>
-							<Typography className={classes.legalInformation} component="span">
-								{t('contact.legalInformation.firstSection')}{' '}
-							</Typography>
-							<Typography
-								className={classes.privacyPolicyLink}
-								component="span"
-								color="primary"
-								onClick={openTermsAndConditions}
-							>
-								{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
-							</Typography>
-							<Typography className={classes.legalInformation} component="span">
-								{t('contact.legalInformation.secondSection1')}{' '}
-							</Typography>
-							<Typography
-								className={classes.privacyPolicyLink}
-								component="span"
-								color="primary"
-								onClick={openPrivacyPolicy}
-							>
-								{t('contact.legalInformation.privacyPolicyLink1')}{' '}
-							</Typography>
+							<FormControlLabel
+								control={<Field component={Checkbox} type="checkbox" name="isClub" color="primary" />}
+								label={
+									<>
+										<Typography className={classes.legalInformation} component="span">
+											{t('contact.legalInformation.firstSection')}{' '}
+										</Typography>
+										<Typography
+											className={classes.privacyPolicyLink}
+											component="span"
+											color="primary"
+											onClick={openTermsAndConditions}
+										>
+											{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
+										</Typography>
+										<Typography className={classes.legalInformation} component="span">
+											{t('contact.legalInformation.secondSection1')}{' '}
+										</Typography>
+										<Typography
+											className={classes.privacyPolicyLink}
+											component="span"
+											color="primary"
+											onClick={openPrivacyPolicy}
+										>
+											{t('contact.legalInformation.privacyPolicyLink1')}{' '}
+										</Typography>
+									</>
+								}
+							/>
 						</div>
 						<div className={classes.fieldWrapper}>
 							<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>

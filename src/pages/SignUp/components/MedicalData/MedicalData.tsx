@@ -8,6 +8,7 @@ import { stylesWithTheme, redirectToURL } from 'utils';
 
 import MedicalDataForm, { MedicalDataValues } from './MedicalDataForm';
 import IndicacionesModal from './components/IndicacionesModal';
+import { ContactValues } from '../Contact';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -46,9 +47,10 @@ interface MedicalDataProps {
 	medicalData: MedicalDataValues | undefined;
 	defaultLabelType?: string;
 	isGuest: boolean;
+	//submitSignUp: (values: ContactValues) => Promise<void>;
 }
 
-const MedicalData = ({ onChangeStep, medicalData, isGuest }: MedicalDataProps) => {
+const MedicalData = ({ onChangeStep, medicalData, isGuest /*submitSignUp*/ }: MedicalDataProps) => {
 	const { t } = useTranslation('signUp');
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const classes = useStyles();
@@ -67,6 +69,12 @@ const MedicalData = ({ onChangeStep, medicalData, isGuest }: MedicalDataProps) =
 	const openIndicacionesModal = () => {
 		setIsIndicacionesModalOpen(true);
 	};
+	const gotToPolicy = () => {
+		redirectToURL(
+			'https://docs.google.com/document/u/1/d/e/2PACX-1vQf6HE_Cj14iMCA6By3PPapUWZbp4dhtoi5n1BlpL5Nk58v_1Cl66sHA6gKx3yP0w/pub',
+			true,
+		);
+	};
 
 	return (
 		<div className={classes.wrapper}>
@@ -74,8 +82,8 @@ const MedicalData = ({ onChangeStep, medicalData, isGuest }: MedicalDataProps) =
 				medicalData={medicalData}
 				onChangeStep={onChangeStep}
 				openIndicacionesModal={openIndicacionesModal}
-				openPrivacyPolicy={openDialog}
 				isGuest={isGuest}
+				openPrivacyPolicy={gotToPolicy}
 			/>
 			<IndicacionesModal isOpen={isIndicacionesModalOpen} onClose={closeIndicacionesModal} />
 		</div>

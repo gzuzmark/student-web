@@ -215,6 +215,7 @@ const AboutMeForm = ({
 								</div>
 							</Grid>
 						</Grid>
+						{/*
 						<Typography className={classes.subTitle} color="primary">
 							{t('Datos Medicos')}
 						</Typography>
@@ -238,7 +239,7 @@ const AboutMeForm = ({
 						</div>
 						<div className={classes.fieldWrapper}>
 							<Field component={TextField} name="address" placeholder={t('Lima - Perú')} variant="outlined" fullWidth />
-						</div>
+						</div>*/}
 						{userLabelExists ? (
 							<>
 								<div className={classes.fieldWrapper}>
