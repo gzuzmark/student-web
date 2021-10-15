@@ -14,13 +14,6 @@ const messages = {
 	filesDerman: {
 		required: i18next.t('signUp:medicalData.validation.filesDerman.required'),
 	},
-	phoneNumber: {
-		required: i18next.t('signUp:contact.validation.phoneNumber.required'),
-	},
-	email: {
-		required: i18next.t('signUp:contact.validation.email.required'),
-		validEmail: i18next.t('signUp:contact.validation.email.validEmail'),
-	},
 };
 
 const validationSchema = object().shape({
@@ -30,16 +23,6 @@ const validationSchema = object().shape({
 	files: array().when('isDermatology', { is: true, then: array().ensure().min(2, 'Adjuntar mínimo dos fotos') }),
 
 	moreInfo: string(),
-	phoneNumber: string()
-		.min(9, messages.phoneNumber.required)
-		.max(9, messages.phoneNumber.required)
-		// eslint-disable-next-line
-		// @ts-ignore
-		.digits(messages.phoneNumber.required)
-		.required(messages.phoneNumber.required),
-	// eslint-disable-next-line
-	// @ts-ignore
-	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
 });
 
 export default validationSchema;

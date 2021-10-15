@@ -34,28 +34,9 @@ const messages = {
 	documentIssueDate: {
 		required: i18next.t('signUp:aboutme.validation.documentIssueDate.required'),
 	},
-	haveAllergies: {
-		required: i18next.t('signUp:medicalData.validation.haveAllergy.required'),
-	},
-	condition: {
-		required: i18next.t('signUp:medicalData.validation.condition.required'),
-	},
 };
 
 const validationSchema = object().shape({
-	identificationType: string().required(messages.identificationType.required),
-	identification: string()
-		.min(8, messages.identification.digits)
-		.max(12, messages.identification.digits)
-		.required(messages.identification.required)
-		.when('identificationType', {
-			is: `1`,
-			then: string().matches(/^[0-9]{8}$/g, 'DNI inválido'),
-		})
-		.when('identificationType', {
-			is: `2`,
-			then: string().matches(/\b[a-zA-Z0-9]{12}\b/, 'CE inválido'),
-		}),
 	name: string()
 		.required(messages.name.required)
 		.matches(/^[aA-zZ-ZÀ-ÿ\s]+$/, 'Ingrese solo letras'),
@@ -72,8 +53,6 @@ const validationSchema = object().shape({
 		.typeError(messages.birthDate.required)
 		.nullable(),
 	gender: number().required(messages.gender.required),
-	haveAllergies: boolean().required(messages.haveAllergies.required).nullable(),
-	condition: boolean().required(messages.condition.required).nullable(),
 });
 
 export const minorValidationSchema = object().shape({

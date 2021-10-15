@@ -20,10 +20,8 @@ export interface AboutMeValues {
 	secondSurname: string;
 	birthDate: Date | null;
 	gender: number | undefined;
-	identification: string;
+	identification?: string;
 	documentIssueDate?: Date | null;
-	identificationType: string;
-	haveAllergies: boolean | null;
 	condition: boolean | null;
 	address: string;
 }
@@ -45,8 +43,6 @@ const initialValues = {
 	gender: undefined,
 	identification: '',
 	documentIssueDate: null,
-	identificationType: '',
-	haveAllergies: null,
 	condition: null,
 	address: '',
 };
@@ -156,34 +152,6 @@ const AboutMeForm = ({
 								<FormControl className={classes.fieldWrapper} fullWidth>
 									<Field
 										component={TextField}
-										label={'Tipo de doc.'}
-										name="identificationType"
-										variant="outlined"
-										select
-									>
-										<MenuItem value={'1'}>DNI</MenuItem>
-										<MenuItem value={'2'}>CE</MenuItem>
-									</Field>
-								</FormControl>
-							</Grid>
-							<Grid item sm={6} xs={6}>
-								<div className={classes.fieldWrapper}>
-									<Field
-										component={TextField}
-										name="identification"
-										label={t(`contact.fields.id.label.${contactKey}`)}
-										variant="outlined"
-										inputProps={{ maxLength: 12 }}
-										fullWidth
-									/>
-								</div>
-							</Grid>
-						</Grid>
-						<Grid container spacing={2}>
-							<Grid item sm={6} xs={6}>
-								<FormControl className={classes.fieldWrapper} fullWidth>
-									<Field
-										component={TextField}
 										label={t('aboutme.fields.gender.label')}
 										name="gender"
 										variant="outlined"
@@ -250,21 +218,6 @@ const AboutMeForm = ({
 						<Typography className={classes.subTitle} color="primary">
 							{t('Datos Medicos')}
 						</Typography>
-						<Grid container spacing={2} className={classes.labelYesNo}>
-							<Grid item sm>
-								<FormLabel>{t('medicalData.fields.haveAllergies.label')}</FormLabel>
-							</Grid>
-							<Grid item sm={6} xs={12} md="auto">
-								<Field component={OptionsGroup} name="haveAllergies" fullWidth>
-									<Option className={classes.optionButton} value={true}>
-										{t('medicalData.fields.yesOption')}
-									</Option>
-									<Option className={classes.optionButton} value={false}>
-										{t('medicalData.fields.noOption')}
-									</Option>
-								</Field>
-							</Grid>
-						</Grid>
 						<Grid container spacing={2} className={classes.labelYesNo}>
 							<Grid item sm>
 								<FormLabel>{t('aboutme.fields.moreInfo.helperText')}</FormLabel>

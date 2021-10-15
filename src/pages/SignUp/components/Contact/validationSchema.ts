@@ -67,7 +67,7 @@ export const defaultNewUserValidationSchema = object().shape({
 		.min(8, messages.identification.digits)
 		.max(12, messages.identification.digits)
 		.required(messages.identification.required),
-	/*phoneNumber: string()
+	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
@@ -77,7 +77,7 @@ export const defaultNewUserValidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	password: string().required(messages.password.required).min(6, messages.password.minLength),
+	/*password: string().required(messages.password.required).min(6, messages.password.minLength),
 	repeatPassword: string()
 		.required(messages.repeatPassword.required)
 		// eslint-disable-next-line
@@ -100,7 +100,7 @@ export const guestValidationSchema = object().shape({
 			then: string().matches(/^[a-zA-Z0-9]{12,}$/g, 'CE inválido'),
 		}),
 
-	/*phoneNumber: string()
+	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
@@ -110,5 +110,5 @@ export const guestValidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	// isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], 'gest'),*/
+	// isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], 'gest'),
 });

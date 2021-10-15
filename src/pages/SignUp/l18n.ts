@@ -79,6 +79,7 @@ const signUp = {
 	'contact.title.firstLine': 'Usaremos los datos de contacto para',
 	'contact.title.secondLine': 'enviar información de la cita',
 	'contact.subTitle': '3. DATOS DE CONTACTO',
+	'contact.subTitle.id': 'Documento de identidad del Paciente',
 	'contact.fields.idType.label.toYou': 'Tipo de documento',
 	'contact.fields.idType.label.toSomeoneElse': 'Tipo de documento del paciente',
 	'contact.fields.id.label.toYou': 'N° Documento',
@@ -107,7 +108,7 @@ const signUp = {
 	'contact.validation.email.validEmail': 'Ingrese un correo de contacto valido',
 	'contact.validation.isterm.required': 'Se requiere aceptar los términos y condiciones',
 
-	'contact.legalInformation.firstSection': 'Al ingresar estás confirmando que estás de acuerdo con nuestra',
+	'contact.legalInformation.firstSection': 'Al continuar estás aceptando nuestros',
 
 	'contact.legalInformation.firstSection1': 'He leído y acepto los',
 	'contact.legalInformation.termsAndConditionsLink1': 'Términos y Condiciones',
@@ -115,8 +116,8 @@ const signUp = {
 	'contact.legalInformation.privacyPolicyLink1': 'Política de Privacidad',
 
 	'contact.legalInformation.firstSection2': 'He leído y acepto el',
-	'contact.legalInformation.analysisData': 'tratamiento de mis datos personales para fines adicionales',
-
+	'contact.legalInformation.analysisData': 'tratamiento de mis datos personales',
+	'contact.legalInformation.secondSection2': 'para fines adicionales',
 	'contact.legalInformation.privacyPolicyLink': 'política de privacidad',
 	'contact.legalInformation.secondSection': 'y nuestros',
 	'contact.legalInformation.termsAndConditionsLink': 'términos y condiciones.',

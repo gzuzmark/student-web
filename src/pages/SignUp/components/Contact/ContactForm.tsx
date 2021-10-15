@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useState } from 'react';
-import { TextField as MaterialTextField } from '@material-ui/core';
+import { Grid, TextField as MaterialTextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -56,7 +56,7 @@ interface ContactFormProps {
 
 const initialValues = {
 	identification: '',
-	identificationType: 'DNI',
+	identificationType: '',
 	phoneNumber: '',
 	email: '',
 	password: '',
@@ -73,15 +73,18 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			maxWidth: '752px',
 		},
 	},
+	fieldTermWrapper: {
+		paddingBottom: '22px',
+	},
 	fieldWrapper: {
-		paddingBottom: '37px',
+		paddingBottom: '39px',
 		'&:last-child': {
-			paddingBottom: '25px',
+			paddingBottom: '35px',
 		},
 		[breakpoints.up('lg')]: {
 			paddingBottom: '48px',
 			'&:last-child': {
-				paddingBottom: '27px',
+				paddingBottom: '43px',
 			},
 		},
 	},
@@ -114,6 +117,34 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		fontSize: '0.85rem',
 		fontWeight: '500',
 		color: '#FE6B6F',
+	},
+	subTitle: {
+		marginBottom: '40px',
+		fontFamily: 'Mulish',
+		fontWeight: '700',
+		fontSize: '16px',
+		paddingBottom: '8px',
+		color: palette.secondary.light,
+		lineHeight: '20px',
+		borderBottom: '1px solid #B0CEFE',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '16px',
+			fontSize: '20px',
+		},
+	},
+	title: {
+		marginBottom: '40px',
+		fontFamily: 'Mulish',
+		fontWeight: '700',
+		fontSize: '16px',
+		paddingBottom: '8px',
+		color: palette.primary.main,
+		lineHeight: '20px',
+		borderBottom: '1px solid #B0CEFE',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '16px',
+			fontSize: '20px',
+		},
 	},
 }));
 
@@ -179,53 +210,6 @@ const ContactForm = ({
 			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
 					{/*<div>
-						
-						<FormControl className={classes.fieldWrapper} fullWidth>
-							<Field
-								component={TextField}
-								label={'Tipo de documento'}
-								name="identificationType"
-								variant="outlined"
-								select
-							>
-								<MenuItem value={'1'}>DNI</MenuItem>
-								<MenuItem value={'2'}>CE</MenuItem>
-							</Field>
-						</FormControl>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={TextField}
-								name="identification"
-								label={t(`contact.fields.id.label.${contactKey}`)}
-								variant="outlined"
-								inputProps={{ maxLength: 12 }}
-								fullWidth
-							/>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={TextField}
-								className={classes.fieldWithHelperText}
-								name="phoneNumber"
-								type="tel"
-								label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
-								variant="outlined"
-								helperText={t(`contact.fields.phoneNumber.helperText.${contactKey}`)}
-								inputProps={{ maxLength: 9 }}
-								fullWidth
-							/>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={TextField}
-								className={classes.fieldWithHelperText}
-								name="email"
-								label={t(`contact.fields.email.label.${contactKey}`)}
-								variant="outlined"
-								helperText={t('contact.fields.email.helperText')}
-								fullWidth
-							/>
-						</div>
 						{isUbigeoEnabled && (
 							<>
 								<div className={classes.fieldWrapper}>
@@ -333,18 +317,131 @@ const ContactForm = ({
 						</Button>
 					</div>*/}
 					<div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={TextField}
-								name="identification"
-								label={t(`contact.fields.id.label.${contactKey}`)}
-								variant="outlined"
-								inputProps={{ maxLength: 12 }}
-								fullWidth
+						<Typography className={classes.title} color="primary">
+							{t('contact.subTitle.id')}
+						</Typography>
+						<Grid container spacing={2}>
+							<Grid item sm={6} xs={6}>
+								<FormControl className={classes.fieldWrapper} fullWidth>
+									<Field
+										component={TextField}
+										label={'Tipo de doc.'}
+										name="identificationType"
+										variant="outlined"
+										select
+									>
+										<MenuItem value={'1'}>DNI</MenuItem>
+										<MenuItem value={'2'}>CE</MenuItem>
+									</Field>
+								</FormControl>
+							</Grid>
+							<Grid item sm={6} xs={6}>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={TextField}
+										name="identification"
+										label={t(`contact.fields.id.label.${contactKey}`)}
+										variant="outlined"
+										inputProps={{ maxLength: 12 }}
+										fullWidth
+									/>
+								</div>
+							</Grid>
+						</Grid>
+						<div>
+							<Typography className={classes.subTitle} color="primary">
+								{t('medicalData.fields.files.label.contacto')}
+							</Typography>
+							<Grid container spacing={2}>
+								<Grid item sm={6} xs={6}>
+									<div className={classes.fieldWrapper}>
+										<Field
+											component={TextField}
+											className={classes.fieldWithHelperText}
+											name="phoneNumber"
+											type="tel"
+											label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
+											variant="outlined"
+											inputProps={{ maxLength: 9 }}
+											fullWidth
+										/>
+									</div>
+								</Grid>
+								<Grid item sm={6} xs={6}>
+									<div className={classes.fieldWrapper}>
+										<Field
+											component={TextField}
+											className={classes.fieldWithHelperText}
+											name="email"
+											label={t(`contact.fields.email.label.${contactKey}`)}
+											variant="outlined"
+											fullWidth
+										/>
+									</div>
+								</Grid>
+							</Grid>
+						</div>
+						<div className={classes.fieldTermWrapper}>
+							<FormControlLabel
+								control={
+									<>
+										<Field
+											component={Checkbox}
+											type="checkbox"
+											name="isTerm"
+											color="primary"
+											checked={isChecked}
+											onClick={handleChange}
+										/>
+									</>
+								}
+								label={
+									<>
+										<Typography className={classes.legalInformation} component="span">
+											{t('contact.legalInformation.firstSection2')}{' '}
+										</Typography>
+										<Typography
+											className={classes.privacyPolicyLink}
+											component="span"
+											color="primary"
+											onClick={openDataAnalitycs}
+										>
+											{t('contact.legalInformation.analysisData')}{' '}
+										</Typography>
+										<Typography className={classes.legalInformation} component="span">
+											{t('contact.legalInformation.secondSection2')}{' '}
+										</Typography>
+									</>
+								}
 							/>
+							<ErrorMessage className={classes.termsConditions} name="isTerm" component="p"></ErrorMessage>
 						</div>
 						<div className={classes.fieldWrapper}>
-							<Button variant="contained" fullWidth onClick={submitForm}>
+							<Typography className={classes.legalInformation} component="span">
+								{t('contact.legalInformation.firstSection')}{' '}
+							</Typography>
+							<Typography
+								className={classes.privacyPolicyLink}
+								component="span"
+								color="primary"
+								onClick={openTermsAndConditions}
+							>
+								{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
+							</Typography>
+							<Typography className={classes.legalInformation} component="span">
+								{t('contact.legalInformation.secondSection1')}{' '}
+							</Typography>
+							<Typography
+								className={classes.privacyPolicyLink}
+								component="span"
+								color="primary"
+								onClick={openPrivacyPolicy}
+							>
+								{t('contact.legalInformation.privacyPolicyLink1')}{' '}
+							</Typography>
+						</div>
+						<div className={classes.fieldWrapper}>
+							<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
 								{t('contact.submit.text')}
 							</Button>
 						</div>

@@ -23,11 +23,11 @@ export interface MedicalDataValues {
 	medicineList: string;
 	symptom: string;
 	moreInfo: string;
-	phoneNumber: string;
-	email?: string;
 	consultReason: string;
 	files?: string[];
 	isDermatology: boolean | null;
+	haveAllergies: boolean | null;
+	allergies: string;
 	//identification: string;
 	//identificationType: string;
 	isTerm?: boolean | null;
@@ -46,13 +46,13 @@ interface MedicalDataFormProps {
 const initialValues = {
 	takeMedicines: null,
 	medicineList: '',
-	phoneNumber: '',
-	email: '',
 	symptom: '',
 	moreInfo: '',
 	consultReason: '',
 	files: [],
 	isDermatology: false,
+	haveAllergies: null,
+	allergies: '',
 	isTerm: true,
 	isClub: true,
 };
@@ -64,17 +64,14 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		},
 	},
 	fieldWrapper: {
-		paddingBottom: '37px',
+		paddingBottom: '39px',
 		'&:last-child': {
-			paddingBottom: '20px',
-		},
-		'& .MuiInputBase-root.Mui-disabled': {
-			backgroundColor: 'transparent',
+			paddingBottom: '35px',
 		},
 		[breakpoints.up('lg')]: {
-			paddingBottom: '24px',
+			paddingBottom: '48px',
 			'&:last-child': {
-				paddingBottom: '33px',
+				paddingBottom: '43px',
 			},
 		},
 	},
@@ -130,20 +127,6 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	italicLabel: {
 		fontStyle: 'italic',
-	},
-	subTitle: {
-		marginBottom: '32px',
-		fontFamily: 'Mulish',
-		fontWeight: '700',
-		fontSize: '16px',
-		paddingBottom: '8px',
-		color: palette.secondary.light,
-		lineHeight: '20px',
-		borderBottom: '1px solid #B0CEFE',
-		[breakpoints.up('lg')]: {
-			paddingBottom: '16px',
-			fontSize: '20px',
-		},
 	},
 }));
 
@@ -258,6 +241,32 @@ const MedicalDataForm = ({
 								fullWidth
 							/>
 						</div>
+						<Grid container spacing={2} className={classes.labelYesNo}>
+							<Grid item sm>
+								<FormLabel>{t('medicalData.fields.haveAllergies.label')}</FormLabel>
+							</Grid>
+							<Grid item sm={6} xs={12} md="auto">
+								<Field component={OptionsGroup} name="haveAllergies" fullWidth>
+									<Option className={classes.optionButton} value={true}>
+										{t('medicalData.fields.yesOption')}
+									</Option>
+									<Option className={classes.optionButton} value={false}>
+										{t('medicalData.fields.noOption')}
+									</Option>
+								</Field>
+							</Grid>
+						</Grid>
+						<div className={classes.fieldWrapper}>
+							<Field
+								component={TextField}
+								name="allergies"
+								placeholder={t('medicalData.fields.allergies.label')}
+								variant="outlined"
+								disabled={!values.haveAllergies}
+								fullWidth
+							/>
+						</div>
+
 						<div className={classes.fieldWrapper}>
 							<div className={classes.fieldLabelWrapper}>
 								<FormLabel>{t('medicalData.fields.photos.label')}</FormLabel>
@@ -297,39 +306,6 @@ const MedicalDataForm = ({
 								helperText={t('medicalData.fields.moreInfo.helperText')}
 								fullWidth
 							/>
-						</div>
-						<div>
-							<Typography className={classes.subTitle} color="primary">
-								{t('medicalData.fields.files.label.contacto')}
-							</Typography>
-							<Grid container spacing={1}>
-								<Grid item sm={6} xs={6}>
-									<div className={classes.fieldWrapper}>
-										<Field
-											component={TextField}
-											className={classes.fieldWithHelperText}
-											name="phoneNumber"
-											type="tel"
-											label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
-											variant="outlined"
-											inputProps={{ maxLength: 9 }}
-											fullWidth
-										/>
-									</div>
-								</Grid>
-								<Grid item sm={6} xs={6}>
-									<div className={classes.fieldWrapper}>
-										<Field
-											component={TextField}
-											className={classes.fieldWithHelperText}
-											name="email"
-											label={t(`contact.fields.email.label.${contactKey}`)}
-											variant="outlined"
-											fullWidth
-										/>
-									</div>
-								</Grid>
-							</Grid>
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>
