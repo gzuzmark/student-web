@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import callMedic from 'icons/call_medic.svg';
 import cartMedicB from 'icons/cart_back_medic.svg';
 import cartMedic from 'icons/cart_medic.svg';

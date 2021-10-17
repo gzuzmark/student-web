@@ -1,7 +1,7 @@
 import { Theme, Typography } from '@material-ui/core';
 import { Loading } from 'pages';
 import React, { ReactElement } from 'react';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { stylesWithTheme } from 'utils';
 import { useTranslation } from 'react-i18next';
 

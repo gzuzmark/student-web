@@ -10,7 +10,7 @@ import { useHistory } from 'react-router-dom';
 import AppContext from 'AppContext';
 import clsx from 'clsx';
 
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { ReactComponent as LeftIcon } from 'icons/left.svg';
 import { ReactComponent as UserIcon } from 'icons/default_user_icon.svg';
 
@@ -33,7 +33,11 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		brandLogo: {
 			width: 58,
 			[breakpoints.up('lg')]: {
-				width: 97,
+				width: 140,
+				height: 25,
+			},
+			[breakpoints.down('md')]: {
+				width: 90,
 				height: 25,
 			},
 		},
