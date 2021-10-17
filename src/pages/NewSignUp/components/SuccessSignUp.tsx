@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import AppContext from 'AppContext';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { ReactComponent as ThumbsUpIcon } from 'icons/good_quality.svg';
 import { stylesWithTheme } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router';
 import { parse } from 'query-string';
 
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
 
 import AskAddressForm from './components/AskAddressForm';

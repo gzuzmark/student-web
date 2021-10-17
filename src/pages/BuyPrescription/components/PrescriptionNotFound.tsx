@@ -1,5 +1,5 @@
 import { Card, CardContent, Theme, Typography } from '@material-ui/core';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils';

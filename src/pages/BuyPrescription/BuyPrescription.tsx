@@ -1,7 +1,7 @@
 import Divider from '@material-ui/core/Divider';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { getPrescription, Position } from 'pages/api';
 import { createTrackingPatientPrescriptionBlank, TrackingLocalStorage } from 'pages/api/tracking';
 import { PrescribedMedicine, Prescription } from 'pages/api/userPrescription';

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Container } from 'pages/common';
 import mobileLogin from 'icons/mobile_login.png';
 import desktopImage from 'icons/login_image.jpg';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import IconBack from 'icons/left2.svg';
 import Circle from 'pages/common/Circle';
 import AppContext from 'AppContext';

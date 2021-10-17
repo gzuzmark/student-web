@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
 import {
 	createTrackingDetailSelectMedicinesToEcommerce,

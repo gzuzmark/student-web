@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { ReactComponent as CryingIcon } from 'icons/crying.svg';
 import { ReactComponent as PrescriptionIcon } from 'icons/prescription.svg';
 import { createTrackingDetailLogAddressNoCoverage, TrackingLocalStorage } from 'pages/api/tracking';
