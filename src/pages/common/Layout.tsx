@@ -38,6 +38,15 @@ const useStyles = makeStyles((theme: Theme) =>
 				minHeight: 'calc(100vh - 80px)',
 			},
 		},
+		mainLayout: {
+			backgroundColor: BACKGROUND_DEFAULT,
+			flex: '1 1 auto',
+			minHeight: 'calc(100vh - 50px)',
+			[theme.breakpoints.up('lg')]: {
+				padding: '32px',
+				minHeight: 'calc(100vh - 80px)',
+			},
+		},
 		circle: {
 			display: 'none',
 			position: 'absolute',
@@ -71,4 +80,10 @@ export const RightLayout = ({ children, className }: LayoutProps) => {
 	const classes = useStyles();
 
 	return <div className={clsx(classes.rightLayout, className)}>{children}</div>;
+};
+
+export const MainLayout = ({ children, className }: LayoutProps) => {
+	const classes = useStyles();
+
+	return <div className={clsx(classes.mainLayout, className)}>{children}</div>;
 };
