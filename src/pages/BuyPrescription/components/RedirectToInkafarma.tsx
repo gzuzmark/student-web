@@ -2,7 +2,7 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
+// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { ReactComponent as InkafarmaIcon } from 'icons/inkafarma.svg';
 import {
 	createTrackingDetailSelectMedicinesToEcommerce,
@@ -15,6 +15,7 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { stylesWithTheme } from 'utils';
+const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -207,7 +208,7 @@ const RedirectToInkafarma = ({ medicines, selectedMedicines }: RedirectToInkafar
 			<div className={classes.wrapper}>
 				<div className={classes.content}>
 					<div className={classes.brandLogoWrapper}>
-						<BrandLogo className={classes.brandLogo} />
+						<img src={urlLogo} alt="" className={classes.brandLogo} />
 					</div>
 					<Typography className={classes.title} variant="h1">
 						{t('buyPrescription.redirectToInkafarma.title')}
