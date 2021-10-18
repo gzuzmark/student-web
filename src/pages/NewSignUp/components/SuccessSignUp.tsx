@@ -5,11 +5,12 @@ import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import AppContext from 'AppContext';
-import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
+// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { ReactComponent as ThumbsUpIcon } from 'icons/good_quality.svg';
 import { stylesWithTheme } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
 import { ReducerAction } from '../types';
+const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	'@global': {
@@ -105,7 +106,7 @@ const SuccessSignUp = ({ showWelcomeScreen }: SuccessSignUpProps): ReactElement 
 			<div className={classes.wrapper}>
 				<div className={classes.content}>
 					<div className={classes.brandLogoWrapper}>
-						<BrandLogo className={classes.brandLogo} />
+						<img src={urlLogo} alt="" className={classes.brandLogo} />
 					</div>
 					<div className={classes.dividerWrapper}>
 						<Divider />

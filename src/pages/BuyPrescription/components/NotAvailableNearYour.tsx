@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
+// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { ReactComponent as CryingIcon } from 'icons/crying.svg';
 import { ReactComponent as PrescriptionIcon } from 'icons/prescription.svg';
 import { createTrackingDetailLogAddressNoCoverage, TrackingLocalStorage } from 'pages/api/tracking';
@@ -9,6 +9,7 @@ import useTracking from 'pages/Tracking/useTracking';
 import React, { ReactElement, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils';
+const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -130,7 +131,7 @@ const NotAvailableNearYour = ({ address, showEditAddressScreen }: NotAvailableNe
 			<div className={classes.wrapper}>
 				<div className={classes.content}>
 					<div className={classes.brandLogoWrapper}>
-						<BrandLogo className={classes.brandLogo} />
+						<img src={urlLogo} alt="" className={classes.brandLogo} />
 					</div>
 					<Typography className={classes.title} variant="h1">
 						{t('buyPrescription.notAvailableNearYou.title')}
