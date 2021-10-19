@@ -41,8 +41,16 @@ export interface DoctorAPI {
 	specialty_name: string;
 }
 
+interface AllDoctorUseCaseAPI {
+	data: DoctorAvailability2API[];
+}
+
 interface DoctorAvailabilityAPI extends DoctorAPI {
 	schedules: ScheduleAPI[];
+}
+
+interface DoctorAvailability2API extends DoctorAPI {
+	schedules: number;
 }
 
 interface DoctorResponseAPI {
@@ -96,6 +104,10 @@ export interface Doctor {
 
 export interface DoctorAvailability extends Doctor {
 	schedules: Schedule[];
+}
+
+export interface DoctorAvailabilityUseCase extends DoctorAvailability {
+	hasSchedules: boolean;
 }
 
 interface RequestProps {
@@ -194,6 +206,36 @@ export const getMedicalSpecialities = async (data: RequestProps): Promise<Doctor
 	return parsedData;
 };
 
+export const getAllDoctorsBySpecialty = async (useCaseId: string): Promise<DoctorAvailabilityUseCase[]> => {
+	try {
+		const response = await aliviaAxios.get<AllDoctorUseCaseAPI>('/doctors/doctors-by-usecaseid', {
+			params: {
+				use_case_id: useCaseId,
+			},
+		});
+		return response.data.data.map((item) => {
+			return {
+				...item,
+				speciality: item.title,
+				specialityName: item.specialty_name,
+				lastName: item.last_name,
+				schedules: [],
+				hasSchedules: item.schedules > 0,
+				profilePicture: item.photo,
+				patientOpinions: item.ratings.map(({ rating, comment, created_at }) => ({
+					comment,
+					score: rating,
+					datePublished: created_at,
+				})),
+				aboutMe: item.about_me,
+				education: item.formation,
+			};
+		});
+	} catch (error) {
+		return [];
+	}
+};
+
 export const getNextAvailableSchedules = async (
 	useCaseID: string,
 	startDate: Date,
@@ -209,7 +251,32 @@ export const getNextAvailableSchedules = async (
 	return {
 		doctors: parsedDoctorsData,
 		dates: dates,
-		isNextDays: data.data.dates.length > 7,
+		isNextDays: data.data.status,
+	};
+};
+
+export const getAvailableSchedulesByDoctorId = async (doctorId: string, startDate: Date) => {
+	// startDate.setHours(0, 0, 0, 0);
+
+	const utcDate = new Date(startDate).toUTCString();
+	const parseDateToUtc = Date.parse(utcDate);
+	const response = await aliviaAxios.get<NextAvailableSchedulesAPI>('/doctors/schedules-by-doctorid', {
+		params: { doctor_id: doctorId, from: parseDateToUtc },
+	});
+	const {
+		data: {
+			data: { doctors, dates, status },
+		},
+	} = response;
+	const parsedDoctorsData = parseResponseData(doctors);
+	const dateInit = new Date(dates[0]);
+	const offsetTimeZone = dateInit.getTimezoneOffset();
+	const datesWeeks = validWeek(parsedDoctorsData, addMinutes(dateInit, offsetTimeZone));
+
+	return {
+		doctors: parsedDoctorsData,
+		dates: datesWeeks,
+		isNextDays: status,
 	};
 };
 
@@ -228,6 +295,7 @@ export const validWeek = (doctors: DoctorAvailability[], startDate: Date) => {
 };
 
 const completeWeek = (startDate: Date) => {
+	console.log(startDate, 'startdate');
 	return [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(startDate, i));
 };
 

@@ -16,16 +16,20 @@ import { OptionsGroup, Option, FilesGroupField } from 'pages/common';
 
 import validationSchema from './validationSchema';
 import ActionAfterError from './ActionAfterError';
+import { Grid } from '@material-ui/core';
 
 export interface MedicalDataValues {
 	takeMedicines: boolean | null;
 	medicineList: string;
-	haveAllergies: boolean | null;
-	allergies: string;
+	symptom: string;
 	moreInfo: string;
 	consultReason: string;
 	files?: string[];
 	isDermatology: boolean | null;
+	haveAllergies: boolean | null;
+	allergies: string;
+	isTerm?: boolean | null;
+	isClub?: boolean;
 }
 
 interface MedicalDataFormProps {
@@ -34,36 +38,33 @@ interface MedicalDataFormProps {
 	medicalData: MedicalDataValues | undefined;
 	//---------------------------
 	openIndicacionesModal: () => void;
-	//---------------------------
+	//--------
 }
 
 const initialValues = {
 	takeMedicines: null,
 	medicineList: '',
-	haveAllergies: null,
-	allergies: '',
+	symptom: '',
 	moreInfo: '',
 	consultReason: '',
 	files: [],
 	isDermatology: false,
+	haveAllergies: null,
+	allergies: '',
+	isTerm: true,
+	isClub: true,
 };
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
-			maxWidth: '403px',
+			maxWidth: '752px',
 		},
 	},
 	fieldWrapper: {
-		paddingBottom: '37px',
-		'&:nth-child(4)': {
-			paddingBottom: '20px',
-		},
+		paddingBottom: '39px',
 		'&:last-child': {
-			paddingBottom: '20px',
-		},
-		'& .MuiInputBase-root.Mui-disabled': {
-			backgroundColor: 'transparent',
+			paddingBottom: '35px',
 		},
 		[breakpoints.up('lg')]: {
 			paddingBottom: '48px',
@@ -74,19 +75,28 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	optionButton: {
 		textTransform: 'none',
-		padding: '12.5px',
+		padding: '14px',
+		minWidth: '112px',
 		'&.MuiButton-contained': {
 			padding: '13.5px',
 			[breakpoints.up('lg')]: {
-				padding: '17.5px',
+				padding: '17px',
 			},
 		},
 		[breakpoints.up('lg')]: {
-			padding: '16.5px',
+			maxHeight: '48px',
 		},
 	},
 	fieldLabelWrapper: {
-		paddingBottom: '8px',
+		paddingBottom: '10px',
+	},
+	labelYesNo: {
+		display: 'flex',
+		alignItems: 'center',
+		paddingBottom: '24px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '41px',
+		},
 	},
 	fieldClickable: {
 		cursor: 'pointer',
@@ -122,7 +132,7 @@ function especialidad(speciality = '') {
 	if (speciality === 'Dermatología') {
 		return 'Adjunta al menos dos fotos del problema en piel, una a 10 cm y otra a 30 cm de distancia. (Obligatorio)';
 	} else {
-		return 'Adjunta fotos o exámenes realizados. (Opcional)';
+		return 'Adjunta fotos, resultados de laboratorio, rayos X, ecografías, etc.';
 	}
 }
 
@@ -144,7 +154,7 @@ function indicaciones(speciality = '') {
 
 const MedicalDataForm = ({
 	onChangeStep,
-	openPrivacyPolicy,
+	//submitSignUp,
 	medicalData,
 	openIndicacionesModal,
 }: MedicalDataFormProps) => {
@@ -152,6 +162,7 @@ const MedicalDataForm = ({
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
 	const consultReasonRef = useRef<Element | null>(null);
+
 	const onSubmit = useCallback(
 		(values: MedicalDataValues, { setSubmitting }: { setSubmitting: Function }) => {
 			onChangeStep(values);
@@ -196,49 +207,75 @@ const MedicalDataForm = ({
 						</div>
 						<div className={classes.fieldWrapper}>
 							<div className={classes.fieldLabelWrapper}>
+								<FormLabel>{t('medicalData.fields.symptom.label')}</FormLabel>
+							</div>
+							<Field component={TextField} name="symptom" variant="outlined" fullWidth />
+						</div>
+						<Grid container spacing={2} className={classes.labelYesNo}>
+							<Grid item sm>
 								<FormLabel>{t('medicalData.fields.takeMedicines.label')}</FormLabel>
-							</div>
-							<Field component={OptionsGroup} name="takeMedicines" fullWidth>
-								<Option className={classes.optionButton} value={true}>
-									{t('medicalData.fields.yesOption')}
-								</Option>
-								<Option className={classes.optionButton} value={false}>
-									{t('medicalData.fields.noOption')}
-								</Option>
-							</Field>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={TextField}
-								name="medicineList"
-								label={t('medicalData.fields.medicineList.label')}
-								variant="outlined"
-								disabled={!values.takeMedicines}
-								fullWidth
-							/>
-						</div>
-						<div className={classes.fieldWrapper}>
+							</Grid>
+							<Grid item sm={6} xs={12} md="auto">
+								<Field component={OptionsGroup} name="takeMedicines" fullWidth>
+									<Option className={classes.optionButton} value={true}>
+										{t('medicalData.fields.yesOption')}
+									</Option>
+									<Option className={classes.optionButton} value={false}>
+										{t('medicalData.fields.noOption')}
+									</Option>
+								</Field>
+							</Grid>
+						</Grid>
+						<div className={classes.fieldWrapper} style={{ display: !values.takeMedicines ? 'none' : 'block' }}>
 							<div className={classes.fieldLabelWrapper}>
-								<FormLabel>{t('medicalData.fields.haveAllergies.label')}</FormLabel>
+								<FormLabel>{t('medicalData.fields.medicineList.label')}</FormLabel>
 							</div>
-							<Field component={OptionsGroup} name="haveAllergies" fullWidth>
-								<Option className={classes.optionButton} value={true}>
-									{t('medicalData.fields.yesOption')}
-								</Option>
-								<Option className={classes.optionButton} value={false}>
-									{t('medicalData.fields.noOption')}
-								</Option>
-							</Field>
+							<Field component={TextField} name="medicineList" variant="outlined" fullWidth />
 						</div>
-						<div className={classes.fieldWrapper}>
+						<Grid container spacing={2} className={classes.labelYesNo}>
+							<Grid item sm>
+								<FormLabel>{t('medicalData.fields.haveAllergies.label')}</FormLabel>
+							</Grid>
+							<Grid item sm={6} xs={12} md="auto">
+								<Field component={OptionsGroup} name="haveAllergies" fullWidth>
+									<Option className={classes.optionButton} value={true}>
+										{t('medicalData.fields.yesOption')}
+									</Option>
+									<Option className={classes.optionButton} value={false}>
+										{t('medicalData.fields.noOption')}
+									</Option>
+								</Field>
+							</Grid>
+						</Grid>
+						<div className={classes.fieldWrapper} style={{ display: !values.haveAllergies ? 'none' : 'block' }}>
 							<Field
 								component={TextField}
 								name="allergies"
-								label={t('medicalData.fields.allergies.label')}
+								placeholder={t('medicalData.fields.allergies.label')}
 								variant="outlined"
-								disabled={!values.haveAllergies}
 								fullWidth
 							/>
+						</div>
+
+						<div className={classes.fieldWrapper}>
+							<div className={classes.fieldLabelWrapper}>
+								<FormLabel>{t('medicalData.fields.photos.label')}</FormLabel>
+							</div>
+							<input name="isDermatology" value={String(useCase?.name === 'Dermatología')} type="hidden" />
+
+							<Field
+								component={FilesGroupField}
+								inputId="files-input"
+								name="files"
+								//labelText ={t('medicalData.dropzone.label')}
+								labelText={especialidad(useCase?.name)}
+							/>
+
+							<Typography component="span">{mejorefotos(useCase?.name)} </Typography>
+
+							<Typography className={classes.privacyPolicyLink} component="span" color="primary" onClick={onModal}>
+								{indicaciones(useCase?.name)}
+							</Typography>
 						</div>
 						<div className={classes.fieldWrapper}>
 							<div className={clsx(classes.fieldLabelWrapper, classes.optionalFieldLabel)}>
@@ -259,23 +296,6 @@ const MedicalDataForm = ({
 								helperText={t('medicalData.fields.moreInfo.helperText')}
 								fullWidth
 							/>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<input name="isDermatology" value={String(useCase?.name === 'Dermatología')} type="hidden" />
-
-							<Field
-								component={FilesGroupField}
-								inputId="files-input"
-								name="files"
-								//labelText ={t('medicalData.dropzone.label')}
-								labelText={especialidad(useCase?.name)}
-							/>
-
-							<Typography component="span">{mejorefotos(useCase?.name)} </Typography>
-
-							<Typography className={classes.privacyPolicyLink} component="span" color="primary" onClick={onModal}>
-								{indicaciones(useCase?.name)}
-							</Typography>
 						</div>
 					</div>
 					<div className={classes.fieldWrapper}>

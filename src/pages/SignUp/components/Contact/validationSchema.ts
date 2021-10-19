@@ -47,9 +47,9 @@ export const newUservalidationSchema = object().shape({
 		})
 		.when('identificationType', {
 			is: `2`,
-			then: string().matches(/\b[a-zA-Z0-9]{12}\b/, 'CE inválido'),
+			then: string().matches(/^[a-zA-Z0-9]{9,12}$/, 'CE inválido'),
 		}),
-	phoneNumber: string()
+	/*phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
@@ -59,7 +59,7 @@ export const newUservalidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], messages.isterm.required),
+	isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], messages.isterm.required),*/
 });
 
 export const defaultNewUserValidationSchema = object().shape({
@@ -77,12 +77,12 @@ export const defaultNewUserValidationSchema = object().shape({
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	password: string().required(messages.password.required).min(6, messages.password.minLength),
+	/*password: string().required(messages.password.required).min(6, messages.password.minLength),
 	repeatPassword: string()
 		.required(messages.repeatPassword.required)
 		// eslint-disable-next-line
 		// @ts-ignore
-		.toEqual('password', messages.repeatPassword.notEqual),
+		.toEqual('password', messages.repeatPassword.notEqual),*/
 });
 
 export const guestValidationSchema = object().shape({
@@ -97,7 +97,7 @@ export const guestValidationSchema = object().shape({
 		})
 		.when('identificationType', {
 			is: `2`,
-			then: string().matches(/^[a-zA-Z0-9]{12,}$/g, 'CE inválido'),
+			then: string().matches(/^[a-zA-Z0-9]{9,12}$/, 'CE inválido'),
 		}),
 
 	phoneNumber: string()

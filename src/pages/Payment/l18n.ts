@@ -23,6 +23,7 @@ const paymentL18n = {
 	'payment.right.steps.three':
 		'Acércate a tu agente, agencia o banco de preferencia y menciona Servicio Safetypay con tu código de pago ¡Y LISTO!',
 	'payment.right.steps.wpp': '¿DUDAS? Comunícate vía Whatsapp al: ',
+	'payment.right.pagoEfectivo.label.documentType': 'Ingresa tu DNI o CE',
 };
 
 export default paymentL18n;

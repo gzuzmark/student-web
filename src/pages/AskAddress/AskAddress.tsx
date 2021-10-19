@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router';
 import { parse } from 'query-string';
 
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
 
 import AskAddressForm from './components/AskAddressForm';
@@ -14,7 +14,7 @@ import AddressBenefits from './components/AddressBenefits';
 import SuccessModal from './components/SuccessModal';
 import { Position } from 'pages/api';
 import { ReactComponent as InkafarmaIcon } from '../../icons/inkafarma.svg';
-
+const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 interface StylesProps {
 	isAlternativeActive: boolean;
 }
@@ -100,7 +100,7 @@ const AskAddress = ({ sessionId, submitCallback }: AskAddressProps): ReactElemen
 		<div className={classes.container}>
 			<div className={classes.titleWrapper}>
 				<div>
-					<BrandLogo className={classes.brandLogo} />
+					<img src={urlLogo} alt="" className={classes.brandLogo} />
 				</div>
 				<Typography className={classes.title} variant="h1">
 					{t(!!sessionId ? 'askAddress.title.alternative' : 'askAddress.title')}

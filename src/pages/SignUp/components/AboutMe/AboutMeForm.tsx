@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-// import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
 import { Formik, Form, Field } from 'formik';
@@ -11,8 +10,8 @@ import { useTranslation } from 'react-i18next';
 
 import { stylesWithTheme } from 'utils/createStyles';
 import { DatePickerField } from 'pages/common';
-
 import validationSchema, { minorValidationSchema } from './validationSchema';
+import { Grid } from '@material-ui/core';
 
 export interface AboutMeValues {
 	name: string;
@@ -22,6 +21,8 @@ export interface AboutMeValues {
 	gender: number | undefined;
 	identification?: string;
 	documentIssueDate?: Date | null;
+	condition: boolean | null;
+	address: string;
 }
 
 interface AboutMeFormProps {
@@ -40,18 +41,20 @@ const initialValues = {
 	gender: undefined,
 	identification: '',
 	documentIssueDate: null,
+	condition: null,
+	address: '',
 };
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	form: {
 		[breakpoints.up('lg')]: {
-			maxWidth: '403px',
+			maxWidth: '752px',
 		},
 	},
 	fieldWrapper: {
-		paddingBottom: '37px',
+		paddingBottom: '39px',
 		'&:last-child': {
-			paddingBottom: '20px',
+			paddingBottom: '35px',
 		},
 		[breakpoints.up('lg')]: {
 			paddingBottom: '48px',
@@ -59,6 +62,9 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 				paddingBottom: '43px',
 			},
 		},
+	},
+	fieldLabelWrapper: {
+		paddingBottom: '10px',
 	},
 	privacyPolicyWrapper: {
 		display: 'none',
@@ -71,15 +77,46 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		cursor: 'pointer',
 		textDecoration: 'underline',
 	},
+	subTitle: {
+		marginBottom: '24px',
+		fontFamily: 'Mulish',
+		fontWeight: '700',
+		fontSize: '16px',
+		color: '#1ECD96',
+		lineHeight: '20px',
+		borderBottom: '1px solid #F0F2FA',
+		[breakpoints.up('lg')]: {
+			marginBottom: '30px',
+			lineHeight: '24px',
+			paddingBottom: '16px',
+			fontSize: '20px',
+		},
+	},
+	optionButton: {
+		textTransform: 'none',
+		minWidth: '112px',
+		padding: '14px',
+		'&.MuiButton-contained': {
+			padding: '12px',
+			[breakpoints.up('lg')]: {
+				padding: '17px',
+			},
+		},
+		[breakpoints.up('lg')]: {
+			maxHeight: '48px',
+		},
+	},
+	labelYesNo: {
+		display: 'flex',
+		alignItems: 'center',
+		paddingBottom: '24px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '41px',
+		},
+	},
 }));
 
-const AboutMeForm = ({
-	aboutMeData,
-	onChangeStep,
-	openPrivacyPolicy,
-	userLabel,
-	validationOnChange,
-}: AboutMeFormProps) => {
+const AboutMeForm = ({ aboutMeData, onChangeStep, userLabel, validationOnChange }: AboutMeFormProps) => {
 	const { t } = useTranslation('signUp');
 	const classes = useStyles();
 	const onSubmit = useCallback(
@@ -100,6 +137,39 @@ const AboutMeForm = ({
 			{({ submitForm, isSubmitting }) => (
 				<Form className={classes.form}>
 					<div>
+						<Grid container spacing={2}>
+							<Grid item sm={6} xs={6}>
+								<FormControl className={classes.fieldWrapper} fullWidth>
+									<Field
+										component={TextField}
+										label={t('aboutme.fields.gender.label')}
+										name="gender"
+										variant="outlined"
+										select
+									>
+										<MenuItem value={'0'}>Masculino</MenuItem>
+										<MenuItem value={'1'}>Femenino</MenuItem>
+									</Field>
+								</FormControl>
+							</Grid>
+							<Grid item sm={6} xs={6}>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={DatePickerField}
+										disableFuture
+										name="birthDate"
+										validationOnChange={validationOnChange}
+										TextFieldProps={{
+											label: t('aboutme.fields.birthDate.label'),
+											variant: 'outlined',
+											helperText: '',
+											fullWidth: true,
+											placeholder: 'DD/MM/YYYY',
+										}}
+									/>
+								</div>
+							</Grid>
+						</Grid>
 						<div className={classes.fieldWrapper}>
 							<Field
 								component={TextField}
@@ -109,51 +179,32 @@ const AboutMeForm = ({
 								fullWidth
 							/>
 						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={TextField}
-								name="lastName"
-								label={t(userLabel ? `aboutme.fields.lastName.label.${userLabel}` : 'aboutme.fields.lastName.label')}
-								variant="outlined"
-								fullWidth
-							/>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={TextField}
-								name="secondSurname"
-								label={t('aboutme.fields.secondSurname.label')}
-								variant="outlined"
-								fullWidth
-							/>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Field
-								component={DatePickerField}
-								disableFuture
-								name="birthDate"
-								validationOnChange={validationOnChange}
-								TextFieldProps={{
-									label: t('aboutme.fields.birthDate.label'),
-									variant: 'outlined',
-									helperText: '',
-									fullWidth: true,
-									placeholder: 'DD/MM/YYYY',
-								}}
-							/>
-						</div>
-						<FormControl className={classes.fieldWrapper} fullWidth>
-							<Field
-								component={TextField}
-								label={t('aboutme.fields.gender.label')}
-								name="gender"
-								variant="outlined"
-								select
-							>
-								<MenuItem value={0}>Masculino</MenuItem>
-								<MenuItem value={1}>Femenino</MenuItem>
-							</Field>
-						</FormControl>
+						<Grid container spacing={2}>
+							<Grid item sm={6} xs={6}>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={TextField}
+										name="lastName"
+										label={t(
+											userLabel ? `aboutme.fields.lastName.label.${userLabel}` : 'aboutme.fields.lastName.label',
+										)}
+										variant="outlined"
+										fullWidth
+									/>
+								</div>
+							</Grid>
+							<Grid item sm={6} xs={6}>
+								<div className={classes.fieldWrapper}>
+									<Field
+										component={TextField}
+										name="secondSurname"
+										label={t('aboutme.fields.secondSurname.label')}
+										variant="outlined"
+										fullWidth
+									/>
+								</div>
+							</Grid>
+						</Grid>
 						{userLabelExists ? (
 							<>
 								<div className={classes.fieldWrapper}>
@@ -182,17 +233,6 @@ const AboutMeForm = ({
 							</>
 						) : null}
 					</div>
-					{/* <div className={classes.privacyPolicyWrapper}>
-						<Typography component="span">{t('aboutme.privacyPolicy.firstSection')} </Typography>
-						<Typography
-							className={classes.privacyPolicyLink}
-							component="span"
-							color="primary"
-							onClick={openPrivacyPolicy}
-						>
-							{t('aboutme.privacyPolicy.secondSection')}
-						</Typography>
-					</div> */}
 					<div className={classes.fieldWrapper}>
 						<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting}>
 							{t('aboutme.submit.text')}

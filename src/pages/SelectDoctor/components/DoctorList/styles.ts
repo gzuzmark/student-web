@@ -58,6 +58,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			flex: '1 1 auto',
 		},
 		counterFirstPart: {
+			fontFamily: 'Mulish, sans-serif !important',
 			color: '#A3ABCC',
 			fontWeight: 'bold',
 			fontSize: '14px',
@@ -71,11 +72,13 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			fontWeight: 'bold',
 			fontSize: '14px',
 			lineHeight: '15px',
+			fontFamily: 'Mulish, sans-serif !important',
 			[breakpoints.down('xs')]: {
 				color: '#52575C',
 			},
 		},
 		counterSecondPart: {
+			fontFamily: 'Mulish, sans-serif !important',
 			fontSize: '14px',
 			lineHeight: '15px',
 			[breakpoints.down('xs')]: {
@@ -83,6 +86,7 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			},
 		},
 		counterFirstPartMobile: {
+			fontFamily: 'Mulish, sans-serif !important',
 			display: 'none',
 			[breakpoints.down('xs')]: {
 				color: '#52575C',
@@ -152,6 +156,11 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			[breakpoints.up('lg')]: {
 				fontSize: '12px',
 				lineHeight: '17px',
+			},
+		},
+		divButtonContinue: {
+			[breakpoints.down('md')]: {
+				marginTop: '16px',
 			},
 		},
 	}),

@@ -129,7 +129,8 @@ export interface LabExam {
 
 export interface SelectDoctorSchedule {
 	useCase: string;
-	doctor: DoctorAvailability;
+	doctorId: string | undefined;
+	doctor: DoctorAvailability | null;
 	listDates: DateSchedule[];
 	isNextDays: boolean;
 	selectDate: Date;
