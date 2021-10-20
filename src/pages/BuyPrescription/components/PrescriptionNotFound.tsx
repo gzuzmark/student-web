@@ -1,11 +1,11 @@
 import { Card, CardContent, Theme, Typography } from '@material-ui/core';
-// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils';
 // import '../../../index.css';
 // import Montserrat from '../../../fonts/Montserrat-Regular.woff2';
-const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
+
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
 		[breakpoints.up('lg')]: {
@@ -102,7 +102,7 @@ const PrescriptionNotFound = ({ folioNumber, prescriptionPath }: PrescriptionNot
 			<div className={classes.wrapper}>
 				<div className={classes.content}>
 					<div className={classes.brandLogoWrapper}>
-						<img src={urlLogo} alt="" className={classes.brandLogo} />
+						<BrandLogo className={classes.brandLogo} />
 					</div>
 					<Typography className={classes.title} variant="h1">
 						{t('buyPrescription.errorPrescriptionNotFound.title')}

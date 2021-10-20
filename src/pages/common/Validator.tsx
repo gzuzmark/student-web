@@ -17,11 +17,7 @@ const requestCurrentUser = async (
 ) => {
 	if (userToken && updateContextState) {
 		const [reservationAccountID, user] = await getCurrentUser(userToken);
-		if (reservationAccountID === '') {
-			updateContextState({ user: null, reservationAccountID, userToken: null });
-		} else {
-			updateContextState({ user, reservationAccountID });
-		}
+		updateContextState({ user, reservationAccountID });
 		setLoading(false);
 	}
 };

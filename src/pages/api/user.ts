@@ -2,7 +2,7 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import { User } from 'AppContext';
-import { getLocalValue, removeLocalItem, setLocalValue } from 'utils';
+import { getLocalValue, setLocalValue } from 'utils';
 import aliviaAxios from 'utils/customAxios';
 import { TokenResponse } from './types';
 
@@ -81,8 +81,7 @@ export const getCurrentUser = async (token?: string): Promise<[string, User]> =>
 
 		return [data.id, parseUser(data)];
 	} catch (e) {
-		console.log('ERROR TOKEN');
-		deleteTokenWhenNoExists();
+		console.log(e);
 
 		return [
 			'',
@@ -105,11 +104,6 @@ export const getCurrentUser = async (token?: string): Promise<[string, User]> =>
 			},
 		];
 	}
-};
-
-const deleteTokenWhenNoExists = () => {
-	removeLocalItem('refreshToken');
-	removeLocalItem('userToken');
 };
 
 export const getProfiles = async () => {

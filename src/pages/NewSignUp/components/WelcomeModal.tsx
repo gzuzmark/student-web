@@ -5,11 +5,10 @@ import { Theme } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AppContext from 'AppContext';
-// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { ReactComponent as ThumbsUpIcon } from 'icons/good_quality.svg';
 import { stylesWithTheme } from 'utils';
 import { BACKGROUND_DEFAULT } from 'theme';
-const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	'@global': {
@@ -98,7 +97,7 @@ const SuccessSignUp = ({ path }: WelcomeScreenProps): ReactElement => {
 			<div className={classes.wrapper}>
 				<div className={classes.content}>
 					<div className={classes.brandLogoWrapper}>
-						<img src={urlLogo} alt="" className={classes.brandLogo} />
+						<BrandLogo className={classes.brandLogo} />
 					</div>
 					<div className={classes.dividerWrapper}>
 						<Divider />
