@@ -1,10 +1,9 @@
 import { Theme, Typography } from '@material-ui/core';
 import { Loading } from 'pages';
 import React, { ReactElement } from 'react';
-// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { stylesWithTheme } from 'utils';
 import { useTranslation } from 'react-i18next';
-const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -70,7 +69,7 @@ const LoadLanding = (): ReactElement => {
 			<div className={classes.wrapper}>
 				<div className={classes.content}>
 					<div className={classes.brandLogoWrapper}>
-						<img src={urlLogo} alt="" className={classes.brandLogo} />
+						<BrandLogo className={classes.brandLogo} />
 					</div>
 					<Typography className={classes.title} variant="h1">
 						{t('buyPrescription.selectPrescriptionType.title2')}

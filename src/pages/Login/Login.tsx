@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Container } from 'pages/common';
 import mobileLogin from 'icons/mobile_login.png';
 import desktopImage from 'icons/login_image.jpg';
-// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import IconBack from 'icons/left2.svg';
 import Circle from 'pages/common/Circle';
 import AppContext from 'AppContext';
@@ -13,7 +13,6 @@ import { usePageTitle, useCurrentUserRediction, redirectToURL } from 'utils';
 
 import { LoginForm } from './components';
 import useStyles from './styles';
-const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 
 const Login = () => {
 	const classes = useStyles();
@@ -39,7 +38,7 @@ const Login = () => {
 					<Typography className={classes.goToStartText}>Ir al inicio</Typography>
 				</div>
 				<div className={classes.contentWrapper}>
-					<img src={urlLogo} alt="" className={classes.brandLogo} />
+					<BrandLogo className={classes.brandImg} />
 					<Typography className={classes.title} variant="h2">
 						{t('login.title')}
 					</Typography>
