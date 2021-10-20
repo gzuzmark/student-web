@@ -10,13 +10,14 @@ import { useHistory } from 'react-router-dom';
 import AppContext from 'AppContext';
 import clsx from 'clsx';
 
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+// import { ReactComponent as BrandLogo } from 'https://storage.googleapis.com/alivia-277103.appspot.com/logos/logo-alivia.svg';
 import { ReactComponent as LeftIcon } from 'icons/left.svg';
 import { ReactComponent as UserIcon } from 'icons/default_user_icon.svg';
 
 import NavMenu from './NavMenu';
 import { redirectToURL } from 'utils';
 
+const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
 		container: {
@@ -33,7 +34,11 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 		brandLogo: {
 			width: 58,
 			[breakpoints.up('lg')]: {
-				width: 97,
+				width: 140,
+				height: 25,
+			},
+			[breakpoints.down('md')]: {
+				width: 90,
 				height: 25,
 			},
 		},
@@ -146,7 +151,8 @@ const Nav = () => {
 					<img alt="" src={IconBack} height={20} />
 					<Typography className={classes.goToStartText}>Ir al inicio</Typography>
 				</div>
-				<BrandLogo className={classes.brandLogo} />
+				{/*<BrandLogo className={classes.brandLogo} />*/}
+				<img src={urlLogo} alt="" className={classes.brandLogo} />
 				{user && user.id !== '' ? (
 					<div className={classes.userIconWrapper}>
 						<Typography color="primary">{user.name}</Typography>
