@@ -1,7 +1,7 @@
 import Divider from '@material-ui/core/Divider';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { ReactComponent as BrandLogo } from 'icons/brand.svg';
+// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
 import { getPrescription, Position } from 'pages/api';
 import { createTrackingPatientPrescriptionBlank, TrackingLocalStorage } from 'pages/api/tracking';
 import { PrescribedMedicine, Prescription } from 'pages/api/userPrescription';
@@ -20,6 +20,8 @@ import PrescriptionNotFound from './components/PrescriptionNotFound';
 import RedirectToInkafarma from './components/RedirectToInkafarma';
 import SelectPrescriptionType from './components/SelectPrescriptionType';
 import TitleStock from './components/TitleStock';
+
+const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -220,7 +222,7 @@ const BuyPrescription = (): ReactElement => {
 	return (
 		<div className={classes.container}>
 			<div>
-				<BrandLogo className={classes.brandLogo} />
+				<img src={urlLogo} alt="" className={classes.brandLogo} />
 			</div>
 			<Typography className={classes.title} variant="h1">
 				{t('buyPrescription.title')}
