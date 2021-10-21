@@ -5,6 +5,8 @@ import ApiPaymentError from 'pages/Payment/exceptions/ApiPaymentError';
 export const CULQI_PAYMENT_ID = 1;
 export const PE_PAYMENT_ID = 2;
 export const TRANSACTION_PAYMENT_ID = 3;
+export const B2B_PAYMENT_ID = 4;
+
 export const KUSHKI_PAYMENT_ID = 1;
 
 export const KUSHKI_RESPONSE_K001 = 'K001';
@@ -26,6 +28,7 @@ export interface PaymentRequestBody {
 	paymentType: number;
 	trackParams: TrackParams;
 	reservationAccountID: string;
+	benefitID: string;
 }
 
 interface PaymentRequestBodyLab {
@@ -60,7 +63,8 @@ interface FakeSessionBody {
 }
 
 interface DiscountRequestBody {
-	couponCode: string;
+	benefitID?: string;
+	couponCode?: string;
 	dni: string;
 	scheduleID: string;
 }
@@ -81,6 +85,17 @@ interface DiscountDataResponse {
 	data: DiscountAPI;
 }
 
+interface BenefitDiscountAPI {
+	benefit: {
+		id: string;
+		total_cost: string;
+	};
+}
+
+interface BenefitDiscountDataResponse {
+	data: BenefitDiscountAPI;
+}
+
 const formatParams = (params: PaymentRequestBody) => ({
 	cost: params.cost,
 	appointment_type_id: params.appointmentTypeID || 'ugito',
@@ -97,6 +112,7 @@ const formatParams = (params: PaymentRequestBody) => ({
 	utm_campaign: params.trackParams.utmCampaign || '',
 	utm_medium: params.trackParams.utmMedium || '',
 	user_id: params.reservationAccountID || '',
+	benefit_id: params.benefitID || '',
 });
 
 export const createPayment = async (params: PaymentRequestBody): Promise<void> => {
@@ -134,6 +150,22 @@ export const applyDiscount = async ({ couponCode, dni, scheduleID }: DiscountReq
 			appointment_type_id: 'ugito',
 		});
 		const discountAPI = resp.data.data.coupon;
+
+		return { id: discountAPI.id, totalCost: discountAPI.total_cost };
+	} catch (e) {
+		throw Error(e);
+	}
+};
+
+export const applyBenefit = async ({ benefitID, dni, scheduleID }: DiscountRequestBody): Promise<Discount> => {
+	try {
+		const resp = await aliviaAxios.post<BenefitDiscountDataResponse>('/benefits/validate-discount', {
+			benefit_id: benefitID,
+			patient_dni: dni || '',
+			schedule_id: scheduleID,
+			appointment_type_id: 'b2b',
+		});
+		const discountAPI = resp.data.data.benefit;
 
 		return { id: discountAPI.id, totalCost: discountAPI.total_cost };
 	} catch (e) {

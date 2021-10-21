@@ -1,8 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useContext, useState, ChangeEvent } from 'react';
+import { TextField as MaterialTextField } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { TextField as TextField2 } from '@material-ui/core';
 
 import { Theme } from '@material-ui/core/styles';
 import { TextField } from 'formik-material-ui';
@@ -13,9 +15,12 @@ import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils/createStyles';
 
 import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
+import AppContext from 'AppContext';
+import { getLocations, Ubigeo, getBenefit, Benefit } from 'pages/api';
 import FormControl from '@material-ui/core/FormControl';
 
 import MenuItem from '@material-ui/core/MenuItem';
+import { InformBenefit } from '..';
 
 export interface ContactValues {
 	identification: string;
@@ -155,6 +160,17 @@ const ContactForm = ({
 	const { t } = useTranslation('signUp');
 	//const { isUbigeoEnabled } = useContext(AppContext);
 	//const [ubigeos, setUbigeos] = useState<string[]>([]);
+	const { updateState: updateContextState } = useContext(AppContext);
+	// const [ubigeos, setUbigeos] = useState<string[]>([]);
+	const [hasBenefitModalOpen, setHasBenefitModalOpen] = useState<boolean>(false);
+	const [benefit, setBenefit] = useState<Benefit>({
+		id: '',
+		name: '',
+		description: '',
+		discount: 0,
+		expirationDate: '2010/09/01',
+		companyName: '',
+	});
 	const classes = useStyles(initialValues.isTerm);
 	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
 
@@ -197,16 +213,47 @@ const ContactForm = ({
 		}
 	};*/
 
+	const handleFindBenefit = async (e: ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		if (value) {
+			const response = await getBenefit(value);
+			const benefit = response;
+			if (benefit.id !== '' && updateContextState) {
+				setBenefit(benefit);
+				setHasBenefitModalOpen(true);
+				updateContextState({
+					useBenefit: true,
+				});
+			}
+		} else {
+			setHasBenefitModalOpen(false);
+		}
+	};
+
+	const acceptBenefit = () => {
+		if (updateContextState) {
+			updateContextState({
+				useBenefit: true,
+			});
+			setHasBenefitModalOpen(false);
+		}
+	};
+
+	const closeHasBenefitModal = () => {
+		setHasBenefitModalOpen(false);
+	};
+
 	return (
-		<Formik
-			enableReinitialize
-			initialValues={initialValues}
-			onSubmit={onSubmit}
-			validationSchema={isGuest ? guestValidationSchema : newUservalidationSchema}
-		>
-			{({ submitForm, isSubmitting }) => (
-				<Form className={classes.form}>
-					{/*<div>
+		<>
+			<Formik
+				enableReinitialize
+				initialValues={initialValues}
+				onSubmit={onSubmit}
+				validationSchema={isGuest ? guestValidationSchema : newUservalidationSchema}
+			>
+				{({ submitForm, isSubmitting }) => (
+					<Form className={classes.form}>
+						{/*<div>
 						{isUbigeoEnabled && (
 							<>
 								<div className={classes.fieldWrapper}>
@@ -250,146 +297,159 @@ const ContactForm = ({
 							{t('contact.submit.text')}
 						</Button>
 					</div>*/}
-					<div>
-						<Typography className={classes.title} color="primary">
-							{t('contact.subTitle.id')}
-						</Typography>
-						<Grid container spacing={2}>
-							<Grid item sm={6} xs={6}>
-								<FormControl className={classes.fieldWrapper} fullWidth>
-									<Field
-										component={TextField}
-										label={'Tipo de doc.'}
-										name="identificationType"
-										variant="outlined"
-										select
-									>
-										<MenuItem value={'1'}>DNI</MenuItem>
-										<MenuItem value={'2'}>CE</MenuItem>
-									</Field>
-								</FormControl>
-							</Grid>
-							<Grid item sm={6} xs={6}>
-								<div className={classes.fieldWrapper}>
-									<Field
-										component={TextField}
-										name="identification"
-										label={t(`contact.fields.id.label.${contactKey}`)}
-										variant="outlined"
-										inputProps={{ maxLength: 12 }}
-										fullWidth
-									/>
-								</div>
-							</Grid>
-						</Grid>
 						<div>
-							<Typography className={classes.subTitle} color="primary">
-								{t('medicalData.fields.files.label.contacto')}
+							<Typography className={classes.title} color="primary">
+								{t('contact.subTitle.id')}
 							</Typography>
 							<Grid container spacing={2}>
 								<Grid item sm={6} xs={6}>
-									<div className={classes.fieldWrapper}>
+									<FormControl className={classes.fieldWrapper} fullWidth>
 										<Field
 											component={TextField}
-											className={classes.fieldWithHelperText}
-											name="phoneNumber"
-											type="tel"
-											label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
+											label={'Tipo de doc.'}
+											name="identificationType"
 											variant="outlined"
-											inputProps={{ maxLength: 9 }}
-											fullWidth
-										/>
-									</div>
+											select
+										>
+											<MenuItem value={'1'}>DNI</MenuItem>
+											<MenuItem value={'2'}>CE</MenuItem>
+										</Field>
+									</FormControl>
 								</Grid>
 								<Grid item sm={6} xs={6}>
 									<div className={classes.fieldWrapper}>
 										<Field
 											component={TextField}
-											className={classes.fieldWithHelperText}
-											name="email"
-											label={t(`contact.fields.email.label.${contactKey}`)}
+											name="identification"
+											label={t(`contact.fields.id.label.${contactKey}`)}
 											variant="outlined"
+											inputProps={{ maxLength: 12 }}
 											fullWidth
 										/>
 									</div>
 								</Grid>
 							</Grid>
+							<div>
+								<Typography className={classes.subTitle} color="primary">
+									{t('medicalData.fields.files.label.contacto')}
+								</Typography>
+								<Grid container spacing={2}>
+									<Grid item sm={6} xs={6}>
+										<div className={classes.fieldWrapper}>
+											<Field
+												component={TextField}
+												className={classes.fieldWithHelperText}
+												name="phoneNumber"
+												type="tel"
+												label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
+												variant="outlined"
+												inputProps={{ maxLength: 9 }}
+												fullWidth
+											/>
+										</div>
+									</Grid>
+									<Grid item sm={6} xs={6}>
+										<div className={classes.fieldWrapper}>
+											<Field
+												component={TextField}
+												className={classes.fieldWithHelperText}
+												name="email"
+												label={t(`contact.fields.email.label.${contactKey}`)}
+												variant="outlined"
+												fullWidth
+											/>
+										</div>
+									</Grid>
+								</Grid>
+							</div>
+							<div className={classes.fieldTermWrapper}>
+								<FormControlLabel
+									control={
+										<>
+											<Field
+												component={TextField}
+												className={classes.fieldWithHelperText}
+												name="address"
+												label={t('contact.fields.address.label')}
+												variant="outlined"
+												helperText={t('contact.fields.address.helperText')}
+												fullWidth
+											/>
+										</>
+									}
+									label={
+										<>
+											<Typography className={classes.legalInformation} component="span">
+												{t('contact.legalInformation.firstSection2')}{' '}
+											</Typography>
+											<Typography
+												className={classes.privacyPolicyLink}
+												component="span"
+												color="primary"
+												onClick={openDataAnalitycs}
+											>
+												{t('contact.legalInformation.analysisData')}{' '}
+											</Typography>
+											<Typography className={classes.legalInformation} component="span">
+												{t('contact.legalInformation.secondSection2')}{' '}
+											</Typography>
+										</>
+									}
+								/>
+								<ErrorMessage className={classes.termsConditions} name="isTerm" component="p"></ErrorMessage>
+							</div>
+							<div className={classes.fieldWrapper}>
+								<FormControlLabel
+									control={<Field component={Checkbox} type="checkbox" name="isClub" color="primary" />}
+									label={
+										<>
+											<Typography className={classes.legalInformation} component="span">
+												{t('contact.legalInformation.firstSection')}{' '}
+											</Typography>
+											<Typography
+												className={classes.privacyPolicyLink}
+												component="span"
+												color="primary"
+												onClick={openTermsAndConditions}
+											>
+												{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
+											</Typography>
+											<Typography className={classes.legalInformation} component="span">
+												{t('contact.legalInformation.secondSection1')}{' '}
+											</Typography>
+											<Typography
+												className={classes.privacyPolicyLink}
+												component="span"
+												color="primary"
+												onClick={openPrivacyPolicy}
+											>
+												{t('contact.legalInformation.privacyPolicyLink1')}{' '}
+											</Typography>
+										</>
+									}
+								/>
+							</div>
+							<div className={classes.fieldWrapper}>
+								<Button
+									variant="contained"
+									fullWidth
+									onClick={submitForm}
+									disabled={isSubmitting || isChecked === false}
+								>
+									{t('contact.submit.text')}
+								</Button>
+							</div>
 						</div>
-						<div className={classes.fieldTermWrapper}>
-							<FormControlLabel
-								control={
-									<>
-										<Field
-											component={Checkbox}
-											type="checkbox"
-											name="isTerm"
-											color="primary"
-											checked={isChecked}
-											onClick={handleChange}
-										/>
-									</>
-								}
-								label={
-									<>
-										<Typography className={classes.legalInformation} component="span">
-											{t('contact.legalInformation.firstSection2')}{' '}
-										</Typography>
-										<Typography
-											className={classes.privacyPolicyLink}
-											component="span"
-											color="primary"
-											onClick={openDataAnalitycs}
-										>
-											{t('contact.legalInformation.analysisData')}{' '}
-										</Typography>
-										<Typography className={classes.legalInformation} component="span">
-											{t('contact.legalInformation.secondSection2')}{' '}
-										</Typography>
-									</>
-								}
-							/>
-							<ErrorMessage className={classes.termsConditions} name="isTerm" component="p"></ErrorMessage>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<FormControlLabel
-								control={<Field component={Checkbox} type="checkbox" name="isClub" color="primary" />}
-								label={
-									<>
-										<Typography className={classes.legalInformation} component="span">
-											{t('contact.legalInformation.firstSection')}{' '}
-										</Typography>
-										<Typography
-											className={classes.privacyPolicyLink}
-											component="span"
-											color="primary"
-											onClick={openTermsAndConditions}
-										>
-											{t('contact.legalInformation.termsAndConditionsLink1')}{' '}
-										</Typography>
-										<Typography className={classes.legalInformation} component="span">
-											{t('contact.legalInformation.secondSection1')}{' '}
-										</Typography>
-										<Typography
-											className={classes.privacyPolicyLink}
-											component="span"
-											color="primary"
-											onClick={openPrivacyPolicy}
-										>
-											{t('contact.legalInformation.privacyPolicyLink1')}{' '}
-										</Typography>
-									</>
-								}
-							/>
-						</div>
-						<div className={classes.fieldWrapper}>
-							<Button variant="contained" fullWidth onClick={submitForm} disabled={isSubmitting || isChecked === false}>
-								{t('contact.submit.text')}
-							</Button>
-						</div>
-					</div>
-				</Form>
-			)}
-		</Formik>
+					</Form>
+				)}
+			</Formik>
+			<InformBenefit
+				isModalOpen={hasBenefitModalOpen}
+				closeModal={closeHasBenefitModal}
+				benefit={benefit}
+				acceptBenefit={acceptBenefit}
+			/>
+		</>
 	);
 };
 
