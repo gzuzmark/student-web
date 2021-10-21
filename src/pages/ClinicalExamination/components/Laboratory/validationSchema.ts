@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import i18next from 'l18n/index';
 
 import { registerCustomValidators } from 'utils/addCustomValidations';
+import { MESSAGE_VALIDATION } from 'pages/constants';
 
 registerCustomValidators(Yup);
 
@@ -40,7 +41,7 @@ export const newUservalidationSchema = object().shape({
 		.required(messages.identification.required)
 		.when('identificationType', {
 			is: 1,
-			then: string().matches(/^[0-9]{8}$/g, 'DNI inválido'),
+			then: string().matches(/^[0-9]{8}$/g, MESSAGE_VALIDATION.DNI),
 		})
 		.when('identificationType', {
 			is: 2,
@@ -89,7 +90,7 @@ export const guestValidationSchema = object().shape({
 		.required(messages.identification.required)
 		.when('identificationType', {
 			is: `1`,
-			then: string().matches(/^[0-9]{8}$/g, 'DNI inválido'),
+			then: string().matches(/^[0-9]{8}$/g, MESSAGE_VALIDATION.DNI),
 		})
 		.when('identificationType', {
 			is: `2`,

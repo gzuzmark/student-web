@@ -7,6 +7,7 @@ import { formatUTCDate } from 'utils';
 import { TriagePair } from 'AppContext';
 
 import { Doctor, DoctorAPI } from './selectDoctor';
+import ApiAppoitmentError from 'pages/Payment/exceptions/ApiAppoitmentError';
 
 export const INCOMING = 'incoming';
 export const PREVIOUS = 'previous';
@@ -92,7 +93,7 @@ interface AppointmentListParams {
 	closed: number;
 }
 
-interface NewAppointmentBody {
+export interface NewAppointmentBody {
 	reservationAccountID: string;
 	useCaseID: string;
 	scheduleID: string;
@@ -197,11 +198,13 @@ export const createAppointment = async (
 	params: NewAppointmentBody,
 	token: string | null | undefined,
 ): Promise<void> => {
+	const body = { ...formatCreateParams(params) };
 	try {
 		const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-		await aliviaAxios.post('/appointments', { ...formatCreateParams(params) }, { headers });
+		await aliviaAxios.post('/appointments', body, { headers });
 	} catch (e) {
-		throw Error(e);
+		if (e instanceof Error) {
+			throw new ApiAppoitmentError(e.message, 'http', body);
+		}
 	}
 };
