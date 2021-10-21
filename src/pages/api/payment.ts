@@ -1,5 +1,6 @@
 import aliviaAxios from 'utils/customAxios';
 import { TrackParams } from 'AppContext';
+import ApiPaymentError from 'pages/Payment/exceptions/ApiPaymentError';
 
 export const CULQI_PAYMENT_ID = 1;
 export const PE_PAYMENT_ID = 2;
@@ -11,7 +12,7 @@ export const KUSHKI_RESPONSE_K004 = 'K004';
 export const KUSHKI_RESPONSE_K005 = 'K005';
 export const KUSHKI_RESPONSE_K017 = '017';
 
-interface PaymentRequestBody {
+export interface PaymentRequestBody {
 	cost: string;
 	appointmentTypeID: string;
 	token: string;
@@ -102,7 +103,9 @@ export const createPayment = async (params: PaymentRequestBody): Promise<void> =
 	try {
 		return await aliviaAxios.post('/payments', { ...formatParams(params) });
 	} catch (e) {
-		throw Error(e);
+		if (e instanceof Error) {
+			throw new ApiPaymentError(e.message, 'status http', params);
+		}
 	}
 };
 
