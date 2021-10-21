@@ -1,5 +1,6 @@
 import aliviaAxios from 'utils/customAxios';
 import { TrackParams } from 'AppContext';
+import ApiPaymentError from 'pages/Payment/exceptions/ApiPaymentError';
 
 export const CULQI_PAYMENT_ID = 1;
 export const PE_PAYMENT_ID = 2;
@@ -103,13 +104,7 @@ export const createPayment = async (params: PaymentRequestBody): Promise<void> =
 		return await aliviaAxios.post('/payments', { ...formatParams(params) });
 	} catch (e) {
 		if (e instanceof Error) {
-			throw Error(
-				JSON.stringify({
-					params: params,
-					message: e.message,
-					url: '/payments',
-				}),
-			);
+			throw new ApiPaymentError(e.message, 'status http', params);
 		}
 	}
 };

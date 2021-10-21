@@ -1,4 +1,5 @@
 import { Kushki } from '@kushki/js';
+import { CashTokenRequest } from '@kushki/js/lib/types/cash_token_request';
 import { TokenRequest } from '@kushki/js/lib/types/token_request';
 import {
 	Button,
@@ -66,6 +67,9 @@ import {
 import initCulqi from 'utils/culquiIntegration';
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
+import KushkiCardError, { RequestCard } from './exceptions/KushkiCardError';
+import KushkiCashError from './exceptions/KushkiCashError';
+import { processErrorPayment } from './services';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -311,7 +315,6 @@ const Payment = () => {
 
 	const makePayment = useCallback(
 		(paymentMethod: number) => (e: MouseEvent) => {
-			console.log('tipo de pago:', paymentMethod, schedule);
 			const isValidaDate = validHourReservation();
 			if (!isValidaDate) return;
 			const { id: scheduleId = '' } = schedule || {};
@@ -346,7 +349,7 @@ const Payment = () => {
 		[schedule, validHourReservation, useCase, reservationAccountID, doctor],
 	);
 
-	const createRequestKushki = (amount: string, values: any) => {
+	const createRequestCardKushki = (amount: string, values: any) => {
 		return {
 			amount: amount,
 			currency: 'PEN',
@@ -360,7 +363,20 @@ const Payment = () => {
 		} as TokenRequest;
 	};
 
-	const createRequestPayment = (token: string, schedule: any, amount: string, email: string) => {
+	const createRequestCashKushki = (amount: string, values: any) => {
+		return {
+			name: values.name.toString(),
+			lastName: values.lastName.toString(),
+			identification: values.documentNumber.toString(),
+			documentType: values.documentType.toString(),
+			email: values.email.toString(),
+			totalAmount: Number(amount),
+			currency: 'PEN',
+			description: values.description.toString(),
+		} as CashTokenRequest;
+	};
+
+	const createRequestCardPayment = (token: string, schedule: any, amount: string, email: string) => {
 		return {
 			cost: amount,
 			appointmentTypeID: 'ugito',
@@ -378,7 +394,25 @@ const Payment = () => {
 		} as PaymentRequestBody;
 	};
 
-	const createRequestAppoitment = () => {
+	const createRequestChashPayment = (amount: string, values: any, token: string, method: number) => {
+		return {
+			cost: amount,
+			appointmentTypeID: 'ugito',
+			scheduleID: schedule?.id || '',
+			discountID: discount.id,
+			email: values.email.toString() || '',
+			token: token,
+			dni: values.documentNumber.toString() || '',
+			name: values.name.toString() || '',
+			lastName: values.lastName.toString() || '',
+			phone: activeUser?.phoneNumber || '',
+			paymentType: method,
+			trackParams: trackParams || EMPTY_TRACK_PARAMS,
+			reservationAccountID: activeUser?.id,
+		} as PaymentRequestBody;
+	};
+
+	const createRequestCardAppoitment = () => {
 		return {
 			reservationAccountID: activeUser?.id,
 			appointmentTypeID: 'ugito',
@@ -390,13 +424,44 @@ const Payment = () => {
 		} as NewAppointmentBody;
 	};
 
-	const paymentKushki = (amount: string, values: any): Promise<any> => {
+	const createRequestCashAppoitment = () => {
+		return {
+			reservationAccountID: activeUser?.id,
+			appointmentTypeID: 'ugito',
+			useCaseID: useCase?.id,
+			scheduleID: schedule?.id,
+			triage,
+			media: userFiles || [],
+			isGuest: appointmentOwner === GUEST,
+		} as NewAppointmentBody;
+	};
+
+	const paymentCardKushki = (amount: string, values: any): Promise<any> => {
 		return new Promise((resolve, reject) => {
-			kushki.requestToken(createRequestKushki(amount, values), (response: any) => {
+			const request = createRequestCardKushki(amount, values);
+			kushki.requestToken(request, (response: any) => {
+				if (response.code && response.message) {
+					return reject(new KushkiCardError(response.message, response.code, request as RequestCard));
+				}
 				if (response.token) {
 					return resolve(response.token);
 				}
-				return reject('error en kushi');
+				return reject(new KushkiCardError('error de kushki', 'undefined', request as RequestCard));
+			});
+		});
+	};
+
+	const paymentCashKushki = (amount: string, values: any): Promise<string> => {
+		return new Promise((resolve, reject) => {
+			const request = createRequestCashKushki(amount, values);
+			kushki.requestCashToken(request, (response: any) => {
+				if (response.code && response.message) {
+					return reject(new KushkiCashError(response.message, response.code, request as object));
+				}
+				if (response.token) {
+					return resolve(response.token);
+				}
+				return reject(new KushkiCashError('error de kushki', 'undefined', request as object));
 			});
 		});
 	};
@@ -409,9 +474,9 @@ const Payment = () => {
 		if (schedule && updateContextState && useCase && triage && activeUser) {
 			try {
 				setIsPaymentLoading(true);
-				const token = await paymentKushki(amount, values);
-				await createPayment(createRequestPayment(token, schedule, amount, values.email));
-				await createAppointment(createRequestAppoitment(), userToken);
+				const token = await paymentCardKushki(amount, values);
+				await createPayment(createRequestCardPayment(token, schedule, amount, values.email));
+				await createAppointment(createRequestCardAppoitment(), userToken);
 
 				addGAEvent({
 					event: 'virtualEvent',
@@ -454,114 +519,49 @@ const Payment = () => {
 					useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
 					appointmentCreationStep: CONFIRMATION_STEP,
 				});
+				setErrorMessage('');
 				setIsPaymentLoading(false);
 				history.push('/confirmacion');
 			} catch (error) {
-				console.error(error);
+				setErrorMessage(processErrorPayment(error as Error));
 				setOpenKushkiModal(false);
 				setIsPaymentLoading(false);
-				setErrorMessage('Error al procesar el pago, por favor contacte con soporte...');
 			}
-			/*
-				console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
-				setErrorMessage('Error-' + response.code + ': ' + response.message);
-				/*if (response.code === KUSHKI_RESPONSE_K001) {
-					setErrorMessage('Error-K001: Ingresar correctamente datos de Tarjeta.');
-				} else if (response.code === KUSHKI_RESPONSE_K005) {
-					setErrorMessage('Error-K005: El número de tarjeta no es válido.');
-				} else if (response.code === KUSHKI_RESPONSE_K004) {
-					setErrorMessage('Error-K004: ID del comercio o credencial no válido.');
-				} else if (response.code === KUSHKI_RESPONSE_K017) {
-					setErrorMessage('Error-017: Transacción rechazada, ingresar correctamente datos de una tarjeta válida.');
-				} //
-				setOpenKushkiModal(false);
-			}*/
 		}
 	};
 
-	const makeKushkiCashPayment = (values: any) => {
+	const makeKushkiCashPayment = async (values: any) => {
 		const totalCost = discount.totalCost || useCase?.totalCost;
 		const amount = totalCost ? totalCost.toString() : '';
-		setIsPaymentLoading(true);
-		const callback = async function (response: any) {
-			if (!response.code) {
-				if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
-					const method = 2;
-					const token = response.token;
-					try {
-						//setIsPaymentLoading(true);
-						//const userName = activeUser.name;
-						const userPhone = activeUser.phoneNumber;
-						const response: any = await createPayment({
-							cost: amount,
-							appointmentTypeID: 'ugito',
-							scheduleID: schedule.id,
-							discountID: discount.id,
-							email: values.email.toString() || '',
-							token: token,
-							dni: values.documentNumber.toString() || '',
-							name: values.name.toString() || '',
-							lastName: values.lastName.toString() || '',
-							phone: userPhone || '',
-							paymentType: method,
-							trackParams: trackParams || EMPTY_TRACK_PARAMS,
-							reservationAccountID: activeUser.id,
-						});
-						await createAppointment(
-							{
-								reservationAccountID: activeUser.id,
-								appointmentTypeID: 'ugito',
-								useCaseID: useCase.id,
-								scheduleID: schedule.id,
-								triage,
-								media: userFiles || [],
-								isGuest: appointmentOwner === GUEST,
-							},
-							userToken,
-						);
-						setIsPaymentLoading(false);
-						let link = null;
+		if (schedule && updateContextState && useCase && triage && activeUser && doctor) {
+			const method = 2;
+			try {
+				setIsPaymentLoading(true);
+				const token = await paymentCashKushki(amount, values);
+				const response: any = await createPayment(createRequestChashPayment(amount, values, token, method));
+				await createAppointment(createRequestCashAppoitment(), userToken);
+				let link = null;
 
-						if (method === PE_PAYMENT_ID) {
-							if (response?.data) {
-								link = response?.data?.data?.reference_link as string;
-							}
-						} else {
-							link = buildTransactionURL(doctor.name, doctor.lastName, values.fullName || '', userPhone || '');
-						}
-						updateContextState({
-							useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-							paymentURL: '',
-							appointmentCreationStep: CONFIRMATION_STEP,
-							ticketNumber: link,
-						});
-						history.push('/confirmacion');
-					} catch (e) {
-						setErrorMessage(t('payment.error.pe'));
-						setIsPaymentLoading(false);
+				if (method === PE_PAYMENT_ID) {
+					if (response?.data) {
+						link = response?.data?.data?.reference_link as string;
 					}
+				} else {
+					link = buildTransactionURL(doctor.name, doctor.lastName, values.fullName || '', activeUser.phoneNumber || '');
 				}
-			} else {
-				console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
-				setErrorMessage('Error-' + response.code + ': ' + response.message);
+				updateContextState({
+					useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+					paymentURL: '',
+					appointmentCreationStep: CONFIRMATION_STEP,
+					ticketNumber: link,
+				});
+				history.push('/confirmacion');
+			} catch (error) {
+				setErrorMessage(processErrorPayment(error as Error));
 				setOpenKushkiCashModal(false);
+				setIsPaymentLoading(false);
 			}
-		};
-		kushki.requestCashToken(
-			{
-				name: values.name.toString(),
-				lastName: values.lastName.toString(),
-				identification: values.documentNumber.toString(),
-				documentType: values.documentType.toString(),
-				email: values.email.toString(),
-				totalAmount: Number(amount),
-				currency: 'PEN',
-				description: values.description.toString(),
-			},
-			callback,
-		); // Als
-
-		//performTransactionPayment(PE_PAYMENT_ID);
+		}
 	};
 
 	const onChangeDiscount = (e: ChangeEvent<HTMLInputElement>) => {
