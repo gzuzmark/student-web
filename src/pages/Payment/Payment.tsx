@@ -1,4 +1,5 @@
 import { Kushki } from '@kushki/js';
+import { TokenRequest } from '@kushki/js/lib/types/token_request';
 import {
 	Button,
 	Dialog,
@@ -40,6 +41,8 @@ import {
 	createPayment,
 	Discount,
 	KUSHKI_PAYMENT_ID,
+	NewAppointmentBody,
+	PaymentRequestBody,
 	PE_PAYMENT_ID,
 	sendFakeSession,
 } from 'pages/api';
@@ -343,119 +346,136 @@ const Payment = () => {
 		[schedule, validHourReservation, useCase, reservationAccountID, doctor],
 	);
 
-	const makeKushkiPayment = (values: any) => {
+	const createRequestKushki = (amount: string, values: any) => {
+		return {
+			amount: amount,
+			currency: 'PEN',
+			card: {
+				name: values.cardName,
+				number: values.cardNumber.toString(),
+				cvc: values.cardCvv.toString(),
+				expiryMonth: values.expDate.split('/')[0],
+				expiryYear: values.expDate.split('/')[1],
+			},
+		} as TokenRequest;
+	};
+
+	const createRequestPayment = (token: string, schedule: any, amount: string, email: string) => {
+		return {
+			cost: amount,
+			appointmentTypeID: 'ugito',
+			scheduleID: schedule.id,
+			discountID: discount.id,
+			email: email,
+			token: token,
+			dni: activeUser?.identification || '',
+			name: '',
+			lastName: '',
+			phone: '',
+			paymentType: KUSHKI_PAYMENT_ID,
+			trackParams: trackParams || EMPTY_TRACK_PARAMS,
+			reservationAccountID: activeUser?.id,
+		} as PaymentRequestBody;
+	};
+
+	const createRequestAppoitment = () => {
+		return {
+			reservationAccountID: activeUser?.id,
+			appointmentTypeID: 'ugito',
+			useCaseID: useCase?.id,
+			scheduleID: schedule?.id,
+			triage,
+			media: userFiles || [],
+			isGuest: appointmentOwner === GUEST,
+		} as NewAppointmentBody;
+	};
+
+	const paymentKushki = (amount: string, values: any): Promise<any> => {
+		return new Promise((resolve, reject) => {
+			kushki.requestToken(createRequestKushki(amount, values), (response: any) => {
+				if (response.token) {
+					return resolve(response.token);
+				}
+				return reject('error en kushi');
+			});
+		});
+	};
+
+	const makeKushkiPayment = async (values: any) => {
 		const isValidaDate = validHourReservation();
 		if (!isValidaDate) return;
 		const totalCost = discount.totalCost || useCase?.totalCost;
 		const amount = totalCost ? totalCost.toString() : '';
 		if (schedule && updateContextState && useCase && triage && activeUser) {
-			setIsPaymentLoading(true);
-			kushki.requestToken(
-				{
-					amount: amount,
-					currency: 'PEN',
-					card: {
-						name: values.cardName,
-						number: values.cardNumber.toString(),
-						cvc: values.cardCvv.toString(),
-						expiryMonth: values.expDate.split('/')[0],
-						expiryYear: values.expDate.split('/')[1],
-					},
-				},
-				async (response: any) => {
-					if (!response.code) {
-						console.log(response);
-						await createPayment({
-							cost: amount,
-							appointmentTypeID: 'ugito',
-							scheduleID: schedule.id,
-							discountID: discount.id,
-							email: values.email,
-							token: response.token,
-							dni: activeUser.identification || '',
-							name: '',
-							lastName: '',
-							phone: '',
-							paymentType: KUSHKI_PAYMENT_ID,
-							trackParams: trackParams || EMPTY_TRACK_PARAMS,
-							reservationAccountID: activeUser.id,
-						});
+			try {
+				setIsPaymentLoading(true);
+				const token = await paymentKushki(amount, values);
+				await createPayment(createRequestPayment(token, schedule, amount, values.email));
+				await createAppointment(createRequestAppoitment(), userToken);
 
-						await createAppointment(
-							{
-								reservationAccountID: activeUser.id,
-								appointmentTypeID: 'ugito',
-								useCaseID: useCase.id,
-								scheduleID: schedule.id,
-								triage,
-								media: userFiles || [],
-								isGuest: appointmentOwner === GUEST,
+				addGAEvent({
+					event: 'virtualEvent',
+					category: 'Agendar cita - Gracias',
+					action: 'Avance satisfactorio',
+					label: doctor?.cmp || '',
+					dia: getHumanDay(schedule.startTime),
+					hora: getHour(schedule.startTime),
+					especialidad: doctor?.specialityName || '',
+					monto: discount.totalCost || useCase?.totalCost,
+					tipoPago: 'Tarjeta',
+				});
+				addGAEvent({
+					event: 'Purchase',
+					ecommerce: {
+						currencyCode: 'PEN',
+						purchase: {
+							actionField: {
+								id: activeUser.id,
+								revenue: discount.totalCost || useCase?.totalCost,
+								tax: '0',
 							},
-							userToken,
-						);
-
-						addGAEvent({
-							event: 'virtualEvent',
-							category: 'Agendar cita - Gracias',
-							action: 'Avance satisfactorio',
-							label: doctor?.cmp || '',
-							dia: getHumanDay(schedule.startTime),
-							hora: getHour(schedule.startTime),
-							especialidad: doctor?.specialityName || '',
-							monto: discount.totalCost || useCase?.totalCost,
-							tipoPago: 'Tarjeta',
-						});
-
-						addGAEvent({
-							event: 'Purchase',
-							ecommerce: {
-								currencyCode: 'PEN',
-								purchase: {
-									actionField: {
-										id: activeUser.id,
-										revenue: discount.totalCost || useCase?.totalCost,
-										tax: '0',
-									},
-									products: [
-										{
-											name: doctor?.cmp || '',
-											id: doctor?.cmp || '',
-											price: discount.totalCost || useCase?.totalCost,
-											brand: 'Alivia',
-											category: doctor?.specialityName || '',
-											variant: getHour(schedule.startTime),
-											quantity: '1',
-											dimension3: 'Tarjeta de crédito o débito',
-											dimension4: getHumanDay(schedule.startTime),
-										},
-									],
+							products: [
+								{
+									name: doctor?.cmp || '',
+									id: doctor?.cmp || '',
+									price: discount.totalCost || useCase?.totalCost,
+									brand: 'Alivia',
+									category: doctor?.specialityName || '',
+									variant: getHour(schedule.startTime),
+									quantity: '1',
+									dimension3: 'Tarjeta de crédito o débito',
+									dimension4: getHumanDay(schedule.startTime),
 								},
-							},
-						});
-
-						updateContextState({
-							useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
-							appointmentCreationStep: CONFIRMATION_STEP,
-						});
-
-						history.push('/confirmacion');
-					} else {
-						console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
-						setErrorMessage('Error-' + response.code + ': ' + response.message);
-						/*if (response.code === KUSHKI_RESPONSE_K001) {
-							setErrorMessage('Error-K001: Ingresar correctamente datos de Tarjeta.');
-						} else if (response.code === KUSHKI_RESPONSE_K005) {
-							setErrorMessage('Error-K005: El número de tarjeta no es válido.');
-						} else if (response.code === KUSHKI_RESPONSE_K004) {
-							setErrorMessage('Error-K004: ID del comercio o credencial no válido.');
-						} else if (response.code === KUSHKI_RESPONSE_K017) {
-							setErrorMessage('Error-017: Transacción rechazada, ingresar correctamente datos de una tarjeta válida.');
-						}*/
-						setOpenKushkiModal(false);
-					}
-					setIsPaymentLoading(false);
-				},
-			);
+							],
+						},
+					},
+				});
+				updateContextState({
+					useCase: { ...useCase, totalCost: discount.totalCost || useCase.totalCost },
+					appointmentCreationStep: CONFIRMATION_STEP,
+				});
+				setIsPaymentLoading(false);
+				history.push('/confirmacion');
+			} catch (error) {
+				console.error(error);
+				setOpenKushkiModal(false);
+				setIsPaymentLoading(false);
+				setErrorMessage('Error al procesar el pago, por favor contacte con soporte...');
+			}
+			/*
+				console.error('Error: ', response.error, 'Code: ', response.code, 'Message: ', response.message);
+				setErrorMessage('Error-' + response.code + ': ' + response.message);
+				/*if (response.code === KUSHKI_RESPONSE_K001) {
+					setErrorMessage('Error-K001: Ingresar correctamente datos de Tarjeta.');
+				} else if (response.code === KUSHKI_RESPONSE_K005) {
+					setErrorMessage('Error-K005: El número de tarjeta no es válido.');
+				} else if (response.code === KUSHKI_RESPONSE_K004) {
+					setErrorMessage('Error-K004: ID del comercio o credencial no válido.');
+				} else if (response.code === KUSHKI_RESPONSE_K017) {
+					setErrorMessage('Error-017: Transacción rechazada, ingresar correctamente datos de una tarjeta válida.');
+				} //
+				setOpenKushkiModal(false);
+			}*/
 		}
 	};
 

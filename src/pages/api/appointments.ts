@@ -92,7 +92,7 @@ interface AppointmentListParams {
 	closed: number;
 }
 
-interface NewAppointmentBody {
+export interface NewAppointmentBody {
 	reservationAccountID: string;
 	useCaseID: string;
 	scheduleID: string;
@@ -202,6 +202,14 @@ export const createAppointment = async (
 
 		await aliviaAxios.post('/appointments', { ...formatCreateParams(params) }, { headers });
 	} catch (e) {
-		throw Error(e);
+		if (e instanceof Error) {
+			throw Error(
+				JSON.stringify({
+					params: params,
+					message: e.message,
+					url: '/appointments',
+				}),
+			);
+		}
 	}
 };

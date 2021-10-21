@@ -11,7 +11,7 @@ export const KUSHKI_RESPONSE_K004 = 'K004';
 export const KUSHKI_RESPONSE_K005 = 'K005';
 export const KUSHKI_RESPONSE_K017 = '017';
 
-interface PaymentRequestBody {
+export interface PaymentRequestBody {
 	cost: string;
 	appointmentTypeID: string;
 	token: string;
@@ -102,7 +102,15 @@ export const createPayment = async (params: PaymentRequestBody): Promise<void> =
 	try {
 		return await aliviaAxios.post('/payments', { ...formatParams(params) });
 	} catch (e) {
-		throw Error(e);
+		if (e instanceof Error) {
+			throw Error(
+				JSON.stringify({
+					params: params,
+					message: e.message,
+					url: '/payments',
+				}),
+			);
+		}
 	}
 };
 
