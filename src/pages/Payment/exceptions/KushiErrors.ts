@@ -22,7 +22,8 @@ const KushiErrors = {
 			'Transacción rechazada. Reintentar la transacción, en caso de que el error persista comunícate con el equipo de soporte',
 	},
 	K322: {
-		message: 'Transacción rechazada. La transacción fue rechazada por una regla de seguridad de Kushki.',
+		message:
+			'Transacción rechazada. Reintentar la transacción, en caso de que el error persista comunícate con el equipo de soporte',
 	},
 };
 
