@@ -48,6 +48,7 @@ import {
 	PE_PAYMENT_ID,
 	B2B_PAYMENT_ID,
 	sendFakeSession,
+	Benefit,
 } from 'pages/api';
 import { Container, Loading } from 'pages/common';
 import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
