@@ -386,7 +386,13 @@ const Payment = () => {
 		} as CashTokenRequest;
 	};
 
-	const createRequestCardPayment = (token: string, schedule: any, amount: string, email: string, benefit: Benefit) => {
+	const createRequestCardPayment = (
+		token: string,
+		schedule: any,
+		amount: string,
+		email: string,
+		benefit?: Benefit | null,
+	) => {
 		return {
 			cost: amount,
 			appointmentTypeID: 'ugito',
@@ -405,7 +411,13 @@ const Payment = () => {
 		} as PaymentRequestBody;
 	};
 
-	const createRequestChashPayment = (amount: string, values: any, token: string, method: number, benefit: Benefit) => {
+	const createRequestChashPayment = (
+		amount: string,
+		values: any,
+		token: string,
+		method: number,
+		benefit?: Benefit | null,
+	) => {
 		return {
 			cost: amount,
 			appointmentTypeID: 'ugito',
