@@ -1,26 +1,19 @@
-import React, { useCallback, useContext, useState, ChangeEvent } from 'react';
-import { TextField as MaterialTextField } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { TextField as TextField2 } from '@material-ui/core';
-
-import { Theme } from '@material-ui/core/styles';
-import { TextField } from 'formik-material-ui';
-import { Checkbox } from 'formik-material-ui';
-import { Formik, Form, Field, FormikHelpers, ErrorMessage } from 'formik';
-import { useTranslation } from 'react-i18next';
-
-import { stylesWithTheme } from 'utils/createStyles';
-
-import { newUservalidationSchema, guestValidationSchema } from './validationSchema';
-import AppContext from 'AppContext';
-import { getLocations, Ubigeo, getBenefit, Benefit } from 'pages/api';
 import FormControl from '@material-ui/core/FormControl';
-
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
+import { Theme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import AppContext from 'AppContext';
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
+import { Checkbox, TextField } from 'formik-material-ui';
+import { Benefit, getBenefit } from 'pages/api';
+import React, { ChangeEvent, useCallback, useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { stylesWithTheme } from 'utils/createStyles';
 import { InformBenefit } from '..';
+import { guestValidationSchema, newUservalidationSchema } from './validationSchema';
 
 export interface ContactValues {
 	identification: string;
@@ -198,6 +191,7 @@ const ContactForm = ({
 	);
 
 	const [isChecked, setChecked] = useState(false);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const handleChange = (event: any) => {
 		setChecked(event.target.checked);
 	};
@@ -213,6 +207,7 @@ const ContactForm = ({
 		}
 	};*/
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const handleFindBenefit = async (e: ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		if (value) {
