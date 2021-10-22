@@ -367,13 +367,12 @@ const ContactForm = ({
 									control={
 										<>
 											<Field
-												component={TextField}
-												className={classes.fieldWithHelperText}
-												name="address"
-												label={t('contact.fields.address.label')}
-												variant="outlined"
-												helperText={t('contact.fields.address.helperText')}
-												fullWidth
+												component={Checkbox}
+												type="checkbox"
+												name="isTerm"
+												color="primary"
+												checked={isChecked}
+												onClick={handleChange}
 											/>
 										</>
 									}
