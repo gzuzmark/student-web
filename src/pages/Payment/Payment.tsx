@@ -67,7 +67,6 @@ import {
 	stylesWithTheme,
 	useAppointmentStepValidation,
 } from 'utils';
-import initCulqi from 'utils/culquiIntegration';
 import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
 import KushkiCardError, { RequestCard } from './exceptions/KushkiCardError';
@@ -224,23 +223,23 @@ const Payment = () => {
 		}
 	}, [schedule]);
 
-	React.useEffect(() => {
-		const { id = '', startTime, endTime } = schedule || {};
-		const { id: useCaseId = '' } = useCase || {};
-		if (id.includes(FAKE_SESSION_ID)) {
-			sendFakeSession({
-				reservation_account_id: reservationAccountID || '',
-				use_case_id: useCaseId,
-				doctor_id: (doctor && doctor.id) || '',
-				start_time: dateToUTCUnixTimestamp(startTime!),
-				end_time: dateToUTCUnixTimestamp(endTime!),
-			}).catch((err) => {
-				const { message = '' } = err || {};
-				setErrorMessage(message);
-			});
-		}
-		// eslint-disable-next-line
-	}, []);
+	// React.useEffect(() => {
+	// 	const { id = '', startTime, endTime } = schedule || {};
+	// 	const { id: useCaseId = '' } = useCase || {};
+	// 	if (id.includes(FAKE_SESSION_ID)) {
+	// 		sendFakeSession({
+	// 			reservation_account_id: reservationAccountID || '',
+	// 			use_case_id: useCaseId,
+	// 			doctor_id: (doctor && doctor.id) || '',
+	// 			start_time: dateToUTCUnixTimestamp(startTime!),
+	// 			end_time: dateToUTCUnixTimestamp(endTime!),
+	// 		}).catch((err) => {
+	// 			const { message = '' } = err || {};
+	// 			setErrorMessage(message);
+	// 		});
+	// 	}
+	// 	// eslint-disable-next-line
+	// }, []);
 
 	const performTransactionB2BPayment = useCallback(
 		async (method: number) => {
@@ -639,12 +638,28 @@ const Payment = () => {
 		} catch (e) {}
 	}, [discountCode, schedule, activeUser, benefit]);
 
+	// useEffect(() => {
+	// 	if (useCase?.totalCost) {
+	// 		initCulqi(useCase?.totalCost);
+	// 	}
+	// 	// eslint-disable-next-line
+	// }, []);
+
 	useEffect(() => {
-		if (useCase?.totalCost) {
-			initCulqi(useCase?.totalCost);
-		}
-		// eslint-disable-next-line
-	}, []);
+		const isOpenModal = openKushkiModal || openKushkiCashModal;
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		const unblock = history.block((l, action) => {
+			if (action === 'POP' && isOpenModal) {
+				setOpenKushkiModal(false);
+				setOpenKushkiCashModal(false);
+				return false;
+			}
+		});
+
+		return () => {
+			unblock();
+		};
+	}, [history, openKushkiModal, openKushkiCashModal]);
 
 	useEffect(() => {
 		if (useCase?.totalCost) {
