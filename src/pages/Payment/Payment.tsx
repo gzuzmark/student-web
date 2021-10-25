@@ -68,6 +68,7 @@ import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
 import KushkiCardError, { RequestCard } from './exceptions/KushkiCardError';
 import KushkiCashError from './exceptions/KushkiCashError';
+import { DataTracking } from './interfaces';
 import { processErrorPayment } from './services';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
@@ -348,6 +349,15 @@ const Payment = () => {
 		[schedule, validHourReservation, useCase, reservationAccountID, doctor],
 	);
 
+	const makeDataAppointment = (): DataTracking => {
+		return {
+			session_id: schedule?.id || '',
+			doctor_id: doctor?.id || '',
+			patient_id: patientUser?.id || '',
+			user_id: user?.id || null,
+		};
+	};
+
 	const createRequestCardKushki = (amount: string, values: any) => {
 		return {
 			amount: amount,
@@ -411,7 +421,7 @@ const Payment = () => {
 		} as PaymentRequestBody;
 	};
 
-	const createRequestCardAppoitment = () => {
+	const createRequestCardAppointment = () => {
 		return {
 			reservationAccountID: activeUser?.id,
 			appointmentTypeID: 'ugito',
@@ -423,7 +433,7 @@ const Payment = () => {
 		} as NewAppointmentBody;
 	};
 
-	const createRequestCashAppoitment = () => {
+	const createRequestCashAppointment = () => {
 		return {
 			reservationAccountID: activeUser?.id,
 			appointmentTypeID: 'ugito',
@@ -474,8 +484,8 @@ const Payment = () => {
 			try {
 				setIsPaymentLoading(true);
 				const token = await paymentCardKushki(amount, values);
-				await createPayment(createRequestCardPayment(token, schedule, amount, values.email));
-				await createAppointment(createRequestCardAppoitment(), userToken);
+				await createPayment(createRequestCardPayment(token, schedule, amount, values.email)); // last param: benefit
+				await createAppointment(createRequestCardAppointment(), userToken);
 
 				addGAEvent({
 					event: 'virtualEvent',
@@ -522,7 +532,7 @@ const Payment = () => {
 				setIsPaymentLoading(false);
 				history.push('/confirmacion');
 			} catch (error) {
-				setErrorMessage(processErrorPayment(error as Error));
+				setErrorMessage(processErrorPayment(error as Error, makeDataAppointment()));
 				setOpenKushkiModal(false);
 				setIsPaymentLoading(false);
 			}
@@ -537,8 +547,8 @@ const Payment = () => {
 			try {
 				setIsPaymentLoading(true);
 				const token = await paymentCashKushki(amount, values);
-				const response: any = await createPayment(createRequestChashPayment(amount, values, token, method));
-				await createAppointment(createRequestCashAppoitment(), userToken);
+				const response: any = await createPayment(createRequestChashPayment(amount, values, token, method)); // last param: benefit
+				await createAppointment(createRequestCashAppointment(), userToken);
 				let link = null;
 
 				if (method === PE_PAYMENT_ID) {
@@ -556,7 +566,7 @@ const Payment = () => {
 				});
 				history.push('/confirmacion');
 			} catch (error) {
-				setErrorMessage(processErrorPayment(error as Error));
+				setErrorMessage(processErrorPayment(error as Error, makeDataAppointment()));
 				setOpenKushkiCashModal(false);
 				setIsPaymentLoading(false);
 			}
