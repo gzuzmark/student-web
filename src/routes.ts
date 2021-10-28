@@ -24,6 +24,7 @@ import {
 } from 'pages';
 import SmallSignUp from 'pages/SignUp/SmallSignUp';
 import { ConfirmationLaboratory } from 'pages/ConfirmationLaboratory';
+import RatingDoctorParam from 'pages/Rating/RatingDoctorParam';
 
 export const TRIAGE_ROUTE = 'triaje';
 export const SELECT_DOCTOR_ROUTE = 'seleccionar_doctor';
@@ -107,4 +108,5 @@ export const routeWithoutNav: RoutesType = [
 	{ id: 'CreateAccount', path: '/crear_cuenta', component: CreateAccount },
 	{ id: 'BuyPrescription', path: '/comprar_receta', component: BuyPrescription },
 	{ id: 'AskAddress', path: '/direccion_receta', component: AskAddress },
+	{ id: 'RatingDoctor', path: '/rating/session/:id', component: RatingDoctorParam },
 ];
