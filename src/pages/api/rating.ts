@@ -1,7 +1,19 @@
 import { AxiosResponse } from 'axios';
 import aliviaAxios from 'utils/customAxios';
+import { Doctor, Schedule } from '.';
 
-export interface HtppResponseRatingDoctor {
+export interface HtppResponseSaveRatingDoctorError {
+	ok: boolean;
+	message: string;
+}
+
+export interface HttpResponseGetRatingDoctor {
+	doctor: Doctor | null;
+	schedule: Schedule | null;
+	hasRating: boolean;
+}
+
+export interface HtppResponseSaveRatingDoctorError {
 	ok: boolean;
 	message: string;
 }
@@ -10,7 +22,7 @@ export const createRatingDoctor = async (
 	sessionId: string,
 	stars: number,
 	comment: string,
-): Promise<HtppResponseRatingDoctor> => {
+): Promise<HtppResponseSaveRatingDoctorError> => {
 	try {
 		const body = {
 			stars: stars,
@@ -26,7 +38,7 @@ export const createRatingDoctor = async (
 	}
 };
 
-const processHttpResponse = (response: AxiosResponse): HtppResponseRatingDoctor => {
+const processHttpResponse = (response: AxiosResponse): HtppResponseSaveRatingDoctorError => {
 	console.log(response);
 	const status = response.status;
 	switch (status) {
@@ -51,4 +63,17 @@ const processHttpResponse = (response: AxiosResponse): HtppResponseRatingDoctor 
 		ok: false,
 		message: 'Error, la calificación no ha podido ser registrado',
 	};
+};
+
+export const getRatingDoctor = async (sessionId: string): Promise<HttpResponseGetRatingDoctor> => {
+	try {
+		const resp: AxiosResponse = await aliviaAxios.get(`/rating/session/${sessionId}`);
+		return resp.data as HttpResponseGetRatingDoctor;
+	} catch (error) {
+		return {
+			doctor: null,
+			schedule: null,
+			hasRating: false,
+		};
+	}
 };
