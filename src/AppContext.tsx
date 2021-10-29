@@ -87,8 +87,8 @@ export const getTimeFrameIntervals = (startTime: Date): FromTimeFrameIntervals =
 	const dayEnd = endOfDay(startTime);
 	return {
 		morning: { start: startOfDay(startTime), end: addHours(addMinutes(dayStart, 59), 12) },
-		afternoon: { start: addHours(dayStart, 13), end: addHours(addMinutes(dayStart, 59), 16) },
-		evening: { start: addHours(dayStart, 17), end: dayEnd },
+		afternoon: { start: addHours(dayStart, 13), end: addHours(addMinutes(dayStart, 59), 18) },
+		evening: { start: addHours(dayStart, 19), end: dayEnd },
 	};
 };
 
