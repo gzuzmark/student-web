@@ -110,12 +110,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface CardDoctorProps {
 	doctor: Doctor | null | undefined;
-	user: User | null | undefined;
 	schedule: Schedule | null | undefined;
-	channel: string | undefined;
 }
 
-const CardDoctor = ({ doctor, user, schedule, channel }: CardDoctorProps) => {
+const CardDoctor = ({ doctor, schedule }: CardDoctorProps) => {
 	const classes = useStyles();
 	const { t } = useTranslation('payment');
 	return (

@@ -26,7 +26,7 @@ export const createRatingDoctor = async (
 		await aliviaAxios.post(`/rating/session/${sessionId}`, body);
 		return {
 			ok: true,
-			message: 'Gracias por su calificación, ha sido registrado con éxito',
+			message: '',
 		};
 	} catch (error) {
 		return processHttpResponse(error as AxiosResponse);

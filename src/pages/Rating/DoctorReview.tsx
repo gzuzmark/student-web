@@ -1,7 +1,7 @@
 import { Grid, Theme, Typography } from '@material-ui/core';
 import { MainLayout, TopSection } from 'pages';
-import { CreateRatingDoctor } from 'pages/api/rating';
-import React, { useState } from 'react';
+import { createRatingDoctor, getRatingDoctor } from 'pages/api/rating';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { PAYMENT_ROUTE } from 'routes';
@@ -9,6 +9,7 @@ import { stylesWithTheme, useAppointmentStepValidation } from 'utils';
 import { useHistory } from 'react-router-dom';
 import { CardDoctor, RatingDoctor, RatingAlivia } from './components';
 import { RatingDoctorValues } from './components/RatingDoctor';
+import { Doctor, Schedule } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -67,23 +68,53 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 }));
 
 const DoctorReview = () => {
-	const { doctor, user, patientUser, schedule, channel } = useAppointmentStepValidation(PAYMENT_ROUTE);
-	const activeUser = patientUser || user;
-	const classes = useStyles();
-	const { t } = useTranslation('rating');
-	const [step, setStep] = useState<number>(0);
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
+	const { t } = useTranslation('rating');
+	const classes = useStyles();
 
-	const onChangeStep = (values: RatingDoctorValues) => {
+	const [doctor, setDoctor] = useState<Doctor | null>(null);
+	const [schedule, setSchedule] = useState<Schedule | null>(null);
+	const [hasRating, setHasRating] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(true);
+	const [step, setStep] = useState<number>(0);
+
+	const onChangeStep = async (values: RatingDoctorValues) => {
 		console.log(values);
 		console.log('paso---->' + step);
 		if (step === 0) {
-			CreateRatingDoctor('42cca08c-406f-4ec4-a92f-61e8b1b1b0ff', values.stars, values.comment);
-			history.push('/thanks');
+			const resp = await createRatingDoctor(id, values.stars, values.comment);
+			if (resp.ok) {
+				history.push('/thanks');
+			} else {
+				// mensaje de error
+			}
 		}
 		setStep(step + 1);
 	};
+
+	useEffect(() => {
+		getRatingDoctor(id).then((resp) => {
+			if (resp.doctor === null && resp.schedule === null) {
+				// pagina no encontrada...
+				history.push('/rating-not-found');
+			} else {
+				setDoctor(resp.doctor);
+				setSchedule(resp.schedule);
+				setHasRating(resp.hasRating);
+			}
+			setLoading(false);
+		});
+	}, [id, history]);
+
+	if (loading) {
+		return <>Cargando</>;
+	}
+
+	if (hasRating) {
+		return <>Ya fue calificado</>;
+	}
+
 	return (
 		<>
 			<TopSection>
@@ -103,7 +134,7 @@ const DoctorReview = () => {
 				<div className={classes.cont}>
 					<Grid container spacing={3}>
 						<Grid item xs={12} md={4}>
-							<CardDoctor doctor={doctor} user={activeUser} schedule={schedule} channel={channel} />
+							<CardDoctor doctor={doctor} schedule={schedule} />
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<div className={classes.area_rating}>
