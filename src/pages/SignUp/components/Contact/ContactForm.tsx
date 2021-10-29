@@ -15,6 +15,8 @@ import { stylesWithTheme } from 'utils/createStyles';
 import { InformBenefit } from '..';
 import { guestValidationSchema, newUservalidationSchema } from './validationSchema';
 
+import { TextField as TextField2 } from '@material-ui/core';
+
 export interface ContactValues {
 	identification: string;
 	identificationType: string;
@@ -208,7 +210,7 @@ const ContactForm = ({
 	};*/
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const handleFindBenefit = async (e: ChangeEvent<HTMLInputElement>) => {
+	const handleFindBenefit = async (e: any) => {
 		const value = e.target.value;
 		if (value) {
 			const response = await getBenefit(value);
@@ -223,11 +225,13 @@ const ContactForm = ({
 		} else {
 			setHasBenefitModalOpen(false);
 		}
+		return benefit;
 	};
 
 	const acceptBenefit = () => {
 		if (updateContextState) {
 			updateContextState({
+				benefit: benefit,
 				useBenefit: true,
 			});
 			setHasBenefitModalOpen(false);
@@ -246,7 +250,7 @@ const ContactForm = ({
 				onSubmit={onSubmit}
 				validationSchema={isGuest ? guestValidationSchema : newUservalidationSchema}
 			>
-				{({ submitForm, isSubmitting }) => (
+				{({ submitForm, isSubmitting, setFieldValue }) => (
 					<Form className={classes.form}>
 						{/*<div>
 						{isUbigeoEnabled && (
@@ -313,13 +317,19 @@ const ContactForm = ({
 								</Grid>
 								<Grid item sm={6} xs={6}>
 									<div className={classes.fieldWrapper}>
-										<Field
-											component={TextField}
+										<TextField2
 											name="identification"
+											type="text"
 											label={t(`contact.fields.id.label.${contactKey}`)}
 											variant="outlined"
 											inputProps={{ maxLength: 12 }}
 											fullWidth
+											onChange={(e: any) => {
+												handleFindBenefit(e);
+												if (e.target.validity.valid || !e.target.value) {
+													setFieldValue('identification', e.target.value);
+												}
+											}}
 										/>
 									</div>
 								</Grid>

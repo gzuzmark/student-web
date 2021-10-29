@@ -254,7 +254,7 @@ const Payment = () => {
 						cost: useCase?.totalCost,
 						appointmentTypeID: 'ugito',
 						scheduleID: schedule.id,
-						discountID: discount.id,
+						discountID: '',
 						email: activeUser.email || '',
 						token: 'SnzVSB3cSA',
 						dni: activeUser.identification || '',
@@ -308,16 +308,15 @@ const Payment = () => {
 			activeUser,
 			doctor,
 			initialValuesCash,
-			discount.id,
 			discount.totalCost,
 			trackParams,
+			benefit,
+			useBenefit,
 			userFiles,
 			appointmentOwner,
 			userToken,
 			history,
 			t,
-			benefit,
-			useBenefit,
 		],
 	);
 
@@ -604,19 +603,19 @@ const Payment = () => {
 	};
 	const sendDiscount = useCallback(async () => {
 		try {
-			const reviewedBenefit = await applyBenefit({
-				benefitID: benefit?.id,
-				dni: 'fasdafasd',
-				scheduleID: 'fadsfdafads',
-			});
+			// const reviewedBenefit = await applyBenefit({
+			// 	benefitID: benefit?.id,
+			// 	dni: 'fasdafasd',
+			// 	scheduleID: 'fadsfdafads',
+			// });
 
-			addGAEvent({
-				category: 'Agendar cita - Paso 3',
-				action: 'Aplicar descuento en beneficio',
-				label: reviewedBenefit.id,
-			});
-			window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedBenefit.totalCost) });
-			setDiscount(reviewedBenefit);
+			// addGAEvent({
+			// 	category: 'Agendar cita - Paso 3',
+			// 	action: 'Aplicar descuento en beneficio',
+			// 	label: reviewedBenefit.id,
+			// });
+			// window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedBenefit.totalCost) });
+			// setDiscount(reviewedBenefit);
 
 			if (activeUser && schedule) {
 				if (discountCode) {

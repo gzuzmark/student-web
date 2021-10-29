@@ -84,7 +84,9 @@ const parseBenefit = (apiBenefit: BenefitAPI): Benefit => ({
 	name: apiBenefit.name,
 	description: apiBenefit.description,
 	discount: apiBenefit.discount,
-	expirationDate: format(parseExpirationDate(apiBenefit.expiration_date), "eeee d 'de' MMMMMM ", { locale: es }),
+	expirationDate: apiBenefit.expiration_date
+		? format(parseExpirationDate(apiBenefit.expiration_date), "eeee d 'de' MMMMMM ", { locale: es })
+		: '',
 	companyName: apiBenefit.company_name,
 });
 
@@ -235,9 +237,9 @@ export const getLocations = async (query: string): Promise<UbigeoResponse> => {
 export const getBenefit = async (document_number: string): Promise<Benefit> => {
 	const data = new FormData();
 
-	data.append('patient_number', document_number);
+	data.append('patient_document', document_number);
 
-	const response = await aliviaAxios.post<BenefitResponse>('/benefits/validate', data);
+	const response = await aliviaAxios.post<BenefitResponse>('/benefits/validate', { patient_document: document_number });
 
 	return parseBenefit(response.data.data.benefit);
 };

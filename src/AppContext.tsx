@@ -195,7 +195,7 @@ const defaultState: ContextProps = {
 	labFiles: [],
 	labAva: [],
 	benefit: null,
-	useBenefit: true,
+	useBenefit: false,
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 

@@ -102,7 +102,7 @@ const formatParams = (params: PaymentRequestBody) => ({
 	token: params.token,
 	email: params.email,
 	schedule_id: params.scheduleID,
-	discount_id: params.discountID || '',
+	discount_id: '',
 	patient_dni: params.dni || '',
 	patient_name: params.name || '',
 	patient_last_name: params.lastName || '',
