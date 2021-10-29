@@ -9,7 +9,7 @@ import AppContext from 'AppContext';
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import { Checkbox, TextField } from 'formik-material-ui';
 import { Benefit, getBenefit } from 'pages/api';
-import React, { ChangeEvent, useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { stylesWithTheme } from 'utils/createStyles';
 import { InformBenefit } from '..';
