@@ -21,6 +21,8 @@ import {
 	AskAddress,
 	NewSignUp,
 	DashboardDefault,
+	DoctorReview,
+	ThanksPage,
 } from 'pages';
 import SmallSignUp from 'pages/SignUp/SmallSignUp';
 import { ConfirmationLaboratory } from 'pages/ConfirmationLaboratory';
@@ -99,6 +101,7 @@ export const routes: RoutesType = [
 	{ id: 'SelectPatient', path: '/select_patient', component: SelectPatient, guard: false },
 	{ id: 'PaymentLaboratory', path: '/pago_laboratory', component: PaymentLaboratory, guard: false, exact: false },
 	{ id: 'NewSignUp', path: '/creacion_cuenta/*', component: NewSignUp },
+
 	// { id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile, guard: true },
 ];
 
@@ -107,4 +110,7 @@ export const routeWithoutNav: RoutesType = [
 	{ id: 'CreateAccount', path: '/crear_cuenta', component: CreateAccount },
 	{ id: 'BuyPrescription', path: '/comprar_receta', component: BuyPrescription },
 	{ id: 'AskAddress', path: '/direccion_receta', component: AskAddress },
+	//{ id: 'DoctorReview', path: '/review', component: DoctorReview, },
+	{ id: 'DoctorReview', path: '/rating/session/:id', component: DoctorReview },
+	{ id: 'Thanks', path: '/thanks', component: ThanksPage },
 ];

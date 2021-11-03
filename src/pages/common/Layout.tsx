@@ -39,12 +39,13 @@ const useStyles = makeStyles((theme: Theme) =>
 			},
 		},
 		mainLayout: {
-			backgroundColor: BACKGROUND_DEFAULT,
+			backgroundColor: '#FFFFFF',
 			flex: '1 1 auto',
 			minHeight: 'calc(100vh - 50px)',
 			[theme.breakpoints.up('lg')]: {
 				padding: '32px',
 				minHeight: 'calc(100vh - 80px)',
+				backgroundColor: BACKGROUND_DEFAULT,
 			},
 		},
 		circle: {
@@ -54,6 +55,14 @@ const useStyles = makeStyles((theme: Theme) =>
 			left: '0',
 			[theme.breakpoints.up('lg')]: {
 				display: 'block',
+			},
+		},
+		topSection: {
+			backgroundColor: '#FFFFFF',
+			padding: '16px 0',
+			[theme.breakpoints.up('lg')]: {
+				padding: '32px 0',
+				maxHeight: '144px',
 			},
 		},
 	}),
@@ -86,4 +95,10 @@ export const MainLayout = ({ children, className }: LayoutProps) => {
 	const classes = useStyles();
 
 	return <div className={clsx(classes.mainLayout, className)}>{children}</div>;
+};
+
+export const TopSection = ({ children, className }: LayoutProps) => {
+	const classes = useStyles();
+
+	return <div className={clsx(classes.topSection, className)}>{children}</div>;
 };
