@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { PAYMENT_ROUTE } from 'routes';
 import { stylesWithTheme, useAppointmentStepValidation } from 'utils';
-import { string } from 'yup/lib/locale';
+import { useHistory } from 'react-router-dom';
 import { CardDoctor, RatingDoctor, RatingAlivia } from './components';
 import { RatingDoctorValues } from './components/RatingDoctor';
 
@@ -72,14 +72,17 @@ const DoctorReview = () => {
 	const classes = useStyles();
 	const { t } = useTranslation('rating');
 	const [step, setStep] = useState<number>(0);
+	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
 
 	const onChangeStep = (values: RatingDoctorValues) => {
-		setStep(step + 1);
 		console.log(values);
-		console.log('id======>' + id);
-		CreateRatingDoctor('850a040b-f55d-4a8f-910e-3d240f7ffbcf', 2, values.comment);
 		console.log('paso---->' + step);
+		if (step === 0) {
+			CreateRatingDoctor('42cca08c-406f-4ec4-a92f-61e8b1b1b0ff', values.stars, values.comment);
+			history.push('/thanks');
+		}
+		setStep(step + 1);
 	};
 	return (
 		<>
