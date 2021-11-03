@@ -128,7 +128,7 @@ const CardDoctor = ({ doctor, schedule }: CardDoctorProps) => {
 					</div>
 					<div className={classes.doctorWrapper}>
 						<div>
-							<Typography className={classes.doctorName}>{doctor?.name}</Typography>
+							<Typography className={classes.doctorName}>{`${doctor?.name} ${doctor?.lastName}`}</Typography>
 							<div>
 								<Typography className={classes.infoTitle}>{doctor?.specialityName}</Typography>
 							</div>

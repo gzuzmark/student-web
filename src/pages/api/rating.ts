@@ -7,9 +7,17 @@ export interface HtppResponseSaveRatingDoctorError {
 	message: string;
 }
 
+export interface Patient {
+	id: string;
+	name: string;
+	lastname: string;
+	second_lastname: string;
+}
+
 export interface HttpResponseGetRatingDoctor {
 	doctor: Doctor | null;
 	schedule: Schedule | null;
+	patient: Patient | null;
 	hasRating: boolean;
 }
 
@@ -68,12 +76,45 @@ const processHttpResponse = (response: AxiosResponse): HtppResponseSaveRatingDoc
 export const getRatingDoctor = async (sessionId: string): Promise<HttpResponseGetRatingDoctor> => {
 	try {
 		const resp: AxiosResponse = await aliviaAxios.get(`/rating/session/${sessionId}`);
-		return resp.data as HttpResponseGetRatingDoctor;
+		return convertDataToResponseRatingDoctor(resp.data);
 	} catch (error) {
 		return {
 			doctor: null,
 			schedule: null,
+			patient: null,
 			hasRating: false,
 		};
 	}
+};
+
+const convertDataToResponseRatingDoctor = (data: any): HttpResponseGetRatingDoctor => {
+	return {
+		doctor: {
+			id: String(data.doctor.id),
+			name: String(data.doctor.name),
+			lastName: String(data.doctor.last_name),
+			cmp: String(data.doctor.cmp),
+			profilePicture: String(data.doctor.photo),
+			specialityName: String(data.doctor.specialty_name),
+			aboutMe: String(data.doctor.about_me),
+			diseases: [],
+			patientOpinions: [],
+			speciality: '',
+			education: '',
+			rating: 0,
+		},
+		schedule: {
+			id: String(data.schedule.id),
+			startTime: new Date(data.schedule.start_time * 1000),
+			endTime: new Date(data.schedule.end_time * 1000),
+			isDisabled: false,
+		},
+		patient: {
+			id: String(data.patient.id),
+			name: String(data.patient.name),
+			lastname: String(data.patient.last_name),
+			second_lastname: String(data.patient.second_last_name),
+		},
+		hasRating: data.hasEvaluation,
+	};
 };
