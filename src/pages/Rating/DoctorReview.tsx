@@ -1,6 +1,6 @@
 import { Grid, Theme, Typography } from '@material-ui/core';
 import { MainLayout, TopSection } from 'pages';
-import { createRatingDoctor, getRatingDoctor } from 'pages/api/rating';
+import { createRatingDoctor, getRatingDoctor, Patient } from 'pages/api/rating';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
@@ -75,6 +75,7 @@ const DoctorReview = () => {
 
 	const [doctor, setDoctor] = useState<Doctor | null>(null);
 	const [schedule, setSchedule] = useState<Schedule | null>(null);
+	const [patient, setPatient] = useState<Patient | null>(null);
 	const [hasRating, setHasRating] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [step, setStep] = useState<number>(0);
@@ -95,14 +96,10 @@ const DoctorReview = () => {
 
 	useEffect(() => {
 		getRatingDoctor(id).then((resp) => {
-			if (resp.doctor === null && resp.schedule === null) {
-				// pagina no encontrada...
-				history.push('/rating-not-found');
-			} else {
-				setDoctor(resp.doctor);
-				setSchedule(resp.schedule);
-				setHasRating(resp.hasRating);
-			}
+			setDoctor(resp.doctor);
+			setPatient(resp.patient);
+			setSchedule(resp.schedule);
+			setHasRating(resp.hasRating);
 			setLoading(false);
 		});
 	}, [id, history]);
@@ -115,6 +112,10 @@ const DoctorReview = () => {
 		return <>Ya fue calificado</>;
 	}
 
+	if (schedule === null || doctor === null || patient === null) {
+		return <>No se encontró la cita médica especificada</>;
+	}
+
 	return (
 		<>
 			<TopSection>
@@ -123,10 +124,10 @@ const DoctorReview = () => {
 						Califica tu experiencia
 					</Typography>
 					<Typography className={classes.subtitle} variant="h1">
-						Hola, ayúdanos a mejorar nuestro servicio calificando tu experiencia
+						Hola {patient.name}, ayúdanos a mejorar nuestro servicio calificando tu experiencia
 					</Typography>
 					<Typography className={classes.subtitle} variant="h1">
-						{step}
+						Paso {step}
 					</Typography>
 				</div>
 			</TopSection>
