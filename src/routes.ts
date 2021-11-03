@@ -26,6 +26,7 @@ import {
 } from 'pages';
 import SmallSignUp from 'pages/SignUp/SmallSignUp';
 import { ConfirmationLaboratory } from 'pages/ConfirmationLaboratory';
+import RatingDoctorParam from 'pages/Rating/RatingDoctorParam';
 
 export const TRIAGE_ROUTE = 'triaje';
 export const SELECT_DOCTOR_ROUTE = 'seleccionar_doctor';
