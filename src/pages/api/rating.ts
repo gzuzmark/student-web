@@ -9,6 +9,7 @@ export const createRatingDoctor = async (sessionId: string, stars: number, comme
 		const response = await aliviaAxios.post(`/rating/session/${sessionId}`, body);
 		console.log(response);
 	} catch (error) {
-		// console.log(error.response.status);
+		const errorAxios = error as any;
+		console.log(errorAxios.response);
 	}
 };

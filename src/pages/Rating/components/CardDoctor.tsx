@@ -92,6 +92,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	iconWrapper: {
 		display: 'flex',
 		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	schedule: {
 		background: '#F7F8FC',
@@ -131,8 +132,7 @@ const CardDoctor = ({ doctor, user, schedule, channel }: CardDoctorProps) => {
 						<div>
 							<Typography className={classes.doctorName}>{doctor?.name}</Typography>
 							<div>
-								<Typography component="span">{t('payment.left.cmp')} </Typography>
-								<Typography component="span">{doctor?.cmp}</Typography>
+								<Typography className={classes.infoTitle}>{doctor?.specialityName}</Typography>
 							</div>
 						</div>
 					</div>

@@ -1,2 +1,3 @@
+export { default as RatingDoctor } from './RatingDoctor';
 export { default as CardDoctor } from './CardDoctor';
-export { default as Rating } from './Rating';
+export { default as RatingAlivia } from './RatingAlivia';

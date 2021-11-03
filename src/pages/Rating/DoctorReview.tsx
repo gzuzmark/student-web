@@ -1,9 +1,14 @@
 import { Grid, Theme, Typography } from '@material-ui/core';
 import { MainLayout, TopSection } from 'pages';
-import React from 'react';
+import { CreateRatingDoctor } from 'pages/api/rating';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router';
 import { PAYMENT_ROUTE } from 'routes';
 import { stylesWithTheme, useAppointmentStepValidation } from 'utils';
-import { CardDoctor, Rating } from './components';
+import { string } from 'yup/lib/locale';
+import { CardDoctor, RatingDoctor, RatingAlivia } from './components';
+import { RatingDoctorValues } from './components/RatingDoctor';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -65,6 +70,17 @@ const DoctorReview = () => {
 	const { doctor, user, patientUser, schedule, channel } = useAppointmentStepValidation(PAYMENT_ROUTE);
 	const activeUser = patientUser || user;
 	const classes = useStyles();
+	const { t } = useTranslation('rating');
+	const [step, setStep] = useState<number>(0);
+	const { id } = useParams<{ id: string }>();
+
+	const onChangeStep = (values: RatingDoctorValues) => {
+		setStep(step + 1);
+		console.log(values);
+		console.log('id======>' + id);
+		CreateRatingDoctor('850a040b-f55d-4a8f-910e-3d240f7ffbcf', 2, values.comment);
+		console.log('paso---->' + step);
+	};
 	return (
 		<>
 			<TopSection>
@@ -74,6 +90,9 @@ const DoctorReview = () => {
 					</Typography>
 					<Typography className={classes.subtitle} variant="h1">
 						Hola, ayúdanos a mejorar nuestro servicio calificando tu experiencia
+					</Typography>
+					<Typography className={classes.subtitle} variant="h1">
+						{step}
 					</Typography>
 				</div>
 			</TopSection>
@@ -86,7 +105,7 @@ const DoctorReview = () => {
 						<Grid item xs={12} md={8}>
 							<div className={classes.area_rating}>
 								<Typography className={classes.question}>¿Cómo fue la experiencia con tu especialista?</Typography>
-								<Rating />
+								<RatingDoctor onChangeStep={onChangeStep} />
 							</div>
 						</Grid>
 					</Grid>
