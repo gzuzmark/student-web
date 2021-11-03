@@ -1,16 +1,14 @@
-import { Grid, Theme, Typography } from '@material-ui/core';
+import { Grid, Snackbar, SnackbarContent, Theme, Typography } from '@material-ui/core';
 import { MainLayout, TopSection } from 'pages';
 import { createRatingDoctor, getRatingDoctor, Patient } from 'pages/api/rating';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { PAYMENT_ROUTE } from 'routes';
-import { stylesWithTheme, useAppointmentStepValidation } from 'utils';
+import { stylesWithTheme } from 'utils';
 import { useHistory } from 'react-router-dom';
-import { CardDoctor, RatingDoctor, RatingAlivia } from './components';
+import { CardDoctor, RatingDoctor } from './components';
 import { RatingDoctorValues } from './components/RatingDoctor';
 import { Doctor, Schedule } from 'pages/api';
-
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		//padding: '32px 25px',
@@ -65,12 +63,19 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			borderBottom: '1px solid #CDD4F0',
 		},
 	},
+	snackbar: {
+		background: '#E5EFFF',
+		width: '100%',
+	},
+	wrapperAlert: {
+		padding: '24px',
+	},
 }));
 
 const DoctorReview = () => {
 	const history = useHistory();
 	const { id } = useParams<{ id: string }>();
-	const { t } = useTranslation('rating');
+	//const { t } = useTranslation('rating');
 	const classes = useStyles();
 
 	const [doctor, setDoctor] = useState<Doctor | null>(null);
@@ -79,10 +84,16 @@ const DoctorReview = () => {
 	const [hasRating, setHasRating] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [step, setStep] = useState<number>(0);
-
+	const [open, setOpen] = React.useState(false);
+	const vertical = 'top';
+	const horizontal = 'center';
+	const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+		setOpen(false);
+	};
 	const onChangeStep = async (values: RatingDoctorValues) => {
-		console.log(values);
-		console.log('paso---->' + step);
 		if (step === 0) {
 			const resp = await createRatingDoctor(id, values.stars, values.comment);
 			if (resp.ok) {
@@ -100,6 +111,7 @@ const DoctorReview = () => {
 			setPatient(resp.patient);
 			setSchedule(resp.schedule);
 			setHasRating(resp.hasRating);
+			setOpen(resp.hasRating);
 			setLoading(false);
 		});
 	}, [id, history]);
@@ -109,7 +121,6 @@ const DoctorReview = () => {
 	}
 
 	if (hasRating) {
-		return <>Ya fue calificado</>;
 	}
 
 	if (schedule === null || doctor === null || patient === null) {
@@ -120,14 +131,16 @@ const DoctorReview = () => {
 		<>
 			<TopSection>
 				<div className={classes.wrapper}>
+					{hasRating && (
+						<Snackbar open={open} autoHideDuration={5000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }}>
+							<SnackbarContent className={classes.snackbar} message={<span id="client-snackbar">Hello World</span>} />
+						</Snackbar>
+					)}
 					<Typography className={classes.title} variant="h1">
 						Califica tu experiencia
 					</Typography>
 					<Typography className={classes.subtitle} variant="h1">
 						Hola {patient.name}, ayúdanos a mejorar nuestro servicio calificando tu experiencia
-					</Typography>
-					<Typography className={classes.subtitle} variant="h1">
-						Paso {step}
 					</Typography>
 				</div>
 			</TopSection>
@@ -140,7 +153,7 @@ const DoctorReview = () => {
 						<Grid item xs={12} md={8}>
 							<div className={classes.area_rating}>
 								<Typography className={classes.question}>¿Cómo fue la experiencia con tu especialista?</Typography>
-								<RatingDoctor onChangeStep={onChangeStep} />
+								<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />
 							</div>
 						</Grid>
 					</Grid>
@@ -149,4 +162,5 @@ const DoctorReview = () => {
 		</>
 	);
 };
+
 export default DoctorReview;

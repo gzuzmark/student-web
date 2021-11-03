@@ -2,7 +2,6 @@ import React, { ChangeEvent, ReactElement, useCallback, useState } from 'react';
 import { Button, Theme, Typography } from '@material-ui/core';
 import StarRateIcon from '@material-ui/icons/StarRate';
 import { stylesWithTheme } from 'utils';
-import { useHistory } from 'react-router-dom';
 
 export interface RatingDoctorValues {
 	stars: number;
@@ -96,14 +95,14 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 
 interface RatingDoctorProps {
 	onChangeStep: (values: RatingDoctorValues) => void;
+	hasRating: boolean;
 }
 
-const RatingDoctor = ({ onChangeStep }: RatingDoctorProps) => {
+const RatingDoctor = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 	const [rating, setRating] = useState<any>(null);
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const [comment, setComment] = useState<string>('');
 	const classes = useStyles();
-	const history = useHistory();
 	const stars = [
 		{
 			description: 'No me gustó',
@@ -137,9 +136,6 @@ const RatingDoctor = ({ onChangeStep }: RatingDoctorProps) => {
 		},
 		[comment, onChangeStep, rating],
 	);
-	/*= () => {
-		//history.push('/thanks');
-	};*/
 	const HelpText = (): ReactElement | null => {
 		if (hoverValue != null) {
 			return <Typography className={classes.description}>{stars[hoverValue - 1].description}</Typography>;
@@ -149,7 +145,6 @@ const RatingDoctor = ({ onChangeStep }: RatingDoctorProps) => {
 	};
 	const updateComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setComment(e.target.value);
-		console.log('ETRELLA===' + rating);
 	};
 	return (
 		<div className={classes.layout}>
@@ -158,13 +153,13 @@ const RatingDoctor = ({ onChangeStep }: RatingDoctorProps) => {
 					{[...Array(5)].map((star, i) => {
 						const ratingValue = i + 1;
 						return (
-							<StarRateIcon
-								key={i}
-								style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0', fontSize: '60' }}
-								onClick={() => setRating(ratingValue)}
-								onMouseLeave={() => setHoverValue(null)}
-								onMouseEnter={() => setHoverValue(ratingValue)}
-							/>
+							<Button disabled={hasRating} key={i} onClick={() => setRating(ratingValue)}>
+								<StarRateIcon
+									style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0', fontSize: '60' }}
+									onMouseLeave={() => setHoverValue(null)}
+									onMouseEnter={() => setHoverValue(ratingValue)}
+								/>
+							</Button>
 						);
 					})}
 				</div>
@@ -173,12 +168,7 @@ const RatingDoctor = ({ onChangeStep }: RatingDoctorProps) => {
 			{rating != null && (
 				<>
 					<Typography className={classes.question}>{rating == null ? '' : stars[rating - 1].question}</Typography>
-					<textarea
-						className={classes.textArea}
-						value={comment}
-						onChange={updateComment}
-						placeholder="¿Te gustó su trato?¿Lo recomendarías?"
-					/>
+					<textarea className={classes.textArea} value={comment} onChange={updateComment} />
 					<div className={classes.buttonWrapper}>
 						<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.button}>
 							Calificar
