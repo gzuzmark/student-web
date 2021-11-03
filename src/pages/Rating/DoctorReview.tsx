@@ -1,14 +1,13 @@
 import { Grid, Snackbar, SnackbarContent, Theme, Typography } from '@material-ui/core';
 import { MainLayout, TopSection } from 'pages';
+import { Doctor, Schedule } from 'pages/api';
 import { createRatingDoctor, getRatingDoctor, Patient } from 'pages/api/rating';
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { stylesWithTheme } from 'utils';
 import { useHistory } from 'react-router-dom';
+import { stylesWithTheme } from 'utils';
 import { CardDoctor, RatingDoctor } from './components';
 import { RatingDoctorValues } from './components/RatingDoctor';
-import { Doctor, Schedule } from 'pages/api';
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		//padding: '32px 25px',
