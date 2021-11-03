@@ -22,3 +22,4 @@ export * from './AskAddress';
 export * from './NewSignUp';
 export * from './DashboardDefault';
 export * from './ClinicalExamination';
+export * from './Rating';
