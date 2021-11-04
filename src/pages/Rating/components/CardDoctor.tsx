@@ -1,13 +1,11 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import { Theme } from '@material-ui/core/styles';
-import capitalize from 'lodash/capitalize';
-
-import { Doctor, Schedule } from 'pages/api';
-import { stylesWithTheme, formatUTCDate } from 'utils';
-import { useTranslation } from 'react-i18next';
-import { ReactComponent as ClockIcon } from 'icons/clockGreen.svg';
+import Typography from '@material-ui/core/Typography';
 import { ReactComponent as CalendarIcon } from 'icons/calendarGreen.svg';
+import { ReactComponent as ClockIcon } from 'icons/clockGreen.svg';
+import capitalize from 'lodash/capitalize';
+import { Doctor, Schedule } from 'pages/api';
+import React from 'react';
+import { stylesWithTheme, formatUTCDate } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
