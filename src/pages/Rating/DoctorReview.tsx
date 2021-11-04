@@ -147,7 +147,7 @@ const DoctorReview = () => {
 					{hasRating && (
 						<Snackbar
 							open={open}
-							autoHideDuration={7000}
+							autoHideDuration={5000}
 							onClose={handleClose}
 							anchorOrigin={{ vertical, horizontal }}
 							ContentProps={{
