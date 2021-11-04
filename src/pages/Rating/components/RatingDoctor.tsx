@@ -60,6 +60,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			outline: 'none !important',
 		},
 	},
+	icon: {
+		width: '48px',
+		height: '48px',
+		transform: 'scale(1.5)',
+	},
 
 	question: {
 		fontFamily: 'Mulish',
@@ -85,7 +90,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	button: {
 		padding: '18px',
-		width: '100%',
+		minWidth: '50px',
 		[breakpoints.up('lg')]: {
 			maxWidth: '164px',
 			padding: '14px',
@@ -153,11 +158,17 @@ const RatingDoctor = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 					{[...Array(5)].map((star, i) => {
 						const ratingValue = i + 1;
 						return (
-							<Button disabled={hasRating} key={i} onClick={() => setRating(ratingValue)}>
+							<Button
+								disabled={hasRating}
+								key={i}
+								onClick={() => setRating(ratingValue)}
+								style={{ padding: '0 10px 0 0', minWidth: '50px' }}
+							>
 								<StarRateIcon
-									style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0', fontSize: '60' }}
+									style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0' }}
 									onMouseLeave={() => setHoverValue(null)}
 									onMouseEnter={() => setHoverValue(ratingValue)}
+									className={classes.icon}
 								/>
 							</Button>
 						);

@@ -10,9 +10,9 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			display: 'flex',
 			padding: '12px 0 12px 52px',
 			position: 'relative',
+			justifyContent: 'center',
 			[breakpoints.up('lg')]: {
 				padding: '27px 0',
-				justifyContent: 'center',
 			},
 		},
 		brandLogo: {
@@ -24,78 +24,6 @@ const useStyles = makeStyles(({ breakpoints }: Theme) =>
 			[breakpoints.down('md')]: {
 				width: 90,
 				height: 25,
-			},
-		},
-		arrowIcon: {
-			padding: '10px',
-			left: 4,
-			position: 'absolute',
-			cursor: 'pointer',
-			[breakpoints.up('lg')]: {
-				display: 'none',
-			},
-		},
-		goToStartText: {
-			fontFamily: 'Mulish, sans-serif',
-			fontStyle: 'normal',
-			fontWeight: 600,
-			fontSize: '14px',
-			lineHeight: '20px',
-			color: '#1ECD96',
-			marginLeft: '10px',
-		},
-		goToStartButton: {
-			cursor: 'pointer',
-			display: 'none',
-			fontSize: '12px',
-			padding: 0,
-			position: 'absolute',
-			left: '26px',
-			textTransform: 'none',
-			textDecoration: 'none',
-			'&:hover': {
-				textDecoration: 'none',
-			},
-			[breakpoints.up('lg')]: {
-				display: 'flex',
-				padding: '10px 20px',
-				left: '72px',
-				fontSize: '15px',
-			},
-		},
-		loginButton: {
-			fontSize: '12px',
-			padding: 0,
-			position: 'absolute',
-			right: '26px',
-			textTransform: 'none',
-			textDecoration: 'none',
-			'&:hover': {
-				textDecoration: 'none',
-			},
-			[breakpoints.up('lg')]: {
-				padding: '10px 20px',
-				right: '72px',
-				fontSize: '15px',
-			},
-		},
-		userIconWrapper: {
-			alignItems: 'center',
-			display: 'flex',
-			position: 'absolute',
-			top: '0px',
-			right: '7px',
-			[breakpoints.up('lg')]: {
-				top: '5px',
-				right: '111px',
-			},
-		},
-		userIcon: {
-			width: '25px',
-			height: '25px',
-			[breakpoints.up('lg')]: {
-				width: '46px',
-				height: '46px',
 			},
 		},
 	}),

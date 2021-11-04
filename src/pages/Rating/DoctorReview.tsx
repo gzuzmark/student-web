@@ -82,6 +82,15 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			marginTop: '80px',
 		},
 	},
+	spanMessage: {
+		fontFamily: 'Mulish',
+		marginLeft: '20px',
+		fontSize: '16px',
+		fontStyle: 'normal',
+		[breakpoints.up('lg')]: {
+			fontSize: '20px',
+		},
+	},
 }));
 
 const DoctorReview = () => {
@@ -159,9 +168,7 @@ const DoctorReview = () => {
 								message={
 									<div className={classes.snackbarMessage}>
 										<Check />
-										<span style={{ fontFamily: 'Mulish', marginLeft: '20px', fontSize: '20px', fontStyle: 'normal' }}>
-											Ya haz calificado a tu especialista
-										</span>
+										<span className={classes.spanMessage}>Ya haz calificado a tu especialista</span>
 									</div>
 								}
 							/>

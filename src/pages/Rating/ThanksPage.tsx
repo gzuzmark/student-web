@@ -75,6 +75,10 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			padding: '37px 0 0',
 		},
 	},
+	linkMessage: {
+		color: '#2C7BFD',
+		fontWeight: '700',
+	},
 }));
 const ThanksPage = () => {
 	const classes = useStyles();
@@ -89,8 +93,15 @@ const ThanksPage = () => {
 						<div className={classes.box}>
 							<Typography className={classes.subtitle}>¿Te quedaron dudas de tu cita?</Typography>
 							<Typography className={classes.text}>
-								Coméntanos todas tus dudas en el preriodo de estos siete días para consultarlas a tu doctor. Dejános tus
-								comentarios aquí
+								Coméntanos todas tus dudas en el preriodo de estos siete días para consultarlas a tu doctor.
+								<a
+									className={classes.linkMessage}
+									style={{ textDecoration: 'none' }}
+									href="https://api.whatsapp.com/send?phone=51965698337&text=%5BMe%20atendí%20hace%20poco%5D%20Hola!%20Tengo%20dudas%20sobre%20mi%20última%20cita&source=&data=&app_absent"
+								>
+									{' '}
+									Dejános tus comentarios aquí{' '}
+								</a>
 							</Typography>
 						</div>
 						<Typography className={classes.footer}>Periodo de siete días desde la cita</Typography>
