@@ -106,28 +106,6 @@ const RatingAlivia = ({ onChangeStep }: RatingDoctorProps) => {
 	const [rating, setRating] = useState<any>(null);
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const classes = useStyles();
-	// const stars = [
-	// 	{
-	// 		description: 'No me gustó',
-	// 		question: 'Oh no, ¿Qué ocurrió? (tu comentario será anónimo)',
-	// 	},
-	// 	{
-	// 		description: 'No fue lo que esperaba',
-	// 		question: 'Oh no, ¿Qué ocurrió? (tu comentario será anónimo)',
-	// 	},
-	// 	{
-	// 		description: 'Regular',
-	// 		question: 'Cuéntanos, ¿en qué puede mejorar tu especialista? (tu comentario será anónimo)',
-	// 	},
-	// 	{
-	// 		description: 'Me gustó',
-	// 		question: 'Cuéntanos, ¿qué fue lo que te gustó de tu especialista?',
-	// 	},
-	// 	{
-	// 		description: 'Me encantó',
-	// 		question: 'Cuéntanos, ¿qué fue lo que más te gustó de tu especialista?',
-	// 	},
-	// ];
 
 	const onSubmit = useCallback(
 		(rating) => {

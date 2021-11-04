@@ -3,6 +3,7 @@ import { MainLayout } from 'pages';
 import React from 'react';
 import { stylesWithTheme } from 'utils';
 import { ReactComponent as ImgLike } from 'icons/imgLike.svg';
+import { Header } from './components';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	layout: {
@@ -79,6 +80,7 @@ const ThanksPage = () => {
 	const classes = useStyles();
 	return (
 		<>
+			<Header />
 			<MainLayout>
 				<div className={classes.layout}>
 					<div className={classes.container}>

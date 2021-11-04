@@ -5,7 +5,7 @@ import { ReactComponent as ClockIcon } from 'icons/clockGreen.svg';
 import capitalize from 'lodash/capitalize';
 import { Doctor, Schedule } from 'pages/api';
 import React from 'react';
-import { formatUTCDate, stylesWithTheme } from 'utils';
+import { stylesWithTheme, formatUTCDate } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -112,7 +112,6 @@ interface CardDoctorProps {
 
 const CardDoctor = ({ doctor, schedule }: CardDoctorProps) => {
 	const classes = useStyles();
-	// const { t } = useTranslation('payment');
 	return (
 		<div className={classes.container}>
 			<Typography className={classes.prefix} variant="h1">
