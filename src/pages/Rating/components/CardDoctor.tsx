@@ -5,7 +5,6 @@ import capitalize from 'lodash/capitalize';
 
 import { Doctor, Schedule } from 'pages/api';
 import { stylesWithTheme, formatUTCDate } from 'utils';
-import { User } from 'AppContext';
 import { useTranslation } from 'react-i18next';
 import { ReactComponent as ClockIcon } from 'icons/clockGreen.svg';
 import { ReactComponent as CalendarIcon } from 'icons/calendarGreen.svg';
@@ -115,7 +114,6 @@ interface CardDoctorProps {
 
 const CardDoctor = ({ doctor, schedule }: CardDoctorProps) => {
 	const classes = useStyles();
-	const { t } = useTranslation('payment');
 	return (
 		<div className={classes.container}>
 			<Typography className={classes.prefix} variant="h1">

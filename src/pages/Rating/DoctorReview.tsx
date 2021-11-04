@@ -2,13 +2,13 @@ import { Grid, Snackbar, SnackbarContent, Theme, Typography } from '@material-ui
 import { MainLayout, TopSection } from 'pages';
 import { createRatingDoctor, getRatingDoctor, Patient } from 'pages/api/rating';
 import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { stylesWithTheme } from 'utils';
 import { useHistory } from 'react-router-dom';
-import { CardDoctor, RatingDoctor } from './components';
+import { CardDoctor, Header, RatingDoctor } from './components';
 import { RatingDoctorValues } from './components/RatingDoctor';
 import { Doctor, Schedule } from 'pages/api';
+import { ReactComponent as Check } from 'icons/check.svg';
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
 		//padding: '32px 25px',
@@ -63,12 +63,23 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			borderBottom: '1px solid #CDD4F0',
 		},
 	},
-	snackbar: {
-		background: '#E5EFFF',
-		width: '100%',
+	snackbarMessage: {
+		display: 'flex',
+		color: '#2C7BFD',
+		alignItems: 'center',
+		padding: '0',
+		fontFamily: 'Mulish',
 	},
-	wrapperAlert: {
-		padding: '24px',
+	contentSnackbar: {
+		background: '#E5EFFF',
+		minWidth: '312px',
+		boxShadow: 'none',
+		marginTop: '48px',
+		justifyContent: 'center',
+		[breakpoints.up('lg')]: {
+			minWidth: '1390px',
+			marginTop: '80px',
+		},
 	},
 }));
 
@@ -129,11 +140,30 @@ const DoctorReview = () => {
 
 	return (
 		<>
+			<Header />
 			<TopSection>
 				<div className={classes.wrapper}>
 					{hasRating && (
-						<Snackbar open={open} autoHideDuration={5000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }}>
-							<SnackbarContent className={classes.snackbar} message={<span id="client-snackbar">Hello World</span>} />
+						<Snackbar
+							open={open}
+							autoHideDuration={7000}
+							onClose={handleClose}
+							anchorOrigin={{ vertical, horizontal }}
+							ContentProps={{
+								className: classes.snackbar,
+							}}
+						>
+							<SnackbarContent
+								className={classes.contentSnackbar}
+								message={
+									<div className={classes.snackbarMessage}>
+										<Check />
+										<span style={{ fontFamily: 'Mulish', marginLeft: '20px', fontSize: '20px', fontStyle: 'normal' }}>
+											Ya haz calificado a tu especialista
+										</span>
+									</div>
+								}
+							/>
 						</Snackbar>
 					)}
 					<Typography className={classes.title} variant="h1">
