@@ -538,7 +538,7 @@ const RightSide = ({
 					<Typography className={classes.descriptionwpp}>
 						{t('payment.right.steps.wpp')}
 						<Typography className={classes.link} color="primary" onClick={gotToWpp} component="span">
-							{t('+51 947 907 184')}
+							{t('+51 965 698 337')}
 						</Typography>
 					</Typography>
 				</div>
