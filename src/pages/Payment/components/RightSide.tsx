@@ -22,6 +22,7 @@ import tambo from 'icons/imgTambo.png';
 import cajaarequipa from 'icons/imgCajaArequipa.png';
 
 import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
+import { WHATSAPP_PHONE_NUMBER } from 'pages/constants';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
 	container: {
@@ -379,7 +380,7 @@ const RightSide = ({
 	};
 	const gotToWpp = () => {
 		redirectToURL(
-			'https://api.whatsapp.com/send?phone=51947907184&text=%5BVengo%20de%20la%20web%5D%20Hola%20Alivia!%20Tengo%20una%20duda,%20me%20podr%C3%ADan%20ayudar?&source=&data=&app_absent',
+			`https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE_NUMBER}&text=%5BVengo%20de%20la%20web%5D%20Hola%20Alivia!%20Tengo%20una%20duda,%20me%20podr%C3%ADan%20ayudar?&source=&data=&app_absent`,
 			true,
 		);
 	};
