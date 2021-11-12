@@ -4,8 +4,8 @@ import StarRateIcon from '@material-ui/icons/StarRate';
 import { stylesWithTheme } from 'utils';
 
 export interface RatingDoctorValues {
-	rate: number;
-	lastName: string;
+	stars: number;
+	comment: string;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -14,6 +14,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
+		textAlign: 'center',
 		[breakpoints.up('lg')]: {
 			flexDirection: 'row',
 		},
@@ -31,21 +32,21 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			padding: '24px 34px',
 		},
 	},
-	title: {
-		paddingBottom: '8px',
-		fontWeight: 'bold',
-		fontFamily: 'Mulish, sans-serif',
-	},
-	subtitle: {
-		fontFamily: 'Mulish',
-		fontWeight: '600',
-		fontSize: '16px',
-		lineHeight: '20px',
-		color: '#676F8F',
-		display: 'none',
+	topBar: {
+		padding: '0 12px 12px 12px',
+		display: 'flex',
 		[breakpoints.up('lg')]: {
-			display: 'block',
+			padding: '24px 34px',
+			borderBottom: '1px solid #CDD4F0',
+			justifyContent: 'space-between',
 		},
+	},
+	title: {
+		fontFamily: 'Mulish',
+		fontWeight: '700',
+		fontSize: '20px',
+		color: '#494F66',
+		lineHeight: '24px',
 	},
 	textArea: {
 		fontFamily: 'Mulish',
@@ -77,8 +78,13 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	description: {
 		fontFamily: 'Mulish',
 		fontWeight: '600',
-		fontSize: '16px',
-		color: '#A3ABCC',
+		fontSize: '14px',
+		color: '#676F8F',
+	},
+	footer: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		padding: '12px 0 16px',
 	},
 	buttonWrapper: {
 		display: 'flex',
@@ -91,18 +97,55 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	button: {
 		padding: '18px',
 		width: '100%',
+		fontSize: '16px',
+		borderRadius: '8px',
 		[breakpoints.up('lg')]: {
 			maxWidth: '164px',
 			padding: '14px',
+		},
+	},
+	icon: {
+		width: '48px',
+		height: '48px',
+		transform: 'scale(1.4)',
+	},
+	btnStar: {
+		minWidth: '48px',
+		padding: '0',
+		[breakpoints.up('lg')]: {
+			padding: '0 12px 0 0',
+		},
+	},
+	step: {
+		display: 'none',
+		[breakpoints.up('lg')]: {
+			display: 'block',
+			fontFamily: 'Mulish',
+			fontWeight: '600',
+			fontSize: '14px',
+			color: '#1ECD96',
+			lineHeight: '20px',
+		},
+	},
+	stepNumber: {
+		fontFamily: 'Mulish',
+		fontWeight: '600',
+		fontSize: '14px',
+		color: '#1ECD96',
+		lineHeight: '20px',
+		paddingBottom: '8px',
+		[breakpoints.up('lg')]: {
+			display: 'none',
 		},
 	},
 }));
 
 interface RatingDoctorProps {
 	onChangeStep: (values: RatingDoctorValues) => void;
+	hasRating: boolean;
 }
 
-const RatingAlivia = ({ onChangeStep }: RatingDoctorProps) => {
+const RatingAlivia = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 	const [rating, setRating] = useState<any>(null);
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const classes = useStyles();
@@ -113,40 +156,57 @@ const RatingAlivia = ({ onChangeStep }: RatingDoctorProps) => {
 		},
 		[onChangeStep],
 	);
-	/*= () => {
-		//history.push('/thanks');
-	};*/
 
 	return (
-		<div className={classes.layout}>
-			<div className={classes.wrapper}>
-				{[...Array(10)].map((star, i) => {
-					const ratingValue = i + 1;
-					return (
-						<div className={classes.starWrapper} key={i}>
-							<StarRateIcon
-								style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0', fontSize: '60' }}
-								onClick={() => setRating(ratingValue)}
-								onMouseLeave={() => setHoverValue(null)}
-								onMouseEnter={() => setHoverValue(ratingValue)}
-							/>
-							<Typography className={classes.description}>{i}</Typography>
-						</div>
-					);
-				})}
+		<>
+			<div className={classes.topBar}>
+				<Typography className={classes.stepNumber}>
+					02 <span style={{ color: '#A3ABCC' }}>/03</span>
+				</Typography>
+				<Typography className={classes.title}>¿Del 0 al 10 qué tan probable es que recomiendes Alivia?</Typography>
+				<Typography className={classes.step}>
+					02 <span style={{ color: '#A3ABCC' }}>/03</span>
+				</Typography>
 			</div>
-			{rating != null && (
-				<>
-					<Typography className={classes.question}>Cuéntanos de manera breve el porqué de tu respuesta</Typography>
-					<textarea className={classes.textArea} placeholder="Deja tu comentario" />
-					<div className={classes.buttonWrapper}>
-						<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.button}>
-							Calificar
-						</Button>
+			<div className={classes.layout}>
+				<div className={classes.wrapper}>
+					<div>
+						{[...Array(11)].map((star, i) => {
+							const ratingValue = i + 1;
+							return (
+								<Button disabled={hasRating} key={i} onClick={() => setRating(ratingValue)} className={classes.btnStar}>
+									<div className={classes.starWrapper} key={i}>
+										<StarRateIcon
+											style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0' }}
+											onClick={() => setRating(ratingValue)}
+											onMouseLeave={() => setHoverValue(null)}
+											onMouseEnter={() => setHoverValue(ratingValue)}
+											className={classes.icon}
+										/>
+										<Typography className={classes.description}>{i}</Typography>
+									</div>
+								</Button>
+							);
+						})}
 					</div>
-				</>
-			)}
-		</div>
+				</div>
+				<div className={classes.footer}>
+					<Typography className={classes.description}>No lo recomendaría</Typography>
+					<Typography className={classes.description}>Totalmente recomendable</Typography>
+				</div>
+				{rating != null && (
+					<>
+						<Typography className={classes.question}>Cuéntanos de manera breve el porqué de tu respuesta</Typography>
+						<textarea className={classes.textArea} placeholder="Deja tu comentario" />
+						<div className={classes.buttonWrapper}>
+							<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.button}>
+								Calificar
+							</Button>
+						</div>
+					</>
+				)}
+			</div>
+		</>
 	);
 };
 export default RatingAlivia;
