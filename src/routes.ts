@@ -1,29 +1,31 @@
-import { ReactElement } from 'react';
 import {
-	ClinicalExamination,
-	SelectDoctor,
-	SelectDoctorHour,
-	PreSignUp,
-	Login,
-	SignUp,
-	AppointmentList,
 	Appointment,
+	AppointmentList,
+	AskAddress,
+	BuyPrescription,
+	ClinicalExamination,
+	Confirmation,
+	CreateAccount,
+	DashboardDefault,
+	DoctorReview,
+	FamilyMembers,
+	ForgotPassword,
+	LaboratoryExams,
+	Login,
+	NewSignUp,
 	Payment,
 	PaymentLaboratory,
-	Confirmation,
-	ForgotPassword,
-	SelectProfile,
+	PreSignUp,
+	SelectDoctor,
+	SelectDoctorHour,
 	SelectPatient,
-	FamilyMembers,
-	CreateAccount,
-	LaboratoryExams,
-	BuyPrescription,
-	AskAddress,
-	NewSignUp,
-	DashboardDefault,
+	SelectProfile,
+	SignUp,
+	ThanksPage,
 } from 'pages';
-import SmallSignUp from 'pages/SignUp/SmallSignUp';
 import { ConfirmationLaboratory } from 'pages/ConfirmationLaboratory';
+import SmallSignUp from 'pages/SignUp/SmallSignUp';
+import { ReactElement } from 'react';
 
 export const TRIAGE_ROUTE = 'triaje';
 export const SELECT_DOCTOR_ROUTE = 'seleccionar_doctor';
@@ -99,6 +101,7 @@ export const routes: RoutesType = [
 	{ id: 'SelectPatient', path: '/select_patient', component: SelectPatient, guard: false },
 	{ id: 'PaymentLaboratory', path: '/pago_laboratory', component: PaymentLaboratory, guard: false, exact: false },
 	{ id: 'NewSignUp', path: '/creacion_cuenta/*', component: NewSignUp },
+
 	// { id: 'CreateProfile', path: '/crear_perfil', component: CreateProfile, guard: true },
 ];
 
@@ -107,4 +110,7 @@ export const routeWithoutNav: RoutesType = [
 	{ id: 'CreateAccount', path: '/crear_cuenta', component: CreateAccount },
 	{ id: 'BuyPrescription', path: '/comprar_receta', component: BuyPrescription },
 	{ id: 'AskAddress', path: '/direccion_receta', component: AskAddress },
+	//{ id: 'DoctorReview', path: '/review', component: DoctorReview, },
+	{ id: 'DoctorReview', path: '/rating/session/:id', component: DoctorReview },
+	{ id: 'Thanks', path: '/thanks', component: ThanksPage },
 ];

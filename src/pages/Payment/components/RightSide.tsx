@@ -1,4 +1,4 @@
-import React, { MouseEvent, ChangeEvent } from 'react';
+import React, { MouseEvent, ChangeEvent, useEffect } from 'react';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -21,8 +21,8 @@ import bbva from 'icons/imgBBVA.png';
 import tambo from 'icons/imgTambo.png';
 import cajaarequipa from 'icons/imgCajaArequipa.png';
 
-import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID } from 'pages/api';
 import { WHATSAPP_PHONE_NUMBER } from 'pages/constants';
+import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID, B2B_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
 	container: {
@@ -90,6 +90,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 	},
 	description: {
 		fontSize: '13px',
+		paddingTop: '10px',
 		paddingBottom: '5px',
 		[breakpoints.up('lg')]: {
 			fontSize: '17px',
@@ -188,6 +189,32 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 			maxWidth: '290px',
 		},
 	},
+	confirmButton: {
+		border: '1px solid white',
+		boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
+		backgroundColor: palette.primary.main,
+		marginRight: '10px',
+		justifyContent: 'flex-start',
+		padding: '26px',
+		'&.long-text': {
+			padding: '26px 15px 26px 26px',
+		},
+		'&:last-child': {
+			marginBottom: '0',
+		},
+		'&:hover': {
+			boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
+			'& .option-icon-wrapper': {
+				backgroundColor: palette.primary.light,
+			},
+		},
+		[breakpoints.up('lg')]: {
+			marginBottom: 0,
+			padding: '28px 13px 28px 22px',
+			boxShadow: 'none',
+			width: '33%',
+		},
+	},
 	option: {
 		border: '1px solid white',
 		boxShadow: '0px 4px 4px rgba(83, 91, 108, 0.28)',
@@ -234,6 +261,15 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 	},
 	optionLabel: {
 		color: palette.primary.main,
+		fontSize: '10px',
+		fontWeight: '500',
+		letterSpacing: '1px',
+		[breakpoints.up('lg')]: {
+			fontSize: '15px',
+		},
+	},
+	confirmLabel: {
+		color: 'white',
 		fontSize: '10px',
 		fontWeight: '500',
 		letterSpacing: '1px',
@@ -352,6 +388,7 @@ interface RightSideProps {
 	onChangeDiscount: (e: ChangeEvent<HTMLInputElement>) => void;
 	executePayment: (pm: number) => (e: MouseEvent) => void;
 	errorMessage: string;
+	useBenefit: boolean | undefined;
 }
 
 const RightSide = ({
@@ -362,10 +399,17 @@ const RightSide = ({
 	onChangeDiscount,
 	executePayment,
 	errorMessage,
+	useBenefit,
 }: RightSideProps) => {
 	const { t } = useTranslation('payment');
 	const classes = useStyles();
 	const matches = useMediaQuery(({ breakpoints }: Theme) => breakpoints.up('lg'));
+
+	useEffect(() => {
+		if (useBenefit) {
+			sendDiscount();
+		}
+	}, [useBenefit, sendDiscount]);
 
 	const onClickSendDiscount = () => {
 		if (discountCode !== '') {
@@ -374,6 +418,8 @@ const RightSide = ({
 	};
 
 	const isPagoEfectivoVisible = true; //isWeekDayLateNightOrSunday();
+
+	const useFreeBenefit = totalCost && parseInt(totalCost) === 0;
 
 	const gotToYoutubeSteps = () => {
 		redirectToURL('https://www.youtube.com/watch?v=n-Gg8ar0IkI', true);
@@ -415,7 +461,11 @@ const RightSide = ({
 					</div>
 				</div> */}
 				<Typography className={classes.title}>
-					{t('payment.right.payment')}{' '}
+					<div>
+						{useBenefit && t('payment.right.employeeTitle')}
+						<br></br>
+						{t('payment.right.payment')}{' '}
+					</div>
 					<Typography
 						className={clsx(classes.title, classes.amount)}
 						component="span"
@@ -423,72 +473,79 @@ const RightSide = ({
 					>
 						S/{totalCost}
 					</Typography>
+					<Typography className={classes.description}> {t('payment.right.adviceInformation')} </Typography>
 				</Typography>
-				<div className={classes.discountWrapper}>
-					<TextField
-						value={discountCode}
-						onChange={onChangeDiscount}
-						className={classes.discountInputWrapper}
-						InputProps={{ className: classes.discountInput }}
-						variant="outlined"
-						disabled={isCounponDisabled}
-						label={t('payment.right.discountLabel')}
-						fullWidth
-					/>
-					<div className={classes.discountButtonWrapper}>
-						<Button
-							className={classes.discountButton}
-							onClick={onClickSendDiscount}
+				{!useFreeBenefit && (
+					<div className={classes.discountWrapper}>
+						<TextField
+							value={discountCode}
+							onChange={onChangeDiscount}
+							className={classes.discountInputWrapper}
+							InputProps={{ className: classes.discountInput }}
 							variant="outlined"
 							disabled={isCounponDisabled}
+							label={t('payment.right.discountLabel')}
 							fullWidth
-						>
-							{t('payment.right.addDiscountLabel')}
-						</Button>
-					</div>
-				</div>
-				<Typography className={classes.subtitle} component="span" variant={matches ? 'h3' : 'body1'}>
-					{isPagoEfectivoVisible ? t('payment.right.method') : t('payment.right.method-only')}:
-				</Typography>
-				<div className={classes.buttonWrapper}>
-					<Button
-						className={classes.option}
-						// onClick={(e) => {
-						// addGAEvent({
-						// 	category: 'Agendar cita - Paso 3',
-						// 	action: 'Avance satisfactorio',
-						// 	label: 'Tarjeta de crédito o débito',
-						// });
-						// 	executePayment(CULQI_PAYMENT_ID)(e);
-						// }}
-						onClick={(e) => {
-							addGAEvent({
-								category: 'Agendar cita - Paso 3',
-								action: 'Avance satisfactorio',
-								label: 'Tarjeta de crédito o débito',
-							});
-							executePayment(KUSHKI_PAYMENT_ID)(e);
-						}}
-						variant="outlined"
-					>
-						<div className={classes.optionBody}>
-							<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
-								<CreditCardSvg />
-							</div>
-							<Typography className={classes.optionLabel} variant="h3">
-								{t('payment.right.payCulqiButton')}
-							</Typography>
-							<div className={classes.optionBrandWrapper}>
-								<img src={visa} className={classes.visaImage} alt="Brand Visa" />
-								<img src={mastercard} className={classes.masterCardImage} alt="Brand Mastercard" />
-								<img src={amex} className={classes.amexImage} alt="Brand Amex" />
-							</div>
-							<Typography className={classes.andmore} variant="h3">
-								{t('y más')}
-							</Typography>
+						/>
+						<div className={classes.discountButtonWrapper}>
+							<Button
+								className={classes.discountButton}
+								onClick={onClickSendDiscount}
+								variant="outlined"
+								disabled={isCounponDisabled}
+								fullWidth
+							>
+								{t('payment.right.addDiscountLabel')}
+							</Button>
 						</div>
-					</Button>
-					{isPagoEfectivoVisible && (
+					</div>
+				)}
+				{!useFreeBenefit && (
+					<Typography className={classes.subtitle} component="span" variant={matches ? 'h3' : 'body1'}>
+						{isPagoEfectivoVisible ? t('payment.right.method') : t('payment.right.method-only')}:
+					</Typography>
+				)}
+				<div className={classes.buttonWrapper}>
+					{!useFreeBenefit && (
+						<Button
+							className={classes.option}
+							// onClick={(e) => {
+							// addGAEvent({
+							// 	category: 'Agendar cita - Paso 3',
+							// 	action: 'Avance satisfactorio',
+							// 	label: 'Tarjeta de crédito o débito',
+							// });
+							// 	executePayment(CULQI_PAYMENT_ID)(e);
+							// }}
+							onClick={(e) => {
+								addGAEvent({
+									category: 'Agendar cita - Paso 3',
+									action: 'Avance satisfactorio',
+									label: 'Tarjeta de crédito o débito',
+								});
+								executePayment(KUSHKI_PAYMENT_ID)(e);
+							}}
+							variant="outlined"
+						>
+							<div className={classes.optionBody}>
+								<div className={clsx(classes.optionIconWrapper, 'option-icon-wrapper')}>
+									<CreditCardSvg />
+								</div>
+								<Typography className={classes.optionLabel} variant="h3">
+									{t('payment.right.payCulqiButton')}
+								</Typography>
+								<div className={classes.optionBrandWrapper}>
+									<img src={visa} className={classes.visaImage} alt="Brand Visa" />
+									<img src={mastercard} className={classes.masterCardImage} alt="Brand Mastercard" />
+									<img src={amex} className={classes.amexImage} alt="Brand Amex" />
+								</div>
+								<Typography className={classes.andmore} variant="h3">
+									{t('y más')}
+								</Typography>
+							</div>
+						</Button>
+					)}
+					{isPagoEfectivoVisible && !useFreeBenefit && (
 						<Button
 							className={classes.option}
 							onClick={(e) => {
@@ -522,6 +579,27 @@ const RightSide = ({
 							</div>
 						</Button>
 					)}
+					{useFreeBenefit && (
+						<Button
+							className={classes.confirmButton}
+							onClick={(e) => {
+								addGAEvent({
+									category: 'Agendar cita - Paso 3',
+									action: 'Avance satisfactorio',
+									label: 'Depósitos y transferencias',
+								});
+								executePayment(B2B_PAYMENT_ID)(e);
+							}}
+							variant="outlined"
+							style={{}}
+						>
+							<div className={classes.optionBody} style={{ width: 'inherit' }}>
+								<Typography className={classes.confirmLabel} variant="h3">
+									{t('payment.right.pagoEmpresaBeneficio')}
+								</Typography>
+							</div>
+						</Button>
+					)}
 				</div>
 				{errorMessage ? (
 					<div className={classes.errorWrapper}>
@@ -530,7 +608,7 @@ const RightSide = ({
 				) : null}
 
 				<div className={classes.stepsWrapper}>
-					{isPagoEfectivoVisible && (
+					{isPagoEfectivoVisible && !useBenefit && (
 						<Typography className={classes.link} color="primary" onClick={gotToYoutubeSteps} component="span">
 							{t('*¿Cómo Pago en Efectivo?')}
 						</Typography>
