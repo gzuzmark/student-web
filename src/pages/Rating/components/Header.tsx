@@ -1,5 +1,6 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core';
 import React from 'react';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 
 const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
@@ -33,7 +34,7 @@ const Header = () => {
 	const classes = useStyles();
 	return (
 		<div className={classes.container}>
-			<img src={urlLogo} alt="" className={classes.brandLogo} />
+			<BrandLogo className={classes.brandLogo} />
 		</div>
 	);
 };
