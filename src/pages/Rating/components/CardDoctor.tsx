@@ -112,7 +112,6 @@ interface CardDoctorProps {
 
 const CardDoctor = ({ doctor, schedule }: CardDoctorProps) => {
 	const classes = useStyles();
-	// const { t } = useTranslation('payment');
 	return (
 		<div className={classes.container}>
 			<Typography className={classes.prefix} variant="h1">
