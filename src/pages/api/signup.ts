@@ -6,6 +6,11 @@ import { ContactValues } from 'pages/SignUp/components';
 import { TokenResponse } from './types';
 import { getLocalValue } from 'utils';
 import { User } from 'AppContext';
+import parse from 'date-fns/parse';
+import { es } from 'date-fns/locale';
+
+const parseExpirationDate = (expirationDate: string) =>
+	parse(expirationDate.slice(0, expirationDate.indexOf('T')), 'yyyy-MM-dd', new Date());
 
 interface NewUser {
 	name: string;
@@ -44,11 +49,46 @@ interface UbigeoResponse {
 	data: Ubigeo[];
 }
 
+export interface Benefit {
+	id: string;
+	name: string;
+	description: string;
+	discount: number;
+	expirationDate: string;
+	companyName: string;
+}
+
+interface BenefitResponse {
+	data: {
+		benefit: BenefitAPI;
+	};
+}
+
 interface FileResponse {
 	data: {
 		id: string;
 	};
 }
+
+interface BenefitAPI {
+	id: string;
+	name: string;
+	description: string;
+	discount: number;
+	expiration_date: string;
+	company_name: string;
+}
+
+const parseBenefit = (apiBenefit: BenefitAPI): Benefit => ({
+	id: apiBenefit.id,
+	name: apiBenefit.name,
+	description: apiBenefit.description,
+	discount: apiBenefit.discount,
+	expirationDate: apiBenefit.expiration_date
+		? format(parseExpirationDate(apiBenefit.expiration_date), "eeee d 'de' MMMMMM ", { locale: es })
+		: '',
+	companyName: apiBenefit.company_name,
+});
 
 export const createGuestPatient = async (user: NewUser): Promise<string> => {
 	const resp = await aliviaAxios.post<CreatePatientResponse>('/patients-guest', {
@@ -192,6 +232,16 @@ export const createAccount = async ({
 export const getLocations = async (query: string): Promise<UbigeoResponse> => {
 	const response = await aliviaAxios.get<UbigeoResponse>(`/ubigeo?keywords=${query}`);
 	return response.data;
+};
+
+export const getBenefit = async (document_number: string): Promise<Benefit> => {
+	const data = new FormData();
+
+	data.append('patient_document', document_number);
+
+	const response = await aliviaAxios.post<BenefitResponse>('/benefits/validate', { patient_document: document_number });
+
+	return parseBenefit(response.data.data.benefit);
 };
 
 export const uploadFile = async (file: File) => {

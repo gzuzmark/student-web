@@ -26,21 +26,23 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 			padding: '24px 34px',
 		},
 	},
-	title: {
-		paddingBottom: '8px',
-		fontWeight: 'bold',
-		fontFamily: 'Mulish, sans-serif',
-	},
-	subtitle: {
-		fontFamily: 'Mulish',
-		fontWeight: '600',
-		fontSize: '16px',
-		lineHeight: '20px',
-		color: '#676F8F',
-		display: 'none',
+	topBar: {
+		padding: '0 12px 12px 12px',
+		display: 'flex',
+		flexDirection: 'column',
 		[breakpoints.up('lg')]: {
-			display: 'block',
+			flexDirection: 'row',
+			padding: '24px 34px',
+			borderBottom: '1px solid #CDD4F0',
+			justifyContent: 'space-between',
 		},
+	},
+	title: {
+		fontFamily: 'Mulish',
+		fontWeight: '700',
+		fontSize: '20px',
+		color: '#494F66',
+		lineHeight: '24px',
 	},
 	textArea: {
 		fontFamily: 'Mulish',
@@ -59,6 +61,11 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		'&:focus': {
 			outline: 'none !important',
 		},
+	},
+	icon: {
+		width: '48px',
+		height: '48px',
+		transform: 'scale(1.5)',
 	},
 
 	question: {
@@ -85,10 +92,33 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 	button: {
 		padding: '18px',
-		width: '100%',
+		minWidth: '50px',
+		borderRadius: '8px',
 		[breakpoints.up('lg')]: {
 			maxWidth: '164px',
 			padding: '14px',
+		},
+	},
+	step: {
+		display: 'none',
+		[breakpoints.up('lg')]: {
+			display: 'block',
+			fontFamily: 'Mulish',
+			fontWeight: '600',
+			fontSize: '14px',
+			color: '#1ECD96',
+			lineHeight: '20px',
+		},
+	},
+	stepNumber: {
+		fontFamily: 'Mulish',
+		fontWeight: '600',
+		fontSize: '14px',
+		color: '#1ECD96',
+		lineHeight: '20px',
+		paddingBottom: '8px',
+		[breakpoints.up('lg')]: {
+			display: 'none',
 		},
 	},
 }));
@@ -114,15 +144,15 @@ const RatingDoctor = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 		},
 		{
 			description: 'Regular',
-			question: 'Cuéntanos, ¿en qué puede mejorar tu especialista? (tu comentario será anónimo)',
+			question: 'Cuéntanos, ¿En qué puede mejorar tu especialista? (tu comentario será anónimo)',
 		},
 		{
 			description: 'Me gustó',
-			question: 'Cuéntanos, ¿qué fue lo que te gustó de tu especialista?',
+			question: 'Cuéntanos, ¿Qué fue lo que te gustó de tu especialista?',
 		},
 		{
 			description: 'Me encantó',
-			question: 'Cuéntanos, ¿qué fue lo que más te gustó de tu especialista?',
+			question: 'Cuéntanos, ¿Qué fue lo que más te gustó de tu especialista?',
 		},
 	];
 
@@ -147,36 +177,53 @@ const RatingDoctor = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 		setComment(e.target.value);
 	};
 	return (
-		<div className={classes.layout}>
-			<div className={classes.wrapper}>
-				<div>
-					{[...Array(5)].map((star, i) => {
-						const ratingValue = i + 1;
-						return (
-							<Button disabled={hasRating} key={i} onClick={() => setRating(ratingValue)}>
-								<StarRateIcon
-									style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0', fontSize: '60' }}
-									onMouseLeave={() => setHoverValue(null)}
-									onMouseEnter={() => setHoverValue(ratingValue)}
-								/>
-							</Button>
-						);
-					})}
-				</div>
-				<HelpText />
+		<>
+			<div className={classes.topBar}>
+				<Typography className={classes.stepNumber}>
+					01 <span style={{ color: '#A3ABCC' }}>/03</span>
+				</Typography>
+				<Typography className={classes.title}>¿Cómo fue la experiencia con tu especialista?</Typography>
+				<Typography className={classes.step}>
+					01 <span style={{ color: '#A3ABCC' }}>/03</span>
+				</Typography>
 			</div>
-			{rating != null && (
-				<>
-					<Typography className={classes.question}>{rating == null ? '' : stars[rating - 1].question}</Typography>
-					<textarea className={classes.textArea} value={comment} onChange={updateComment} />
-					<div className={classes.buttonWrapper}>
-						<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.button}>
-							Calificar
-						</Button>
+			<div className={classes.layout}>
+				<div className={classes.wrapper}>
+					<div>
+						{[...Array(5)].map((star, i) => {
+							const ratingValue = i + 1;
+							return (
+								<Button
+									disabled={hasRating}
+									key={i}
+									onClick={() => setRating(ratingValue)}
+									style={{ padding: '0 10px 0 0', minWidth: '50px' }}
+								>
+									<StarRateIcon
+										style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0' }}
+										onMouseLeave={() => setHoverValue(null)}
+										onMouseEnter={() => setHoverValue(ratingValue)}
+										className={classes.icon}
+									/>
+								</Button>
+							);
+						})}
 					</div>
-				</>
-			)}
-		</div>
+					<HelpText />
+				</div>
+				{rating != null && (
+					<>
+						<Typography className={classes.question}>{rating == null ? '' : stars[rating - 1].question}</Typography>
+						<textarea className={classes.textArea} value={comment} onChange={updateComment} />
+						<div className={classes.buttonWrapper}>
+							<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.button}>
+								Calificar
+							</Button>
+						</div>
+					</>
+				)}
+			</div>
+		</>
 	);
 };
 export default RatingDoctor;

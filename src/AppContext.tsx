@@ -10,6 +10,7 @@ import { ReactComponent as SunsetIcon } from 'icons/sunset.svg';
 import { ReactComponent as MoonIcon } from 'icons/moon.svg';
 import { addHours, addMinutes, startOfDay } from 'date-fns/esm';
 import { endOfDay } from 'date-fns';
+import { Benefit } from 'pages/api';
 
 export const EMPTY_TRACK_PARAMS = {
 	utmSource: '',
@@ -162,6 +163,8 @@ interface ContextProps {
 	labExamn: LabExam | null;
 	labFiles: string[];
 	labAva: string[];
+	benefit: Benefit | null;
+	useBenefit: boolean;
 }
 
 const defaultState: ContextProps = {
@@ -191,6 +194,8 @@ const defaultState: ContextProps = {
 	labExamn: null,
 	labFiles: [],
 	labAva: [],
+	benefit: null,
+	useBenefit: false,
 };
 const AppContext = React.createContext<Partial<ContextProps>>({});
 
