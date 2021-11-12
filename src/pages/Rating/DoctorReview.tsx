@@ -190,7 +190,9 @@ const DoctorReview = () => {
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<div className={classes.area_rating}>
-								<Typography className={classes.question}>¿Cómo fue la experiencia con tu especialista?</Typography>
+								{/*<Typography className={classes.question}>¿Cómo fue la experiencia con tu especialista?</Typography>
+								{/*<RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating}/>*/}
+								{/*<FinalRating onChangeStep={onChangeStep} hasRating={hasRating}/>*/}
 								<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />
 							</div>
 						</Grid>
