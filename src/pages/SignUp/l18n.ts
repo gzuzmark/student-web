@@ -143,7 +143,12 @@ const signUp = {
 	'informationBenefit.warning': 'Al continuar, permites que tu empresa conozca la especialidad que vas a utilizar.',
 	'informationBenefit.question': '¿Deseas usar este beneficio?',
 	'informationBenefit.rejectLabel': 'No deseo usarlo',
-	'informationBenefit.acceptLabel': 'Sí, continuar',
+	'informationBenefit.acceptLabel': 'Usar Descuento',
+
+	//	Discount TalonOne
+	'talonModalDiscount.title': '¡Te damos la bienvenida con un super descuento!',
+	'talonModalDiscount.descriptionLabel1': 'Por ser tu primera cita obtén ',
+	'talonModalDiscount.descriptionLabel2': ' de descuento',
 };
 
 export default signUp;
