@@ -72,6 +72,12 @@ interface DiscountRequestBody {
 export interface Discount {
 	id: string;
 	totalCost: string;
+	percentage?: string;
+}
+
+export interface DiscountFirstSession {
+	status: boolean;
+	discount: Discount;
 }
 
 interface DiscountAPI {
@@ -92,10 +98,26 @@ interface BenefitDiscountAPI {
 	};
 }
 
+interface NewCostAPI {
+	coupon: {
+		id: string;
+		total_cost: string;
+		percentage?: string;
+	};
+}
 interface BenefitDiscountDataResponse {
 	data: BenefitDiscountAPI;
 }
+interface ValidateDocumentTalonOneResponse {
+	status: boolean;
+	data: NewCostAPI;
+}
 
+interface ValidateDocumentBody {
+	document_number: string;
+	total_cost: number;
+	scheduleID: string;
+}
 const formatParams = (params: PaymentRequestBody) => ({
 	cost: params.cost,
 	appointment_type_id: params.appointmentTypeID || 'ugito',
@@ -168,6 +190,38 @@ export const applyBenefit = async ({ benefitID, dni, scheduleID }: DiscountReque
 		const discountAPI = resp.data.data.benefit;
 
 		return { id: discountAPI.id, totalCost: discountAPI.total_cost };
+	} catch (e) {
+		throw Error(e);
+	}
+};
+
+const parseResponseDiscount = (id: string, totalCost: string, percentage: string): Discount => ({
+	id: id,
+	totalCost: totalCost,
+	percentage: percentage,
+});
+export const applyDiscountFirstDate = async ({
+	document_number,
+	total_cost,
+	scheduleID,
+}: ValidateDocumentBody): Promise<DiscountFirstSession> => {
+	try {
+		const resp = await aliviaAxios.get<ValidateDocumentTalonOneResponse>(`/user/document`, {
+			params: {
+				document_number: document_number,
+				total_cost: total_cost,
+				session_id: scheduleID,
+			},
+		});
+		const respData = resp.data;
+		return {
+			status: respData.status,
+			discount: parseResponseDiscount(
+				respData.data.coupon.id,
+				respData.data.coupon.total_cost,
+				respData.data.coupon.percentage || '',
+			),
+		};
 	} catch (e) {
 		throw Error(e);
 	}
