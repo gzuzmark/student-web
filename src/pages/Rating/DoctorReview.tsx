@@ -4,7 +4,7 @@ import { createRatingDoctor, getRatingDoctor, Patient } from 'pages/api/rating';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
-import { CardDoctor, Header, RatingAlivia, RatingDoctor } from './components';
+import { CardDoctor, FinalRating, Header, RatingAlivia, RatingDoctor } from './components';
 import { RatingDoctorValues } from './components/RatingDoctor';
 import { Doctor, Schedule } from 'pages/api';
 import { ReactComponent as Check } from 'icons/check.svg';
@@ -123,6 +123,9 @@ const DoctorReview = () => {
 				// mensaje de error
 			}
 		}
+		if (step === 2) {
+			history.push('/thanks');
+		}
 		setStep(step + 1);
 	};
 
@@ -191,8 +194,8 @@ const DoctorReview = () => {
 						<Grid item xs={12} md={8}>
 							<div className={classes.area_rating}>
 								{/*<Typography className={classes.question}>¿Cómo fue la experiencia con tu especialista?</Typography>*/}
-								<RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating} />
-								{/*<FinalRating onChangeStep={onChangeStep} hasRating={hasRating}/>*/}
+								{/*<RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating} />*/}
+								<FinalRating onChangeStep={onChangeStep} hasRating={hasRating} />
 								{/*<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />*/}
 							</div>
 						</Grid>
