@@ -35,7 +35,9 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	topBar: {
 		padding: '0 12px 12px 12px',
 		display: 'flex',
+		flexDirection: 'column',
 		[breakpoints.up('lg')]: {
+			flexDirection: 'row',
 			padding: '24px 34px',
 			borderBottom: '1px solid #CDD4F0',
 			justifyContent: 'space-between',
@@ -112,6 +114,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	btnStar: {
 		minWidth: '48px',
 		padding: '0',
+		textDecoration: 'none',
 		[breakpoints.up('lg')]: {
 			padding: '0 12px 0 0',
 		},
@@ -174,7 +177,7 @@ const RatingAlivia = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 						{[...Array(11)].map((star, i) => {
 							const ratingValue = i + 1;
 							return (
-								<Button disabled={hasRating} key={i} onClick={() => setRating(ratingValue)} className={classes.btnStar}>
+								<Button key={i} onClick={() => setRating(ratingValue)} className={classes.btnStar}>
 									<div className={classes.starWrapper} key={i}>
 										<StarRateIcon
 											style={{ color: ratingValue <= (hoverValue || rating) ? '#FACD40' : '#CDD4F0' }}
