@@ -105,6 +105,23 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		color: '#494F66',
 		lineHeight: '24px',
 	},
+	description: {
+		fontFamily: 'Mulish',
+		fontWeight: '600',
+		fontSize: '16px',
+		color: '#A3ABCC',
+		[breakpoints.up('lg')]: {
+			marginLeft: '20px',
+		},
+	},
+	buttonContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		[breakpoints.up('lg')]: {
+			flexDirection: 'row',
+		},
+	},
 }));
 interface RatingProps {
 	onChangeStep: (values: FinalRatingValues) => void;
@@ -116,7 +133,7 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const [comment, setComment] = useState<string>('');
 	const classes = useStyles();
-
+	const iconsDescription = ['Indiferente', 'Algo decepcionado', 'Muy decepcionado'];
 	const icons: { [key: string]: React.ReactElement } = {
 		1: <Face1 />,
 		2: <Face2 />,
@@ -151,21 +168,26 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 				</Typography>
 			</div>
 			<div className={classes.wrapper}>
-				<div>
-					{[...Array(3)].map((el, i) => {
-						const ratingValue = i + 1;
-						return (
-							<Button
-								key={i}
-								onClick={() => setRating(ratingValue)}
-								style={{ padding: '10px', minWidth: '50px' }}
-								onMouseEnter={() => setHoverValue(ratingValue)}
-								onMouseLeave={() => setHoverValue(null)}
-							>
-								{ratingValue === (hoverValue || rating) ? icons[ratingValue] : iconsDisabled[ratingValue]}
-							</Button>
-						);
-					})}
+				<div className={classes.buttonContainer}>
+					<div style={{ display: 'flex', flexDirection: 'row' }}>
+						{[...Array(3)].map((el, i) => {
+							const ratingValue = i + 1;
+							return (
+								<Button
+									key={i}
+									onClick={() => setRating(ratingValue)}
+									style={{ padding: '10px', minWidth: '50px' }}
+									onMouseEnter={() => setHoverValue(ratingValue)}
+									onMouseLeave={() => setHoverValue(null)}
+								>
+									{ratingValue === (hoverValue || rating) ? icons[ratingValue] : iconsDisabled[ratingValue]}
+								</Button>
+							);
+						})}
+					</div>
+					{(hoverValue || rating) != null && (
+						<Typography className={classes.description}>{iconsDescription[rating - 1]}</Typography>
+					)}
 				</div>
 				{rating != null && (
 					<>

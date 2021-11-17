@@ -21,6 +21,11 @@ export interface HttpResponseGetRatingDoctor {
 	hasRating: boolean;
 }
 
+export interface HtppResponseSaveRatingDoctorError {
+	ok: boolean;
+	message: string;
+}
+
 export const createRatingDoctor = async (
 	sessionId: string,
 	stars: number,
