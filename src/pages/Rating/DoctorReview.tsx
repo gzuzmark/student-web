@@ -4,7 +4,7 @@ import { createRatingDoctor, getRatingDoctor, Patient } from 'pages/api/rating';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
-import { CardDoctor, FinalRating, Header, RatingAlivia, RatingDoctor } from './components';
+import { CardDoctor, FinalRating, Header } from './components';
 import { RatingDoctorValues } from './components/RatingDoctor';
 import { Doctor, Schedule } from 'pages/api';
 import { ReactComponent as Check } from 'icons/check.svg';
