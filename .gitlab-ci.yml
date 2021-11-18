@@ -47,6 +47,7 @@ deploy_stage_dev:
   only:
     - dev
   script:
+    - yarn global add cli-table@0.3.6 --cache-folder ./.cache_yarn
     - yarn global add firebase-tools@9.22.0 --cache-folder ./.cache_yarn
     - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_DEPLOY_KEY_DEV -P default
 
