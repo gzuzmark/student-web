@@ -1,31 +1,31 @@
-import { ReactElement } from 'react';
 import {
-	ClinicalExamination,
-	SelectDoctor,
-	SelectDoctorHour,
-	PreSignUp,
-	Login,
-	SignUp,
-	AppointmentList,
 	Appointment,
-	Payment,
-	PaymentLaboratory,
-	Confirmation,
-	ForgotPassword,
-	SelectProfile,
-	SelectPatient,
-	FamilyMembers,
-	CreateAccount,
-	LaboratoryExams,
-	BuyPrescription,
+	AppointmentList,
 	AskAddress,
-	NewSignUp,
+	BuyPrescription,
+	ClinicalExamination,
+	Confirmation,
+	CreateAccount,
 	DashboardDefault,
 	DoctorReview,
+	FamilyMembers,
+	ForgotPassword,
+	LaboratoryExams,
+	Login,
+	NewSignUp,
+	Payment,
+	PaymentLaboratory,
+	PreSignUp,
+	SelectDoctor,
+	SelectDoctorHour,
+	SelectPatient,
+	SelectProfile,
+	SignUp,
 	ThanksPage,
 } from 'pages';
-import SmallSignUp from 'pages/SignUp/SmallSignUp';
 import { ConfirmationLaboratory } from 'pages/ConfirmationLaboratory';
+import SmallSignUp from 'pages/SignUp/SmallSignUp';
+import { ReactElement } from 'react';
 
 export const TRIAGE_ROUTE = 'triaje';
 export const SELECT_DOCTOR_ROUTE = 'seleccionar_doctor';

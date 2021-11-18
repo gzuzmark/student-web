@@ -5,7 +5,7 @@ import { ReactComponent as ClockIcon } from 'icons/clockGreen.svg';
 import capitalize from 'lodash/capitalize';
 import { Doctor, Schedule } from 'pages/api';
 import React from 'react';
-import { stylesWithTheme, formatUTCDate } from 'utils';
+import { formatUTCDate, stylesWithTheme } from 'utils';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -62,6 +62,14 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		},
 	},
 	infoTitle: {
+		fontFamily: 'Mulish',
+		fontWeight: '400',
+		fontSize: '12px',
+		color: '#A0A4A8',
+		lineHeight: '16px',
+		paddingBottom: '10px',
+	},
+	titleSchedule: {
 		fontFamily: 'Mulish',
 		fontWeight: '400',
 		fontSize: '12px',
@@ -140,7 +148,7 @@ const CardDoctor = ({ doctor, schedule }: CardDoctorProps) => {
 					</div>
 				</div>
 				<div className={classes.appointmentSection}>
-					<Typography className={classes.infoTitle}>Fecha de cita: </Typography>
+					<Typography className={classes.titleSchedule}>Fecha de cita: </Typography>
 					<div className={classes.schedule}>
 						<div className={classes.iconWrapper}>
 							<CalendarIcon />

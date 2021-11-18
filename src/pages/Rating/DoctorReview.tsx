@@ -123,6 +123,9 @@ const DoctorReview = () => {
 				// mensaje de error
 			}
 		}
+		if (step === 2) {
+			history.push('/thanks');
+		}
 		setStep(step + 1);
 	};
 
