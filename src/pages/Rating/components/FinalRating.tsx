@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Button, Theme, Typography } from '@material-ui/core';
 import { ReactComponent as Face1Disabled } from 'icons/rating/face1_disabled.svg';
 import { ReactComponent as Face2Disabled } from 'icons/rating/face2_disabled.svg';
