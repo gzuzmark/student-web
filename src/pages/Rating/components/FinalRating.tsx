@@ -7,6 +7,7 @@ import { ReactComponent as Face1 } from 'icons/rating/face1.svg';
 import { ReactComponent as Face2 } from 'icons/rating/face2.svg';
 import { ReactComponent as Face3 } from 'icons/rating/face3.svg';
 import { stylesWithTheme } from 'utils';
+import { useHistory } from 'react-router-dom';
 
 export interface FinalRatingValues {
 	stars: number;
@@ -130,6 +131,7 @@ interface RatingProps {
 }
 
 const FinalRating = ({ hasRating }: RatingProps) => {
+	const history = useHistory();
 	const [rating, setRating] = useState<any>(null);
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const [comment, setComment] = useState<string>('');
@@ -148,7 +150,9 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 	const updateComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setComment(e.target.value);
 	};
-	const onSubmit = useCallback(
+	const onSubmit = () => {
+		history.push('/thanks');
+	}; /*useCallback(
 		(values: FinalRatingValues) => {
 			values = {
 				stars: rating,
@@ -156,7 +160,7 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 			};
 		},
 		[comment, rating],
-	);
+	);*/
 	return (
 		<>
 			<div className={classes.topBar}>
@@ -195,7 +199,7 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 						<Typography className={classes.question}>Cuéntanos de manera breve el porqué de tu respuesta</Typography>
 						<textarea className={classes.textArea} value={comment} onChange={updateComment} />
 						<div className={classes.buttonWrapper}>
-							<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.submitButton}>
+							<Button variant="contained" onClick={() => onSubmit()} className={classes.submitButton}>
 								Responder
 							</Button>
 						</div>
