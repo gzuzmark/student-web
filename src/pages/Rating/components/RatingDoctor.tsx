@@ -94,6 +94,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		padding: '18px',
 		minWidth: '50px',
 		borderRadius: '8px',
+		width: '100%',
 		[breakpoints.up('lg')]: {
 			maxWidth: '164px',
 			padding: '14px',

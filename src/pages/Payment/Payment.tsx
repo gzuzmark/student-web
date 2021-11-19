@@ -49,6 +49,7 @@ import {
 	B2B_PAYMENT_ID,
 	sendFakeSession,
 	Benefit,
+	applyDiscountFirstDate,
 } from 'pages/api';
 import { Container, Loading } from 'pages/common';
 import { validSelectTimeWithNow } from 'pages/SelectDoctor/components/FunctionsHelper';
@@ -73,6 +74,7 @@ import KushkiCardError, { RequestCard } from './exceptions/KushkiCardError';
 import KushkiCashError from './exceptions/KushkiCashError';
 import { DataTracking } from './interfaces';
 import { processErrorPayment } from './services';
+import ModalDiscount from './components/ModalDiscount';
 
 const buildTransactionURL = (doctorName: string, doctorLastname: string, patientName: string, patientPhone: string) => {
 	return `https://chats.landbot.io/v2/H-728571-PDFPFMRFJGISOF45/index.html?doctor_name=${doctorName}&doctor_lastname=${doctorLastname}&name=${patientName}&phone=${patientPhone}`;
@@ -151,7 +153,8 @@ const Payment = () => {
 	const [errorMessage, setErrorMessage] = useState<string>('');
 	const [discount, setDiscount] = useState<Discount>({ id: '', totalCost: '' });
 	const [errorTimeMessage, setErrorTimeMessage] = useState<string | null>(null);
-
+	const [hasValidateForFirstDiscount, sethasValidateForFirstDiscount] = useState<boolean>(false);
+	const [percentageDiscount, setPercentageDiscount] = useState<string>('');
 	const kushki = new Kushki({
 		merchantId: `${process.env.REACT_APP_KUSHKI_MERCHANT_ID}`, // Your public merchant id
 		inTestEnvironment: getBooleanOrTrue(process.env.REACT_APP_KUSHKI_IN_TEST_ENV), //!!`${process.env.REACT_APP_KUSHKI_IN_TEST_ENV}`
@@ -507,7 +510,7 @@ const Payment = () => {
 			try {
 				setIsPaymentLoading(true);
 				const token = await paymentCardKushki(amount, values);
-				await createPayment(createRequestCardPayment(token, schedule, amount, values.email)); // last param: benefit
+				await createPayment(createRequestCardPayment(token, schedule, amount, values.email, benefit));
 				await createAppointment(createRequestCardAppointment(), userToken);
 
 				addGAEvent({
@@ -570,7 +573,7 @@ const Payment = () => {
 			try {
 				setIsPaymentLoading(true);
 				const token = await paymentCashKushki(amount, values);
-				const response: any = await createPayment(createRequestChashPayment(amount, values, token, method)); // last param: benefit
+				const response: any = await createPayment(createRequestChashPayment(amount, values, token, method, benefit));
 				await createAppointment(createRequestCashAppointment(), userToken);
 				let link = null;
 
@@ -625,7 +628,11 @@ const Payment = () => {
 						scheduleID: schedule.id,
 					});
 
-					addGAEvent({ category: 'Agendar cita - Paso 3', action: 'Aplicar descuento', label: reviewedDiscount.id });
+					addGAEvent({
+						category: 'Agendar cita - Paso 3',
+						action: 'Aplicar descuento',
+						label: reviewedDiscount.id,
+					});
 					window.Culqi.settings({ currency: 'PEN', amount: getIntCurrency(reviewedDiscount.totalCost) });
 					setDiscount(reviewedDiscount);
 				} else {
@@ -653,14 +660,14 @@ const Payment = () => {
 	// 	}
 	// 	// eslint-disable-next-line
 	// }, []);
+	const closeModalDiscountReject = () => {
+		sethasValidateForFirstDiscount(false);
+		setDiscount({ id: '', totalCost: '' });
+	};
 
-	// useEffect(() => {
-	// 	if (useCase?.totalCost) {
-	// 		initCulqi(useCase?.totalCost);
-	// 	}
-	// 	// eslint-disable-next-line
-	// }, []);
-
+	const closeModalDiscountAccept = () => {
+		sethasValidateForFirstDiscount(false);
+	};
 	useEffect(() => {
 		const isOpenModal = openKushkiModal || openKushkiCashModal;
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -676,6 +683,25 @@ const Payment = () => {
 			unblock();
 		};
 	}, [history, openKushkiModal, openKushkiCashModal]);
+
+	useEffect(() => {
+		applyDiscountFirstDate({
+			document_number: patientUser?.identification || '',
+			total_cost: Number(useCase?.totalCost) || 0,
+			scheduleID: schedule?.id || '',
+		})
+			.then((data) => {
+				// data
+				console.log(data);
+				sethasValidateForFirstDiscount(data.status);
+				setDiscount(data.discount);
+				setPercentageDiscount(data.discount.percentage + '%' || '');
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		// eslint-disable-next-line
+    }, [])
 
 	useEffect(() => {
 		if (useCase?.totalCost) {
@@ -769,7 +795,7 @@ const Payment = () => {
 			// };
 		}
 		// eslint-disable-next-line
-	}, [discount]);
+    }, [discount]);
 
 	return !isPaymentLoading ? (
 		<Container>
@@ -1325,6 +1351,13 @@ const Payment = () => {
 			{errorTimeMessage && (
 				<ModalErrorTime isOpen={true} setIsOpen={() => null} message={errorTimeMessage} redirect={true} />
 			)}
+
+			<ModalDiscount
+				isModalOpen={hasValidateForFirstDiscount}
+				closeModalDiscountReject={closeModalDiscountReject}
+				closeModalDiscounAccept={closeModalDiscountAccept}
+				discountTotal={percentageDiscount}
+			/>
 		</Container>
 	) : (
 		<Loading fullScreen loadingMessage={t('payment.wait.message')} />

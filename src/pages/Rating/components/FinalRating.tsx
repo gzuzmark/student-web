@@ -7,6 +7,7 @@ import { ReactComponent as Face1 } from 'icons/rating/face1.svg';
 import { ReactComponent as Face2 } from 'icons/rating/face2.svg';
 import { ReactComponent as Face3 } from 'icons/rating/face3.svg';
 import { stylesWithTheme } from 'utils';
+import { useHistory } from 'react-router-dom';
 
 export interface FinalRatingValues {
 	stars: number;
@@ -27,7 +28,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		fontSize: '16px',
 		color: '#494F66',
 		lineHeight: '20px',
-		padding: '16px 0px',
+		padding: '30px 0px 16px',
 	},
 	textArea: {
 		fontFamily: 'Mulish',
@@ -60,6 +61,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		minWidth: '50px',
 		fontSize: '16px',
 		borderRadius: '8px',
+		width: '100%',
 		[breakpoints.up('lg')]: {
 			maxWidth: '164px',
 			padding: '14px',
@@ -105,6 +107,23 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		color: '#494F66',
 		lineHeight: '24px',
 	},
+	description: {
+		fontFamily: 'Mulish',
+		fontWeight: '600',
+		fontSize: '16px',
+		color: '#A3ABCC',
+		[breakpoints.up('lg')]: {
+			marginLeft: '20px',
+		},
+	},
+	buttonContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		[breakpoints.up('lg')]: {
+			flexDirection: 'row',
+		},
+	},
 }));
 interface RatingProps {
 	onChangeStep: (values: FinalRatingValues) => void;
@@ -112,11 +131,12 @@ interface RatingProps {
 }
 
 const FinalRating = ({ hasRating }: RatingProps) => {
+	const history = useHistory();
 	const [rating, setRating] = useState<any>(null);
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const [comment, setComment] = useState<string>('');
 	const classes = useStyles();
-
+	const iconsDescription = ['Indiferente', 'Algo decepcionado', 'Muy decepcionado'];
 	const icons: { [key: string]: React.ReactElement } = {
 		1: <Face1 />,
 		2: <Face2 />,
@@ -130,7 +150,9 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 	const updateComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setComment(e.target.value);
 	};
-	const onSubmit = useCallback(
+	const onSubmit = () => {
+		history.push('/thanks');
+	}; /*useCallback(
 		(values: FinalRatingValues) => {
 			values = {
 				stars: rating,
@@ -138,7 +160,7 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 			};
 		},
 		[comment, rating],
-	);
+	);*/
 	return (
 		<>
 			<div className={classes.topBar}>
@@ -151,28 +173,33 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 				</Typography>
 			</div>
 			<div className={classes.wrapper}>
-				<div>
-					{[...Array(3)].map((el, i) => {
-						const ratingValue = i + 1;
-						return (
-							<Button
-								key={i}
-								onClick={() => setRating(ratingValue)}
-								style={{ padding: '10px', minWidth: '50px' }}
-								onMouseEnter={() => setHoverValue(ratingValue)}
-								onMouseLeave={() => setHoverValue(null)}
-							>
-								{ratingValue === (hoverValue || rating) ? icons[ratingValue] : iconsDisabled[ratingValue]}
-							</Button>
-						);
-					})}
+				<div className={classes.buttonContainer}>
+					<div style={{ display: 'flex', flexDirection: 'row' }}>
+						{[...Array(3)].map((el, i) => {
+							const ratingValue = i + 1;
+							return (
+								<Button
+									key={i}
+									onClick={() => setRating(ratingValue)}
+									style={{ padding: '10px', minWidth: '50px' }}
+									onMouseEnter={() => setHoverValue(ratingValue)}
+									onMouseLeave={() => setHoverValue(null)}
+								>
+									{ratingValue === (hoverValue || rating) ? icons[ratingValue] : iconsDisabled[ratingValue]}
+								</Button>
+							);
+						})}
+					</div>
+					{(hoverValue || rating) != null && (
+						<Typography className={classes.description}>{iconsDescription[rating - 1]}</Typography>
+					)}
 				</div>
 				{rating != null && (
 					<>
-						<Typography className={classes.question}>Cuéntamos de manera breve el porqué de tu respuesta</Typography>
+						<Typography className={classes.question}>Cuéntanos de manera breve el porqué de tu respuesta</Typography>
 						<textarea className={classes.textArea} value={comment} onChange={updateComment} />
 						<div className={classes.buttonWrapper}>
-							<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.submitButton}>
+							<Button variant="contained" onClick={() => onSubmit()} className={classes.submitButton}>
 								Responder
 							</Button>
 						</div>
