@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, ReactElement, useState } from 'react';
 import { Button, Theme, Typography } from '@material-ui/core';
 import { ReactComponent as Face1Disabled } from 'icons/rating/face1_disabled.svg';
 import { ReactComponent as Face2Disabled } from 'icons/rating/face2_disabled.svg';
@@ -147,6 +147,13 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 		2: <Face2Disabled />,
 		3: <Face3Disabled />,
 	};
+	const HelpText = (): ReactElement | null => {
+		if (hoverValue != null) {
+			return <Typography className={classes.description}>{iconsDescription[hoverValue - 1]}</Typography>;
+		} else if (rating != null)
+			return <Typography className={classes.description}>{iconsDescription[rating - 1]}</Typography>;
+		return <></>;
+	};
 	const updateComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setComment(e.target.value);
 	};
@@ -190,9 +197,7 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 							);
 						})}
 					</div>
-					{(hoverValue || rating) != null && (
-						<Typography className={classes.description}>{iconsDescription[rating - 1]}</Typography>
-					)}
+					<HelpText />
 				</div>
 				{rating != null && (
 					<>
