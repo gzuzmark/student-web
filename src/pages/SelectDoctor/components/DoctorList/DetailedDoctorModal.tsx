@@ -11,37 +11,42 @@ import clsx from 'clsx';
 
 import { stylesWithTheme } from 'utils';
 import { Doctor } from 'pages/api';
-import { ReactComponent as PersonIcon } from 'icons/person.svg';
-import { ReactComponent as SchoolIcon } from 'icons/school.svg';
-import { ReactComponent as FirstAidKitIcon } from 'icons/first_aid_kit.svg';
+import { ReactComponent as HospitalIcon } from 'icons/hospital.svg';
+import { ReactComponent as SchoolIcon } from 'icons/birrete.svg';
+import { ReactComponent as FirstAidKitIcon } from 'icons/likeDoctor.svg';
 
 import PatientOpinion from './PatientOpinion';
+import { Grid } from '@material-ui/core';
 
 const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 	paper: {
 		[breakpoints.up('lg')]: {
-			width: '714px',
+			width: '756px',
 			maxHeight: '676px',
 			maxWidth: 'none',
 		},
 	},
 	wrapper: {
 		position: 'relative',
-		padding: '40px 0 0 0',
-		[breakpoints.up('lg')]: {
-			padding: '60px 70px 40px 76px',
-		},
 	},
 	doctor: {
 		display: 'flex',
 		alignItems: 'center',
-		padding: '0 0 36px 24px',
+		padding: '24px',
+		[breakpoints.up('lg')]: {
+			padding: '68px 96px 49px 96px',
+		},
 	},
 	photoWrapper: {
 		paddingRight: '20px',
 		[breakpoints.up('lg')]: {
 			paddingRight: '58px',
 		},
+	},
+	infoDocWrapper: {
+		display: 'flex',
+		flexDirection: 'column',
+		width: '100%',
 	},
 	photo: {
 		borderRadius: '51%',
@@ -53,18 +58,21 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	nameWrapper: {
-		paddingBottom: '10px',
+		paddingBottom: '25px',
 	},
 	name: {
-		fontSize: '15px',
-		lineHeight: '18px',
+		fontSize: '20px',
+		lineHeight: '24px',
+		fontFamily: 'Mulish',
+		fontWeight: '700',
+		color: '#494F66',
 		textTransform: 'capitalize',
 		'&.no-caps': {
 			textTransform: 'none',
 		},
 		[breakpoints.up('lg')]: {
-			fontSize: '20px',
-			lineHeight: '25px',
+			fontSize: '24px',
+			lineHeight: '28px',
 		},
 	},
 	specialityWrapper: {
@@ -75,16 +83,24 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	speciality: {
-		fontSize: '12px',
-		lineHeight: '17px',
-		textTransform: 'uppercase',
+		fontSize: '20px',
+		lineHeight: '24px',
+		fontFamily: 'Mulish',
+		fontWeight: '400',
+		color: '#494F66',
+		textTransform: 'capitalize',
+		[breakpoints.up('lg')]: {
+			fontSize: '24px',
+			lineHeight: '28px',
+		},
 	},
 	cmp: {
 		fontSize: '12px',
 		lineHeight: '17px',
+		color: '#A3ABCC',
 	},
 	flexWrapper: {
-		paddingBottom: '8px',
+		paddingBottom: '2px',
 		[breakpoints.up('lg')]: {
 			display: 'flex',
 		},
@@ -98,12 +114,23 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 	},
 	doctorRating: {
 		'&&': {
-			color: palette.primary.main,
+			color: '#FACD40',
+			fontSize: '14px',
+			[breakpoints.up('lg')]: {
+				fontSize: '20px',
+			},
 		},
 	},
 	ratingNumber: {
-		fontSize: '13px',
-		lineHeight: '24px',
+		fontFamily: 'Mulish',
+		fontSize: '12px',
+		lineHeight: '16px',
+		marginLeft: '15px',
+		color: '#A3ABCC',
+		[breakpoints.up('lg')]: {
+			fontSize: '14px',
+			lineHeight: '18px',
+		},
 	},
 	availabilityButtonDesktop: {
 		padding: '7.5px 28px',
@@ -116,7 +143,11 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	extraInforWrapper: {
-		padding: '0 24px',
+		backgroundColor: '#F7F8FC',
+		padding: '32px 24px',
+		[breakpoints.up('lg')]: {
+			padding: '56px 96px',
+		},
 	},
 	aboutMeSection: {
 		paddingBottom: '26px',
@@ -185,14 +216,18 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	userOpinionsSection: {
-		padding: '0 24px',
+		padding: '48px 96px 0 96px',
 	},
 	userOpinionsSectionTitle: {
 		paddingBottom: '24px',
+		disply: 'flex',
+		width: '100%',
+		justifyContent: 'space-between',
 	},
 	viewMoreButton: {
 		textDecoration: 'none',
 		textTransform: 'none',
+		color: '#1ECD96',
 		padding: '6px 0',
 		fontSize: '13px',
 
@@ -201,7 +236,13 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	titleText: {
-		color: palette.info.main,
+		color: ' #494F66',
+		fontWeight: '700',
+		fontSize: '16px',
+		fontFamily: 'Mulish',
+		[breakpoints.up('lg')]: {
+			fontSize: '20px',
+		},
 	},
 	commentsDivider: {
 		margin: '0 24px 12px',
@@ -214,12 +255,35 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		bottom: 0,
 		left: 0,
 		right: 0,
-		[breakpoints.up('lg')]: {
-			display: 'none',
-		},
+		textAlign: 'center',
+		backgroundColor: '#ffffff',
+		padding: '24px',
+		boxShadow: '0px 5px 25px rgba(103, 111, 143, 0.15)',
 	},
 	mobileStickyButton: {
-		borderRadius: 0,
+		borderRadius: '8px',
+		width: '100%',
+		[breakpoints.up('lg')]: {
+			maxWidth: '312px',
+		},
+	},
+	bodyText: {
+		fontSize: '12px',
+		fontFamily: 'Mulish',
+		color: '#777E9A',
+		[breakpoints.up('lg')]: {
+			fontSize: '16px',
+		},
+	},
+	noComments: {
+		paddingTop: '24px',
+		fontFamily: 'Mulish',
+		fontSize: '12px',
+		fontWeight: '600',
+		color: '#676F8F',
+		[breakpoints.up('lg')]: {
+			fontSize: '16px',
+		},
 	},
 }));
 
@@ -275,7 +339,7 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 					<div className={classes.photoWrapper}>
 						<img className={classes.photo} src={profilePicture} alt="doctor" />
 					</div>
-					<div>
+					<div className={classes.infoDocWrapper}>
 						<div className={classes.nameWrapper}>
 							<Typography component="span" className={clsx(classes.name, 'no-caps')}>
 								{t('right.doctor.prefix')}{' '}
@@ -288,23 +352,21 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 							<div className={classes.specialityWrapper}>
 								<Typography className={classes.speciality}>{speciality}</Typography>
 							</div>
-							<div>
-								<Typography className={classes.cmp}>CMP: {cmp}</Typography>
-							</div>
 						</div>
-						{patientOpinions.length >= 5 && (
-							<div className={classes.ratingWrapper}>
-								<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
-								<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
-							</div>
-						)}
-						{isDesktop ? (
-							<div>
-								<Button className={classes.availabilityButtonDesktop} variant="contained" onClick={closeModal}>
-									{t('doctorModal.seeAvailability')}
-								</Button>
-							</div>
-						) : null}
+						<Grid container spacing={1} xl={12}>
+							<Grid item xs={6} md={4} xl={4}>
+								<Typography className={classes.cmp}>CMP: {cmp}</Typography>
+							</Grid>
+							<Grid item xs={6} md={4} xl={4}>
+								<Typography className={classes.cmp}>RNE: {cmp}</Typography>
+							</Grid>
+							{patientOpinions.length >= 5 && (
+								<Grid item xs={12} md={4} xl={4} className={classes.ratingWrapper}>
+									<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
+									<Typography className={classes.ratingNumber}>({patientOpinions.length})</Typography>
+								</Grid>
+							)}
+						</Grid>
 					</div>
 				</div>
 				<Divider className={classes.divider} />
@@ -312,12 +374,12 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 					<div className={classes.aboutMeSection}>
 						<div className={classes.aboutMeTitle}>
 							<div className={classes.aboutMeIcon}>
-								<PersonIcon />
+								<HospitalIcon />
 							</div>
 							<Typography className={classes.titleText}>{t('doctorModal.aboutMe.title')}</Typography>
 						</div>
 						<div>
-							<Typography>
+							<Typography className={classes.bodyText}>
 								{isALongAboutMe ? (showMoreAboutMe ? aboutMe : `${aboutMe.substring(0, 165)}...`) : aboutMe}
 							</Typography>
 						</div>
@@ -337,7 +399,7 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 							<Typography className={classes.titleText}>{t('doctorModal.educationSection.title')}</Typography>
 						</div>
 						<div>
-							<Typography>
+							<Typography className={classes.bodyText}>
 								{isALongEducation ? (showMoreEducation ? education : `${education.substring(0, 165)}...`) : education}
 							</Typography>
 						</div>
@@ -378,13 +440,19 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 						<Typography className={classes.titleText}>
 							{t('doctorModal.userOpinionsSection.title')} ({patientOpinions.length})
 						</Typography>
+						{patientOpinions.length >= 5 && (
+							<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
+						)}
+						{patientOpinions.length == 0 && (
+							<Typography className={classes.noComments}>El especialista aún no tiene comentarios.</Typography>
+						)}
 					</div>
 					{patientOpinions.map((opinion) => (
 						<PatientOpinion key={`${cmp}-${opinion.datePublished}`} opinion={opinion} />
 					))}
 				</div>
 				<div className={classes.mobileStickyButtonWrapper}>
-					<Button className={classes.mobileStickyButton} variant="contained" onClick={closeModal} fullWidth>
+					<Button className={classes.mobileStickyButton} variant="contained" onClick={closeModal}>
 						{t('doctorModal.seeAvailability')}
 					</Button>
 				</div>
