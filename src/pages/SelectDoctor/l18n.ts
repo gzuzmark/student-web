@@ -48,8 +48,8 @@ const selectDoctor = {
 	'doctorModal.aboutMe.title': 'Mi experiencia',
 	'doctorModal.educationSection.title': 'Mi formación',
 	'doctorModal.diseasesSection.title': '¿En qué te puedo ayudar?',
-	'doctorModal.seeMore': 'VER MÁS',
-	'doctorModal.seeLess': 'VER MENOS',
+	'doctorModal.seeMore': 'Ver más',
+	'doctorModal.seeLess': 'Ver menos',
 	'doctorModal.seeAvailability': 'Ver disponibilidad',
 	'doctorModal.userOpinionsSection.title': 'Comentarios',
 };

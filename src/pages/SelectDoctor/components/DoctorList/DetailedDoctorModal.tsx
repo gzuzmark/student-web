@@ -3,7 +3,7 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Rating from '@material-ui/lab/Rating';
-import Divider from '@material-ui/core/Divider';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from 'react-i18next';
@@ -58,7 +58,17 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	nameWrapper: {
-		paddingBottom: '25px',
+		display: 'none',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '8px',
+			display: 'flex',
+		},
+	},
+	nameWrapperMobile: {
+		padding: '24px 0 0 24px',
+		[breakpoints.up('lg')]: {
+			display: 'none',
+		},
 	},
 	name: {
 		fontSize: '20px',
@@ -95,9 +105,13 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	cmp: {
-		fontSize: '12px',
+		fontSize: '14px',
 		lineHeight: '17px',
 		color: '#A3ABCC',
+		[breakpoints.up('lg')]: {
+			fontSize: '16px',
+			lineHeight: '20px',
+		},
 	},
 	flexWrapper: {
 		paddingBottom: '2px',
@@ -216,21 +230,30 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	userOpinionsSection: {
-		padding: '48px 96px 0 96px',
+		padding: '34px 24px',
+		[breakpoints.up('lg')]: {
+			padding: '48px 96px',
+		},
 	},
 	userOpinionsSectionTitle: {
 		paddingBottom: '24px',
-		disply: 'flex',
+		display: 'flex',
 		width: '100%',
 		justifyContent: 'space-between',
+	},
+	btnWrapper: {
+		display: 'flex',
+		flexDirection: 'row-reverse',
 	},
 	viewMoreButton: {
 		textDecoration: 'none',
 		textTransform: 'none',
 		color: '#1ECD96',
 		padding: '6px 0',
-		fontSize: '13px',
-
+		fontSize: '16px',
+		fontWeight: '800',
+		lineHeight: '20px',
+		fontFamily: 'Mulish',
 		'&:hover': {
 			textDecoration: 'none',
 		},
@@ -276,7 +299,6 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		},
 	},
 	noComments: {
-		paddingTop: '24px',
 		fontFamily: 'Mulish',
 		fontSize: '12px',
 		fontWeight: '600',
@@ -335,6 +357,14 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 	return (
 		<Dialog open={isOpen} onClose={closeModal} fullScreen={!isDesktop} PaperProps={{ className: classes.paper }}>
 			<div className={classes.wrapper}>
+				<div className={classes.nameWrapperMobile}>
+					<Typography component="span" className={clsx(classes.name, 'no-caps')}>
+						{t('right.doctor.prefix')}{' '}
+					</Typography>
+					<Typography component="span" className={classes.name}>
+						{name} {lastName}
+					</Typography>
+				</div>
 				<div className={classes.doctor}>
 					<div className={classes.photoWrapper}>
 						<img className={classes.photo} src={profilePicture} alt="doctor" />
@@ -369,7 +399,6 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 						</Grid>
 					</div>
 				</div>
-				<Divider className={classes.divider} />
 				<div className={classes.extraInforWrapper}>
 					<div className={classes.aboutMeSection}>
 						<div className={classes.aboutMeTitle}>
@@ -384,9 +413,10 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 							</Typography>
 						</div>
 						{isALongAboutMe ? (
-							<div>
+							<div className={classes.btnWrapper}>
 								<Button className={classes.viewMoreButton} onClick={toggleShowMoreAboutMe}>
 									{showMoreAboutMe ? t('doctorModal.seeLess') : t('doctorModal.seeMore')}
+									<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
 								</Button>
 							</div>
 						) : null}
@@ -404,9 +434,10 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 							</Typography>
 						</div>
 						{isALongEducation ? (
-							<div>
+							<div className={classes.btnWrapper}>
 								<Button className={classes.viewMoreButton} onClick={toggleShowMoreEducation}>
 									{showMoreAboutMe ? t('doctorModal.seeLess') : t('doctorModal.seeMore')}
+									<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
 								</Button>
 							</div>
 						) : null}
@@ -426,15 +457,15 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 							))}
 						</div>
 						{isALongDiseaseList ? (
-							<div>
+							<div className={classes.btnWrapper}>
 								<Button className={classes.viewMoreButton} onClick={toggleShowMoreDiseases}>
 									{showMoreDiseases ? t('doctorModal.seeLess') : t('doctorModal.seeMore')}
+									<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
 								</Button>
 							</div>
 						) : null}
 					</div>
 				</div>
-				<Divider className={classes.commentsDivider} />
 				<div className={classes.userOpinionsSection}>
 					<div className={classes.userOpinionsSectionTitle}>
 						<Typography className={classes.titleText}>
@@ -443,13 +474,13 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 						{patientOpinions.length >= 5 && (
 							<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
 						)}
-						{patientOpinions.length === 0 && (
-							<Typography className={classes.noComments}>El especialista aún no tiene comentarios.</Typography>
-						)}
 					</div>
 					{patientOpinions.map((opinion) => (
 						<PatientOpinion key={`${cmp}-${opinion.datePublished}`} opinion={opinion} />
 					))}
+					{patientOpinions.length === 0 && (
+						<Typography className={classes.noComments}>El especialista aún no tiene comentarios.</Typography>
+					)}
 				</div>
 				<div className={classes.mobileStickyButtonWrapper}>
 					<Button className={classes.mobileStickyButton} variant="contained" onClick={closeModal}>

@@ -35,7 +35,10 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	scoreWrapper: {
 		display: 'flex',
 		justifyContent: 'space-between',
-		padding: '20px 0',
+		padding: '20px 0 10px 0',
+		[breakpoints.up('lg')]: {
+			padding: '20px 0 18px 0',
+		},
 	},
 	score: {
 		'&&': {
