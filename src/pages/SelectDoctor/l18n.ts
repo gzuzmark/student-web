@@ -45,13 +45,13 @@ const selectDoctor = {
 	'selectAppointmentOwner.for': 'Para',
 	'selectAppointmentOwner.me': 'mí',
 	'selectAppointmentOwner.someoneElse': 'alguien más',
-	'doctorModal.aboutMe.title': 'SOBRE MÍ:',
-	'doctorModal.educationSection.title': 'FORMACIÓN:',
-	'doctorModal.diseasesSection.title': 'ENFERMEDADES QUE TRATO:',
-	'doctorModal.seeMore': 'VER MÁS',
-	'doctorModal.seeLess': 'VER MENOS',
+	'doctorModal.aboutMe.title': 'Mi experiencia',
+	'doctorModal.educationSection.title': 'Mi formación',
+	'doctorModal.diseasesSection.title': '¿En qué te puedo ayudar?',
+	'doctorModal.seeMore': 'Ver más',
+	'doctorModal.seeLess': 'Ver menos',
 	'doctorModal.seeAvailability': 'Ver disponibilidad',
-	'doctorModal.userOpinionsSection.title': 'HISTORIAS DE PACIENTES',
+	'doctorModal.userOpinionsSection.title': 'Comentarios',
 };
 
 export default selectDoctor;
