@@ -443,7 +443,7 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 						{patientOpinions.length >= 5 && (
 							<Rating className={classes.doctorRating} value={rating} precision={0.5} readOnly />
 						)}
-						{patientOpinions.length == 0 && (
+						{patientOpinions.length === 0 && (
 							<Typography className={classes.noComments}>El especialista aún no tiene comentarios.</Typography>
 						)}
 					</div>
