@@ -4,7 +4,7 @@ import { createRatingDoctor, getRatingDoctor, Patient } from 'pages/api/rating';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
-import { CardDoctor, FinalRating, Header } from './components';
+import { CardDoctor, Header } from './components';
 import RatingDoctor, { RatingDoctorValues } from './components/RatingDoctor';
 import { Doctor, Schedule } from 'pages/api';
 import { ReactComponent as Check } from 'icons/check.svg';
@@ -152,7 +152,23 @@ const DoctorReview = () => {
 	if (schedule === null || doctor === null || patient === null) {
 		return <>No se encontró la cita médica especificada</>;
 	}
-
+	/*
+	const ratingElement = () =>{
+		switch (step){
+			case 1 :
+				return(
+					<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />
+				);
+			case 2:
+				return(
+					<RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating} />
+				);
+			case 3:
+				return(
+					<FinalRating onChangeStep={onChangeStep} hasRating={hasRating} />
+				);	
+		}
+	}*/
 	return (
 		<>
 			<Header />
@@ -198,7 +214,7 @@ const DoctorReview = () => {
 								{/*<Typography className={classes.question}>¿Cómo fue la experiencia con tu especialista?</Typography>*/}
 								{/*<RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating} />*/}
 								{/*	<FinalRating onChangeStep={onChangeStep} hasRating={hasRating} />*/}
-								{/*<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />*/}
+								<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />
 							</div>
 						</Grid>
 					</Grid>

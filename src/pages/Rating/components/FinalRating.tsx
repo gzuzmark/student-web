@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactElement, useState } from 'react';
+import React, { ChangeEvent, ReactElement, useCallback, useState } from 'react';
 import { Button, Theme, Typography } from '@material-ui/core';
 import { ReactComponent as Face1Disabled } from 'icons/rating/face1_disabled.svg';
 import { ReactComponent as Face2Disabled } from 'icons/rating/face2_disabled.svg';
@@ -7,11 +7,11 @@ import { ReactComponent as Face1 } from 'icons/rating/face1.svg';
 import { ReactComponent as Face2 } from 'icons/rating/face2.svg';
 import { ReactComponent as Face3 } from 'icons/rating/face3.svg';
 import { stylesWithTheme } from 'utils';
-import { useHistory } from 'react-router-dom';
 
 export interface FinalRatingValues {
 	stars: number;
 	comment: string;
+	step: number;
 }
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -130,12 +130,12 @@ interface RatingProps {
 	hasRating: boolean;
 }
 
-const FinalRating = ({ hasRating }: RatingProps) => {
-	const history = useHistory();
+const FinalRating = ({ onChangeStep, hasRating }: RatingProps) => {
 	const [rating, setRating] = useState<any>(null);
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const [comment, setComment] = useState<string>('');
 	const classes = useStyles();
+	const paso = 3;
 	const iconsDescription = ['Indiferente', 'Algo decepcionado', 'Muy decepcionado'];
 	const icons: { [key: string]: React.ReactElement } = {
 		1: <Face1 />,
@@ -157,17 +157,17 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 	const updateComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setComment(e.target.value);
 	};
-	const onSubmit = () => {
-		history.push('/thanks');
-	}; /*useCallback(
+	const onSubmit = useCallback(
 		(values: FinalRatingValues) => {
 			values = {
 				stars: rating,
 				comment: comment,
+				step: paso,
 			};
+			onChangeStep(values);
 		},
-		[comment, rating],
-	);*/
+		[comment, onChangeStep, rating],
+	);
 	return (
 		<>
 			<div className={classes.topBar}>
@@ -204,7 +204,7 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 						<Typography className={classes.question}>Cuéntanos de manera breve el porqué de tu respuesta</Typography>
 						<textarea className={classes.textArea} value={comment} onChange={updateComment} />
 						<div className={classes.buttonWrapper}>
-							<Button variant="contained" onClick={() => onSubmit()} className={classes.submitButton}>
+							<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.submitButton}>
 								Responder
 							</Button>
 						</div>
