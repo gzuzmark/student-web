@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Button, Theme, Typography } from '@material-ui/core';
 import StarRateIcon from '@material-ui/icons/StarRate';
 import { stylesWithTheme } from 'utils';
 
-export interface RatingDoctorValues {
+export interface RatingAliviaValues {
 	stars: number;
 	comment: string;
+	step: number;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -143,23 +144,31 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	},
 }));
 
-interface RatingDoctorProps {
-	onChangeStep: (values: RatingDoctorValues) => void;
+interface RatingAliviaProps {
+	onChangeStep: (values: RatingAliviaValues) => void;
 	hasRating: boolean;
 }
 
-const RatingAlivia = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
+const RatingAlivia = ({ onChangeStep, hasRating }: RatingAliviaProps) => {
 	const [rating, setRating] = useState<any>(null);
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const classes = useStyles();
-
+	const [comment, setComment] = useState<string>('');
+	const paso = 2;
 	const onSubmit = useCallback(
-		(rating) => {
-			onChangeStep(rating);
+		(values: RatingAliviaValues) => {
+			values = {
+				stars: rating,
+				comment: comment,
+				step: paso,
+			};
+			onChangeStep(values);
 		},
-		[onChangeStep],
+		[comment, onChangeStep, rating],
 	);
-
+	const updateComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
+		setComment(e.target.value);
+	};
 	return (
 		<>
 			<div className={classes.topBar}>
@@ -200,7 +209,12 @@ const RatingAlivia = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 				{rating != null && (
 					<>
 						<Typography className={classes.question}>Cuéntanos de manera breve el porqué de tu respuesta</Typography>
-						<textarea className={classes.textArea} placeholder="Deja tu comentario" />
+						<textarea
+							className={classes.textArea}
+							placeholder="Deja tu comentario"
+							value={comment}
+							onChange={updateComment}
+						/>
 						<div className={classes.buttonWrapper}>
 							<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.button}>
 								Calificar

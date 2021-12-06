@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Rating from '@material-ui/lab/Rating';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLess from '@material-ui/icons/ExpandLess';
 import { Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTranslation } from 'react-i18next';
@@ -320,11 +321,12 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 	const [showMoreAboutMe, setShowMoreAboutMe] = useState<boolean>(false);
 	const [showMoreDiseases, setShowMoreDiseases] = useState<boolean>(false);
 	const [showMoreEducation, setShowMoreEducation] = useState<boolean>(false);
-	const toggleShowMoreEducation = () => {
-		setShowMoreEducation(!showMoreEducation);
-	};
+
 	const toggleShowMoreAboutMe = () => {
 		setShowMoreAboutMe(!showMoreAboutMe);
+	};
+	const toggleShowMoreEducation = () => {
+		setShowMoreEducation(!showMoreEducation);
 	};
 	const toggleShowMoreDiseases = () => {
 		setShowMoreDiseases(!showMoreDiseases);
@@ -415,8 +417,17 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 						{isALongAboutMe ? (
 							<div className={classes.btnWrapper}>
 								<Button className={classes.viewMoreButton} onClick={toggleShowMoreAboutMe}>
-									{showMoreAboutMe ? t('doctorModal.seeLess') : t('doctorModal.seeMore')}
-									<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+									{showMoreAboutMe ? (
+										<>
+											<Typography className={classes.viewMoreButton}>{t('doctorModal.seeLess')} </Typography>
+											<ExpandLess style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+										</>
+									) : (
+										<>
+											<Typography className={classes.viewMoreButton}>{t('doctorModal.seeMore')} </Typography>
+											<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+										</>
+									)}
 								</Button>
 							</div>
 						) : null}
@@ -436,8 +447,17 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 						{isALongEducation ? (
 							<div className={classes.btnWrapper}>
 								<Button className={classes.viewMoreButton} onClick={toggleShowMoreEducation}>
-									{showMoreAboutMe ? t('doctorModal.seeLess') : t('doctorModal.seeMore')}
-									<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+									{showMoreEducation ? (
+										<>
+											<Typography className={classes.viewMoreButton}>{t('doctorModal.seeLess')} </Typography>
+											<ExpandLess style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+										</>
+									) : (
+										<>
+											<Typography className={classes.viewMoreButton}>{t('doctorModal.seeMore')} </Typography>
+											<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+										</>
+									)}
 								</Button>
 							</div>
 						) : null}
@@ -459,8 +479,17 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 						{isALongDiseaseList ? (
 							<div className={classes.btnWrapper}>
 								<Button className={classes.viewMoreButton} onClick={toggleShowMoreDiseases}>
-									{showMoreDiseases ? t('doctorModal.seeLess') : t('doctorModal.seeMore')}
-									<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+									{showMoreDiseases ? (
+										<>
+											<Typography className={classes.viewMoreButton}>{t('doctorModal.seeLess')} </Typography>
+											<ExpandLess style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+										</>
+									) : (
+										<>
+											<Typography className={classes.viewMoreButton}>{t('doctorModal.seeMore')} </Typography>
+											<ExpandMoreIcon style={{ color: '#1ECD96', lineHeight: '12px', marginLeft: '12px' }} />
+										</>
+									)}
 								</Button>
 							</div>
 						) : null}
