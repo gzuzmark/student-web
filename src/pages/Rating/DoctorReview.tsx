@@ -4,7 +4,7 @@ import { createRatingDoctor, getRatingDoctor, Patient } from 'pages/api/rating';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
-import { CardDoctor, Header } from './components';
+import { CardDoctor, FinalRating, Header, RatingAlivia } from './components';
 import RatingDoctor, { RatingDoctorValues } from './components/RatingDoctor';
 import { Doctor, Schedule } from 'pages/api';
 import { ReactComponent as Check } from 'icons/check.svg';
@@ -115,18 +115,16 @@ const DoctorReview = () => {
 		setOpen(false);
 	};
 	const onChangeStep = async (values: RatingDoctorValues) => {
-		if (step === 0) {
-			const resp = await createRatingDoctor(id, values.stars, values.comment);
-			if (resp.ok) {
-				history.push('/thanks');
-			} else {
-				// mensaje de error
-			}
+		const resp = await createRatingDoctor(id, values.stars, values.comment, values.step);
+		if (resp.ok) {
+			setStep(step + 1);
+		} else {
+			// mensaje de error
 		}
-		if (step === 2) {
+
+		if (step === 3) {
 			history.push('/thanks');
 		}
-		setStep(step + 1);
 	};
 
 	useEffect(() => {
@@ -136,7 +134,7 @@ const DoctorReview = () => {
 			setSchedule(resp.schedule);
 			setHasRating(resp.hasRating);
 			setOpen(resp.hasRating);
-			//setStep(resp.step);
+			setStep(resp.step);
 			setLoading(false);
 		});
 	}, [id, history]);
@@ -152,23 +150,19 @@ const DoctorReview = () => {
 	if (schedule === null || doctor === null || patient === null) {
 		return <>No se encontró la cita médica especificada</>;
 	}
-	/*
-	const ratingElement = () =>{
-		switch (step){
-			case 1 :
-				return(
-					<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />
-				);
+
+	const RatingElement = () => {
+		switch (step) {
+			case 1:
+				return <RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />;
 			case 2:
-				return(
-					<RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating} />
-				);
+				return <RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating} />;
 			case 3:
-				return(
-					<FinalRating onChangeStep={onChangeStep} hasRating={hasRating} />
-				);	
+				return <FinalRating onChangeStep={onChangeStep} hasRating={hasRating} />;
+			default:
+				return <></>;
 		}
-	}*/
+	};
 	return (
 		<>
 			<Header />
@@ -196,7 +190,7 @@ const DoctorReview = () => {
 						</Snackbar>
 					)}
 					<Typography className={classes.title} variant="h1">
-						Califica tu experiencia
+						Califica tu experiencia --- {step}
 					</Typography>
 					<Typography className={classes.subtitle} variant="h1">
 						Hola {patient.name}, ayúdanos a mejorar nuestro servicio calificando tu experiencia
@@ -214,7 +208,8 @@ const DoctorReview = () => {
 								{/*<Typography className={classes.question}>¿Cómo fue la experiencia con tu especialista?</Typography>*/}
 								{/*<RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating} />*/}
 								{/*	<FinalRating onChangeStep={onChangeStep} hasRating={hasRating} />*/}
-								<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />
+								{/*<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />*/}
+								<RatingElement />
 							</div>
 						</Grid>
 					</Grid>

@@ -280,6 +280,7 @@ const useStyles = stylesWithTheme(({ breakpoints, palette }) => ({
 		left: 0,
 		right: 0,
 		textAlign: 'center',
+		zIndex: '10',
 		backgroundColor: '#ffffff',
 		padding: '24px',
 		boxShadow: '0px 5px 25px rgba(103, 111, 143, 0.15)',
