@@ -6,6 +6,7 @@ import { stylesWithTheme } from 'utils';
 export interface RatingDoctorValues {
 	stars: number;
 	comment: string;
+	step: number;
 }
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
@@ -94,6 +95,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		padding: '18px',
 		minWidth: '50px',
 		borderRadius: '8px',
+		width: '100%',
 		[breakpoints.up('lg')]: {
 			maxWidth: '164px',
 			padding: '14px',
@@ -133,6 +135,7 @@ const RatingDoctor = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const [comment, setComment] = useState<string>('');
 	const classes = useStyles();
+	const paso = 1;
 	const stars = [
 		{
 			description: 'No me gustó',
@@ -161,6 +164,7 @@ const RatingDoctor = ({ onChangeStep, hasRating }: RatingDoctorProps) => {
 			values = {
 				stars: rating,
 				comment: comment,
+				step: paso,
 			};
 			onChangeStep(values);
 		},

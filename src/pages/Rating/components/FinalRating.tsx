@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, ReactElement, useCallback, useState } from 'react';
 import { Button, Theme, Typography } from '@material-ui/core';
 import { ReactComponent as Face1Disabled } from 'icons/rating/face1_disabled.svg';
 import { ReactComponent as Face2Disabled } from 'icons/rating/face2_disabled.svg';
@@ -11,6 +11,7 @@ import { stylesWithTheme } from 'utils';
 export interface FinalRatingValues {
 	stars: number;
 	comment: string;
+	step: number;
 }
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	wrapper: {
@@ -27,7 +28,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		fontSize: '16px',
 		color: '#494F66',
 		lineHeight: '20px',
-		padding: '16px 0px',
+		padding: '30px 0px 16px',
 	},
 	textArea: {
 		fontFamily: 'Mulish',
@@ -60,6 +61,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		minWidth: '50px',
 		fontSize: '16px',
 		borderRadius: '8px',
+		width: '100%',
 		[breakpoints.up('lg')]: {
 			maxWidth: '164px',
 			padding: '14px',
@@ -105,18 +107,36 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		color: '#494F66',
 		lineHeight: '24px',
 	},
+	description: {
+		fontFamily: 'Mulish',
+		fontWeight: '600',
+		fontSize: '16px',
+		color: '#A3ABCC',
+		[breakpoints.up('lg')]: {
+			marginLeft: '20px',
+		},
+	},
+	buttonContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		[breakpoints.up('lg')]: {
+			flexDirection: 'row',
+		},
+	},
 }));
 interface RatingProps {
 	onChangeStep: (values: FinalRatingValues) => void;
 	hasRating: boolean;
 }
 
-const FinalRating = ({ hasRating }: RatingProps) => {
+const FinalRating = ({ onChangeStep, hasRating }: RatingProps) => {
 	const [rating, setRating] = useState<any>(null);
 	const [hoverValue, setHoverValue] = useState<any>(null);
 	const [comment, setComment] = useState<string>('');
 	const classes = useStyles();
-
+	const paso = 3;
+	const iconsDescription = ['Indiferente', 'Algo decepcionado', 'Muy decepcionado'];
 	const icons: { [key: string]: React.ReactElement } = {
 		1: <Face1 />,
 		2: <Face2 />,
@@ -127,6 +147,13 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 		2: <Face2Disabled />,
 		3: <Face3Disabled />,
 	};
+	const HelpText = (): ReactElement | null => {
+		if (hoverValue != null) {
+			return <Typography className={classes.description}>{iconsDescription[hoverValue - 1]}</Typography>;
+		} else if (rating != null)
+			return <Typography className={classes.description}>{iconsDescription[rating - 1]}</Typography>;
+		return <></>;
+	};
 	const updateComment = (e: ChangeEvent<HTMLTextAreaElement>) => {
 		setComment(e.target.value);
 	};
@@ -135,9 +162,11 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 			values = {
 				stars: rating,
 				comment: comment,
+				step: paso,
 			};
+			onChangeStep(values);
 		},
-		[comment, rating],
+		[comment, onChangeStep, rating],
 	);
 	return (
 		<>
@@ -151,25 +180,28 @@ const FinalRating = ({ hasRating }: RatingProps) => {
 				</Typography>
 			</div>
 			<div className={classes.wrapper}>
-				<div>
-					{[...Array(3)].map((el, i) => {
-						const ratingValue = i + 1;
-						return (
-							<Button
-								key={i}
-								onClick={() => setRating(ratingValue)}
-								style={{ padding: '10px', minWidth: '50px' }}
-								onMouseEnter={() => setHoverValue(ratingValue)}
-								onMouseLeave={() => setHoverValue(null)}
-							>
-								{ratingValue === (hoverValue || rating) ? icons[ratingValue] : iconsDisabled[ratingValue]}
-							</Button>
-						);
-					})}
+				<div className={classes.buttonContainer}>
+					<div style={{ display: 'flex', flexDirection: 'row' }}>
+						{[...Array(3)].map((el, i) => {
+							const ratingValue = i + 1;
+							return (
+								<Button
+									key={i}
+									onClick={() => setRating(ratingValue)}
+									style={{ padding: '10px', minWidth: '50px' }}
+									onMouseEnter={() => setHoverValue(ratingValue)}
+									onMouseLeave={() => setHoverValue(null)}
+								>
+									{ratingValue === (hoverValue || rating) ? icons[ratingValue] : iconsDisabled[ratingValue]}
+								</Button>
+							);
+						})}
+					</div>
+					<HelpText />
 				</div>
 				{rating != null && (
 					<>
-						<Typography className={classes.question}>Cuéntamos de manera breve el porqué de tu respuesta</Typography>
+						<Typography className={classes.question}>Cuéntanos de manera breve el porqué de tu respuesta</Typography>
 						<textarea className={classes.textArea} value={comment} onChange={updateComment} />
 						<div className={classes.buttonWrapper}>
 							<Button variant="contained" onClick={() => onSubmit(rating)} className={classes.submitButton}>

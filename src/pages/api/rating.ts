@@ -19,6 +19,7 @@ export interface HttpResponseGetRatingDoctor {
 	schedule: Schedule | null;
 	patient: Patient | null;
 	hasRating: boolean;
+	step: number;
 }
 
 export interface HtppResponseSaveRatingDoctorError {
@@ -30,11 +31,13 @@ export const createRatingDoctor = async (
 	sessionId: string,
 	stars: number,
 	comment: string,
+	step: number,
 ): Promise<HtppResponseSaveRatingDoctorError> => {
 	try {
 		const body = {
 			stars: stars,
 			comment: comment,
+			step: step,
 		};
 		await aliviaAxios.post(`/rating/session/${sessionId}`, body);
 		return {
@@ -83,6 +86,7 @@ export const getRatingDoctor = async (sessionId: string): Promise<HttpResponseGe
 			schedule: null,
 			patient: null,
 			hasRating: false,
+			step: 0,
 		};
 	}
 };
@@ -116,5 +120,6 @@ const convertDataToResponseRatingDoctor = (data: any): HttpResponseGetRatingDoct
 			second_lastname: String(data.patient.second_last_name),
 		},
 		hasRating: data.hasEvaluation,
+		step: data.step,
 	};
 };

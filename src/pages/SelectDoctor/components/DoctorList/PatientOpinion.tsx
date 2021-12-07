@@ -11,13 +11,23 @@ import { PatientOpinion as PatientOpinionType } from 'pages/api/selectDoctor';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	wrapper: {
-		paddingBottom: '24px',
+		paddingBottom: '8px',
+		borderBottom: '0.5px solid #CDD4F0',
+		'&:last-child': {
+			borderBottom: 'none',
+		},
 	},
 	comment: {
 		paddingBottom: '12px',
-		fontStyle: 'italic',
-		fontSize: '13px',
-		lineHeight: '18px',
+		fontStyle: 'normal',
+		color: '#676F8F',
+		fontSize: '12px',
+		lineHeight: '16px',
+		fontFamily: 'Mulish',
+		[breakpoints.up('lg')]: {
+			fontSize: '16px',
+			lineHeight: '20px',
+		},
 	},
 	datePublished: {
 		color: palette.info.main,
@@ -25,10 +35,15 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	scoreWrapper: {
 		display: 'flex',
 		justifyContent: 'space-between',
+		padding: '20px 0 10px 0',
+		[breakpoints.up('lg')]: {
+			padding: '20px 0 18px 0',
+		},
 	},
 	score: {
 		'&&': {
-			color: palette.primary.main,
+			color: '#FACD40',
+			fontSize: '1rem',
 		},
 	},
 	datePublishedWrapper: {
@@ -48,9 +63,6 @@ const PatientOpinion = ({ opinion: { comment, score, datePublished } }: PatientO
 
 	return (
 		<div className={classes.wrapper}>
-			<div>
-				<Typography className={classes.comment}>“{comment}”</Typography>
-			</div>
 			<div className={classes.scoreWrapper}>
 				<Rating
 					className={classes.score}
@@ -62,6 +74,9 @@ const PatientOpinion = ({ opinion: { comment, score, datePublished } }: PatientO
 				<div className={classes.datePublishedWrapper}>
 					<Typography className={classes.datePublished}>Hace {formatDate(datePublished)}</Typography>
 				</div>
+			</div>
+			<div>
+				<Typography className={classes.comment}>“{comment}”</Typography>
 			</div>
 		</div>
 	);

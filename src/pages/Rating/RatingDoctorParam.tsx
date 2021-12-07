@@ -7,7 +7,7 @@ const RatingDoctor = () => {
 	const [message, setMessage] = useState<string | null>(null);
 
 	const saveButton = async () => {
-		const resp = await createRatingDoctor(id, 3, 'Doctor es muy bueno');
+		const resp = await createRatingDoctor(id, 3, 'Doctor es muy bueno', 2);
 		if (resp.ok) {
 			// mensaje cuando es registrado
 			setMessage(resp.message);

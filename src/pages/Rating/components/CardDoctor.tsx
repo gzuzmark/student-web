@@ -68,10 +68,26 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		color: '#A0A4A8',
 		lineHeight: '16px',
 		paddingBottom: '10px',
+	},
+	titleSchedule: {
+		fontFamily: 'Mulish',
+		fontWeight: '400',
+		fontSize: '12px',
+		color: '#A0A4A8',
+		lineHeight: '16px',
+		paddingBottom: '10px',
 		display: 'none',
 		[breakpoints.up('lg')]: {
 			display: 'block',
 		},
+	},
+	infoSpeciality: {
+		fontFamily: 'Mulish',
+		fontWeight: '400',
+		fontSize: '12px',
+		color: '#A0A4A8',
+		lineHeight: '16px',
+		paddingBottom: '10px',
 	},
 	appointmentSection: {
 		paddingTop: '8px',
@@ -80,7 +96,7 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		fontFamily: 'Mulish',
 		paddingLeft: '5px',
 		fontWeight: '600',
-		fontSize: '14px',
+		fontSize: '12px',
 		color: '#52575C',
 		[breakpoints.up('lg')]: {
 			paddingLeft: '9.5px',
@@ -126,13 +142,13 @@ const CardDoctor = ({ doctor, schedule }: CardDoctorProps) => {
 						<div>
 							<Typography className={classes.doctorName}>{`${doctor?.name} ${doctor?.lastName}`}</Typography>
 							<div>
-								<Typography className={classes.infoTitle}>{doctor?.specialityName}</Typography>
+								<Typography className={classes.infoSpeciality}>{doctor?.specialityName}</Typography>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div className={classes.appointmentSection}>
-					<Typography className={classes.infoTitle}>Fecha de cita: </Typography>
+					<Typography className={classes.titleSchedule}>Fecha de cita: </Typography>
 					<div className={classes.schedule}>
 						<div className={classes.iconWrapper}>
 							<CalendarIcon />
