@@ -108,6 +108,33 @@ const DoctorReview = () => {
 	const [open, setOpen] = React.useState(false);
 	const vertical = 'top';
 	const horizontal = 'center';
+
+	useEffect(() => {
+		getRatingDoctor(id).then((resp) => {
+			let toOpen = false;
+			setDoctor(resp.doctor);
+			setPatient(resp.patient);
+			setSchedule(resp.schedule);
+			setHasRating(resp.hasRating);
+			setStep(resp.step);
+			if (resp.step >= 2) {
+				toOpen = true;
+			}
+			setOpen(toOpen);
+			setLoading(false);
+		});
+	}, [id, history]);
+
+	if (loading) {
+		return <>Cargando</>;
+	}
+	if (hasRating) {
+		history.push('/thanks');
+	}
+
+	if (schedule === null || doctor === null || patient === null) {
+		return <>No se encontró la cita médica especificada</>;
+	}
 	const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
 		if (reason === 'clickaway') {
 			return;
@@ -127,30 +154,6 @@ const DoctorReview = () => {
 		}
 	};
 
-	useEffect(() => {
-		getRatingDoctor(id).then((resp) => {
-			setDoctor(resp.doctor);
-			setPatient(resp.patient);
-			setSchedule(resp.schedule);
-			setHasRating(resp.hasRating);
-			setOpen(resp.hasRating);
-			setStep(resp.step);
-			setLoading(false);
-		});
-	}, [id, history]);
-
-	if (loading) {
-		return <>Cargando</>;
-	}
-
-	if (hasRating) {
-		history.push('/thanks');
-	}
-
-	if (schedule === null || doctor === null || patient === null) {
-		return <>No se encontró la cita médica especificada</>;
-	}
-
 	const RatingElement = () => {
 		switch (step) {
 			case 1:
@@ -168,29 +171,28 @@ const DoctorReview = () => {
 			<Header />
 			<TopSection>
 				<div className={classes.wrapper}>
-					{hasRating && (
-						<Snackbar
-							open={open}
-							autoHideDuration={5000}
-							onClose={handleClose}
-							anchorOrigin={{ vertical, horizontal }}
-							ContentProps={{
-								className: classes.snackbar,
-							}}
-						>
-							<SnackbarContent
-								className={classes.contentSnackbar}
-								message={
-									<div className={classes.snackbarMessage}>
-										<Check />
-										<span className={classes.spanMessage}>Ya haz calificado a tu especialista</span>
-									</div>
-								}
-							/>
-						</Snackbar>
-					)}
+					<Snackbar
+						open={open}
+						autoHideDuration={4000}
+						onClose={handleClose}
+						anchorOrigin={{ vertical, horizontal }}
+						ContentProps={{
+							className: classes.snackbar,
+						}}
+					>
+						<SnackbarContent
+							className={classes.contentSnackbar}
+							message={
+								<div className={classes.snackbarMessage}>
+									<Check />
+									{step === 2 && <span className={classes.spanMessage}>Ya haz calificado a tu especialista</span>}
+									{step === 3 && <span className={classes.spanMessage}>Ya haz calificado a Alivia</span>}
+								</div>
+							}
+						/>
+					</Snackbar>
 					<Typography className={classes.title} variant="h1">
-						Califica tu experiencia --- {step}
+						Califica tu experiencia
 					</Typography>
 					<Typography className={classes.subtitle} variant="h1">
 						Hola {patient.name}, ayúdanos a mejorar nuestro servicio calificando tu experiencia
@@ -205,10 +207,6 @@ const DoctorReview = () => {
 						</Grid>
 						<Grid item xs={12} md={8}>
 							<div className={classes.area_rating}>
-								{/*<Typography className={classes.question}>¿Cómo fue la experiencia con tu especialista?</Typography>*/}
-								{/*<RatingAlivia onChangeStep={onChangeStep} hasRating={hasRating} />*/}
-								{/*	<FinalRating onChangeStep={onChangeStep} hasRating={hasRating} />*/}
-								{/*<RatingDoctor onChangeStep={onChangeStep} hasRating={hasRating} />*/}
 								<RatingElement />
 							</div>
 						</Grid>
