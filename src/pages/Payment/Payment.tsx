@@ -48,7 +48,6 @@ import {
 	PE_PAYMENT_ID,
 	B2B_PAYMENT_ID,
 	sendFakeSession,
-	Benefit,
 	applyDiscountFirstDate,
 } from 'pages/api';
 import { Container, Loading } from 'pages/common';
@@ -72,7 +71,6 @@ import LeftSide from './components/LeftSide';
 import RightSide from './components/RightSide';
 import KushkiCardError, { RequestCard } from './exceptions/KushkiCardError';
 import KushkiCashError from './exceptions/KushkiCashError';
-import { DataTracking } from './interfaces';
 import { processErrorPayment } from './services';
 import ModalDiscount from './components/ModalDiscount';
 
@@ -361,15 +359,6 @@ const Payment = () => {
 		[schedule, validHourReservation, useCase, reservationAccountID, doctor, performTransactionB2BPayment],
 	);
 
-	const makeDataAppointment = (): DataTracking => {
-		return {
-			session_id: schedule?.id || '',
-			doctor_id: doctor?.id || '',
-			patient_id: patientUser?.id || '',
-			user_id: user?.id || null,
-		};
-	};
-
 	const createRequestCardKushki = (amount: string, values: any) => {
 		return {
 			amount: amount,
@@ -397,13 +386,7 @@ const Payment = () => {
 		} as CashTokenRequest;
 	};
 
-	const createRequestCardPayment = (
-		token: string,
-		schedule: any,
-		amount: string,
-		email: string,
-		benefit?: Benefit | null,
-	) => {
+	const createRequestCardPayment = (token: string, schedule: any, amount: string, email: string) => {
 		return {
 			cost: amount,
 			appointmentTypeID: 'ugito',
@@ -418,17 +401,10 @@ const Payment = () => {
 			paymentType: KUSHKI_PAYMENT_ID,
 			trackParams: trackParams || EMPTY_TRACK_PARAMS,
 			reservationAccountID: activeUser?.id,
-			benefitID: benefit ? benefit.id : '',
 		} as PaymentRequestBody;
 	};
 
-	const createRequestChashPayment = (
-		amount: string,
-		values: any,
-		token: string,
-		method: number,
-		benefit?: Benefit | null,
-	) => {
+	const createRequestChashPayment = (amount: string, values: any, token: string, method: number) => {
 		return {
 			cost: amount,
 			appointmentTypeID: 'ugito',
@@ -443,11 +419,10 @@ const Payment = () => {
 			paymentType: method,
 			trackParams: trackParams || EMPTY_TRACK_PARAMS,
 			reservationAccountID: activeUser?.id,
-			benefitID: benefit ? benefit.id : '',
 		} as PaymentRequestBody;
 	};
 
-	const createRequestCardAppointment = () => {
+	const createRequestCardAppoitment = () => {
 		return {
 			reservationAccountID: activeUser?.id,
 			appointmentTypeID: 'ugito',
@@ -459,7 +434,7 @@ const Payment = () => {
 		} as NewAppointmentBody;
 	};
 
-	const createRequestCashAppointment = () => {
+	const createRequestCashAppoitment = () => {
 		return {
 			reservationAccountID: activeUser?.id,
 			appointmentTypeID: 'ugito',
@@ -510,8 +485,8 @@ const Payment = () => {
 			try {
 				setIsPaymentLoading(true);
 				const token = await paymentCardKushki(amount, values);
-				await createPayment(createRequestCardPayment(token, schedule, amount, values.email, benefit));
-				await createAppointment(createRequestCardAppointment(), userToken);
+				await createPayment(createRequestCardPayment(token, schedule, amount, values.email));
+				await createAppointment(createRequestCardAppoitment(), userToken);
 
 				addGAEvent({
 					event: 'virtualEvent',
@@ -558,7 +533,7 @@ const Payment = () => {
 				setIsPaymentLoading(false);
 				history.push('/confirmacion');
 			} catch (error) {
-				setErrorMessage(processErrorPayment(error as Error, makeDataAppointment()));
+				setErrorMessage(processErrorPayment(error as Error));
 				setOpenKushkiModal(false);
 				setIsPaymentLoading(false);
 			}
@@ -573,8 +548,8 @@ const Payment = () => {
 			try {
 				setIsPaymentLoading(true);
 				const token = await paymentCashKushki(amount, values);
-				const response: any = await createPayment(createRequestChashPayment(amount, values, token, method, benefit));
-				await createAppointment(createRequestCashAppointment(), userToken);
+				const response: any = await createPayment(createRequestChashPayment(amount, values, token, method));
+				await createAppointment(createRequestCashAppoitment(), userToken);
 				let link = null;
 
 				if (method === PE_PAYMENT_ID) {
@@ -592,7 +567,7 @@ const Payment = () => {
 				});
 				history.push('/confirmacion');
 			} catch (error) {
-				setErrorMessage(processErrorPayment(error as Error, makeDataAppointment()));
+				setErrorMessage(processErrorPayment(error as Error));
 				setOpenKushkiCashModal(false);
 				setIsPaymentLoading(false);
 			}
@@ -668,6 +643,21 @@ const Payment = () => {
 	const closeModalDiscountAccept = () => {
 		sethasValidateForFirstDiscount(false);
 	};
+
+	// useEffect(() => {
+	// 	if (useCase?.totalCost) {
+	// 		initCulqi(useCase?.totalCost);
+	// 	}
+	// 	// eslint-disable-next-line
+	// }, []);
+
+	// useEffect(() => {
+	// 	if (useCase?.totalCost) {
+	// 		initCulqi(useCase?.totalCost);
+	// 	}
+	// 	// eslint-disable-next-line
+	// }, []);
+
 	useEffect(() => {
 		const isOpenModal = openKushkiModal || openKushkiCashModal;
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
