@@ -119,7 +119,7 @@ const convertDataToResponseRatingDoctor = (data: any): HttpResponseGetRatingDoct
 			lastname: String(data.patient.last_name),
 			second_lastname: String(data.patient.second_last_name),
 		},
-		hasRating: data.hasEvaluation,
+		hasRating: data.hasRating,
 		step: data.step,
 	};
 };
