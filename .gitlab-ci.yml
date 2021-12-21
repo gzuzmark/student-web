@@ -81,14 +81,14 @@ deploy_stage_staging:
 build_stage_prod:
   stage: build
   variables:
-    REACT_APP_BASE_URL: "$API_BASE_URL_STAGE"
-    REACT_APP_CULQI_PK_KEY: "$CULQI_PK_KEY_DEV"
-    REACT_APP_CONFERENCE_URL: "$CONFERENCE_BASE_URL_DEV"
-    REACT_APP_GOOGLE_MAPS_KEY: "$GOOGLE_MAPS_KEY_DEV"
-    REACT_APP_UGO_API_URL: "$UGO_API_URL_STAGE"
-    REACT_APP_KUSHKI_MERCHANT_ID: "$KUSHKI_MERCHANT_ID_DEV"
-    REACT_APP_KUSHKI_IN_TEST_ENV: "$KUSHKI_IN_TEST_ENV_DEV"
-    REACT_APP_KUSHKI_LINK_DOWNLOAD_PDF: "$KUSHKI_LINK_DOWNLOAD_PDF_DEV"
+    REACT_APP_BASE_URL: "$API_BASE_URL_PROD"
+    REACT_APP_CULQI_PK_KEY: "$CULQI_PK_KEY_PROD"
+    REACT_APP_CONFERENCE_URL: "$CONFERENCE_BASE_URL_PROD"
+    REACT_APP_GOOGLE_MAPS_KEY: "$GOOGLE_MAPS_KEY_PROD"
+    REACT_APP_UGO_API_URL: "$UGO_API_URL_PROD"
+    REACT_APP_KUSHKI_MERCHANT_ID: "$KUSHKI_MERCHANT_ID_PROD"
+    REACT_APP_KUSHKI_IN_TEST_ENV: "$KUSHKI_IN_TEST_ENV_PROD"
+    REACT_APP_KUSHKI_LINK_DOWNLOAD_PDF: "$KUSHKI_LINK_DOWNLOAD_PDF_PROD"
   script:
     - yarn build
   dependencies:
@@ -105,4 +105,4 @@ deploy_stage_prod:
     - master
   script:
     - yarn global add firebase-tools --cache-folder ./.cache_yarn
-    - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_DEPLOY_KEY_DEV -P pacientes-stage 
+    - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_DEPLOY_KEY_DEV -P prod
