@@ -3,7 +3,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import IconBack from 'icons/left2.svg';
+// import IconBack from 'icons/left2.svg';
 import { Typography } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -11,7 +11,7 @@ import AppContext from 'AppContext';
 import clsx from 'clsx';
 
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
-import { ReactComponent as LeftIcon } from 'icons/left.svg';
+// import { ReactComponent as LeftIcon } from 'icons/left.svg';
 import { ReactComponent as UserIcon } from 'icons/default_user_icon.svg';
 
 import NavMenu from './NavMenu';
@@ -123,10 +123,10 @@ const Nav = () => {
 	const onClick = () => {
 		history.push('/iniciar_sesion');
 	};
-	const onGoBack = () => {
-		// history.goBack();
-		redirectToURL('https://alivia.pe/botica');
-	};
+	// const onGoBack = () => {
+	// 	// history.goBack();
+	// 	redirectToURL('https://alivia.pe/botica');
+	// };
 	const handleProfileMenuOpen = (event: MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};

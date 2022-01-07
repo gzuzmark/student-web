@@ -6,7 +6,7 @@ import { Container } from 'pages/common';
 import mobileLogin from 'icons/mobile_login.png';
 import desktopImage from 'icons/login_image.jpg';
 import { ReactComponent as BrandLogo } from 'icons/brand.svg';
-import IconBack from 'icons/left2.svg';
+// import IconBack from 'icons/left2.svg';
 import Circle from 'pages/common/Circle';
 import AppContext from 'AppContext';
 import { usePageTitle, useCurrentUserRediction, redirectToURL } from 'utils';
@@ -22,9 +22,9 @@ const Login = () => {
 	usePageTitle('Iniciar sesion');
 	useCurrentUserRediction({ isUserLoggedIn: !!userToken, redirectPath: '/dashboard/citas' });
 
-	const onClickGoToStart = () => {
-		redirectToURL('https://alivia.pe/botica');
-	};
+	// const onClickGoToStart = () => {
+	// 	redirectToURL('https://alivia.pe/botica');
+	// };
 
 	return (
 		<Container className={classes.container}>
