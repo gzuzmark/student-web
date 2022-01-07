@@ -134,9 +134,9 @@ const Nav = () => {
 		setAnchorEl(null);
 	};
 
-	const onClickGoToStart = () => {
-		redirectToURL('https://alivia.pe/botica');
-	};
+	// const onClickGoToStart = () => {
+	// 	redirectToURL('https://alivia.pe/botica');
+	// };
 
 	return (
 		<div>
