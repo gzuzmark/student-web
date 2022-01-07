@@ -141,11 +141,11 @@ const Nav = () => {
 	return (
 		<div>
 			<nav className={clsx(classes.container, 'nav-container')}>
-				<LeftIcon className={classes.arrowIcon} onClick={onGoBack} />
-				<div className={classes.goToStartButton} onClick={onClickGoToStart}>
-					<img alt="" src={IconBack} height={20} />
-					<Typography className={classes.goToStartText}>Ir al inicio</Typography>
-				</div>
+				{/*<LeftIcon className={classes.arrowIcon} onClick={onGoBack} />*/}
+				{/*<div className={classes.goToStartButton} onClick={onClickGoToStart}>*/}
+				{/*	<img alt="" src={IconBack} height={20} />*/}
+				{/*	<Typography className={classes.goToStartText}>Ir al inicio</Typography>*/}
+				{/*</div>*/}
 				<BrandLogo className={classes.brandLogo} />
 				{user && user.id !== '' ? (
 					<div className={classes.userIconWrapper}>

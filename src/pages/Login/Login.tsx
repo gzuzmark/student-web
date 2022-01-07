@@ -33,10 +33,10 @@ const Login = () => {
 				<img className={classes.desktopImg} src={desktopImage} alt="desktop background" />
 			</div>
 			<div className={classes.loginFormContainer}>
-				<div className={classes.goToStartButton} onClick={onClickGoToStart}>
-					<img alt="" src={IconBack} height={20} />
-					<Typography className={classes.goToStartText}>Ir al inicio</Typography>
-				</div>
+				{/*<div className={classes.goToStartButton} onClick={onClickGoToStart}>*/}
+				{/*	<img alt="" src={IconBack} height={20} />*/}
+				{/*	<Typography className={classes.goToStartText}>	Ir al inicio</Typography>*/}
+				{/*</div>*/}
 				<div className={classes.contentWrapper}>
 					<BrandLogo className={classes.brandImg} />
 					<Typography className={classes.title} variant="h2">
