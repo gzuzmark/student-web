@@ -9,7 +9,7 @@ import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 // import IconBack from 'icons/left2.svg';
 import Circle from 'pages/common/Circle';
 import AppContext from 'AppContext';
-import { usePageTitle, useCurrentUserRediction, redirectToURL } from 'utils';
+import { usePageTitle, useCurrentUserRediction } from 'utils';
 
 import { LoginForm } from './components';
 import useStyles from './styles';

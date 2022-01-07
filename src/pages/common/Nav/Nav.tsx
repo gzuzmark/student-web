@@ -15,7 +15,7 @@ import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import { ReactComponent as UserIcon } from 'icons/default_user_icon.svg';
 
 import NavMenu from './NavMenu';
-import { redirectToURL } from 'utils';
+// import { redirectToURL } from 'utils';
 
 const useStyles = makeStyles(({ breakpoints }: Theme) =>
 	createStyles({
