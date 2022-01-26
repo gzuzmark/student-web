@@ -100,6 +100,7 @@ const signUp = {
 	'contact.validation.idType.required': 'El tipo de documento del paciente es obligatorio',
 	'contact.validation.id.digits': 'Ingrese un DNI o CE valido',
 	'contact.validation.phoneNumber.required': 'El número de celular de contacto es obligatorio',
+	'contact.validation.phoneNumber.validPhone': 'Ingrese un número válido',
 	'contact.validation.password.required': 'Ingresa una contraseña',
 	'contact.validation.password.incorrectFormat': 'Usa 6 caracteres o más para tu contraseña',
 	'contact.validation.repeatPassword.required': 'La contraseña es obligatoria',

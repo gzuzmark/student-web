@@ -18,6 +18,7 @@ const messages = {
 	},
 	phoneNumber: {
 		required: i18next.t('signUp:contact.validation.phoneNumber.required'),
+		validPhone: i18next.t('signUp:contact.validation.phoneNumber.validPhone'),
 	},
 	email: {
 		required: i18next.t('signUp:contact.validation.email.required'),
@@ -50,17 +51,17 @@ export const newUservalidationSchema = object().shape({
 			is: `2`,
 			then: string().matches(/^[a-zA-Z0-9]{9,12}$/, 'CE inválido'),
 		}),
-	/*phoneNumber: string()
+	phoneNumber: string()
 		.min(9, messages.phoneNumber.required)
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
 		// @ts-ignore
-		.digits(messages.phoneNumber.required)
+		.digits(messages.phoneNumber.validPhone)
 		.required(messages.phoneNumber.required),
 	// eslint-disable-next-line
 	// @ts-ignore
 	email: string().required(messages.email.required).validEmail(messages.email.validEmail),
-	isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], messages.isterm.required),*/
+	// isTerm: Yup.bool().required(messages.isterm.required).oneOf([true], messages.isterm.required),
 });
 
 export const defaultNewUserValidationSchema = object().shape({
@@ -73,7 +74,7 @@ export const defaultNewUserValidationSchema = object().shape({
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
 		// @ts-ignore
-		.digits(messages.phoneNumber.required)
+		.digits(messages.phoneNumber.validPhone)
 		.required(messages.phoneNumber.required),
 	// eslint-disable-next-line
 	// @ts-ignore
@@ -102,11 +103,11 @@ export const guestValidationSchema = object().shape({
 		}),
 
 	phoneNumber: string()
-		.min(9, messages.phoneNumber.required)
+		.min(9, messages.phoneNumber.validPhone)
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
 		// @ts-ignore
-		.digits(messages.phoneNumber.required)
+		.digits(messages.phoneNumber.validPhone)
 		.required(messages.phoneNumber.required),
 	// eslint-disable-next-line
 	// @ts-ignore
