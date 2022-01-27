@@ -195,7 +195,7 @@ const DoctorReview = () => {
 						Califica tu experiencia
 					</Typography>
 					<Typography className={classes.subtitle} variant="h1">
-						Hola {patient.name}, ayúdanos a mejorar nuestro servicio calificando tu experiencia
+						Hola {patient.name}, ayúdanos a mejorar nuestro servicio calificando tu experiencia.
 					</Typography>
 				</div>
 			</TopSection>

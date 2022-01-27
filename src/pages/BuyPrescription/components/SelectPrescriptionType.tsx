@@ -8,7 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-// import { ReactComponent as BrandLogo } from 'icons/logo-alivia.svg';
+import { ReactComponent as BrandLogo } from 'icons/brand.svg';
 import callMedic from 'icons/call_medic.svg';
 import cartMedicB from 'icons/cart_back_medic.svg';
 import cartMedic from 'icons/cart_medic.svg';
@@ -27,7 +27,6 @@ import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import { stylesWithTheme } from 'utils';
-const urlLogo = `${process.env.REACT_APP_LOGO_URL}`;
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	container: {
@@ -291,7 +290,7 @@ const SelectPrescriptionType = ({
 			<div className={classes.wrapper}>
 				<div className={classes.content}>
 					<div className={classes.brandLogoWrapper}>
-						<img src={urlLogo} alt="" className={classes.brandLogo} />
+						<BrandLogo className={classes.brandLogo} />
 					</div>
 					<Typography className={classes.title} variant="h1">
 						{t('buyPrescription.selectPrescriptionType.title2')}
@@ -358,7 +357,7 @@ const SelectPrescriptionType = ({
 
 			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
 				<DialogTitle style={{ textAlign: 'center' }}>
-					<img src={urlLogo} alt="" className={classes.brandLogo1} />
+					<BrandLogo className={classes.brandLogo1} />
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText>

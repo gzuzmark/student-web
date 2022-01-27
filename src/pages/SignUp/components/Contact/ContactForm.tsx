@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AppContext from 'AppContext';
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Checkbox, TextField } from 'formik-material-ui';
 import { Benefit, getBenefit } from 'pages/api';
 import React, { useCallback, useContext, useState } from 'react';
@@ -29,7 +29,7 @@ export interface ContactValues {
 	isTerm?: boolean | null;
 	isClub?: boolean;
 }
-
+/*
 interface FormikContactValues {
 	identification: string;
 	identificationType: string;
@@ -41,7 +41,7 @@ interface FormikContactValues {
 	ubigeo: string;
 	isTerm: boolean;
 	isClub: boolean;
-}
+}*/
 
 interface ContactFormProps {
 	submitSignUp: (values: ContactValues) => Promise<void>;
@@ -170,7 +170,11 @@ const ContactForm = ({
 	const contactKey = isGuest ? 'toSomeoneElse' : 'toYou';
 
 	const onSubmit = useCallback(
-		async (values: ContactValues, { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
+		async (
+			values: ContactValues,
+			{ setSubmitting, setFieldError }: { setSubmitting: Function; setFieldError: Function },
+		) => {
+			// { setSubmitting, setFieldError }: FormikHelpers<FormikContactValues>) => {
 			try {
 				const formatedValues = {
 					...values,
@@ -345,7 +349,7 @@ const ContactForm = ({
 												component={TextField}
 												className={classes.fieldWithHelperText}
 												name="phoneNumber"
-												type="tel"
+												type="number"
 												label={t(`contact.fields.phoneNumber.label.${contactKey}`)}
 												variant="outlined"
 												inputProps={{ maxLength: 9 }}

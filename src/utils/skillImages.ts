@@ -69,7 +69,7 @@ export const DEV_IMAGES: SpecialtyType[] = [
 		id: '42c02591-ab0b-4523-9a12-15412fed062c',
 		label: 'Test Psicología',
 		image: psicologiaIcon,
-		cost: 45,
+		cost: 50,
 	},
 	{
 		id: 'c78cf27f-2059-4823-bdb8-8bd22126b670',
@@ -138,7 +138,7 @@ export const PROD_IMAGES: SpecialtyType[] = [
 		id: '42c02591-ab0b-4523-9a12-15412fed062c',
 		label: 'Psicología',
 		image: psicologiaIcon,
-		cost: 45,
+		cost: 50,
 	},
 	{
 		id: 'c78cf27f-2059-4823-bdb8-8bd22126b671',

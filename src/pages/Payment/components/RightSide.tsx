@@ -21,6 +21,7 @@ import bbva from 'icons/imgBBVA.png';
 import tambo from 'icons/imgTambo.png';
 import cajaarequipa from 'icons/imgCajaArequipa.png';
 
+import { WHATSAPP_PHONE_NUMBER } from 'pages/constants';
 import { KUSHKI_PAYMENT_ID, PE_PAYMENT_ID, B2B_PAYMENT_ID } from 'pages/api';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => ({
@@ -425,7 +426,7 @@ const RightSide = ({
 	};
 	const gotToWpp = () => {
 		redirectToURL(
-			'https://api.whatsapp.com/send?phone=51947907184&text=%5BVengo%20de%20la%20web%5D%20Hola%20Alivia!%20Tengo%20una%20duda,%20me%20podr%C3%ADan%20ayudar?&source=&data=&app_absent',
+			`https://api.whatsapp.com/send?phone=${WHATSAPP_PHONE_NUMBER}&text=%5BVengo%20de%20la%20web%5D%20Hola%20Alivia!%20Tengo%20una%20duda,%20me%20podr%C3%ADan%20ayudar?&source=&data=&app_absent`,
 			true,
 		);
 	};
@@ -615,7 +616,7 @@ const RightSide = ({
 					<Typography className={classes.descriptionwpp}>
 						{t('payment.right.steps.wpp')}
 						<Typography className={classes.link} color="primary" onClick={gotToWpp} component="span">
-							{t('+51 947 907 184')}
+							{t('+51 965 698 337')}
 						</Typography>
 					</Typography>
 				</div>
