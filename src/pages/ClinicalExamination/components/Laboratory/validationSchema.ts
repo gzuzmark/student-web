@@ -18,6 +18,7 @@ const messages = {
 	},
 	phoneNumber: {
 		required: i18next.t('signUp:contact.validation.phoneNumber.required'),
+		validPhone: i18next.t('signUp:contact.validation.phoneNumber.validPhone'),
 	},
 	email: {
 		required: i18next.t('signUp:contact.validation.email.required'),
@@ -52,7 +53,7 @@ export const newUservalidationSchema = object().shape({
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
 		// @ts-ignore
-		.digits(messages.phoneNumber.required)
+		.digits(messages.phoneNumber.validPhone)
 		.required(messages.phoneNumber.required),
 	// eslint-disable-next-line
 	// @ts-ignore
@@ -69,7 +70,7 @@ export const defaultNewUserValidationSchema = object().shape({
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
 		// @ts-ignore
-		.digits(messages.phoneNumber.required)
+		.digits(messages.phoneNumber.validPhone)
 		.required(messages.phoneNumber.required),
 	// eslint-disable-next-line
 	// @ts-ignore
@@ -101,7 +102,7 @@ export const guestValidationSchema = object().shape({
 		.max(9, messages.phoneNumber.required)
 		// eslint-disable-next-line
 		// @ts-ignore
-		.digits(messages.phoneNumber.required)
+		.digits(messages.phoneNumber.validPhone)
 		.required(messages.phoneNumber.required),
 	// eslint-disable-next-line
 	// @ts-ignore
