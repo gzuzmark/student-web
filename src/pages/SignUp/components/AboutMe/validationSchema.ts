@@ -26,6 +26,7 @@ const messages = {
 	},
 	birthDate: {
 		required: i18next.t('signUp:aboutme.validation.birthDate.required'),
+		valid: i18next.t('signUp:aboutme.validation.birthDate.valid'),
 	},
 	gender: {
 		required: i18next.t('signUp:aboutme.validation.gender.required'),
@@ -47,8 +48,8 @@ const validationSchema = object().shape({
 		.matches(/^[aA-zZ-ZÀ-ÿ\s]+$/, 'Ingrese solo letras'),
 	birthDate: date()
 		.required(messages.birthDate.required)
-		.min(new Date('1900-01-01'), messages.birthDate.required)
-		.max(new Date('2100-01-01'), messages.birthDate.required)
+		.min(new Date('1910-01-01'), messages.birthDate.required)
+		.max(new Date('2004-12-01'), messages.birthDate.valid)
 		.typeError(messages.birthDate.required)
 		.nullable(),
 	gender: number().required(messages.gender.required),

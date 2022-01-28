@@ -33,6 +33,7 @@ const signUp = {
 	'aboutme.validation.lastName.required': 'El apellido paterno es obligatorio',
 	'aboutme.validation.secondSurname.required': 'El apellido materno es obligatorio',
 	'aboutme.validation.birthDate.required': 'La fecha de nacimiento es obligatoria',
+	'aboutme.validation.birthDate.valid': 'Para poder continuar debe ser mayor de edad',
 	'aboutme.validation.gender.required': 'El sexo es obligatorio',
 	'aboutme.validation.document.required': 'El DNI o CE es obligatorio',
 	'aboutme.validation.documentIssueDate.required': 'La fecha de emisión es obligatoria',
