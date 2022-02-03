@@ -49,7 +49,7 @@ const validationSchema = object().shape({
 	birthDate: date()
 		.required(messages.birthDate.required)
 		.min(new Date('1910-01-01'), messages.birthDate.required)
-		.max(new Date('2004-12-01'), messages.birthDate.valid)
+		.max(new Date('2090-12-01'), messages.birthDate.valid)
 		.typeError(messages.birthDate.required)
 		.nullable(),
 	gender: number().required(messages.gender.required),
