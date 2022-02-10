@@ -21,6 +21,7 @@ export const formatDoctor = (doctor: DoctorAvailability | null): Doctor | null =
 				diagnostics: doctor.diagnostics,
 				ageFrom: doctor.ageFrom,
 				ageTo: doctor.ageTo,
+				gender: doctor.gender,
 		  }
 		: null;
 

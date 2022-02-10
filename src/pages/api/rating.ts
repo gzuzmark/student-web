@@ -111,6 +111,7 @@ const convertDataToResponseRatingDoctor = (data: any): HttpResponseGetRatingDoct
 			diagnostics: [],
 			ageFrom: '',
 			ageTo: '',
+			gender: '',
 		},
 		schedule: {
 			id: String(data.schedule.id),

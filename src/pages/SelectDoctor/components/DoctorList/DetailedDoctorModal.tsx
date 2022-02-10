@@ -65,7 +65,7 @@ const useStyles = stylesWithTheme(({ breakpoints }) => ({
 		display: 'none',
 		[breakpoints.up('lg')]: {
 			paddingBottom: '8px',
-			display: 'flex',
+			display: 'block',
 		},
 	},
 	nameWrapperMobile: {
@@ -461,6 +461,7 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 		cmp,
 		rating,
 		aboutMe,
+		gender,
 		patientOpinions,
 		experiences, // experiencias
 		education,
@@ -479,7 +480,7 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 	const isALongDiseaseList = diagnostics.length > 4;
 	const filterDiagnostics = isALongDiseaseList ? diagnostics.slice(0, 4) : diagnostics;
 	const viewableDiagnostics = showMoreDiagnostics ? diagnostics : filterDiagnostics;
-
+	const genderText = gender === 'M' ? 'Dr. ' : gender === 'F' ? 'Dra. ' : '';
 	const renderExperienceType = (name: string) => {
 		let colorClass, bgColor;
 		if (name === 'Profesional') {
@@ -509,7 +510,7 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 			<div className={classes.wrapper}>
 				<div className={classes.nameWrapperMobile}>
 					<Typography component="span" className={clsx(classes.name, 'no-caps')}>
-						{t('right.doctor.prefix')}{' '}
+						{genderText}{' '}
 					</Typography>
 					<Typography component="span" className={classes.name}>
 						{name} {lastName}
@@ -522,7 +523,7 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 					<div className={classes.infoDocWrapper}>
 						<div className={classes.nameWrapper}>
 							<Typography component="span" className={clsx(classes.name, 'no-caps')}>
-								{t('right.doctor.prefix')}{' '}
+								{genderText}
 							</Typography>
 							<Typography component="span" className={classes.name}>
 								{name} {lastName}

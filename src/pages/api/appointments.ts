@@ -136,6 +136,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 				diagnostics: doctor.diagnostics,
 				ageFrom: doctor.age_from,
 				ageTo: doctor.age_to,
+				gender: doctor.gender,
 			},
 			appointmentType,
 			date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),

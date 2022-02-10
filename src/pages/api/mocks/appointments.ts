@@ -39,6 +39,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			age_from: '',
 			age_to: '',
 			awards: [],
+			gender: 'M',
 		},
 		date: 1590836400, // May 30th - previous date
 		prescribed_medicines: [],
@@ -82,6 +83,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			age_from: '',
 			age_to: '',
 			awards: [],
+			gender: 'M',
 		},
 		date: 1590836400, // May 30th - previous date
 		prescribed_medicines: [],
@@ -125,6 +127,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			age_from: '',
 			age_to: '',
 			awards: [],
+			gender: 'M',
 		},
 		date: 1590836400, // May 30th - previous date
 		prescribed_medicines: [],
@@ -168,6 +171,7 @@ export const mockSmallAppointmentList: ApiAppointmentDetail[] = [
 			age_from: '',
 			age_to: '',
 			awards: [],
+			gender: 'M',
 		},
 		date: 1590836400, // May 30th - previous date
 		prescribed_medicines: [],
@@ -213,6 +217,7 @@ export const mockAppointmentDetail: ApiAppointmentDetail = {
 		age_from: '',
 		age_to: '',
 		awards: [],
+		gender: 'M',
 	},
 	date: 1590836400, // May 30th - previous date
 	prescribed_medicines: [],

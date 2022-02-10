@@ -59,6 +59,7 @@ export interface DoctorAPI {
 	diagnostics: Diagnostics[];
 	age_from: string;
 	age_to: string;
+	gender: string;
 }
 
 interface AllDoctorUseCaseAPI {
@@ -142,6 +143,7 @@ export interface Doctor {
 	ageFrom: string;
 	ageTo: string;
 	patientOpinions: PatientOpinion[];
+	gender: string;
 }
 
 export interface DoctorAvailability extends Doctor {
@@ -210,6 +212,7 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 				diagnostics,
 				age_from,
 				age_to,
+				gender,
 			}: DoctorAvailabilityAPI) => ({
 				id,
 				name,
@@ -253,6 +256,7 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 					score: rating,
 					datePublished: created_at,
 				})),
+				gender,
 			}),
 		)
 		.filter((doctor) => doctor.schedules.length > 0);
@@ -311,6 +315,7 @@ export const getAllDoctorsBySpecialty = async (useCaseId: string): Promise<Docto
 				})),
 				ageFrom: item.age_from,
 				ageTo: item.age_to,
+				gender: item.gender,
 			};
 		});
 	} catch (error) {
