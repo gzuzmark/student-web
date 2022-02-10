@@ -25,7 +25,21 @@ interface PatientOpinionsAPI {
 	comment: string;
 	created_at: number;
 }
-
+interface ExperiencesAPI {
+	type: string;
+	title: string;
+	company: string;
+	from: string;
+	to: string;
+	location: string;
+}
+interface EducationAPI {
+	city: string;
+	degree: string;
+	education_type: string;
+	school: string;
+	year: number;
+}
 export interface DoctorAPI {
 	id: string;
 	name: string;
@@ -39,6 +53,12 @@ export interface DoctorAPI {
 	diseases: DiseaseAPI[];
 	ratings: PatientOpinionsAPI[];
 	specialty_name: string;
+	experience: ExperiencesAPI[]; // experiencias
+	education: EducationAPI[];
+	awards: Awards[];
+	diagnostics: Diagnostics[];
+	age_from: string;
+	age_to: string;
 }
 
 interface AllDoctorUseCaseAPI {
@@ -82,10 +102,27 @@ export interface PatientOpinion {
 	datePublished: number;
 }
 
-export interface Disease {
+export interface Diagnostics {
 	name: string;
 }
-
+export interface DoctorExperiences {
+	type: string;
+	title: string;
+	company: string;
+	yearStart: string;
+	yearEnd: string;
+	city: string;
+}
+export interface Studies {
+	city: string;
+	title: string;
+	type: string;
+	school: string;
+	year: number;
+}
+export interface Awards {
+	description: string;
+}
 export interface Doctor {
 	id: string;
 	name: string;
@@ -97,8 +134,13 @@ export interface Doctor {
 	// New fields
 	rating: number;
 	aboutMe: string;
-	education: string; // formation
-	diseases: Disease[];
+	diseases: DiseaseAPI[];
+	experiences: DoctorExperiences[]; // experiencias
+	education: Studies[];
+	awards: Awards[];
+	diagnostics: Diagnostics[];
+	ageFrom: string;
+	ageTo: string;
 	patientOpinions: PatientOpinion[];
 }
 
@@ -155,7 +197,6 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 				cmp,
 				rating,
 				about_me,
-				formation,
 				diseases,
 				ratings,
 				schedules,
@@ -163,6 +204,12 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 				title,
 				last_name,
 				specialty_name,
+				experience,
+				education,
+				awards,
+				diagnostics,
+				age_from,
+				age_to,
 			}: DoctorAvailabilityAPI) => ({
 				id,
 				name,
@@ -181,8 +228,26 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 					.filter(({ startTime }) => isAfter(startTime, minHourDate)),
 				rating,
 				aboutMe: about_me,
-				education: formation,
 				diseases,
+				experiences: experience.map(({ type, title, company, from, to, location }) => ({
+					type,
+					title,
+					company,
+					yearStart: from.substring(0, 4),
+					yearEnd: to.substring(0, 4),
+					city: location,
+				})), // experiencias
+				education: education.map(({ city, degree, education_type, school, year }) => ({
+					city,
+					title: degree,
+					type: education_type,
+					school,
+					year,
+				})),
+				awards: awards,
+				diagnostics: diagnostics,
+				ageFrom: age_from,
+				ageTo: age_to,
 				patientOpinions: ratings.map(({ rating, comment, created_at }) => ({
 					comment,
 					score: rating,
@@ -214,6 +279,7 @@ export const getAllDoctorsBySpecialty = async (useCaseId: string): Promise<Docto
 			},
 		});
 		return response.data.data.map((item) => {
+			console.log(item);
 			return {
 				...item,
 				speciality: item.title,
@@ -228,7 +294,23 @@ export const getAllDoctorsBySpecialty = async (useCaseId: string): Promise<Docto
 					datePublished: created_at,
 				})),
 				aboutMe: item.about_me,
-				education: item.formation,
+				experiences: item.experience.map(({ type, title, company, from, to, location }) => ({
+					type,
+					title,
+					company,
+					yearStart: from.substring(0, 4),
+					yearEnd: to.substring(0, 4),
+					city: location,
+				})), // experiencias
+				education: item.education.map(({ city, degree, education_type, school, year }) => ({
+					city,
+					title: degree,
+					type: education_type,
+					school,
+					year,
+				})),
+				ageFrom: item.age_from,
+				ageTo: item.age_to,
 			};
 		});
 	} catch (error) {
