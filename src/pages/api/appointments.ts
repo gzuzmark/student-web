@@ -127,10 +127,15 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 				speciality: doctor.title,
 				rating: -1,
 				aboutMe: '',
-				education: '',
 				diseases: [],
 				patientOpinions: [],
 				specialityName: doctor.specialty_name,
+				experiences: [], // experiencias
+				education: [],
+				awards: doctor.awards,
+				diagnostics: doctor.diagnostics,
+				ageFrom: doctor.age_from,
+				ageTo: doctor.age_to,
 			},
 			appointmentType,
 			date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
@@ -182,7 +187,7 @@ export const getAppointmentList = async (
 	}
 };
 
-export const getAppoinmentDetails = async ({ id }: { id: string }): Promise<AppointDetail | undefined> => {
+export const getAppoinmentDetails = async (): Promise<AppointDetail | undefined> => {
 	try {
 		// const resp = await aliviaAxios.get<ApiAppointmentDetail>(`/citas/${id}`);
 		// const data = resp.data;
