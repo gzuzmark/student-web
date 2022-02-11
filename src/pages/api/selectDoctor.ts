@@ -32,6 +32,7 @@ interface ExperiencesAPI {
 	from: string;
 	to: string;
 	location: string;
+	currentJob: number;
 }
 interface EducationAPI {
 	city: string;
@@ -113,6 +114,7 @@ export interface DoctorExperiences {
 	yearStart: string;
 	yearEnd: string;
 	city: string;
+	currentJob: number;
 }
 export interface Studies {
 	city: string;
@@ -232,13 +234,14 @@ const parseResponseData = (doctors: DoctorAvailabilityAPI[] = []): DoctorAvailab
 				rating,
 				aboutMe: about_me,
 				diseases,
-				experiences: experience.map(({ type, title, company, from, to, location }) => ({
+				experiences: experience.map(({ type, title, company, from, to, location, currentJob }) => ({
 					type,
 					title,
 					company,
 					yearStart: from.substring(0, 4),
 					yearEnd: to.substring(0, 4),
 					city: location,
+					currentJob,
 				})), // experiencias
 				education: education.map(({ city, degree, education_type, school, year }) => ({
 					city,
@@ -298,13 +301,14 @@ export const getAllDoctorsBySpecialty = async (useCaseId: string): Promise<Docto
 					datePublished: created_at,
 				})),
 				aboutMe: item.about_me,
-				experiences: item.experience.map(({ type, title, company, from, to, location }) => ({
+				experiences: item.experience.map(({ type, title, company, from, to, location, currentJob }) => ({
 					type,
 					title,
 					company,
 					yearStart: from.substring(0, 4),
 					yearEnd: to.substring(0, 4),
 					city: location,
+					currentJob,
 				})), // experiencias
 				education: item.education.map(({ city, degree, education_type, school, year }) => ({
 					city,

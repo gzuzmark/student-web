@@ -625,7 +625,12 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 												<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
 													<CalendarTodayOutlinedIcon style={{ color: '#A3ABCC', width: '12px', marginRight: '6px' }} />
 													<Typography className={classes.dateInfoItem}>
-														{value.yearStart} - {value.yearEnd}
+														{value.yearStart} -{' '}
+														{value.currentJob === 1 || '1' ? (
+															<span style={{ color: '#2C7BFD' }}>Actualidad</span>
+														) : (
+															value.yearEnd
+														)}
 													</Typography>
 												</div>
 												<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
