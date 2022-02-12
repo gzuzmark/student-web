@@ -608,9 +608,11 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 												<Grid item xs={6} md={6} xl={6}>
 													<span style={{ fontSize: '14px' }}>{value.title}</span>
 												</Grid>
-												<Grid item xs={6} md={6} xl={6} style={{ textAlign: 'end' }}>
-													{renderExperienceType(value.type)}
-												</Grid>
+												{!!value.type && (
+													<Grid item xs={6} md={6} xl={6} style={{ textAlign: 'end' }}>
+														{renderExperienceType(value.type)}
+													</Grid>
+												)}
 											</Grid>
 											<div style={{ fontSize: '16px', padding: '8px 0' }}>{value.company}</div>
 											<div
@@ -626,10 +628,12 @@ const DetailedDoctorModal = ({ closeModal, isOpen, doctor }: DetailedDoctorModal
 													<CalendarTodayOutlinedIcon style={{ color: '#A3ABCC', width: '12px', marginRight: '6px' }} />
 													<Typography className={classes.dateInfoItem}>
 														{value.yearStart} -{' '}
-														{value.currentJob === 1 || '1' ? (
-															<span style={{ color: '#2C7BFD' }}>Actualidad</span>
-														) : (
+														{value.currentJob === 0 ? (
 															value.yearEnd
+														) : value.currentJob === 1 ? (
+															<span style={{ color: '#2C7BFD' }}> Actualidad</span>
+														) : (
+															' '
 														)}
 													</Typography>
 												</div>
