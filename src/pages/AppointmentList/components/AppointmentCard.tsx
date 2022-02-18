@@ -3,7 +3,6 @@ import { Theme } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
@@ -11,13 +10,14 @@ import { stylesWithTheme, capitalizeDate } from 'utils';
 import { AppointDetail } from 'pages/api/appointments';
 import { ReactComponent as CalendarIcon } from 'icons/calendar.svg';
 import { ReactComponent as ClockIcon } from 'icons/clock.svg';
-import { ReactComponent as UserIcon } from 'icons/user.svg';
+import { Divider } from '@material-ui/core';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	card: {
 		borderRadius: '5px',
 		marginBottom: '16px',
-		boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.05)',
+		boxShadow: '0px 5px 25px rgba(103, 111, 143, 0.15)',
 		cursor: 'pointer',
 		'&:hover': {
 			boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
@@ -37,14 +37,17 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	infoWrapper: {
 		display: 'flex',
-		flexDirection: 'column-reverse',
 		[breakpoints.up('lg')]: {
 			flexDirection: 'row',
 		},
 	},
 	section: {
+		width: '100%',
+		marginLeft: '20px',
+		display: 'flex',
+		alignItems: 'center',
 		[breakpoints.up('lg')]: {
-			marginRight: '70px',
+			marginLeft: '70px',
 		},
 	},
 	sectionTitle: {
@@ -66,14 +69,8 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		paddingBottom: '14px',
 	},
 	dataWrapper: {
-		alignItems: 'center',
 		display: 'flex',
-		'&:first-child': {
-			paddingBottom: '8px',
-			[breakpoints.up('lg')]: {
-				paddingBottom: '5px',
-			},
-		},
+		alignItems: 'center',
 	},
 	clockWrapper: {
 		alignItems: 'center',
@@ -90,9 +87,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		},
 	},
 	title: {
-		fontSize: '15px',
+		fontSize: '12px',
 		[breakpoints.up('lg')]: {
-			fontSize: '18px',
+			fontSize: '14px',
 		},
 		'&.bold': {
 			fontWeight: 'bold',
@@ -104,8 +101,15 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			textTransform: 'capitalize',
 		},
 	},
+	doctorName: {
+		color: '#A0A4A8',
+		fontSize: '12px',
+		[breakpoints.up('lg')]: {
+			fontSize: '14px',
+		},
+	},
 	iconWrapper: {
-		marginRight: '13.25px',
+		marginRight: '8px',
 		width: '15px',
 		height: '15px',
 		'&.user': {
@@ -141,12 +145,8 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		},
 	},
 	conferenceLink: {
-		textDecoration: 'underline',
-
-		'&.normal-text': {
-			textDecoration: 'none',
-			color: palette.text.primary,
-		},
+		color: '#676F8F',
+		fontSize: '12px',
 	},
 	userIcon: {
 		width: '17px',
@@ -176,18 +176,75 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			padding: '0px',
 		},
 	},
+	divider: {
+		margin: '16px 0px 16px',
+	},
+	doctorImg: {
+		borderRadius: '51%',
+		width: '41px',
+		height: '40px',
+		[breakpoints.up('lg')]: {
+			width: '60px',
+			height: '61px',
+		},
+	},
+	rowFlex: {
+		display: 'flex',
+		width: '100%',
+		justifyContent: 'space-between',
+	},
+	alertMessageContainer: {
+		backgroundColor: '#E5F6FE',
+		borderRadius: '8px',
+		padding: '16px 25px',
+	},
+	buttonIcon: {
+		padding: '0px',
+		justifyContent: 'end',
+	},
+	timerWrapper: {
+		paddingTop: '30px',
+	},
+	timerBox: {
+		backgroundColor: '#F7F8FC',
+		color: '#A3ABCC',
+		padding: '10px 0',
+		borderRadius: '8px',
+		textAlign: 'center',
+		fontSize: '16px',
+	},
+	videoCallButton: {
+		backgroundColor: '#1ECD96',
+		padding: '10px 0',
+		textAlign: 'center',
+
+		borderRadius: '8px',
+
+		width: '100%',
+	},
+	callLink: {
+		color: '#FFFFFF',
+		fontSize: '16px',
+	},
 }));
 
 interface AppointmentCardProps {
 	appointment: AppointDetail;
 	isOldAppointment?: boolean;
+	isNextAppoinment?: boolean;
+	isLessThen5min?: boolean;
 }
 
-const AppointmentCard = ({ appointment, isOldAppointment = false }: AppointmentCardProps) => {
-	const { id, channel, disease, date, time, patient, scheduleID } = appointment;
+const AppointmentCard = ({
+	appointment,
+	isOldAppointment = false,
+	isNextAppoinment = false,
+	isLessThen5min,
+}: AppointmentCardProps) => {
+	const { id, date, time, scheduleID, doctor, timer } = appointment;
 	const classes = useStyles();
 	const history = useHistory();
-	const { t } = useTranslation('appointmentList');
+
 	const onClick = () => {
 		// eslint-disable-next-line
 		// @ts-ignore
@@ -198,62 +255,64 @@ const AppointmentCard = ({ appointment, isOldAppointment = false }: AppointmentC
 		e.stopPropagation();
 		window.open(`${process.env.REACT_APP_CONFERENCE_URL}/${scheduleID}`, '_blank');
 	};
-
+	const goToCall = () => {
+		window.open(`https://videocall-alivia.herokuapp.com/?room={sessionID}&passcode=75034637551703`);
+	};
 	return (
-		<Card className={classes.card} onClick={onClick}>
+		<Card className={classes.card}>
 			<div className={classes.wrapper}>
-				<div className={classes.titleWrapper}>
-					<Typography className={clsx(classes.title, 'capitalize')} component="span">
-						{channel}{' '}
-					</Typography>
-					<Typography className={classes.title} component="span">
-						{t('appointments.of')}{' '}
-					</Typography>
-					<Typography className={clsx(classes.title, 'bold')} component="span">
-						{disease}
-					</Typography>
+				<div className={classes.rowFlex}>
+					<div className={classes.dataWrapper}>
+						<div className={classes.iconWrapper}>
+							<CalendarIcon className={classes.calendarIcon} />
+						</div>
+						<Typography className={classes.title}>{capitalizeDate(date)}</Typography>
+					</div>
+					<div className={classes.dataWrapper}>
+						<div className={classes.iconWrapper}>
+							<ClockIcon className={classes.clockIcon} />
+						</div>
+						<Typography className={clsx(classes.title)} onClick={isOldAppointment ? undefined : openConference}>
+							{time}
+						</Typography>
+					</div>
 				</div>
+				<Divider className={classes.divider} variant="middle" />
 				<div className={classes.infoWrapper}>
+					<img className={classes.doctorImg} src={doctor.profilePicture} alt="doctor profile" />
 					<div className={classes.section}>
-						<Typography className={classes.sectionTitle}>{t('appointments.when.title')}</Typography>
-						<div>
-							<div className={classes.dataWrapper}>
-								<div className={classes.iconWrapper}>
-									<CalendarIcon className={classes.calendarIcon} />
-								</div>
-								<Typography>{capitalizeDate(date)}</Typography>
-							</div>
-							<div className={classes.dataWrapper}>
-								<div className={classes.iconWrapper}>
-									<ClockIcon className={classes.clockIcon} />
-								</div>
-								<Typography
-									color="primary"
-									className={clsx(classes.conferenceLink, isOldAppointment ? 'normal-text' : '')}
-									onClick={isOldAppointment ? undefined : openConference}
-								>
-									{time}
+						<div className={classes.rowFlex}>
+							<div style={{ display: 'flex', flexDirection: 'column' }}>
+								<Typography className={clsx(classes.title, 'bold')} component="span">
+									{doctor.specialityName}
+								</Typography>
+								<Typography className={clsx(classes.doctorName, 'bold')} component="span">
+									{doctor.gender === 'F' ? 'Dra.' : 'Dr.'} {doctor.name} {doctor.lastName}
 								</Typography>
 							</div>
+							<Button onClick={onClick} className={classes.buttonIcon}>
+								<NavigateNextIcon style={{ color: '#1ECD96', lineHeight: '12px' }} />
+							</Button>
 						</div>
 					</div>
-					<div>
-						<Typography className={clsx(classes.sectionTitle, 'patient')}>{t('appointments.patient.title')}</Typography>
-						<div>
-							<div className={classes.dataWrapper}>
-								<div className={clsx(classes.iconWrapper, 'user')}>
-									<UserIcon className={classes.userIcon} />
-								</div>
-								<Typography>{patient}</Typography>
+				</div>
+				{!!isNextAppoinment && (
+					<div className={classes.timerWrapper}>
+						{isLessThen5min ? (
+							<div className={classes.videoCallButton} onClick={goToCall}>
+								<Typography component="span" className={classes.callLink}>
+									Ingresar a videollamada
+								</Typography>
 							</div>
-						</div>
+						) : (
+							<div className={classes.timerBox}>
+								<span>
+									Tu cita es en {timer} {timer > 1 ? 'dias' : 'día'}
+								</span>
+							</div>
+						)}
 					</div>
-				</div>
-				<div className={classes.moreDetailWrapper}>
-					<Button className={classes.moreDetailButton} onClick={onClick} variant="text">
-						{t('appointments.seeDetail')}
-					</Button>
-				</div>
+				)}
 			</div>
 		</Card>
 	);

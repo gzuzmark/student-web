@@ -5,7 +5,7 @@ const appointmentsL18n = {
 	'appointments.left.title.secondLine': 'consultas',
 	'appointments.left.preFix': 'HOLA {{name}}',
 	'appointments.title.mobile': 'Hola, {{name}}',
-	'appointments.subTitle.mobile': 'Estas son tus consultas',
+	'appointments.subTitle.mobile': '¡Te damos la bienvenida! Estamos aquí para cuidarte',
 	'appointments.of': 'por',
 	'appointments.seeDetail': 'VER DETALLE',
 	'appointments.when.title': '¿CUÁNDO?',

@@ -82,6 +82,7 @@ export interface AppointDetail {
 	patient: string;
 	medicines: Medicine[];
 	recomendations: Recomendation[];
+	timer: number;
 }
 
 interface AppointmentListResponse {
@@ -139,7 +140,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 				gender: doctor.gender,
 			},
 			appointmentType,
-			date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
+			date: formatUTCDate(date, "EEEE dd 'de' MMMM"),
 			time: formatUTCDate(date, 'hh:mm aaa'),
 			disease: use_case.title,
 			channel: appointment_type.name,
@@ -148,6 +149,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 			scheduleID: schedule_id,
 			medicines: prescribed_medicines,
 			recomendations,
+			timer: getTimer(formatUTCDate(date, 'yyyy-dd-MMMM hh:mm aaa')),
 		}),
 	);
 
@@ -158,6 +160,17 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 // 	time: formatUTCDate(date, 'h:mm aaa'),
 // });
 //
+const getTimer = (date: any) => {
+	const today = new Date();
+	const now = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+	const day1 = new Date(date);
+	const day1Format = Date.UTC(day1.getFullYear(), day1.getMonth(), day1.getDate());
+	let diferencia = (day1Format - now) / (1000 * 60 * 60 * 24);
+	diferencia = Math.floor(diferencia);
+	const daysLeft = diferencia > 0 ? diferencia : 0;
+
+	return daysLeft;
+};
 const formatCreateParams = (params: NewAppointmentBody) => ({
 	reservation_account_id: params.reservationAccountID,
 	use_case_id: params.useCaseID,
