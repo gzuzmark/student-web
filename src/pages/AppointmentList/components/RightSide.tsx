@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 import AppointmentCard from './AppointmentCard';
 import { Card } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -166,6 +167,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		padding: '14px 0px',
 		color: '#2C7BFD',
 		textAlign: 'center',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 }));
 
@@ -290,6 +294,7 @@ const RightSide = () => {
 
 				<div className={classes.btnNewAppoinmentWrapper}>
 					<div className={classes.btnNewAppoinment} onClick={redirectToBaseAlivia}>
+						<AddOutlinedIcon style={{ color: '#2C7BFD', lineHeight: '12px', marginRight: '8px' }} />
 						<span>Agendar nueva cita</span>
 					</div>
 				</div>

@@ -8,9 +8,8 @@ import clsx from 'clsx';
 
 import { stylesWithTheme, capitalizeDate } from 'utils';
 import { AppointDetail } from 'pages/api/appointments';
-import { ReactComponent as CalendarIcon } from 'icons/calendar.svg';
-import { ReactComponent as ClockIcon } from 'icons/clock.svg';
-import { Divider } from '@material-ui/core';
+import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
+import ScheduleOutlinedIcon from '@material-ui/icons/ScheduleOutlined';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
@@ -86,6 +85,10 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 			paddingBottom: '22px',
 		},
 	},
+	titleSchedule: {
+		color: '#676F8F',
+		fontWeight: '700',
+	},
 	title: {
 		fontSize: '12px',
 		[breakpoints.up('lg')]: {
@@ -110,35 +113,22 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	},
 	iconWrapper: {
 		marginRight: '8px',
-		width: '15px',
-		height: '15px',
-		'&.user': {
-			width: '17px',
-			height: '17px',
-			[breakpoints.up('lg')]: {
-				maxHeight: '26px',
-				width: 'auto',
-				height: 'auto',
-			},
-		},
 		[breakpoints.up('lg')]: {
-			maxHeight: '25px',
 			width: 'auto',
 			height: 'auto',
 		},
 	},
 	calendarIcon: {
-		stroke: palette.info.main,
-		width: '15px',
-		height: '15px',
+		color: '#676F8F',
+		maxHeight: '14px',
 		[breakpoints.up('lg')]: {
 			width: '25px',
 			height: '25px',
 		},
 	},
 	clockIcon: {
-		width: '15px',
-		height: '15px',
+		maxHeight: '14px',
+		color: '#676F8F',
 		[breakpoints.up('lg')]: {
 			width: '25px',
 			height: '25px',
@@ -177,7 +167,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		},
 	},
 	divider: {
-		margin: '16px 0px 16px',
+		margin: '14px 0px 14px',
 	},
 	doctorImg: {
 		borderRadius: '51%',
@@ -226,6 +216,11 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		color: '#FFFFFF',
 		fontSize: '16px',
 	},
+	underLineDivider: {
+		borderBottom: '1px solid #F0F2FA',
+		paddingBottom: '15px',
+		marginBottom: '16px',
+	},
 }));
 
 interface AppointmentCardProps {
@@ -261,23 +256,27 @@ const AppointmentCard = ({
 	return (
 		<Card className={classes.card}>
 			<div className={classes.wrapper}>
-				<div className={classes.rowFlex}>
-					<div className={classes.dataWrapper}>
-						<div className={classes.iconWrapper}>
-							<CalendarIcon className={classes.calendarIcon} />
+				<div className={classes.underLineDivider}>
+					<div className={classes.rowFlex}>
+						<div className={classes.dataWrapper}>
+							<div className={classes.iconWrapper}>
+								<CalendarTodayOutlinedIcon className={classes.calendarIcon} />
+							</div>
+							<Typography className={classes.titleSchedule}>{capitalizeDate(date)}</Typography>
 						</div>
-						<Typography className={classes.title}>{capitalizeDate(date)}</Typography>
-					</div>
-					<div className={classes.dataWrapper}>
-						<div className={classes.iconWrapper}>
-							<ClockIcon className={classes.clockIcon} />
+						<div className={classes.dataWrapper}>
+							<div className={classes.iconWrapper}>
+								<ScheduleOutlinedIcon className={classes.clockIcon} />
+							</div>
+							<Typography
+								className={clsx(classes.titleSchedule)}
+								onClick={isOldAppointment ? undefined : openConference}
+							>
+								{time}
+							</Typography>
 						</div>
-						<Typography className={clsx(classes.title)} onClick={isOldAppointment ? undefined : openConference}>
-							{time}
-						</Typography>
 					</div>
 				</div>
-				<Divider className={classes.divider} variant="middle" />
 				<div className={classes.infoWrapper}>
 					<img className={classes.doctorImg} src={doctor.profilePicture} alt="doctor profile" />
 					<div className={classes.section}>
