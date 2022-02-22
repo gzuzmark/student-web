@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { ReactComponent as AgendaIcon } from 'icons/agenda.svg';
+import controlImg from 'icons/cita_control.png';
 import AppContext from 'AppContext';
 import { stylesWithTheme, redirectToBaseAlivia, formatUTCDate } from 'utils';
 import { getAppointmentList, AppointDetail } from 'pages/api/appointments';
@@ -83,6 +84,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		maxWidth: '323px',
 	},
 	newAppointmentButton: {
+		borderRadius: '8px',
 		boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.07)',
 		border: '1px solid white',
 		fontSize: '15px',
@@ -97,14 +99,16 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	cardInfoNoAppointment: {
 		display: 'flex',
 		justifyContent: 'space-between',
+		paddingBottom: '30px',
 	},
 	noAppoinmentTitle: {
 		fontFamily: 'Mulish',
 		fontSize: '16px',
 		fontWeight: '700',
+		color: '#494F66',
 	},
 	calendarIcon: {
-		marginBottom: '36px',
+		marginBottom: '10px',
 		[breakpoints.up('lg')]: {
 			marginBottom: '20px',
 		},
@@ -170,6 +174,16 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
+	},
+	controlAppoinment: {
+		color: '#676F8F',
+		fontWeight: '400',
+		fontSize: '12px',
+	},
+	controlAppoinmentWrapper: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'space-evenly',
 	},
 }));
 
@@ -243,22 +257,45 @@ const RightSide = () => {
 								isLessThen5min={getTimeLeft(appointments[0])}
 							/>
 						) : (
-							<Card className={classes.card}>
-								<div className={classes.cardInfoNoAppointment}>
-									<Typography className={classes.noAppoinmentTitle}>No tienes citas programadas</Typography>
-									<AgendaIcon className={classes.calendarIcon} />
-								</div>
-								<div className={classes.buttonWrapper}>
-									<Button
-										variant="contained"
-										className={classes.newAppointmentButton}
-										onClick={redirectToBaseAlivia}
-										fullWidth
-									>
-										Agendar
-									</Button>
-								</div>
-							</Card>
+							<>
+								<Card className={classes.card}>
+									<div className={classes.cardInfoNoAppointment}>
+										<Typography className={classes.noAppoinmentTitle}>No tienes citas programadas</Typography>
+										<AgendaIcon className={classes.calendarIcon} />
+									</div>
+									<div className={classes.buttonWrapper}>
+										<Button
+											variant="contained"
+											className={classes.newAppointmentButton}
+											onClick={redirectToBaseAlivia}
+											fullWidth
+										>
+											Agendar
+										</Button>
+									</div>
+								</Card>
+								<Card className={classes.card}>
+									<div className={classes.cardInfoNoAppointment}>
+										<div className={classes.controlAppoinmentWrapper}>
+											<Typography className={classes.noAppoinmentTitle}>Tienes una cita control pendiente</Typography>
+											<Typography className={classes.controlAppoinment}>
+												Miércoles, 29 de Noviembre en Nutrición
+											</Typography>
+										</div>
+										<img src={controlImg} width={72} height={72} alt="cita cotrol" className={classes.calendarIcon} />
+									</div>
+									<div className={classes.buttonWrapper}>
+										<Button
+											variant="contained"
+											className={classes.newAppointmentButton}
+											onClick={redirectToBaseAlivia}
+											fullWidth
+										>
+											Agendar
+										</Button>
+									</div>
+								</Card>
+							</>
 						)}
 					</div>
 					<Typography component="span" variant="h1" className={classes.nextATitle}>
