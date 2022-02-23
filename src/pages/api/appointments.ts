@@ -68,6 +68,11 @@ export interface ApiAppointmentDetail {
 	prescribed_medicines: Medicine[];
 	recomendations: Recomendation[];
 }
+export interface ApiControlAppointDetail {
+	date: string;
+	speciality: string;
+	use_case_id: string;
+}
 
 export interface AppointDetail {
 	id: string;
@@ -84,9 +89,15 @@ export interface AppointDetail {
 	recomendations: Recomendation[];
 	timer: number;
 }
+export interface ControlAppointmentDetail {
+	date: string;
+	specialityName: string;
+	specialityId: string;
+}
 
 interface AppointmentListResponse {
 	data: ApiAppointmentDetail[];
+	reschedule_date: ApiControlAppointDetail[];
 }
 
 interface AppointmentListParams {
@@ -180,7 +191,12 @@ const formatCreateParams = (params: NewAppointmentBody) => ({
 	media: params.media || [],
 	is_guest: !!params.isGuest,
 });
-
+const formatControlAppointmentList = (list: ApiControlAppointDetail[]): ControlAppointmentDetail[] =>
+	list.map(({ date, speciality, use_case_id }: ApiControlAppointDetail) => ({
+		date: formatUTCDate(new Date(date), "EEEE dd 'de' MMMM"),
+		specialityName: speciality,
+		specialityId: use_case_id,
+	}));
 // TODO Update how we get the appointments
 export const getAppointmentList = async (
 	params: AppointmentListParams,
@@ -200,7 +216,22 @@ export const getAppointmentList = async (
 		console.log(e);
 	}
 };
-
+export const getControlAppoinmentList = async (
+	params: AppointmentListParams,
+	userToken: string,
+): Promise<ControlAppointmentDetail[] | undefined> => {
+	try {
+		const resp = await aliviaAxios.get<AppointmentListResponse>('/appointments', {
+			params,
+			headers: {
+				Authorization: `Bearer ${userToken}`,
+			},
+		});
+		return formatControlAppointmentList(resp.data.reschedule_date);
+	} catch (e) {
+		console.log(e);
+	}
+};
 export const getAppoinmentDetails = async (): Promise<AppointDetail | undefined> => {
 	try {
 		// const resp = await aliviaAxios.get<ApiAppointmentDetail>(`/citas/${id}`);

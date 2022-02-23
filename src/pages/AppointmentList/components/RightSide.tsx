@@ -5,18 +5,22 @@ import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { ReactComponent as AgendaIcon } from 'icons/agenda.svg';
-import controlImg from 'icons/cita_control.png';
 import AppContext from 'AppContext';
 import { stylesWithTheme, redirectToBaseAlivia, formatUTCDate } from 'utils';
-import { getAppointmentList, AppointDetail } from 'pages/api/appointments';
+import {
+	getAppointmentList,
+	AppointDetail,
+	getControlAppoinmentList,
+	ControlAppointmentDetail,
+} from 'pages/api/appointments';
 import { useHistory } from 'react-router-dom';
-import AppointmentCard from './AppointmentCard';
+import { AppointmentCard, ControlAppoinmentCard } from './AppointmentCard';
 import { Card } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
-const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
+const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	'@global': {
 		backgroundColor: '#D5D7D9',
 		body: {
@@ -189,15 +193,19 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 
 const requestSmallAppointments = async (
 	setAppointments: Function,
+	setControlAppointments: Function,
 	closed: number,
 	userID: string,
 	userToken: string | null | undefined,
 ) => {
 	if (userToken) {
 		const appointments = await getAppointmentList({ user_id: userID, closed }, userToken);
-
+		const controlAppointments = await getControlAppoinmentList({ user_id: userID, closed }, userToken);
 		if (appointments) {
 			setAppointments(appointments);
+		}
+		if (controlAppointments) {
+			setControlAppointments(controlAppointments);
 		}
 	}
 };
@@ -206,11 +214,12 @@ const RightSide = () => {
 	const { t } = useTranslation('appointmentList');
 	const { user: currentUser, userToken } = useContext(AppContext);
 	const [appointments, setAppointments] = useState<AppointDetail[]>([]);
+	const [controlAppointments, setControlAppointments] = useState<ControlAppointmentDetail[]>([]);
 	const classes = useStyles();
 	const history = useHistory();
 	useEffect(() => {
 		if (currentUser) {
-			requestSmallAppointments(setAppointments, 0, currentUser.id, userToken);
+			requestSmallAppointments(setAppointments, setControlAppointments, 0, currentUser.id, userToken);
 		}
 	}, [currentUser, userToken]);
 	const getTimeLeft = (val: AppointDetail) => {
@@ -248,7 +257,7 @@ const RightSide = () => {
 						Próxima Cita
 					</Typography>
 					<div className={classes.citasSection}>
-						{appointments.length > 0 ? (
+						{appointments.length > 0 && (
 							<AppointmentCard
 								key={'appointment-1'}
 								appointment={appointments[0]}
@@ -256,46 +265,28 @@ const RightSide = () => {
 								isNextAppoinment={true}
 								isLessThen5min={getTimeLeft(appointments[0])}
 							/>
-						) : (
-							<>
-								<Card className={classes.card}>
-									<div className={classes.cardInfoNoAppointment}>
-										<Typography className={classes.noAppoinmentTitle}>No tienes citas programadas</Typography>
-										<AgendaIcon className={classes.calendarIcon} />
-									</div>
-									<div className={classes.buttonWrapper}>
-										<Button
-											variant="contained"
-											className={classes.newAppointmentButton}
-											onClick={redirectToBaseAlivia}
-											fullWidth
-										>
-											Agendar
-										</Button>
-									</div>
-								</Card>
-								<Card className={classes.card}>
-									<div className={classes.cardInfoNoAppointment}>
-										<div className={classes.controlAppoinmentWrapper}>
-											<Typography className={classes.noAppoinmentTitle}>Tienes una cita control pendiente</Typography>
-											<Typography className={classes.controlAppoinment}>
-												Miércoles, 29 de Noviembre en Nutrición
-											</Typography>
-										</div>
-										<img src={controlImg} width={72} height={72} alt="cita cotrol" className={classes.calendarIcon} />
-									</div>
-									<div className={classes.buttonWrapper}>
-										<Button
-											variant="contained"
-											className={classes.newAppointmentButton}
-											onClick={redirectToBaseAlivia}
-											fullWidth
-										>
-											Agendar
-										</Button>
-									</div>
-								</Card>
-							</>
+						)}
+						{controlAppointments.length > 0 &&
+							controlAppointments.map((appointment: ControlAppointmentDetail, index) => (
+								<ControlAppoinmentCard key={index} appointment={appointment} />
+							))}
+						{appointments.length === 0 && controlAppointments.length === 0 && (
+							<Card className={classes.card}>
+								<div className={classes.cardInfoNoAppointment}>
+									<Typography className={classes.noAppoinmentTitle}>No tienes citas programadas</Typography>
+									<AgendaIcon className={classes.calendarIcon} />
+								</div>
+								<div className={classes.buttonWrapper}>
+									<Button
+										variant="contained"
+										className={classes.newAppointmentButton}
+										onClick={redirectToBaseAlivia}
+										fullWidth
+									>
+										Agendar
+									</Button>
+								</div>
+							</Card>
 						)}
 					</div>
 					<Typography component="span" variant="h1" className={classes.nextATitle}>

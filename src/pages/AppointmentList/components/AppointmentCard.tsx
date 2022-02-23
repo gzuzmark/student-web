@@ -7,11 +7,11 @@ import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 
 import { stylesWithTheme, capitalizeDate } from 'utils';
-import { AppointDetail } from 'pages/api/appointments';
+import { AppointDetail, ControlAppointmentDetail } from 'pages/api/appointments';
 import CalendarTodayOutlinedIcon from '@material-ui/icons/CalendarTodayOutlined';
 import ScheduleOutlinedIcon from '@material-ui/icons/ScheduleOutlined';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-
+import controlImg from 'icons/cita_control.png';
 const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 	card: {
 		borderRadius: '5px',
@@ -221,6 +221,49 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		paddingBottom: '15px',
 		marginBottom: '16px',
 	},
+	cardInfoNoAppointment: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		paddingBottom: '30px',
+	},
+	noAppoinmentTitle: {
+		fontFamily: 'Mulish',
+		fontSize: '16px',
+		fontWeight: '700',
+		color: '#494F66',
+		paddingBottom: '10px',
+	},
+	controlAppoinment: {
+		color: '#676F8F',
+		fontWeight: '400',
+		fontSize: '12px',
+	},
+	controlAppoinmentWrapper: {
+		display: 'flex',
+		flexDirection: 'column',
+	},
+	buttonWrapper: {
+		maxWidth: '323px',
+	},
+	newAppointmentButton: {
+		borderRadius: '8px',
+		boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.07)',
+		border: '1px solid white',
+		fontSize: '15px',
+		padding: '15px',
+		textTransform: 'none',
+
+		'&:hover': {
+			border: '1px solid white',
+			boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.07)',
+		},
+	},
+	controlIcon: {
+		marginBottom: '10px',
+		[breakpoints.up('lg')]: {
+			marginBottom: '20px',
+		},
+	},
 }));
 
 interface AppointmentCardProps {
@@ -230,7 +273,7 @@ interface AppointmentCardProps {
 	isLessThen5min?: boolean;
 }
 
-const AppointmentCard = ({
+export const AppointmentCard = ({
 	appointment,
 	isOldAppointment = false,
 	isNextAppoinment = false,
@@ -317,4 +360,45 @@ const AppointmentCard = ({
 	);
 };
 
-export default AppointmentCard;
+interface ControlAppointmentCardProps {
+	appointment: ControlAppointmentDetail;
+}
+export const ControlAppoinmentCard = ({ appointment }: ControlAppointmentCardProps) => {
+	const { date, specialityName, specialityId } = appointment;
+	const classes = useStyles();
+	const history = useHistory();
+
+	const goCreateAppointment = (id: string) => {
+		const url = `/seleccionar_doctor?malestar=${id}`;
+		history.push(url);
+	};
+	return (
+		<Card className={classes.card}>
+			<div className={classes.wrapper}>
+				<div className={classes.cardInfoNoAppointment}>
+					<div className={classes.controlAppoinmentWrapper}>
+						<Typography className={classes.noAppoinmentTitle}>Tienes una cita control pendiente</Typography>
+						<Typography className={classes.controlAppoinment}>
+							{date}
+							{' en '}
+							{specialityName}
+						</Typography>
+					</div>
+					<img src={controlImg} width={72} height={72} alt="cita cotrol" className={classes.controlIcon} />
+				</div>
+				<div className={classes.buttonWrapper}>
+					<Button
+						className={classes.newAppointmentButton}
+						variant="contained"
+						onClick={() => {
+							goCreateAppointment(specialityId);
+						}}
+						fullWidth
+					>
+						Agendar
+					</Button>
+				</div>
+			</div>
+		</Card>
+	);
+};
