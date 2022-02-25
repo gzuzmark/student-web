@@ -8,6 +8,9 @@ import { TriagePair } from 'AppContext';
 
 import { Doctor, DoctorAPI } from './selectDoctor';
 import ApiAppoitmentError from 'pages/Payment/exceptions/ApiAppoitmentError';
+import { format } from 'date-fns-tz/esm';
+import parse from 'date-fns/parse';
+import { es } from 'date-fns/locale';
 
 export const INCOMING = 'incoming';
 export const PREVIOUS = 'previous';
@@ -191,9 +194,10 @@ const formatCreateParams = (params: NewAppointmentBody) => ({
 	media: params.media || [],
 	is_guest: !!params.isGuest,
 });
+const parseADate = (appDate: string) => parse(appDate.slice(0, appDate.indexOf('T')), 'yyyy-MM-dd', new Date());
 const formatControlAppointmentList = (list: ApiControlAppointDetail[]): ControlAppointmentDetail[] =>
 	list.map(({ date, speciality, use_case_id }: ApiControlAppointDetail) => ({
-		date: formatUTCDate(new Date(date), "EEEE dd 'de' MMMM"),
+		date: format(parseADate(date), "eeee d 'de' MMMMMM ", { locale: es }),
 		specialityName: speciality,
 		specialityId: use_case_id,
 	}));
