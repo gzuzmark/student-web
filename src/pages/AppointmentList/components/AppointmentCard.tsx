@@ -302,7 +302,7 @@ export const AppointmentCard = ({
 		window.open(`${process.env.REACT_APP_CONFERENCE_URL}/${scheduleID}`, '_blank');
 	};
 	const goToCall = () => {
-		window.open(`https://videocall-alivia.herokuapp.com/?room={sessionID}&passcode=75034637551703`);
+		window.open(`https://videocall-alivia.herokuapp.com/?room=${scheduleID}&passcode=75034637551703`);
 	};
 	return (
 		<Card className={classes.card}>
