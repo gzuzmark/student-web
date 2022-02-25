@@ -225,6 +225,9 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		display: 'flex',
 		justifyContent: 'space-between',
 		paddingBottom: '30px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '0px',
+		},
 	},
 	noAppoinmentTitle: {
 		fontFamily: 'Mulish',
@@ -259,9 +262,14 @@ const useStyles = stylesWithTheme(({ palette, breakpoints }: Theme) => ({
 		},
 	},
 	controlIcon: {
+		width: '72px',
+		height: '72px',
 		marginBottom: '10px',
 		[breakpoints.up('lg')]: {
 			marginBottom: '20px',
+			width: '130px',
+			height: '130px',
+			margin: '20px',
 		},
 	},
 }));
@@ -348,9 +356,7 @@ export const AppointmentCard = ({
 							</div>
 						) : (
 							<div className={classes.timerBox}>
-								<span>
-									Tu cita es en {timer} {timer > 1 ? 'dias' : 'día'}
-								</span>
+								<span>Tu cita es {timer === 0 ? 'Hoy' : timer === 1 ? 'en 1 día' : `en ${timer} días`}</span>
 							</div>
 						)}
 					</div>
@@ -384,7 +390,7 @@ export const ControlAppoinmentCard = ({ appointment }: ControlAppointmentCardPro
 							{specialityName}
 						</Typography>
 					</div>
-					<img src={controlImg} width={72} height={72} alt="cita cotrol" className={classes.controlIcon} />
+					<img src={controlImg} alt="cita cotrol" className={classes.controlIcon} />
 				</div>
 				<div className={classes.buttonWrapper}>
 					<Button

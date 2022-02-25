@@ -91,6 +91,7 @@ export interface AppointDetail {
 	medicines: Medicine[];
 	recomendations: Recomendation[];
 	timer: number;
+	minLeft: number;
 }
 export interface ControlAppointmentDetail {
 	date: string;
@@ -164,6 +165,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 			medicines: prescribed_medicines,
 			recomendations,
 			timer: getTimer(formatUTCDate(date, 'yyyy-dd-MMMM hh:mm aaa')),
+			minLeft: getTimeLeft(date),
 		}),
 	);
 
@@ -182,8 +184,14 @@ const getTimer = (date: any) => {
 	let diferencia = (day1Format - now) / (1000 * 60 * 60 * 24);
 	diferencia = Math.floor(diferencia);
 	const daysLeft = diferencia > 0 ? diferencia : 0;
-
 	return daysLeft;
+};
+const getTimeLeft = (date: number) => {
+	const today = new Date();
+	const currentTime = Math.round(today.getTime() / 1000);
+	const dif = date - currentTime;
+	const minLeft = Math.round(dif / 60);
+	return minLeft;
 };
 const formatCreateParams = (params: NewAppointmentBody) => ({
 	reservation_account_id: params.reservationAccountID,

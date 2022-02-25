@@ -6,7 +6,7 @@ import { Theme } from '@material-ui/core/styles';
 import { useTranslation } from 'react-i18next';
 import { ReactComponent as AgendaIcon } from 'icons/agenda.svg';
 import AppContext from 'AppContext';
-import { stylesWithTheme, redirectToBaseAlivia, formatUTCDate } from 'utils';
+import { stylesWithTheme, redirectToBaseAlivia } from 'utils';
 import {
 	getAppointmentList,
 	AppointDetail,
@@ -104,17 +104,25 @@ const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 		display: 'flex',
 		justifyContent: 'space-between',
 		paddingBottom: '30px',
+		[breakpoints.up('lg')]: {
+			paddingBottom: '0px',
+		},
 	},
 	noAppoinmentTitle: {
 		fontFamily: 'Mulish',
 		fontSize: '16px',
 		fontWeight: '700',
 		color: '#494F66',
+		[breakpoints.up('lg')]: {
+			fontSize: '20px',
+		},
 	},
 	calendarIcon: {
 		marginBottom: '10px',
 		[breakpoints.up('lg')]: {
-			marginBottom: '20px',
+			margin: '30px',
+			width: '130px',
+			height: '130px',
 		},
 	},
 	citasSection: {
@@ -222,6 +230,7 @@ const RightSide = () => {
 			requestSmallAppointments(setAppointments, setControlAppointments, 0, currentUser.id, userToken);
 		}
 	}, [currentUser, userToken]);
+	/*
 	const getTimeLeft = (val: AppointDetail) => {
 		const today = new Date();
 		const currentTime = formatUTCDate(today, 'hh:mm aaa');
@@ -236,7 +245,7 @@ const RightSide = () => {
 			}
 		}
 		return false;
-	};
+	};*/
 	const onClick = () => {
 		history.push(`/appointments_history`);
 	};
@@ -263,7 +272,7 @@ const RightSide = () => {
 								appointment={appointments[0]}
 								isOldAppointment={false}
 								isNextAppoinment={true}
-								isLessThen5min={getTimeLeft(appointments[0])}
+								isLessThen5min={appointments[0].minLeft <= 5 ? true : false}
 							/>
 						)}
 						{controlAppointments.length > 0 &&
