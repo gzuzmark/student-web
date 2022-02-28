@@ -4,7 +4,7 @@ import { Theme } from '@material-ui/core/styles';
 import { stylesWithTheme } from 'utils';
 import { AppointDetail } from 'pages/api/appointments';
 
-import AppointmentCard from './AppointmentCard';
+import { AppointmentCard } from './AppointmentCard';
 
 const useStyles = stylesWithTheme(({ breakpoints }: Theme) => ({
 	tabWrapper: {

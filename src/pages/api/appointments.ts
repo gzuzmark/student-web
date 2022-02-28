@@ -8,6 +8,9 @@ import { TriagePair } from 'AppContext';
 
 import { Doctor, DoctorAPI } from './selectDoctor';
 import ApiAppoitmentError from 'pages/Payment/exceptions/ApiAppoitmentError';
+import { format } from 'date-fns-tz/esm';
+import parse from 'date-fns/parse';
+import { es } from 'date-fns/locale';
 
 export const INCOMING = 'incoming';
 export const PREVIOUS = 'previous';
@@ -68,6 +71,11 @@ export interface ApiAppointmentDetail {
 	prescribed_medicines: Medicine[];
 	recomendations: Recomendation[];
 }
+export interface ApiControlAppointDetail {
+	date: string;
+	speciality: string;
+	use_case_id: string;
+}
 
 export interface AppointDetail {
 	id: string;
@@ -82,10 +90,18 @@ export interface AppointDetail {
 	patient: string;
 	medicines: Medicine[];
 	recomendations: Recomendation[];
+	timer: number;
+	minLeft: number;
+}
+export interface ControlAppointmentDetail {
+	date: string;
+	specialityName: string;
+	specialityId: string;
 }
 
 interface AppointmentListResponse {
 	data: ApiAppointmentDetail[];
+	reschedule_date: ApiControlAppointDetail[];
 }
 
 interface AppointmentListParams {
@@ -139,7 +155,7 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 				gender: doctor.gender,
 			},
 			appointmentType,
-			date: formatUTCDate(date, "EEEE dd 'de' MMMM 'del' yyyy"),
+			date: formatUTCDate(date, "EEEE dd 'de' MMMM"),
 			time: formatUTCDate(date, 'hh:mm aaa'),
 			disease: use_case.title,
 			channel: appointment_type.name,
@@ -148,6 +164,8 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 			scheduleID: schedule_id,
 			medicines: prescribed_medicines,
 			recomendations,
+			timer: getTimer(formatUTCDate(date, 'yyyy-dd-MMMM hh:mm aaa')),
+			minLeft: getTimeLeft(date),
 		}),
 	);
 
@@ -158,6 +176,23 @@ const formatAppointmentList = (rawList: ApiAppointmentDetail[], appointmentType:
 // 	time: formatUTCDate(date, 'h:mm aaa'),
 // });
 //
+const getTimer = (date: any) => {
+	const today = new Date();
+	const now = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+	const day1 = new Date(date);
+	const day1Format = Date.UTC(day1.getFullYear(), day1.getMonth(), day1.getDate());
+	let diferencia = (day1Format - now) / (1000 * 60 * 60 * 24);
+	diferencia = Math.floor(diferencia);
+	const daysLeft = diferencia > 0 ? diferencia : 0;
+	return daysLeft;
+};
+const getTimeLeft = (date: number) => {
+	const today = new Date();
+	const currentTime = Math.round(today.getTime() / 1000);
+	const dif = date - currentTime;
+	const minLeft = Math.round(dif / 60);
+	return minLeft;
+};
 const formatCreateParams = (params: NewAppointmentBody) => ({
 	reservation_account_id: params.reservationAccountID,
 	use_case_id: params.useCaseID,
@@ -167,7 +202,13 @@ const formatCreateParams = (params: NewAppointmentBody) => ({
 	media: params.media || [],
 	is_guest: !!params.isGuest,
 });
-
+const parseADate = (appDate: string) => parse(appDate.slice(0, appDate.indexOf('T')), 'yyyy-MM-dd', new Date());
+const formatControlAppointmentList = (list: ApiControlAppointDetail[]): ControlAppointmentDetail[] =>
+	list.map(({ date, speciality, use_case_id }: ApiControlAppointDetail) => ({
+		date: format(parseADate(date), "eeee d 'de' MMMMMM ", { locale: es }),
+		specialityName: speciality,
+		specialityId: use_case_id,
+	}));
 // TODO Update how we get the appointments
 export const getAppointmentList = async (
 	params: AppointmentListParams,
@@ -187,7 +228,22 @@ export const getAppointmentList = async (
 		console.log(e);
 	}
 };
-
+export const getControlAppoinmentList = async (
+	params: AppointmentListParams,
+	userToken: string,
+): Promise<ControlAppointmentDetail[] | undefined> => {
+	try {
+		const resp = await aliviaAxios.get<AppointmentListResponse>('/appointments', {
+			params,
+			headers: {
+				Authorization: `Bearer ${userToken}`,
+			},
+		});
+		return formatControlAppointmentList(resp.data.reschedule_date);
+	} catch (e) {
+		console.log(e);
+	}
+};
 export const getAppoinmentDetails = async (): Promise<AppointDetail | undefined> => {
 	try {
 		// const resp = await aliviaAxios.get<ApiAppointmentDetail>(`/citas/${id}`);

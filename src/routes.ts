@@ -23,6 +23,7 @@ import {
 	SignUp,
 	ThanksPage,
 } from 'pages';
+import AppointmentHistory from 'pages/AppointmentList/AppointmentHistory';
 import { ConfirmationLaboratory } from 'pages/ConfirmationLaboratory';
 import SmallSignUp from 'pages/SignUp/SmallSignUp';
 import { ReactElement } from 'react';
@@ -92,6 +93,7 @@ export const routes: RoutesType = [
 	{ id: 'ConfirmationLab', path: '/confirmacionlab', component: ConfirmationLaboratory },
 	{ id: 'DashboardDefault', path: '/dashboard/default', component: DashboardDefault, guard: true, exact: true },
 	{ id: 'AppointmentList', path: '/dashboard/citas', component: AppointmentList, guard: true, exact: true },
+	{ id: 'AppointmentHistory', path: '/appointments_history', component: AppointmentHistory, guard: true, exact: true },
 	{ id: 'Appointments', path: '/dashboard/citas/:id', component: Appointment, guard: true, exact: true },
 	{ id: 'FamilyMembers', path: '/dashboard/parientes', component: FamilyMembers, guard: true, exact: true },
 	{ id: 'LaboratoryExamsRoot', path: '/dashboard/laboratorios', component: LaboratoryExams, guard: true, exact: true },
