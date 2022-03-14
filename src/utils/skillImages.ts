@@ -90,7 +90,7 @@ export const PROD_IMAGES: SpecialtyType[] = [
 		id: '6358556c-2e7d-4d94-9d6e-cb72ee5e6103',
 		label: 'Medicina general',
 		image: medicinaGeneralIcon,
-		cost: 25,
+		cost: 19,
 	},
 	{
 		id: 'fedc56ae-b39e-11eb-a596-42010a7c6012',
@@ -108,7 +108,7 @@ export const PROD_IMAGES: SpecialtyType[] = [
 		id: '0ceb81db-ccfe-4198-b72e-1789fe113494',
 		label: 'Dermatología',
 		image: dermatologiaIcon,
-		cost: 45,
+		cost: 29,
 	},
 	{
 		id: '0430e88e-7401-4009-9cae-4c2006969640',
