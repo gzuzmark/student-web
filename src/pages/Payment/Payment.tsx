@@ -799,6 +799,7 @@ const Payment = () => {
 				executePayment={makePayment}
 				errorMessage={errorMessage}
 				useBenefit={useBenefit}
+				useCaseId={useCase?.id || ''}
 			/>
 			<Dialog
 				open={openKushkiModal}
