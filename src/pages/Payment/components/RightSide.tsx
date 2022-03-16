@@ -389,7 +389,10 @@ interface RightSideProps {
 	executePayment: (pm: number) => (e: MouseEvent) => void;
 	errorMessage: string;
 	useBenefit: boolean | undefined;
+	useCaseId: string;
 }
+const COUPON_CODE_MEDICINA_GENERAL = 'Intercorp20';
+const USE_CASE_ID_MEDICINA_GENERAL = '6358556c-2e7d-4d94-9d6e-cb72ee5e6103';
 
 const RightSide = ({
 	totalCost,
@@ -400,6 +403,7 @@ const RightSide = ({
 	executePayment,
 	errorMessage,
 	useBenefit,
+	useCaseId,
 }: RightSideProps) => {
 	const { t } = useTranslation('payment');
 	const classes = useStyles();
@@ -412,7 +416,11 @@ const RightSide = ({
 	}, [useBenefit, sendDiscount]);
 
 	const onClickSendDiscount = () => {
-		if (discountCode !== '') {
+		if (COUPON_CODE_MEDICINA_GENERAL === discountCode && useCaseId === USE_CASE_ID_MEDICINA_GENERAL) {
+			sendDiscount();
+			console.log('medidcina general');
+		} else if (discountCode !== '' && COUPON_CODE_MEDICINA_GENERAL !== discountCode) {
+			console.log('otro cupon');
 			sendDiscount();
 		}
 	};
