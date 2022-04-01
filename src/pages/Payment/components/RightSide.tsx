@@ -355,7 +355,7 @@ const useStyles = stylesWithTheme(({ palette, breakpoints, spacing }: Theme) => 
 	},
 	steptwoImage: {
 		width: '100px',
-		paddingRight: '20px',
+		paddingRight: '21px',
 	},
 	stepthreeImage: {
 		width: '100px',
