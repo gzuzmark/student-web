@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
@@ -38,6 +38,11 @@ const RedirectWrapper = ({ location }: { location: Location }) => {
 
 const App = () => {
 	setLocalValue('routeListeners', '0');
+
+	useEffect(() => {
+		window.alert('Por favor, agenda tu cita desde la plataforma de Alivia');
+		redirectToBaseAlivia();
+	}, []);
 
 	return (
 		<LocalizationProvider dateAdapter={DateFnsUtils} locale={esLocal} dateFormats={formats}>
